@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.area }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        area: [bridge, web, android]
+    steps:
+      - uses: actions/checkout@v5
+
+      # Same image as local ./project and VS Code: .devcontainer/Dockerfile
+      - uses: docker/setup-buildx-action@v3
+      - name: Devcontainer-Image bauen (gecacht)
+        uses: docker/build-push-action@v6
+        with:
+          context: .devcontainer
+          tags: thingy52-live-dev
+          load: true
+          cache-from: type=gha,scope=devcontainer
+          cache-to: type=gha,scope=devcontainer,mode=max
+
+      - name: Test
+        run: ./project ${{ matrix.area }} test
+
+      - name: Build
+        if: matrix.area != 'web'
+        run: ./project ${{ matrix.area }} build
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.area != 'web'
+        with:
+          name: ${{ matrix.area }}
+          path: |
+            build/thingy.exe
+            build/thingylive-debug.apk
+          if-no-files-found: error
+
+  release:
+    name: Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          path: dist
+          merge-multiple: true
+      - name: GitHub Release erstellen/aktualisieren
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          ls -la dist
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/thingy.exe dist/thingylive-debug.apk --clobber
+          else
+            gh release create "$TAG" dist/thingy.exe dist/thingylive-debug.apk \
+              --title "$TAG" --generate-notes $([[ "$TAG" == *-* ]] && echo --prerelease)
+          fi
