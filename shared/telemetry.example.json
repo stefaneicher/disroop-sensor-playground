@@ -18,6 +18,6 @@
     "eco2_ppm": 612, "tvoc_ppb": 14,
     "color": { "r": 180, "g": 160, "b": 120, "clear": 400 }
   },
-  "sound": { "level_dbfs": -38.5, "song": { "playing": false, "note_index": -1 } },
+  "sound": { "level_dbfs": -38.5, "mic_enabled": true, "song": { "playing": false, "note_index": -1 } },
   "ui": { "button_pressed": false, "led": { "r": 0, "g": 0, "b": 0 } }
 }

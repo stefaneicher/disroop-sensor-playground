@@ -1,7 +1,7 @@
 # Protokoll-Vertrag (verbindlich für bridge, web, android)
 
 Quelle: Nordic-Thingy52-FW v2.x (`include/ble_services/*.h`, `source/modules/m_motion.c`, `m_ble.c`).
-Alle Mehrbyte-Werte sind **little-endian**.
+Alle Mehrbyte-Werte sind **little-endian** (Ausnahme: ADPCM-Predictor, big-endian).
 
 ## 1. BLE GATT (Thingy-Werksfirmware)
 
@@ -30,7 +30,7 @@ Gefundenes Gerät: `E3:58:08:1B:53:5F`.
 | `EF680501` | Sound-Config | write | u8 speaker_mode (1 freq, 2 pcm 8 kHz, 3 sample), u8 mic_mode (1 adpcm) |
 | `EF680502` | Speaker | write w/o resp | im Freq-Modus: u16 hz, u16 duration_ms, u8 volume 0..100 |
 | `EF680503` | Speaker-Status | notify | u8 |
-| `EF680504` | Mikrofon | notify | IMA-ADPCM-Frame: i16 predictor, u8 step_index, danach 4-Bit-Samples (low nibble zuerst), 16 kHz mono |
+| `EF680504` | Mikrofon | notify | IMA/DVI-ADPCM-Frame: i16 predictor **big-endian** (htons in FW), u8 step_index, danach 4-Bit-Samples (**high nibble zuerst**), 16 kHz mono |
 | `EF680109` | NFC | read/write | rohe **NDEF-Message** (ohne TLV), max. 247 B, wird persistent gespeichert |
 | `2A19` (Service `180F`) | Akku | read/notify | u8 % |
 
@@ -42,6 +42,7 @@ Gefundenes Gerät: `E3:58:08:1B:53:5F`.
 5. Notifications abonnieren: alle `notify`-Zeilen oben. Gravity und Quaternion sind optional.
 
 ### Lautstärke aus dem Mikrofon
+Das Mikrofon ist **standardmässig aus**, weil der Audio-Stream (~32 kB/s) zusammen mit allen anderen Notifications die BLE-Verbindung unter Windows abbrechen lässt. Einschalten auf Wunsch über `POST /api/mic` oder `--mic`. Bei Abbruch schaltet die Bridge es automatisch wieder aus.
 Frame IMA-ADPCM-dekodieren, RMS über den Frame bilden, `level_dbfs = 20*log10(rms/32768)` auf −100..0 klemmen.
 Geglättet (EMA α=0.3) mit ~10 Hz publizieren.
 
@@ -65,7 +66,10 @@ Bytes: `D4 0F 15` + ASCII `android.com:pkg` + ASCII `ch.disroop.thingylive` (39 
 | GET | `/api/stream` | Server-Sent Events: `event: telemetry` + `data: <Snapshot>` mit ≤ 10 Hz; `event: log` + `data: {"msg": "..."}` |
 | POST | `/api/song` | Body `{"action":"play"\|"stop","volume":0..100}` → 202 |
 | POST | `/api/led` | Body `{"r":0..255,"g":..,"b":..}` → 204 |
+| POST | `/api/mic` | Body `{"enabled":true\|false}` → 202, Mikrofon/Lautstärke ein/aus |
 | GET | `/healthz` | `ok` |
+
+Fehler: 400 ungültige Eingabe, 405 falsche Methode, 502 Schreibfehler am Gerät, 503 nicht verbunden. CORS `*`.
 
 ### Snapshot
 Schema: `docs/telemetry.schema.json`, Beispiel: `shared/telemetry.example.json`.

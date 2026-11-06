@@ -45,6 +45,7 @@
       "type": "object", "required": ["level_dbfs", "song"],
       "properties": {
         "level_dbfs": { "$ref": "#/$defs/num" },
+        "mic_enabled": { "type": "boolean" },
         "song": { "type": "object", "properties": { "playing": { "type": "boolean" }, "note_index": { "type": "integer" } } }
       }
     },
