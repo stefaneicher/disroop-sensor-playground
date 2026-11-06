@@ -23,7 +23,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # --- Go (bridge) ------------------------------------------------------------
-RUN curl -fsSL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xz \
+# gcc + libc6-dev: cgo for `go test -race`
+RUN apt-get update && apt-get install -y --no-install-recommends gcc libc6-dev && rm -rf /var/lib/apt/lists/* \
+    && curl -fsSL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xz \
     && go install honnef.co/go/tools/cmd/staticcheck@latest
 
 # --- Node (web dashboard tests) ---------------------------------------------
