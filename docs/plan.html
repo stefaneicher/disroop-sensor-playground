@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="de" data-theme="light" data-lavish-annotate="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>thingy52-live – die Idee</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/daisyui.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/themes.css">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.2.4/dist/index.global.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :where(.grid, .flex) > * { min-width: 0; }
+  :where(p, h1, h2, h3, li, td, th, .badge, code) { overflow-wrap: anywhere; }
+  :where(img, svg) { max-width: 100%; height: auto; }
+  body { background: var(--color-base-200); color: var(--color-base-content); }
+  svg text { font: 600 14px ui-sans-serif, system-ui; fill: currentColor; }
+  svg .s { font-size: 11.5px; font-weight: 500; opacity: .75; }
+  .box { fill: var(--color-base-100); stroke: currentColor; stroke-width: 1.6; }
+  .ble { stroke: #2563eb; } .web { stroke: #16a34a; } .nfc { stroke: #db2777; } .dk { stroke: #0891b2; }
+  .flow { fill: none; stroke-width: 2.5; stroke-dasharray: 7 5; animation: dash 1.2s linear infinite; }
+  @keyframes dash { to { stroke-dashoffset: -24; } }
+  .term { background:#0b1020; color:#a7f3d0; font: 12px/1.45 ui-monospace, Consolas, monospace; border-radius: .75rem; padding: 1rem; white-space: pre; overflow-x: auto; }
+  .phone { width: 220px; border: 10px solid #111827; border-radius: 30px; background: var(--color-base-100); padding: 12px; margin: 0 auto; }
+  .bar { height: 6px; border-radius: 3px; background: linear-gradient(90deg,#22c55e,#eab308,#ef4444); }
+</style>
+</head>
+<body class="min-h-screen">
+<main class="max-w-6xl mx-auto p-4 md:p-8 space-y-8">
+
+<header class="space-y-2">
+  <div class="badge badge-neutral">Neues Projekt · thingy52-live</div>
+  <h1 class="text-3xl md:text-4xl font-bold">Alle Thingy:52-Sensoren live im Terminal, im Browser und auf dem Handy</h1>
+  <p class="text-lg opacity-80 max-w-3xl"><b>Die Idee in einem Satz:</b> Der Thingy bleibt auf seiner Werksfirmware und sendet alle Sensordaten per Bluetooth.
+    Ein kleines Windows-Programm empfängt sie, zeigt sie im Terminal, spielt „Highway to Hell“ auf dem Thingy ab
+    und streamt die Daten live an eine Web-Oberfläche. Eine Android-App zeigt dasselbe auf dem Handy und öffnet sich per NFC.</p>
+  <div class="flex flex-wrap gap-2">
+    <span class="badge badge-success">Kein Flashen, keine Debug-Probe nötig</span>
+    <span class="badge badge-info">Alle Tools in Docker</span>
+    <span class="badge badge-outline">Nur Kommandozeile</span>
+  </div>
+</header>
+
+<!-- architecture -->
+<section id="architektur" class="card bg-base-100 shadow"><div class="card-body">
+  <h2 class="card-title">Wie fliessen die Daten?</h2>
+  <svg viewBox="0 80 960 320" width="100%" role="img" aria-label="Architektur">
+    <title>Datenfluss thingy52-live</title>
+    <g id="a-thingy"><title>Nordic Thingy:52 mit Werksfirmware: sendet Sensordaten per BLE</title>
+      <rect class="box" x="30" y="140" width="190" height="110" rx="18" style="stroke-width:3"/>
+      <text x="55" y="180" style="font-size:17px">Thingy:52</text>
+      <text x="55" y="202" class="s">Werksfirmware v2.x</text>
+      <text x="55" y="222" class="s">Sensoren · Speaker · LED · NFC</text></g>
+    <g id="a-ble-pc"><title>Bluetooth LE: Notifications vom Thingy, Töne zum Thingy</title>
+      <path class="flow ble" d="M220 175 H390"/><text x="250" y="165" class="s">BLE ⇄ Daten + Töne</text></g>
+    <g id="a-exe"><title>thingy.exe: Go-Programm, in Docker für Windows gebaut</title>
+      <rect class="box dk" x="390" y="120" width="220" height="150" rx="16"/>
+      <text x="410" y="150">thingy.exe (Go)</text>
+      <text x="410" y="174" class="s">① Terminal-Ausgabe</text>
+      <text x="410" y="194" class="s">② Lied → Thingy-Speaker</text>
+      <text x="410" y="214" class="s">③ Webserver :8052</text>
+      <text x="410" y="234" class="s">④ Datenstream (SSE)</text>
+      <text x="410" y="256" class="s">nutzt Windows-Bluetooth</text></g>
+    <g id="a-term"><title>Terminal mit Live-Werten</title>
+      <path class="flow web" d="M610 150 H720"/>
+      <rect class="box" x="720" y="95" width="200" height="70" rx="12"/>
+      <text x="740" y="125">⌨ Terminal</text><text x="740" y="146" class="s">Live-Tabelle</text></g>
+    <g id="a-web"><title>Browser-Dashboard holt Daten per Server-Sent-Events</title>
+      <path class="flow web" d="M610 235 H720"/>
+      <rect class="box" x="720" y="200" width="200" height="70" rx="12"/>
+      <text x="740" y="230">🖥 Web-GUI</text><text x="740" y="251" class="s">localhost:8052</text></g>
+    <g id="a-ble-phone"><title>Alternativ: Handy verbindet sich direkt per BLE</title>
+      <path class="flow ble" d="M125 250 V335 H390"/><text x="190" y="325" class="s">BLE direkt</text></g>
+    <g id="a-nfc"><title>NFC: Handy an Thingy halten öffnet die App (Android Application Record)</title>
+      <path class="flow nfc" d="M60 250 V370 H390"/><text x="190" y="388" class="s">NFC-Tap → App startet</text></g>
+    <g id="a-app"><title>Android-App (Kotlin), in Docker gebaut</title>
+      <rect class="box" x="390" y="305" width="220" height="80" rx="16"/>
+      <text x="410" y="335">📱 Android-App</text><text x="410" y="358" class="s">Kotlin · gleiche Werte · Lied-Knopf</text></g>
+  </svg>
+  <p class="text-sm opacity-75">Der Thingy erlaubt <b>eine</b> BLE-Verbindung gleichzeitig. Es ist also entweder der PC oder das Handy verbunden. Ein NFC-Tap aufs Handy ist der Wechsel.</p>
+</div></section>
+
+<!-- data -->
+<section id="daten" class="card bg-base-100 shadow"><div class="card-body">
+  <h2 class="card-title">Welche Daten kommen live?</h2>
+  <div class="overflow-x-auto"><table class="table table-sm">
+    <thead><tr><th>Gruppe</th><th>Werte</th><th>BLE-Service</th><th>Rate</th></tr></thead>
+    <tbody>
+      <tr><td>🧭 Bewegung</td><td>Beschleunigung xyz (g), Gyro xyz (°/s), Kompass xyz (µT), Heading, Euler, Tap, Lage, Schritte</td><td><code>EF680400</code> Motion</td><td>10–20 Hz</td></tr>
+      <tr><td>🌡 Umwelt</td><td>Temperatur, Feuchte, Luftdruck, eCO₂ / TVOC, Farbe RGBC</td><td><code>EF680200</code> Environment</td><td>1 Hz</td></tr>
+      <tr><td>🎤 Lautstärke</td><td>Mikrofon-Pegel in dB, aus dem ADPCM-Stream berechnet</td><td><code>EF680500</code> Sound</td><td>~ 10 Hz</td></tr>
+      <tr><td>🔊 Lied</td><td>„Highway to Hell“: Frequenz + Dauer pro Note, aus <code>chorus.h</code> übernommen</td><td><code>EF680502</code> Speaker</td><td>auf Knopfdruck</td></tr>
+      <tr><td>💡 LED / 🔘 Taster</td><td>LED-Farbe passend zum Lied, Tastendruck startet das Lied</td><td><code>EF680300</code> UI</td><td>Ereignis</td></tr>
+      <tr><td>🔋 Akku</td><td>Ladestand in %</td><td><code>180F</code> Battery</td><td>1/min</td></tr>
+    </tbody></table></div>
+</div></section>
+
+<!-- mockups -->
+<section id="mockups" class="space-y-3">
+  <h2 class="text-2xl font-bold">So soll es aussehen</h2>
+  <div class="grid gap-4 lg:grid-cols-3">
+    <div id="m-term" class="card bg-base-100 shadow"><div class="card-body">
+      <h3 class="card-title text-base">⌨ Terminal: <code>thingy.exe</code></h3>
+<div class="term">Thingy:52 C4:3F:12:..  🔋 87%  RSSI -58
+──────────────────────────────────────
+Accel  x +0.02  y -0.01  z +1.00 g
+Gyro   x  +1.3  y  -0.4  z  +0.2 °/s
+Kompass x 21.4  y -8.1  z 40.2 µT  ↗ 47°
+Temp   23.4 °C   Feuchte 41 %
+Druck  963.2 hPa  eCO₂ 612 ppm  TVOC 14
+Farbe  ███ R180 G160 B120   Laut 54 dB
+[Taste] gedrückt → ♪ Highway to Hell</div>
+      <p class="text-xs opacity-60">Befehle: <code>thingy</code> · <code>thingy song</code> · <code>thingy web</code></p>
+    </div></div>
+
+    <div id="m-web" class="card bg-base-100 shadow lg:col-span-2"><div class="card-body">
+      <h3 class="card-title text-base">🖥 Web-GUI: localhost:8052</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+        <div class="stat bg-base-200 rounded-box p-3"><div class="stat-title">Temperatur</div><div class="stat-value text-2xl">23.4°</div></div>
+        <div class="stat bg-base-200 rounded-box p-3"><div class="stat-title">Feuchte</div><div class="stat-value text-2xl">41 %</div></div>
+        <div class="stat bg-base-200 rounded-box p-3"><div class="stat-title">Druck</div><div class="stat-value text-2xl">963</div><div class="stat-desc">hPa</div></div>
+        <div class="stat bg-base-200 rounded-box p-3"><div class="stat-title">eCO₂</div><div class="stat-value text-2xl text-success">612</div><div class="stat-desc">ppm · gut</div></div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-3 mt-2">
+        <div class="bg-base-200 rounded-box p-3 md:col-span-2">
+          <div class="text-xs opacity-70 mb-1">Beschleunigung · Gyro · Kompass (Live-Kurven)</div>
+          <svg viewBox="0 0 300 70" width="100%"><title>Live-Kurven Mockup</title>
+            <polyline fill="none" stroke="#ef4444" stroke-width="2" points="0,35 20,30 40,38 60,22 80,40 100,33 120,28 140,45 160,31 180,36 200,20 220,38 240,34 260,29 280,41 300,35"/>
+            <polyline fill="none" stroke="#22c55e" stroke-width="2" points="0,50 30,48 60,55 90,46 120,52 150,49 180,58 210,47 240,51 270,50 300,53"/>
+            <polyline fill="none" stroke="#3b82f6" stroke-width="2" points="0,15 40,18 80,12 120,16 160,10 200,17 240,13 280,15 300,14"/></svg>
+        </div>
+        <div class="bg-base-200 rounded-box p-3 flex flex-col items-center gap-2">
+          <div class="text-xs opacity-70">3D-Würfel folgt der Lage</div>
+          <div style="width:60px;height:60px;background:#334155;border-radius:10px;transform:rotate(18deg) skewX(-8deg)"></div>
+          <button class="btn btn-sm btn-error">♪ Highway to Hell</button>
+        </div>
+      </div>
+      <div class="mt-2"><div class="text-xs opacity-70">Lautstärke 54 dB</div><div class="bar" style="width:54%"></div></div>
+    </div></div>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2">
+    <div id="m-app" class="card bg-base-100 shadow"><div class="card-body items-center">
+      <h3 class="card-title text-base self-start">📱 Android-App</h3>
+      <div class="phone text-sm space-y-2">
+        <div class="font-bold">Thingy Live <span class="badge badge-success badge-xs">verbunden</span></div>
+        <div class="grid grid-cols-2 gap-1">
+          <div class="bg-base-200 rounded p-1">🌡 23.4°</div><div class="bg-base-200 rounded p-1">💧 41 %</div>
+          <div class="bg-base-200 rounded p-1">⛰ 963 hPa</div><div class="bg-base-200 rounded p-1">💨 612 ppm</div>
+        </div>
+        <div class="bg-base-200 rounded p-1">🧭 47° NO · Tap ✓</div>
+        <div class="bg-base-200 rounded p-1">🎤 54 dB</div>
+        <button class="btn btn-error btn-xs w-full">♪ Highway to Hell</button>
+      </div>
+    </div></div>
+    <div id="nfc" class="card bg-base-100 shadow"><div class="card-body">
+      <h3 class="card-title text-base">📲 So öffnet NFC unsere App</h3>
+      <ol class="list-decimal ml-5 text-sm space-y-2">
+        <li>Die Werksfirmware hat einen NFC-Tag. Normal zeigt er auf Nordics App (<code>no.nordicsemi.android.nrfthingy</code>).</li>
+        <li><b>Fund in der Firmware (<code>m_ble.c</code>, <code>nfc_init</code>):</b> Den Tag-Inhalt kann man per BLE überschreiben, über die Konfig-Charakteristik <code>EF680109</code> (max. 247 Byte). Er bleibt im Flash gespeichert.</li>
+        <li><code>thingy nfc</code> schreibt einmalig eine NDEF-Nachricht mit einem Android Application Record (AAR) für unsere App, z. B. <code>ch.eicher.thingylive</code>.</li>
+        <li>Danach öffnet ein Tap mit dem Handy unsere App, die sich direkt per BLE verbindet.</li>
+      </ol>
+      <p class="text-xs opacity-60">Rückweg: <code>thingy nfc --reset</code> stellt den Originalinhalt wieder her.</p>
+    </div></div>
+  </div>
+</section>
+
+<!-- build -->
+<section id="bau" class="card bg-base-100 shadow"><div class="card-body">
+  <h2 class="card-title">Bau und Projektstruktur (alles Docker, alles CLI)</h2>
+  <div class="grid md:grid-cols-2 gap-4 text-sm">
+<pre class="bg-base-200 rounded-box p-3 overflow-x-auto">thingy52-live/
+├─ project            # CLI: build · run · web · song · nfc · apk
+├─ docker/Dockerfile  # Go + Android SDK + Gradle
+├─ bridge/            # Go: BLE → Terminal + HTTP/SSE
+│  └─ web/            # Dashboard (eingebettet in die exe)
+├─ android/           # Kotlin-App, Gradle
+├─ shared/chorus.json # Lied-Noten (aus Blinky)
+├─ GOAL.md · JOURNAL.md · RESUME.md
+└─ .github/workflows/ # baut exe + apk als Release</pre>
+    <ul class="list-disc ml-5 space-y-1">
+      <li><b>Go</b> mit <code>tinygo.org/x/bluetooth</code> nutzt die Windows-BLE-API direkt. Es wird für Windows <i>cross-kompiliert</i>, das Ergebnis ist eine einzige <code>.exe</code> ohne Installation.</li>
+      <li><b>WSL kann kein Bluetooth.</b> Deshalb läuft die exe auf Windows und wird aus WSL gestartet, wie schon <code>highway.exe</code>.</li>
+      <li><b>Web-GUI:</b> HTML/JS eingebettet in die exe, Live-Daten über Server-Sent-Events, Kurven mit Canvas.</li>
+      <li><b>Android:</b> Kotlin, minSdk 26, Debug-APK per Gradle im Container. Installation per <code>adb</code> oder APK-Download aus dem GitHub-Release.</li>
+    </ul>
+  </div>
+</div></section>
+
+<!-- milestones -->
+<section id="meilensteine" class="card bg-base-100 shadow"><div class="card-body">
+  <h2 class="card-title">Reihenfolge</h2>
+  <ul class="steps steps-vertical md:steps-horizontal w-full text-sm">
+    <li class="step step-primary">Repo + Docker</li>
+    <li class="step">BLE-Scan: Thingy gefunden?</li>
+    <li class="step">Terminal-Werte</li>
+    <li class="step">Lied auf Speaker</li>
+    <li class="step">Web-GUI live</li>
+    <li class="step">Android-App</li>
+    <li class="step">NFC → App</li>
+    <li class="step">CI + Release</li>
+  </ul>
+  <p class="text-sm opacity-75">PC-Teil und Android-App bauen zwei Subagents parallel, der Haupt-Chat bleibt frei.</p>
+</div></section>
+
+<!-- risks -->
+<section id="risiken" class="card bg-base-100 shadow"><div class="card-body">
+  <h2 class="card-title">Risiken</h2>
+  <ul class="list-disc ml-5 text-sm space-y-1">
+    <li><b>Firmware-Stand unbekannt:</b> Wenn auf dem Thingy keine Werksfirmware mehr ist, fehlen die BLE-Services. Dann braucht es eine SWD-Probe zum Zurückflashen.</li>
+    <li><b>Mikrofon-Pegel:</b> Der ADPCM-Stream braucht viel Bandbreite. Läuft er parallel zu Motion bei hoher Rate, kann es ruckeln. Abhilfe: Motion-Rate senken.</li>
+    <li><b>Speaker-Lautstärke:</b> Der „Frequency mode“ ist eher leise. Alternative: 8-kHz-PCM-Stream, das ist aufwändiger.</li>
+    <li><b>Android ohne Handy am PC:</b> Ich kann die APK bauen, aber nicht selbst auf dem Handy testen. Das macht der User.</li>
+  </ul>
+</div></section>
+
+<!-- decisions -->
+<section id="entscheide" class="card bg-base-100 shadow"><div class="card-body space-y-4">
+  <h2 class="card-title">Kurz entscheiden, dann lege ich los</h2>
+  <form data-lavish-question="entscheide" class="space-y-4" onsubmit="event.preventDefault(); const f=new FormData(event.currentTarget); const a={quelle:f.get('quelle'),repo:f.get('repo'),paket:f.get('paket'),extra:f.get('extra')}; if(window.lavish) window.lavish.queuePrompt('Plan freigegeben. Datenquelle: '+a.quelle+'; Repo: '+a.repo+'; Android-Paket: '+a.paket+(a.extra?'; Zusatz: '+a.extra:''), {tag:'choice', text:'Entscheide: '+a.quelle+' / '+a.repo+' / '+a.paket, element:event.currentTarget, data:a});">
+    <div class="grid md:grid-cols-2 gap-4">
+      <fieldset class="fieldset bg-base-200 rounded-box p-3">
+        <legend class="fieldset-legend">Datenquelle</legend>
+        <label class="label"><input type="radio" class="radio radio-sm" name="quelle" value="Werksfirmware per BLE" checked> Werksfirmware per BLE <span class="badge badge-primary badge-xs">empfohlen</span></label>
+        <label class="label"><input type="radio" class="radio radio-sm" name="quelle" value="Eigene Zephyr-Firmware"> Eigene Zephyr-Firmware (braucht SWD-Probe)</label>
+      </fieldset>
+      <fieldset class="fieldset bg-base-200 rounded-box p-3">
+        <legend class="fieldset-legend">GitHub-Repo</legend>
+        <label class="label"><input type="radio" class="radio radio-sm" name="repo" value="stefaneicher/thingy52-live (privat)" checked> stefaneicher/thingy52-live, privat</label>
+        <label class="label"><input type="radio" class="radio radio-sm" name="repo" value="stefaneicher/thingy52-live (öffentlich)"> öffentlich</label>
+      </fieldset>
+    </div>
+    <label class="fieldset"><span class="fieldset-legend">Android-Paketname (für NFC)</span>
+      <input class="input input-sm w-full" name="paket" value="ch.eicher.thingylive"></label>
+    <label class="fieldset"><span class="fieldset-legend">Noch etwas dazu? (optional)</span>
+      <textarea class="textarea textarea-sm w-full" name="extra" placeholder="z. B. Motor an M1, Klatsch-Erkennung, Dark Mode …"></textarea></label>
+    <button class="btn btn-primary" type="submit">Antwort einreihen</button>
+  </form>
+</div></section>
+
+<footer class="text-xs opacity-60 pb-6">Belege: Nordic-Thingy52-FW <code>source/modules/m_ble.c</code> (nfc_init: Default → AAR <code>no.nordicsemi.android.nrfthingy</code>, sonst <code>drv_nfc_raw_data_set</code>), <code>source/ble_services/ble_tcs.c</code> (<code>BLE_UUID_TCS_NFC_CHAR 0x0109</code>), <code>include/ble_services/ble_tcs.h</code> (<code>BLE_TCS_NFC_LEN_MAX 247</code>).</footer>
+</main>
+</body>
+</html>
