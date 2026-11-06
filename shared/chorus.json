@@ -1,0 +1,127 @@
+{
+ "title": "Highway to Hell (chorus, approx.)",
+ "source": "blinky-nucleo-ai-demo/src/chorus.h",
+ "pause_ms": 1500,
+ "notes": [
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 440
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 440
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 440
+  },
+  {
+   "on_ms": 400,
+   "off_ms": 120,
+   "hz": 523
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 440
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 392
+  },
+  {
+   "on_ms": 1560,
+   "off_ms": 520,
+   "hz": 440
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 440
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 440
+  },
+  {
+   "on_ms": 400,
+   "off_ms": 120,
+   "hz": 523
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 440
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 392
+  },
+  {
+   "on_ms": 1560,
+   "off_ms": 520,
+   "hz": 440
+  },
+  {
+   "on_ms": 400,
+   "off_ms": 120,
+   "hz": 587
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 523
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 494
+  },
+  {
+   "on_ms": 1560,
+   "off_ms": 520,
+   "hz": 440
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 440
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 440
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 440
+  },
+  {
+   "on_ms": 400,
+   "off_ms": 120,
+   "hz": 523
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 440
+  },
+  {
+   "on_ms": 180,
+   "off_ms": 80,
+   "hz": 392
+  },
+  {
+   "on_ms": 2080,
+   "off_ms": 1040,
+   "hz": 440
+  }
+ ]
+}
