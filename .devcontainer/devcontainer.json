@@ -6,7 +6,16 @@
   "mounts": ["source=thingy52-live-cache,target=/opt/cache,type=volume"],
   "customizations": {
     "vscode": {
-      "extensions": ["golang.go", "fwcd.kotlin", "vscjava.vscode-gradle", "dbaeumer.vscode-eslint"]
+      "extensions": [
+        "golang.go",
+        "fwcd.kotlin",
+        "vscjava.vscode-gradle",
+        "streetsidesoftware.code-spell-checker",
+        "streetsidesoftware.code-spell-checker-german"
+      ],
+      "settings": {
+        "cSpell.language": "en,de-DE"
+      }
     }
   }
 }
