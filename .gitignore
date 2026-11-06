@@ -9,3 +9,6 @@ android/.kotlin/
 android/**/build/
 android/local.properties
 android/.idea/
+
+# project CLI (./t): Invoke installed locally
+.tools/

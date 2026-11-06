@@ -1,0 +1,67 @@
+package ch.disroop.thingylive.ui
+
+import ch.disroop.thingylive.connection.ConnectionFactory
+import ch.disroop.thingylive.connection.SimulatedThingy
+import ch.disroop.thingylive.connection.ThingyConnection
+import ch.disroop.thingylive.protocol.Snapshot
+import ch.disroop.thingylive.protocol.Song
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
+
+/** End-to-end on the JVM: simulated raw BLE payloads → real decoders → reducer → ViewModel state. */
+@OptIn(ExperimentalCoroutinesApi::class)
+class SimulatorSmokeTest {
+    private val dispatcher = StandardTestDispatcher()
+
+    @Before fun setUp() = Dispatchers.setMain(dispatcher)
+
+    @After fun tearDown() = Dispatchers.resetMain()
+
+    @Test fun `simulator fills every value of the snapshot`() = runTest(dispatcher) {
+        val factory = object : ConnectionFactory {
+            override val bleAvailable = false
+            override fun ble(): ThingyConnection = error("no ble in this test")
+            override fun simulator(): ThingyConnection = SimulatedThingy()
+        }
+        val vm = ThingyViewModel(factory, clock = { testScheduler.currentTime }, song = { Song.highwayToHell() })
+        vm.start()
+        advanceTimeBy(15_000)
+        runCurrent()
+
+        val s = vm.state.value.snapshot
+        assertTrue(s.connected)
+        assertEquals(Snapshot.Source.SIM, s.device.source)
+        assertNotNull(s.device.rssi)
+        assertNotNull(s.device.batteryPct)
+        with(s.motion) {
+            listOf(accelG, gyroDps, compassUt, euler, quaternion, gravity, headingDeg, orientation, steps, tap).forEach(::assertNotNull)
+            assertEquals(1.0, accelG!!.z, 0.2)
+        }
+        with(s.environment) {
+            listOf(temperatureC, humidityPct, pressureHpa, eco2Ppm, tvocPpb, color).forEach(::assertNotNull)
+            assertTrue(temperatureC!! in 15.0..35.0)
+        }
+        val level = s.sound.levelDbfs!!
+        assertTrue("level $level", level > -60 && level < 0)
+        assertNotNull(s.ui.buttonPressed)
+        assertTrue(vm.state.value.accelHistory.isNotEmpty())
+
+        vm.playSong()
+        advanceTimeBy(100)
+        runCurrent()
+        assertTrue(vm.state.value.snapshot.sound.song.playing)
+        vm.stop()
+    }
+}

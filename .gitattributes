@@ -3,3 +3,7 @@
 *.png binary
 *.jpg binary
 *.jar binary
+*.keystore binary
+*.jar binary
+*.png binary
+gradlew.bat text eol=crlf
