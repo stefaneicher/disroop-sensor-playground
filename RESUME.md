@@ -87,7 +87,11 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 - Machbarkeits-Scanner: `C:\Users\stefa\AppData\Local\Temp\blescan\` (Go, `tinygo.org/x/bluetooth`, im `golang:1.27`-Container gebaut).
 
 ## Nächste Schritte
-2. Devcontainer-Image erstellen: `.devcontainer/devcontainer.json` + `.devcontainer/Dockerfile` mit Go 1.27, Node 26, JDK 21, Android SDK 37, Gradle-Wrapper.
-3. `docs/protocol.md` + `docs/telemetry.schema.json` + `docs/ENGINEERING.md` (TDD-Regeln) schreiben.
-4. Agents bridge, web und android parallel starten.
-5. Integrieren, Hardware-Smoke-Test, NFC, CI, Release.
+Stand 21:28: Devcontainer, `./project`, Verträge (`docs/protocol.md`, Schema, ENGINEERING.md) sind committed (`e62a051`).
+Drei Background-Agents laufen: **bridge** (`bridge/`, `scripts/bridge.sh`), **web** (`bridge/web/static|test|dev`, `scripts/web.sh`), **android** (`android/`, `scripts/android.sh`). Agents committen nicht.
+Bricht die Session ab: `git status` prüfen. Was halbfertig ist, mit `./project <area> test` validieren, dann den Agent mit demselben Auftrag neu starten (Prompts sinngemäss wie in ENGINEERING.md und protocol.md).
+1. Agent-Ergebnisse integrieren, `./project test` und `./project build`, committen.
+2. Hardware-Smoke-Test: `./project bridge run`, http://localhost:8052, Lied abspielen.
+3. NFC-AAR schreiben (`./project bridge nfc`).
+4. CI-Workflows im Devcontainer-Image, Release mit exe + apk.
+5. README, Abschluss-Lavish, Report.
