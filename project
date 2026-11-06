@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# thingy52-live command line. Every build/test step runs inside the devcontainer image.
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export ROOT
+IMAGE="thingy52-live-dev"
+export IMAGE
+
+# Run a command inside the devcontainer image (builds the image on first use).
+indev() {
+  if ! docker image inspect "$IMAGE" >/dev/null 2>&1 || [[ "${REBUILD:-0}" == 1 ]]; then
+    docker build -t "$IMAGE" "$ROOT/.devcontainer" >&2
+  fi
+  docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp \
+    -v "$ROOT":/workspace -v thingy52-live-cache:/opt/cache -w /workspace "$IMAGE" bash -c "$*"
+}
+export -f indev
+
+usage() {
+  cat <<U
+Usage: ./project <command> [args]
+
+  image                 build the devcontainer image (REBUILD=1 forces)
+  test                  run all tests (bridge, web, android)
+  build                 build thingy.exe and the Android APK
+  bridge <cmd> [args]   bridge/terminal/web commands  (see scripts/bridge.sh)
+  web <cmd>             dashboard commands            (see scripts/web.sh)
+  android <cmd>         Android commands              (see scripts/android.sh)
+  run [args]            build and start thingy.exe (terminal + web on :8052)
+U
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  image)   REBUILD=1 indev true ;;
+  test)    "$ROOT/scripts/bridge.sh" test; "$ROOT/scripts/web.sh" test; "$ROOT/scripts/android.sh" test ;;
+  build)   "$ROOT/scripts/bridge.sh" build; "$ROOT/scripts/android.sh" build ;;
+  run)     "$ROOT/scripts/bridge.sh" run "$@" ;;
+  bridge|web|android) "$ROOT/scripts/$cmd.sh" "$@" ;;
+  help|-h|--help) usage ;;
+  *) usage; exit 1 ;;
+esac

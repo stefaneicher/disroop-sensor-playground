@@ -1,0 +1,12 @@
+{
+  "name": "thingy52-live",
+  "build": { "dockerfile": "Dockerfile" },
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "mounts": ["source=thingy52-live-cache,target=/opt/cache,type=volume"],
+  "customizations": {
+    "vscode": {
+      "extensions": ["golang.go", "fwcd.kotlin", "vscjava.vscode-gradle", "dbaeumer.vscode-eslint"]
+    }
+  }
+}

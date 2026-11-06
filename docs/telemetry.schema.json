@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Thingy52 telemetry snapshot",
+  "type": "object",
+  "$defs": {
+    "num": { "type": ["number", "null"] },
+    "xyz": { "type": ["object", "null"], "required": ["x", "y", "z"],
+             "properties": { "x": { "$ref": "#/$defs/num" }, "y": { "$ref": "#/$defs/num" }, "z": { "$ref": "#/$defs/num" } } }
+  },
+  "required": ["ts", "connected", "device", "motion", "environment", "sound", "ui"],
+  "properties": {
+    "ts": { "type": "integer" },
+    "connected": { "type": "boolean" },
+    "device": {
+      "type": "object", "required": ["name", "address", "rssi", "battery_pct", "source"],
+      "properties": {
+        "name": { "type": ["string", "null"] }, "address": { "type": ["string", "null"] },
+        "rssi": { "$ref": "#/$defs/num" }, "battery_pct": { "$ref": "#/$defs/num" },
+        "source": { "enum": ["ble", "sim"] }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "required": ["accel_g", "gyro_dps", "compass_ut", "euler_deg", "quaternion", "heading_deg", "orientation", "steps", "tap"],
+      "properties": {
+        "accel_g": { "$ref": "#/$defs/xyz" }, "gyro_dps": { "$ref": "#/$defs/xyz" }, "compass_ut": { "$ref": "#/$defs/xyz" },
+        "euler_deg": { "type": ["object", "null"], "properties": { "roll": { "$ref": "#/$defs/num" }, "pitch": { "$ref": "#/$defs/num" }, "yaw": { "$ref": "#/$defs/num" } } },
+        "quaternion": { "type": ["object", "null"], "properties": { "w": { "$ref": "#/$defs/num" }, "x": { "$ref": "#/$defs/num" }, "y": { "$ref": "#/$defs/num" }, "z": { "$ref": "#/$defs/num" } } },
+        "heading_deg": { "$ref": "#/$defs/num" },
+        "orientation": { "enum": ["portrait", "landscape", "reverse_portrait", "reverse_landscape", null] },
+        "steps": { "$ref": "#/$defs/num" },
+        "tap": { "type": ["object", "null"], "properties": {
+          "direction": { "enum": ["X+", "X-", "Y+", "Y-", "Z+", "Z-"] }, "count": { "type": "integer" }, "ts": { "type": "integer" } } }
+      }
+    },
+    "environment": {
+      "type": "object", "required": ["temperature_c", "humidity_pct", "pressure_hpa", "eco2_ppm", "tvoc_ppb", "color"],
+      "properties": {
+        "temperature_c": { "$ref": "#/$defs/num" }, "humidity_pct": { "$ref": "#/$defs/num" }, "pressure_hpa": { "$ref": "#/$defs/num" },
+        "eco2_ppm": { "$ref": "#/$defs/num" }, "tvoc_ppb": { "$ref": "#/$defs/num" },
+        "color": { "type": ["object", "null"], "properties": { "r": { "$ref": "#/$defs/num" }, "g": { "$ref": "#/$defs/num" }, "b": { "$ref": "#/$defs/num" }, "clear": { "$ref": "#/$defs/num" } } }
+      }
+    },
+    "sound": {
+      "type": "object", "required": ["level_dbfs", "song"],
+      "properties": {
+        "level_dbfs": { "$ref": "#/$defs/num" },
+        "song": { "type": "object", "properties": { "playing": { "type": "boolean" }, "note_index": { "type": "integer" } } }
+      }
+    },
+    "ui": {
+      "type": "object", "required": ["button_pressed", "led"],
+      "properties": {
+        "button_pressed": { "type": ["boolean", "null"] },
+        "led": { "type": ["object", "null"], "properties": { "r": { "$ref": "#/$defs/num" }, "g": { "$ref": "#/$defs/num" }, "b": { "$ref": "#/$defs/num" } } }
+      }
+    }
+  }
+}

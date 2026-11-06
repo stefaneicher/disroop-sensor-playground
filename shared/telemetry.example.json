@@ -1,0 +1,23 @@
+{
+  "ts": 1762460000000,
+  "connected": true,
+  "device": { "name": "Thingy", "address": "E3:58:08:1B:53:5F", "rssi": -43, "battery_pct": 87, "source": "sim" },
+  "motion": {
+    "accel_g": { "x": 0.02, "y": -0.01, "z": 1.0 },
+    "gyro_dps": { "x": 1.3, "y": -0.4, "z": 0.2 },
+    "compass_ut": { "x": 21.4, "y": -8.1, "z": 40.2 },
+    "euler_deg": { "roll": 1.0, "pitch": -2.0, "yaw": 47.0 },
+    "quaternion": { "w": 1, "x": 0, "y": 0, "z": 0 },
+    "heading_deg": 47.0,
+    "orientation": "portrait",
+    "steps": 12,
+    "tap": { "direction": "Z+", "count": 1, "ts": 1762459999000 }
+  },
+  "environment": {
+    "temperature_c": 23.4, "humidity_pct": 41, "pressure_hpa": 963.2,
+    "eco2_ppm": 612, "tvoc_ppb": 14,
+    "color": { "r": 180, "g": 160, "b": 120, "clear": 400 }
+  },
+  "sound": { "level_dbfs": -38.5, "song": { "playing": false, "note_index": -1 } },
+  "ui": { "button_pressed": false, "led": { "r": 0, "g": 0, "b": 0 } }
+}
