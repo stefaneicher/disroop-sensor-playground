@@ -27,7 +27,7 @@ const charts: Record<MotionSeries, LiveChart> = {
   compass_ut: new LiveChart(chartRoot('chart-compass'), { minSpan: 20, digits: 1 }),
 };
 const levelChart = new LiveChart(chartRoot('chart-level'), {
-  digits: 1, fixedRange: { min: -80, max: 0 }, axes: [{ key: 'v', label: 'Pegel', color: '#38bdf8' }],
+  digits: 1, fixedRange: { min: -80, max: 0 }, axes: [{ key: 'v', label: 'Pegel', color: '#a3e635' }],
 });
 
 let state = initialState();

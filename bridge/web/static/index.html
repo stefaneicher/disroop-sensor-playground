@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <title>Thingy:52 Live</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='7' fill='%2338bdf8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%230b1120'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/png" href="disroop.png">
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="js/app.js"></script>
 </head>
 <body class="is-connecting">
   <header class="topbar">
     <div class="brand">
-      <span class="brand-logo" aria-hidden="true"></span>
+      <img class="brand-logo" src="disroop.png" alt="Disroop">
       <div>
-        <h1>Thingy:52 <span>Live</span></h1>
+        <h1>Thingy:52 <span>Live</span><small class="brand-by">by Disroop</small></h1>
         <div class="device"><span id="device-name">–</span> · <code id="device-address">–</code></div>
       </div>
     </div>
@@ -174,6 +174,6 @@
       <ol class="log-list mono" id="log" aria-live="off"></ol>
     </section>
   </main>
-  <footer class="foot">Nordic Thingy:52 · Werksfirmware über Bluetooth LE · Server-Sent Events <code>/api/stream</code></footer>
+  <footer class="foot"><a href="https://disroop.ch" target="_blank" rel="noopener"><img src="disroop.png" alt="">Disroop</a> · Disrupt and rebuild. · Nordic Thingy:52 · Werksfirmware über Bluetooth LE · Server-Sent Events <code>/api/stream</code></footer>
 </body>
 </html>
