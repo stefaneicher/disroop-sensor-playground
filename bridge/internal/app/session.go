@@ -18,6 +18,15 @@ type Logf func(format string, args ...any)
 
 const levelPublishEvery = 100 * time.Millisecond
 
+// The microphone streams 16 kHz IMA-ADPCM (≈ 32 kB/s, fixed in the firmware). Together with all other
+// notifications that makes the Windows BLE link drop, so the mic is off by default (SetMic switches it).
+// If the connection drops MicMaxDrops times in a row within MicDropWindow after the mic started,
+// the mic is switched off automatically.
+const (
+	MicMaxDrops   = 2
+	MicDropWindow = 30 * time.Second
+)
+
 // Session owns the current connection.
 type Session struct {
 	store *telemetry.Store
@@ -26,16 +35,26 @@ type Session struct {
 
 	// OnButton is called (in its own goroutine) for every button change.
 	OnButton func(pressed bool)
+	// Skip lists characteristic names (thingy.Char.Name) not to subscribe to (diagnostics, --skip).
+	Skip map[string]bool
+	// MicDelay is the wait after connecting before the mic is subscribed, so the link settles first.
+	MicDelay time.Duration
 
+	micMu          sync.Mutex // serializes mic (un)subscriptions
 	mu             sync.Mutex
 	dev            device.Device
 	meter          *thingy.LevelMeter
 	lastLevel      time.Time
 	speakerStatus  int
 	decodeFailures map[string]bool
+	micWanted      bool
+	micReady       bool      // MicDelay has passed on the current connection
+	micOn          bool      // mic notifications are subscribed on the current connection
+	micSince       time.Time // mic start on the current connection, zero if none
+	micDrops       int
 }
 
-// NewSession returns a session that writes into store.
+// NewSession returns a session that writes into store. The microphone is off.
 func NewSession(store *telemetry.Store, logf Logf, now func() time.Time) *Session {
 	return &Session{store: store, logf: logf, now: now, speakerStatus: -1}
 }
@@ -50,7 +69,8 @@ func (s *Session) Run(ctx context.Context, conn device.Connector, retry time.Dur
 			if err == nil {
 				s.waitForDrop(ctx, dev)
 			}
-			s.Detach()
+			since := s.Detach()
+			s.checkMicDrop(ctx, since)
 			_ = dev.Close()
 		}
 		if ctx.Err() != nil {
@@ -90,6 +110,110 @@ func Connect(ctx context.Context, conn device.Connector, retry time.Duration, lo
 	}
 }
 
+// checkMicDrop counts connections lost shortly after the mic started and switches the mic off
+// after MicMaxDrops of them in a row.
+func (s *Session) checkMicDrop(ctx context.Context, since time.Time) {
+	if ctx.Err() != nil || since.IsZero() {
+		return
+	}
+	s.mu.Lock()
+	if s.now().Sub(since) >= MicDropWindow {
+		s.micDrops = 0
+		s.mu.Unlock()
+		return
+	}
+	s.micDrops++
+	off := s.micDrops >= MicMaxDrops && s.micWanted
+	s.mu.Unlock()
+	if off {
+		s.logf("Mikrofon automatisch ausgeschaltet: Verbindung brach %d× kurz nach dem Mikrofon-Start ab", MicMaxDrops)
+		s.SetMic(false)
+	}
+}
+
+// SetMic switches the microphone (sound level) on or off, also while connected.
+func (s *Session) SetMic(on bool) {
+	s.micMu.Lock()
+	defer s.micMu.Unlock()
+	s.mu.Lock()
+	changed := s.micWanted != on
+	s.micWanted = on
+	if on {
+		s.micDrops = 0
+	}
+	dev, wasOn := s.dev, s.micOn
+	if !on {
+		s.micOn = false
+	}
+	s.mu.Unlock()
+	s.store.Update(func(snap *telemetry.Snapshot) {
+		snap.Sound.MicEnabled = on
+		if !on {
+			snap.Sound.LevelDBFS = nil
+		}
+	})
+	if changed {
+		s.logf("Mikrofon %s", map[bool]string{true: "ein", false: "aus"}[on])
+	}
+	switch {
+	case on && dev != nil:
+		s.startMic(dev)
+	case !on && wasOn && dev != nil:
+		if err := dev.Unsubscribe(thingy.MicrophoneChar); err != nil {
+			s.logf("Mikrofon abbestellen fehlgeschlagen: %v", err)
+		}
+	}
+}
+
+// MicEnabled reports whether the mic is switched on.
+func (s *Session) MicEnabled() bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.micWanted
+}
+
+// micAfterDelay marks the connection ready for the mic after MicDelay and starts it if wanted.
+func (s *Session) micAfterDelay(dev device.Device) {
+	if s.MicDelay > 0 {
+		t := time.NewTimer(s.MicDelay)
+		defer t.Stop()
+		select {
+		case <-t.C:
+		case <-dev.Done():
+			return
+		}
+	}
+	s.mu.Lock()
+	if s.dev == dev {
+		s.micReady = true
+	}
+	s.mu.Unlock()
+	s.micMu.Lock()
+	defer s.micMu.Unlock()
+	s.startMic(dev)
+}
+
+// startMic subscribes the mic on dev if it is wanted, the connection is ready and it is not on yet.
+// The caller holds micMu.
+func (s *Session) startMic(dev device.Device) {
+	s.mu.Lock()
+	if s.dev != dev || !s.micWanted || !s.micReady || s.micOn || s.Skip[thingy.MicrophoneChar.Name] {
+		s.mu.Unlock()
+		return
+	}
+	s.micOn = true
+	s.meter, s.lastLevel = thingy.NewLevelMeter(0.3), time.Time{}
+	if s.micSince.IsZero() {
+		s.micSince = s.now()
+	}
+	s.mu.Unlock()
+	if !s.subscribe(dev, thingy.MicrophoneChar) {
+		s.mu.Lock()
+		s.micOn = false
+		s.mu.Unlock()
+	}
+}
+
 func (s *Session) waitForDrop(ctx context.Context, dev device.Device) {
 	select {
 	case <-ctx.Done():
@@ -105,14 +229,13 @@ func (s *Session) Attach(dev device.Device) error {
 	}
 	s.mu.Lock()
 	s.dev = dev
-	s.meter = thingy.NewLevelMeter(0.3)
-	s.lastLevel = time.Time{}
 	s.decodeFailures = map[string]bool{}
+	s.micReady, s.micOn, s.micSince = false, false, time.Time{}
 	s.mu.Unlock()
 
 	for _, c := range thingy.NotifyChars {
-		if err := dev.Subscribe(c, func(b []byte) { s.Handle(c, b) }); err != nil {
-			s.logf("Abo %s fehlgeschlagen: %v", c.Name, err)
+		if c != thingy.MicrophoneChar && !s.Skip[c.Name] {
+			s.subscribe(dev, c)
 		}
 	}
 	info := dev.Info()
@@ -127,7 +250,16 @@ func (s *Session) Attach(dev device.Device) error {
 		s.Handle(thingy.BatteryChar, b)
 	}
 	s.logf("Verbunden mit %s (%s)", info.Name, info.Address)
+	go s.micAfterDelay(dev)
 	return nil
+}
+
+func (s *Session) subscribe(dev device.Device, c thingy.Char) bool {
+	if err := dev.Subscribe(c, func(b []byte) { s.Handle(c, b) }); err != nil {
+		s.logf("Abo %s fehlgeschlagen: %v", c.Name, err)
+		return false
+	}
+	return true
 }
 
 // Configure writes the motion, environment and sound configuration.
@@ -150,12 +282,18 @@ func Configure(dev device.Device, logf Logf) error {
 	return nil
 }
 
-// Detach marks the session as disconnected.
-func (s *Session) Detach() {
+// Detach marks the session as disconnected. It returns when the mic was started on the connection
+// (zero if it was not).
+func (s *Session) Detach() time.Time {
 	s.mu.Lock()
-	s.dev = nil
+	since := s.micSince
+	s.dev, s.micReady, s.micOn, s.micSince = nil, false, false, time.Time{}
 	s.mu.Unlock()
-	s.store.Update(func(snap *telemetry.Snapshot) { snap.Connected = false })
+	s.store.Update(func(snap *telemetry.Snapshot) {
+		snap.Connected = false
+		snap.Sound.LevelDBFS = nil
+	})
+	return since
 }
 
 func (s *Session) device() (device.Device, error) {

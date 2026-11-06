@@ -7,8 +7,9 @@ import (
 )
 
 func TestDecodeADPCMFrame(t *testing.T) {
+	// Firmware layout (dvi_adpcm.c): predictor big-endian (htons), u8 index, first sample in the HIGH nibble.
 	// predictor 0, step index 0 (step 7); nibble 7 → +11 (index 8, step 16); nibble 0 → +2.
-	got, err := DecodeADPCMFrame([]byte{0x00, 0x00, 0x00, 0x07})
+	got, err := DecodeADPCMFrame([]byte{0x00, 0x00, 0x00, 0x70})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -19,7 +20,7 @@ func TestDecodeADPCMFrame(t *testing.T) {
 
 func TestDecodeADPCMFrameNegativeAndClamp(t *testing.T) {
 	// predictor 32767 index 88: positive nibble must clamp at 32767, then nibble 0xF goes down.
-	got, err := DecodeADPCMFrame([]byte{0xFF, 0x7F, 88, 0xF7})
+	got, err := DecodeADPCMFrame([]byte{0x7F, 0xFF, 88, 0x7F})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -28,6 +29,21 @@ func TestDecodeADPCMFrameNegativeAndClamp(t *testing.T) {
 	}
 	if got[1] >= got[0] {
 		t.Fatalf("second sample %d must decrease", got[1])
+	}
+}
+
+func TestDecodeADPCMFramePredictorIsBigEndian(t *testing.T) {
+	got, _ := DecodeADPCMFrame([]byte{0x01, 0x00, 0, 0x00}) // 0x0100 = 256; nibble 0 adds 7>>3 = 0
+	if want := []int16{256, 256}; !slices.Equal(got, want) {
+		t.Fatalf("got %v want %v", got, want)
+	}
+}
+
+func TestEncodeADPCMFrameUsesFirmwareLayout(t *testing.T) {
+	// Like the firmware encoder: header = initial predictor (big-endian) + index, then high nibble first.
+	got := EncodeADPCMFrame([]int16{256, 256 + 11}) // nibbles 0 (high) then 7 (low)
+	if want := []byte{0x01, 0x00, 0, 0x07}; !slices.Equal(got, want) {
+		t.Fatalf("got % X want % X", got, want)
 	}
 }
 

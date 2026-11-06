@@ -21,16 +21,26 @@ poll 150 curl -fs "$BASE/healthz" -o /dev/null || fail "/healthz not reachable w
 [[ "$(curl -fs "$BASE/healthz")" == "ok" ]] || fail "/healthz"
 ok "/healthz"
 
-live() { state | jq -e '.connected and .environment.temperature_c != null and .sound.level_dbfs != null and .motion.accel_g != null' >/dev/null; }
+live() { state | jq -e '.connected and .environment.temperature_c != null and .motion.accel_g != null' >/dev/null; }
 poll 150 live || fail "no live sim values within 30 s: $(state)"
 STATE="$(state)"
 echo "$STATE" | jq -e --slurpfile schema docs/telemetry.schema.json '
   ($schema[0]) as $s | . as $d
   | all($s.required[]; . as $k | $d | has($k))
   and all($s.properties | to_entries[] | select(.value.required); .key as $k | all(.value.required[]; . as $r | $d[$k] | has($r)))
-  and .device.source == "sim" and (.motion.accel_g.z > 0.9)' >/dev/null \
+  and .device.source == "sim" and (.motion.accel_g.z > 0.9)
+  and .sound.mic_enabled == false and .sound.level_dbfs == null' >/dev/null \
   || fail "/api/state misses schema keys or live values: $STATE"
-ok "/api/state has all schema keys, source sim, live values"
+ok "/api/state has all schema keys, source sim, live values, mic off"
+
+mic() { curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d "$1" "$BASE/api/mic"; }
+[[ "$(mic '{"enabled":true}')" == 202 ]] || fail "POST /api/mic on"
+level() { state | jq -e "$1" >/dev/null; }
+poll 50 level '.sound.mic_enabled and .sound.level_dbfs != null' || fail "no sound level after mic on: $(state)"
+[[ "$(mic '{"enabled":false}')" == 202 ]] || fail "POST /api/mic off"
+poll 50 level '(.sound.mic_enabled | not) and .sound.level_dbfs == null' || fail "sound level still set after mic off: $(state)"
+[[ "$(mic '{"enabled":"yes"}')" == 400 ]] || fail "POST /api/mic with bad body not rejected"
+ok "POST /api/mic on/off/400"
 
 # The sim changes values every 100 ms; 10 Hz throttle → ≤ 31 events in 3 s. Lower bound kept low for loaded machines.
 N="$(curl -sN --max-time 3 "$BASE/api/stream" | grep -c '^event: telemetry' || true)"

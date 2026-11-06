@@ -7,9 +7,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"os"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"tinygo.org/x/bluetooth"
@@ -157,7 +157,7 @@ func (c *Connector) Connect(ctx context.Context) (device.Device, error) {
 	if err != nil {
 		return nil, fmt.Errorf("verbinden: %w", err)
 	}
-	d := &Device{dev: dev, info: info, logf: c.logf, chars: map[string]bluetooth.DeviceCharacteristic{}, done: make(chan struct{})}
+	d := &Device{dev: dev, info: info, logf: c.logf, gens: map[string]*atomic.Int64{}, chars: map[string]bluetooth.DeviceCharacteristic{}, done: make(chan struct{})}
 	if err := d.discover(); err != nil {
 		_ = dev.Disconnect()
 		return nil, err
@@ -179,7 +179,10 @@ type Device struct {
 	info  device.Info
 	chars map[string]bluetooth.DeviceCharacteristic
 
-	logf     func(string, ...any)
+	logf func(string, ...any)
+	// gens invalidates callbacks of earlier subscriptions: tinygo registers a new WinRT handler on every
+	// EnableNotifications and cannot remove the old one.
+	gens     map[string]*atomic.Int64
 	mu       sync.Mutex // serializes GATT operations
 	done     chan struct{}
 	doneOnce sync.Once
@@ -204,6 +207,7 @@ func (d *Device) discover() error {
 		}
 		for _, ch := range chars {
 			d.chars[ch.UUID().String()] = ch
+			d.gens[ch.UUID().String()] = new(atomic.Int64)
 		}
 	}
 	if _, ok := d.chars[thingy.RawMotionChar.UUID]; !ok {
@@ -301,12 +305,27 @@ func (d *Device) Subscribe(c thingy.Char, fn func([]byte)) error {
 	if err != nil {
 		return err
 	}
+	gen := d.gens[c.UUID]
+	mine := gen.Add(1)
 	d.mu.Lock()
 	defer d.mu.Unlock()
-	if os.Getenv("THINGY_DIAG_SKIP") != "" && strings.Contains(os.Getenv("THINGY_DIAG_SKIP"), c.Name) { // DIAG
-		return nil
+	return ch.EnableNotifications(func(buf []byte) {
+		if gen.Load() == mine {
+			fn(append([]byte(nil), buf...))
+		}
+	})
+}
+
+// Unsubscribe implements device.Device (writes the CCCD to "none").
+func (d *Device) Unsubscribe(c thingy.Char) error {
+	ch, err := d.char(c)
+	if err != nil {
+		return err
 	}
-	return ch.EnableNotifications(func(buf []byte) { fn(append([]byte(nil), buf...)) })
+	d.gens[c.UUID].Add(1)
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	return ch.EnableNotifications(nil)
 }
 
 // Done implements device.Device.

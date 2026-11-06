@@ -27,7 +27,10 @@ import (
 	"github.com/stefaneicher/thingy52-live/bridge/web"
 )
 
-const reconnectAfter = 3 * time.Second
+const (
+	reconnectAfter = 3 * time.Second
+	micDelay       = 5 * time.Second // BLE: let the link settle before the mic stream starts
+)
 
 type options struct {
 	command string
@@ -35,6 +38,8 @@ type options struct {
 	addr    string
 	port    int
 	noTUI   bool
+	mic     bool
+	skip    string
 	volume  int
 	restore bool
 	backup  string
@@ -63,6 +68,8 @@ func parseArgs(args []string, stderr io.Writer) (options, error) {
 	fs.StringVar(&o.addr, "addr", "", "Bluetooth-Adresse des Thingy (leer = erstes gefundenes)")
 	fs.IntVar(&o.port, "port", 8052, "HTTP-Port (nur 127.0.0.1)")
 	fs.BoolVar(&o.noTUI, "no-tui", false, "keine Live-Anzeige, nur Meldungen ausgeben")
+	fs.BoolVar(&o.mic, "mic", false, "Mikrofon (Lautstärke) beim Start einschalten; auch per Web-GUI/POST /api/mic")
+	fs.StringVar(&o.skip, "skip", "", "Diagnose: diese Notifications nicht abonnieren, z. B. euler,quaternion")
 	fs.IntVar(&o.volume, "volume", 100, "Lautstärke des Lieds 0..100")
 	fs.BoolVar(&o.restore, "restore", false, "nfc: Backup zurückschreiben")
 	fs.StringVar(&o.backup, "backup", "", "nfc: Backup-Datei (Standard build/nfc-backup.hex)")
@@ -125,6 +132,16 @@ func run(args []string, stdout, stderr io.Writer) int {
 	return 0
 }
 
+func skipSet(list string) map[string]bool {
+	set := map[string]bool{}
+	for _, name := range strings.Split(list, ",") {
+		if name = strings.TrimSpace(name); name != "" {
+			set[name] = true
+		}
+	}
+	return set
+}
+
 func printLogf(w io.Writer) app.Logf {
 	return func(format string, args ...any) {
 		fmt.Fprintf(w, "%s  %s\n", time.Now().Format("15:04:05"), fmt.Sprintf(format, args...))
@@ -172,6 +189,11 @@ func live(ctx context.Context, o options, stdout io.Writer) error {
 	conn := newConnector(o, logs.Logf)
 	store := telemetry.NewStore(telemetry.New(conn.Source()), time.Now)
 	session := app.NewSession(store, logs.Logf, time.Now)
+	session.Skip = skipSet(o.skip)
+	if !o.sim {
+		session.MicDelay = micDelay
+	}
+	session.SetMic(o.mic)
 	chorus := song.Chorus()
 	player := song.NewPlayer(chorus, session, song.RealClock{}, songState(store))
 	session.OnButton = func(pressed bool) {
@@ -188,7 +210,7 @@ func live(ctx context.Context, o options, stdout io.Writer) error {
 	url := fmt.Sprintf("http://localhost:%d", o.port)
 	srv := &http.Server{
 		Handler: server.New(server.Config{
-			Store: store, Logs: logs, Song: player, LED: session, Static: web.Static(), DefaultVolume: o.volume,
+			Store: store, Logs: logs, Song: player, LED: session, Mic: session, Static: web.Static(), DefaultVolume: o.volume,
 		}),
 		BaseContext:       func(net.Listener) context.Context { return ctx },
 		ReadHeaderTimeout: 5 * time.Second,

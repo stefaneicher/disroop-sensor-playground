@@ -13,6 +13,7 @@ func TestParseArgs(t *testing.T) {
 	}{
 		{nil, options{command: "live", port: 8052, volume: 100, backup: "build/nfc-backup.hex"}},
 		{[]string{"--sim", "--no-tui", "--port", "9000"}, options{command: "live", sim: true, noTUI: true, port: 9000, volume: 100, backup: "build/nfc-backup-sim.hex"}},
+		{[]string{"--mic", "--skip", "euler"}, options{command: "live", mic: true, skip: "euler", port: 8052, volume: 100, backup: "build/nfc-backup.hex"}},
 		{[]string{"song", "--volume", "40", "--addr", "E3:58:08:1B:53:5F"}, options{command: "song", addr: "E3:58:08:1B:53:5F", port: 8052, volume: 40, backup: "build/nfc-backup.hex"}},
 		{[]string{"nfc", "--restore"}, options{command: "nfc", restore: true, port: 8052, volume: 100, backup: "build/nfc-backup.hex"}},
 	}

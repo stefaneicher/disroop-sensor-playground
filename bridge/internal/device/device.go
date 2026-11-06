@@ -31,6 +31,8 @@ type Device interface {
 	WriteNoResponse(c thingy.Char, data []byte) error
 	// Subscribe enables notifications. fn runs on an adapter goroutine and must not block.
 	Subscribe(c thingy.Char, fn func([]byte)) error
+	// Unsubscribe disables notifications; fn of the previous Subscribe is not called anymore.
+	Unsubscribe(c thingy.Char) error
 	// Done is closed when the connection is lost or closed.
 	Done() <-chan struct{}
 	Close() error

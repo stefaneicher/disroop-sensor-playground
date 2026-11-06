@@ -25,12 +25,18 @@ type LEDControl interface {
 	LED(r, g, b uint8) error
 }
 
+// MicControl switches the microphone (sound level) on or off.
+type MicControl interface {
+	SetMic(on bool)
+}
+
 // Config holds the dependencies of the handler.
 type Config struct {
 	Store         *telemetry.Store
 	Logs          *telemetry.LogBus
 	Song          SongControl
 	LED           LEDControl
+	Mic           MicControl
 	Static        fs.FS
 	DefaultVolume int
 	MinInterval   time.Duration // minimum time between telemetry events per client (default 100 ms)
@@ -55,11 +61,13 @@ func New(cfg Config) http.Handler {
 	mux.HandleFunc("GET /api/stream", s.stream)
 	mux.HandleFunc("POST /api/song", s.song)
 	mux.HandleFunc("POST /api/led", s.led)
+	mux.HandleFunc("POST /api/mic", s.mic)
 	notAllowed := func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusMethodNotAllowed, map[string]string{"error": "use POST"})
 	}
 	mux.HandleFunc("GET /api/song", notAllowed)
 	mux.HandleFunc("GET /api/led", notAllowed)
+	mux.HandleFunc("GET /api/mic", notAllowed)
 	mux.HandleFunc("OPTIONS /api/", func(w http.ResponseWriter, _ *http.Request) { w.WriteHeader(http.StatusNoContent) })
 	return cors(mux)
 }
@@ -161,4 +169,18 @@ func (s *server) led(w http.ResponseWriter, r *http.Request) {
 	default:
 		w.WriteHeader(http.StatusNoContent)
 	}
+}
+
+type micRequest struct {
+	Enabled *bool `json:"enabled"`
+}
+
+func (s *server) mic(w http.ResponseWriter, r *http.Request) {
+	var req micRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.Enabled == nil {
+		badRequest(w, `body must be {"enabled":true|false}`)
+		return
+	}
+	s.Mic.SetMic(*req.Enabled)
+	writeJSON(w, http.StatusAccepted, map[string]bool{"enabled": *req.Enabled})
 }

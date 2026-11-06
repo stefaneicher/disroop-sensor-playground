@@ -3,6 +3,7 @@ package server
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -32,12 +33,20 @@ type fakeLED struct {
 
 func (f *fakeLED) LED(r, g, b uint8) error { f.rgb = [3]uint8{r, g, b}; return f.err }
 
+type fakeMic struct {
+	mu  sync.Mutex
+	set []bool
+}
+
+func (f *fakeMic) SetMic(on bool) { f.mu.Lock(); f.set = append(f.set, on); f.mu.Unlock() }
+
 type fixture struct {
 	srv   *httptest.Server
 	store *telemetry.Store
 	logs  *telemetry.LogBus
 	song  *fakeSong
 	led   *fakeLED
+	mic   *fakeMic
 }
 
 func newFixture(t *testing.T) *fixture {
@@ -47,9 +56,10 @@ func newFixture(t *testing.T) *fixture {
 		logs:  telemetry.NewLogBus(10),
 		song:  &fakeSong{},
 		led:   &fakeLED{},
+		mic:   &fakeMic{},
 	}
 	h := New(Config{
-		Store: f.store, Logs: f.logs, Song: f.song, LED: f.led,
+		Store: f.store, Logs: f.logs, Song: f.song, LED: f.led, Mic: f.mic,
 		Static: fstest.MapFS{
 			"index.html": {Data: []byte("<h1>Thingy</h1>")},
 			"js/app.js":  {Data: []byte("export {}")},
@@ -308,5 +318,26 @@ func TestCORSPreflight(t *testing.T) {
 	}
 	if res.StatusCode != http.StatusNoContent || res.Header.Get("Access-Control-Allow-Origin") != "*" {
 		t.Fatalf("%d %v", res.StatusCode, res.Header)
+	}
+}
+
+func TestMicSwitch(t *testing.T) {
+	f := newFixture(t)
+	for _, body := range []string{`{"enabled":true}`, `{"enabled":false}`} {
+		if res := f.post(t, "/api/mic", body); res.StatusCode != http.StatusAccepted {
+			t.Fatalf("%s: %d", body, res.StatusCode)
+		}
+	}
+	for _, body := range []string{`{"enabled":"yes"}`, `{}`, `not json`} {
+		if res := f.post(t, "/api/mic", body); res.StatusCode != http.StatusBadRequest {
+			t.Errorf("%s: %d", body, res.StatusCode)
+		}
+	}
+	if fmt.Sprint(f.mic.set) != "[true false]" {
+		t.Fatalf("SetMic calls %v", f.mic.set)
+	}
+	res, _ := http.Get(f.srv.URL + "/api/mic")
+	if res.StatusCode != http.StatusMethodNotAllowed {
+		t.Errorf("GET /api/mic: %d", res.StatusCode)
 	}
 }

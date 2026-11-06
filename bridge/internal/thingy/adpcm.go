@@ -1,6 +1,7 @@
 package thingy
 
 import (
+	"encoding/binary"
 	"fmt"
 	"math"
 )
@@ -16,20 +17,20 @@ var imaStepTable = [89]int{
 	12635, 13899, 15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767,
 }
 
-// DecodeADPCMFrame decodes one Thingy microphone frame: i16 predictor, u8 step index,
-// then 4 bit IMA-ADPCM samples, low nibble first.
+// DecodeADPCMFrame decodes one Thingy microphone frame as written by the firmware (libs/dvi_adpcm):
+// i16 predictor BIG-endian, u8 step index, then 4 bit IMA-ADPCM samples, HIGH nibble first.
 func DecodeADPCMFrame(b []byte) ([]int16, error) {
 	if err := need(b, 3); err != nil {
 		return nil, err
 	}
-	pred := int(int16(le.Uint16(b)))
+	pred := int(int16(binary.BigEndian.Uint16(b)))
 	index := int(b[2])
 	if index > 88 {
 		return nil, fmt.Errorf("adpcm step index %d out of range", index)
 	}
 	out := make([]int16, 0, 2*(len(b)-3))
 	for _, v := range b[3:] {
-		for _, nibble := range [2]int{int(v & 0x0F), int(v >> 4)} {
+		for _, nibble := range [2]int{int(v >> 4), int(v & 0x0F)} {
 			pred, index = imaStep(pred, index, nibble)
 			out = append(out, int16(pred))
 		}

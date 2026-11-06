@@ -116,8 +116,9 @@ func (s *Session) microphone(b []byte) error {
 	}
 	now := s.now()
 	s.mu.Lock()
-	if s.meter == nil {
-		s.meter = thingy.NewLevelMeter(0.3)
+	if !s.micOn { // late frames after switching the mic off
+		s.mu.Unlock()
+		return nil
 	}
 	level := s.meter.Add(thingy.LevelDBFS(samples))
 	publish := now.Sub(s.lastLevel) >= levelPublishEvery

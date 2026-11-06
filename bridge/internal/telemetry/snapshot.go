@@ -85,8 +85,9 @@ type Song struct {
 
 // Sound values.
 type Sound struct {
-	LevelDBFS *float64 `json:"level_dbfs"`
-	Song      Song     `json:"song"`
+	LevelDBFS  *float64 `json:"level_dbfs"`
+	MicEnabled bool     `json:"mic_enabled"`
+	Song       Song     `json:"song"`
 }
 
 // UI values.

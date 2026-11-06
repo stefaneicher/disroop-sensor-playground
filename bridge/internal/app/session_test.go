@@ -63,6 +63,21 @@ func (f *fakeDevice) Subscribe(c thingy.Char, fn func([]byte)) error {
 	f.op("sub " + c.Name)
 	return nil
 }
+func (f *fakeDevice) Unsubscribe(c thingy.Char) error {
+	f.mu.Lock()
+	delete(f.subs, c)
+	f.mu.Unlock()
+	f.op("unsub " + c.Name)
+	return nil
+}
+func (f *fakeDevice) notify(c thingy.Char, b []byte) {
+	f.mu.Lock()
+	fn := f.subs[c]
+	f.mu.Unlock()
+	if fn != nil {
+		fn(b)
+	}
+}
 func (f *fakeDevice) Done() <-chan struct{} { return f.done }
 func (f *fakeDevice) Close() error          { return nil }
 func (f *fakeDevice) list() []string {
@@ -102,7 +117,7 @@ func TestAttachRunsStartupSequence(t *testing.T) {
 		}
 	}
 	for _, c := range thingy.NotifyChars {
-		if !contains(ops, "sub "+c.Name) {
+		if c != thingy.MicrophoneChar && !contains(ops, "sub "+c.Name) {
 			t.Errorf("missing subscription %s", c.Name)
 		}
 	}
@@ -163,25 +178,27 @@ func TestNotificationsUpdateSnapshot(t *testing.T) {
 
 func TestMicLevelIsSmoothedAndThrottled(t *testing.T) {
 	s, store, clock := newTestSession("ble")
+	s.SetMic(true)
 	dev := newFakeDevice()
 	_ = s.Attach(dev)
+	waitFor(t, func() bool { return subscribed(dev, thingy.MicrophoneChar) })
 	loud := make([]int16, 64)
 	for i := range loud {
 		loud[i] = 16384
 	}
 	frame := thingy.EncodeADPCMFrame(loud)
 
-	dev.subs[thingy.MicrophoneChar](frame)
+	dev.notify(thingy.MicrophoneChar, frame)
 	first := *store.Snapshot().Sound.LevelDBFS
 	if first > -5 || first < -8 {
 		t.Fatalf("level %v, want ≈ -6 dBFS", first)
 	}
-	dev.subs[thingy.MicrophoneChar](thingy.EncodeADPCMFrame(make([]int16, 64)))
+	dev.notify(thingy.MicrophoneChar, thingy.EncodeADPCMFrame(make([]int16, 64)))
 	if got := *store.Snapshot().Sound.LevelDBFS; got != first {
 		t.Fatalf("level published within 100 ms: %v", got)
 	}
 	clock.advance(100 * time.Millisecond)
-	dev.subs[thingy.MicrophoneChar](thingy.EncodeADPCMFrame(make([]int16, 64)))
+	dev.notify(thingy.MicrophoneChar, thingy.EncodeADPCMFrame(make([]int16, 64)))
 	if got := *store.Snapshot().Sound.LevelDBFS; got >= first {
 		t.Fatalf("level not updated after 100 ms: %v", got)
 	}
@@ -374,4 +391,126 @@ func TestConnectGivesUpOnCancelAndOtherErrors(t *testing.T) {
 	if _, err := Connect(ctx, &sleepyConnector{asleep: 1000}, time.Millisecond, func(string, ...any) {}); err == nil {
 		t.Fatal("want error after cancel")
 	}
+}
+
+func subscribed(dev *fakeDevice, c thingy.Char) bool { return contains(dev.list(), "sub "+c.Name) }
+
+func TestMicIsSubscribedOnlyAfterMicDelay(t *testing.T) {
+	s, _, _ := newTestSession("ble")
+	s.MicDelay = 50 * time.Millisecond
+	s.SetMic(true)
+	dev := newFakeDevice()
+	_ = s.Attach(dev)
+	if subscribed(dev, thingy.MicrophoneChar) {
+		t.Fatal("mic subscribed immediately")
+	}
+	if !subscribed(dev, thingy.RawMotionChar) {
+		t.Fatal("other notifications must be subscribed immediately")
+	}
+	waitFor(t, func() bool { return subscribed(dev, thingy.MicrophoneChar) })
+}
+
+func TestMicIsOffByDefault(t *testing.T) {
+	s, store, _ := newTestSession("ble")
+	dev := newFakeDevice()
+	_ = s.Attach(dev)
+	time.Sleep(20 * time.Millisecond)
+	if subscribed(dev, thingy.MicrophoneChar) {
+		t.Fatal("mic subscribed although off")
+	}
+	if snap := store.Snapshot(); snap.Sound.MicEnabled || snap.Sound.LevelDBFS != nil {
+		t.Fatalf("sound %+v", snap.Sound)
+	}
+}
+
+func TestSetMicWhileConnected(t *testing.T) {
+	s, store, clock := newTestSession("ble")
+	dev := newFakeDevice()
+	_ = s.Attach(dev)
+	waitFor(t, func() bool { s.mu.Lock(); defer s.mu.Unlock(); return s.micReady })
+
+	s.SetMic(true)
+	if !subscribed(dev, thingy.MicrophoneChar) || !store.Snapshot().Sound.MicEnabled {
+		t.Fatalf("mic not on: %v", dev.list())
+	}
+	frame := thingy.EncodeADPCMFrame([]int16{8000, -8000, 8000, -8000})
+	dev.notify(thingy.MicrophoneChar, frame)
+	if store.Snapshot().Sound.LevelDBFS == nil {
+		t.Fatal("no level while mic on")
+	}
+
+	s.SetMic(false)
+	clock.advance(time.Second)
+	dev.notify(thingy.MicrophoneChar, frame) // a late frame must not bring the level back
+	snap := store.Snapshot()
+	if !contains(dev.list(), "unsub microphone") || snap.Sound.MicEnabled || snap.Sound.LevelDBFS != nil {
+		t.Fatalf("mic not off: %+v %v", snap.Sound, dev.list())
+	}
+}
+
+func TestSkipLeavesCharacteristicsUnsubscribed(t *testing.T) {
+	s, _, _ := newTestSession("ble")
+	s.Skip = map[string]bool{"euler": true, "microphone": true}
+	s.SetMic(true)
+	dev := newFakeDevice()
+	_ = s.Attach(dev)
+	time.Sleep(20 * time.Millisecond)
+	if subscribed(dev, thingy.EulerChar) || subscribed(dev, thingy.MicrophoneChar) || !subscribed(dev, thingy.HeadingChar) {
+		t.Fatalf("ops %v", dev.list())
+	}
+}
+
+// droppingConnector hands out fake devices; the test closes them to simulate drops.
+type droppingConnector struct{ devices chan *fakeDevice }
+
+func (c *droppingConnector) Source() string { return "ble" }
+func (c *droppingConnector) Connect(ctx context.Context) (device.Device, error) {
+	d := newFakeDevice()
+	c.devices <- d
+	return d, nil
+}
+
+func runWithMic(t *testing.T) (*Session, *telemetry.Store, *telemetry.LogBus, *fixedClock, *droppingConnector) {
+	t.Helper()
+	logs := telemetry.NewLogBus(50)
+	clock := &fixedClock{}
+	store := telemetry.NewStore(telemetry.New("ble"), clock.now)
+	s := NewSession(store, logs.Logf, clock.now)
+	s.SetMic(true)
+	conn := &droppingConnector{devices: make(chan *fakeDevice, 4)}
+	ctx, cancel := context.WithCancel(context.Background())
+	t.Cleanup(cancel)
+	go s.Run(ctx, conn, time.Millisecond)
+	return s, store, logs, clock, conn
+}
+
+func TestRunDisablesMicAfterRepeatedDropsWithMic(t *testing.T) {
+	_, store, logs, clock, conn := runWithMic(t)
+	for range MicMaxDrops {
+		dev := <-conn.devices
+		waitFor(t, func() bool { return subscribed(dev, thingy.MicrophoneChar) })
+		clock.advance(MicDropWindow / 2) // drops shortly after the mic stream started
+		close(dev.done)
+	}
+	dev := <-conn.devices
+	waitFor(t, func() bool { return subscribed(dev, thingy.RawMotionChar) })
+	time.Sleep(20 * time.Millisecond)
+	if subscribed(dev, thingy.MicrophoneChar) || store.Snapshot().Sound.MicEnabled {
+		t.Fatal("mic still on after repeated drops")
+	}
+	if !strings.Contains(strings.Join(logs.Recent(), "\n"), "Mikrofon automatisch ausgeschaltet") {
+		t.Fatalf("no log line: %v", logs.Recent())
+	}
+}
+
+func TestRunKeepsMicWhenConnectionWasStable(t *testing.T) {
+	_, _, _, clock, conn := runWithMic(t)
+	for range MicMaxDrops + 1 {
+		dev := <-conn.devices
+		waitFor(t, func() bool { return subscribed(dev, thingy.MicrophoneChar) })
+		clock.advance(2 * MicDropWindow) // ran fine for a while, then dropped (e.g. out of range)
+		close(dev.done)
+	}
+	dev := <-conn.devices
+	waitFor(t, func() bool { return subscribed(dev, thingy.MicrophoneChar) })
 }

@@ -152,6 +152,17 @@ func (d *Device) Subscribe(c thingy.Char, fn func([]byte)) error {
 	return nil
 }
 
+// Unsubscribe implements device.Device.
+func (d *Device) Unsubscribe(c thingy.Char) error {
+	if d.closed() {
+		return device.ErrNotConnected
+	}
+	d.mu.Lock()
+	delete(d.subs, c.UUID)
+	d.mu.Unlock()
+	return nil
+}
+
 func (d *Device) notify(c thingy.Char, payload []byte) {
 	if d.closed() {
 		return

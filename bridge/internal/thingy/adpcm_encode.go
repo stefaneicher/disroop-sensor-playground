@@ -7,15 +7,15 @@ func EncodeADPCMFrame(samples []int16) []byte {
 		return []byte{0, 0, 0}
 	}
 	pred, index := int(samples[0]), 0
-	out := []byte{byte(uint16(pred)), byte(uint16(pred) >> 8), byte(index)}
+	out := []byte{byte(uint16(pred) >> 8), byte(uint16(pred)), byte(index)}
 	var pending byte
 	for i, s := range samples {
 		nibble := imaNibble(pred, index, int(s))
 		pred, index = imaStep(pred, index, nibble)
 		if i%2 == 0 {
-			pending = byte(nibble)
+			pending = byte(nibble) << 4
 		} else {
-			out = append(out, pending|byte(nibble)<<4)
+			out = append(out, pending|byte(nibble))
 		}
 	}
 	if len(samples)%2 == 1 {
