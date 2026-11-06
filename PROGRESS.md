@@ -10,7 +10,7 @@ Stand: 2026-11-06 21:20. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 | 2 | Protokoll aus der Werksfirmware analysiert | ✅ | UUIDs, Q-Formate, NFC-Raw, Speaker-Freq-Mode |
 | 3 | `shared/chorus.json` (24 Noten) | ✅ | aus blinky `src/chorus.h` |
 | 4 | Devcontainer-Image (Go, Node, JDK, Android SDK) | ⬜ | Vorgabe: **alles** wird im Devcontainer-Image gebaut |
-| 5 | BLE-Scan: Thingy sichtbar? | 🔄 | Go-Scanner (`tinygo.org/x/bluetooth`) läuft als Machbarkeitstest |
+| 5 | BLE-Scan: Thingy sichtbar? | ✅ | `E3:58:08:1B:53:5F` "Thingy" −43 dBm; tinygo bluetooth funktioniert unter Windows, CGO_ENABLED=0 |
 | 6 | `docs/protocol.md` + Telemetrie-JSON-Schema | ⬜ | Vertrag für alle Agents |
 | 7 | Agent **bridge** (Go: BLE → Terminal + HTTP/SSE, Lied, NFC) | ⬜ | TDD, Simulator-Modus für Smoke-Tests |
 | 8 | Agent **web** (Dashboard in `bridge/web/`) | ⬜ | gegen Mock-SSE getestet |

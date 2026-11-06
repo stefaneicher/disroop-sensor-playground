@@ -72,6 +72,11 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 
 **Lied:** `shared/chorus.json` mit `{on_ms, off_ms, hz}` × 24 und `pause_ms` 1500.
 
+## Hardware
+- Thingy:52 Adresse `E3:58:08:1B:53:5F`, Name „Thingy“, Werksfirmware sendet Advertising.
+- Schläft nach einigen Minuten ohne Verbindung. Aufwecken: Knopf drücken oder schütteln.
+- `tinygo.org/x/bluetooth` funktioniert: Build im Container `golang:1.27` mit `GOOS=windows CGO_ENABLED=0`, Scan ok.
+
 ## Umgebung
 - Windows + WSL. WSL hat kein Bluetooth, deshalb läuft die exe über WSL-Interop auf Windows.
 - Chrome: `C:\Program Files\Google\Chrome\Application\chrome.exe`
@@ -82,7 +87,6 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 - Machbarkeits-Scanner: `C:\Users\stefa\AppData\Local\Temp\blescan\` (Go, `tinygo.org/x/bluetooth`, im `golang:1.27`-Container gebaut).
 
 ## Nächste Schritte
-1. Scan-Ergebnis auswerten. Wird der Thingy nicht gefunden: den User bitten, ihn einzuschalten. Das ist die einzige erlaubte Frage.
 2. Devcontainer-Image erstellen: `.devcontainer/devcontainer.json` + `.devcontainer/Dockerfile` mit Go 1.27, Node 26, JDK 21, Android SDK 37, Gradle-Wrapper.
 3. `docs/protocol.md` + `docs/telemetry.schema.json` + `docs/ENGINEERING.md` (TDD-Regeln) schreiben.
 4. Agents bridge, web und android parallel starten.
