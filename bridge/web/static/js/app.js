@@ -1,10 +1,10 @@
 // Entry point: wires SSE, reducer, charts and controls together.
 import { initialState, reduce, connectionView } from './state.js';
 import { connectStream } from './connection.js';
-import { updatePeak } from './level.js';
+import { updatePeak, micView } from './level.js';
 import { hexToRgb } from './color.js';
 import { throttle } from './throttle.js';
-import { postSong, postLed } from './api.js';
+import { postSong, postLed, postMic } from './api.js';
 import { LiveChart } from './live-chart.js';
 import { bindDom, renderConnection, renderSnapshot, renderLog } from './view.js';
 
@@ -52,8 +52,9 @@ function render() {
 
 function onTelemetry(snapshot) {
   for (const [key, chart] of Object.entries(charts)) chart.push(snapshot.motion?.[key]);
-  levelChart.push({ v: snapshot.sound?.level_dbfs });
-  peak = updatePeak(peak, snapshot.sound?.level_dbfs, Date.now());
+  const mic = micView(snapshot.sound);
+  levelChart.push({ v: mic.level });
+  peak = mic.enabled ? updatePeak(peak, mic.level, Date.now()) : null;
   dispatch({ type: 'telemetry', snapshot });
 }
 
@@ -76,6 +77,17 @@ dom.songButton.addEventListener('click', async () => {
     localLog(`Lied: ${err.message}`);
   } finally {
     dom.songButton.disabled = false;
+  }
+});
+
+dom.micToggle.addEventListener('change', async () => {
+  dom.micToggle.disabled = true;
+  try {
+    await postMic(dom.micToggle.checked);
+  } catch (err) {
+    localLog(`Mikrofon: ${err.message}`);
+  } finally {
+    dom.micToggle.disabled = false;
   }
 });
 

@@ -6,3 +6,4 @@ async function postJson(path, body, fetchFn = globalThis.fetch) {
 
 export const postSong = (action, volume, fetchFn) => postJson('/api/song', { action, volume }, fetchFn);
 export const postLed = (rgb, fetchFn) => postJson('/api/led', rgb, fetchFn);
+export const postMic = (enabled, fetchFn) => postJson('/api/mic', { enabled }, fetchFn);

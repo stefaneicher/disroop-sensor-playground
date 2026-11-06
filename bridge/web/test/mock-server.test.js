@@ -31,6 +31,14 @@ test('song and led endpoints follow the protocol status codes', async () => {
   assert.equal((await post('/api/led', { r: 300, g: 0, b: 0 })).status, 400);
 });
 
+test('mic endpoint toggles the microphone', async () => {
+  assert.equal((await post('/api/mic', { enabled: true })).status, 202);
+  assert.equal((await (await fetch(`${base}/api/state`)).json()).sound.mic_enabled, true);
+  assert.equal((await post('/api/mic', { enabled: false })).status, 202);
+  assert.equal((await (await fetch(`${base}/api/state`)).json()).sound.mic_enabled, false);
+  assert.equal((await post('/api/mic', { enabled: 'yes' })).status, 400);
+});
+
 test('stream delivers telemetry events', async () => {
   const ctrl = new AbortController();
   const res = await fetch(`${base}/api/stream`, { signal: ctrl.signal });

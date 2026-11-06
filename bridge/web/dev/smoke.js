@@ -14,24 +14,26 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Yields null until the dashboard document is fully loaded, so polling never races navigation.
 const READ_PAGE = `(() => document.readyState !== 'complete' || !document.getElementById('status-label') ? null : JSON.stringify({
-  status: document.getElementById('status-label').textContent,
+  status: document.getElementById('status-label')?.textContent,
   bodyClass: document.body.className,
-  source: document.getElementById('source').textContent,
-  temperature: document.getElementById('temperature').textContent,
-  humidity: document.getElementById('humidity').textContent,
-  pressure: document.getElementById('pressure').textContent,
-  eco2: document.getElementById('eco2').textContent,
-  co2Level: document.getElementById('co2-tile').dataset.level,
-  heading: document.getElementById('heading').textContent,
-  steps: document.getElementById('steps').textContent,
-  level: document.getElementById('level').textContent,
-  battery: document.getElementById('battery').textContent,
-  cube: document.getElementById('cube').style.transform,
-  notes: document.getElementById('notes').children.length,
-  logEntries: document.getElementById('log').children.length,
-  songButton: document.getElementById('song-button').getAttribute('aria-pressed'),
-  songProgress: document.getElementById('song-progress').textContent,
-  led: document.getElementById('led-swatch').style.backgroundColor,
+  source: document.getElementById('source')?.textContent,
+  temperature: document.getElementById('temperature')?.textContent,
+  humidity: document.getElementById('humidity')?.textContent,
+  pressure: document.getElementById('pressure')?.textContent,
+  eco2: document.getElementById('eco2')?.textContent,
+  co2Level: document.getElementById('co2-tile')?.dataset.level,
+  heading: document.getElementById('heading')?.textContent,
+  steps: document.getElementById('steps')?.textContent,
+  level: document.getElementById('level')?.textContent,
+  micOn: document.getElementById('mic-toggle')?.checked,
+  micHint: document.getElementById('mic-hint')?.textContent,
+  battery: document.getElementById('battery')?.textContent,
+  cube: document.getElementById('cube')?.style.transform ?? '',
+  notes: document.getElementById('notes')?.children.length,
+  logEntries: document.getElementById('log')?.children.length,
+  songButton: document.getElementById('song-button')?.getAttribute('aria-pressed'),
+  songProgress: document.getElementById('song-progress')?.textContent,
+  led: document.getElementById('led-swatch')?.style.backgroundColor,
   overflowX: document.documentElement.scrollWidth - document.documentElement.clientWidth,
 }))()`;
 
@@ -44,7 +46,7 @@ const CHECKS = {
   eco2: (p) => /^\d+$/.test(p.eco2) && ['good', 'warn', 'bad'].includes(p.co2Level),
   heading: (p) => /^\d+°$/.test(p.heading),
   steps: (p) => /^\d+$/.test(p.steps),
-  level: (p) => /dBFS$/.test(p.level),
+  level: (p) => (p.micOn ? /dBFS$/.test(p.level) : p.level === '–' && p.micHint === 'Mikrofon aus'),
   battery: (p) => /^\d+ %$/.test(p.battery),
   cube: (p) => p.cube.startsWith('matrix3d('),
   notes: (p) => p.notes === 24,
@@ -78,10 +80,20 @@ async function waitFor(page, predicate, what) {
     }
     await sleep(200);
   }
-  throw new Error(`timeout waiting for ${what}; page state: ${JSON.stringify(last, null, 1)}`);
+  const failing = last ? Object.keys(CHECKS).filter((k) => !CHECKS[k](last)) : ['page not loaded'];
+  throw new Error(`timeout waiting for ${what}; failing checks: ${failing.join(', ') || 'none'}; page state: ${JSON.stringify(last, null, 1)}`);
 }
 
 const click = (page, selector) => page.send('Runtime.evaluate', { expression: `document.querySelector(${JSON.stringify(selector)}).click()` });
+
+// Toggle the microphone twice so the bridge ends in its original state.
+async function checkMic(page, initiallyOn) {
+  for (const on of [!initiallyOn, initiallyOn]) {
+    await click(page, '#mic-toggle');
+    const p = await waitFor(page, (s) => s.micOn === on && CHECKS.level(s) && (!on || s.level !== '–'), `mic ${on ? 'on' : 'off'}`);
+    console.log(`  mic ${on ? 'ein' : 'aus'}: ${p.level}`);
+  }
+}
 
 async function checkSong(page) {
   await click(page, '#song-button');
@@ -120,6 +132,8 @@ async function main() {
 
     const state = await waitFor(page, (p) => Object.values(CHECKS).every((c) => c(p)), 'live values');
     console.log(`  live: ${state.temperature} °C, eCO₂ ${state.eco2} ppm (${state.co2Level}), heading ${state.heading}, ${state.level}`);
+
+    await checkMic(page, state.micOn);
 
     if (process.env.SMOKE_SKIP_SONG === '1') console.log('  song: skipped (SMOKE_SKIP_SONG=1)');
     else await checkSong(page);

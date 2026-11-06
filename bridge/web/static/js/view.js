@@ -3,7 +3,7 @@ import { DASH, fmt, fmtSigned, orientationLabel, tapArrow, cardinal, clock, isNu
 import { co2Level, batteryLevel, rssiBars } from './classify.js';
 import { normalizeColor, rgbToHex } from './color.js';
 import { orientationTransform } from './orientation.js';
-import { dbfsToPercent } from './level.js';
+import { dbfsToPercent, micView } from './level.js';
 import { CHORUS_HZ, songProgress } from './chorus.js';
 
 const IDS = [
@@ -12,7 +12,7 @@ const IDS = [
   'orientation', 'cube', 'cube-led', 'needle', 'compass-ticks', 'heading', 'heading-cardinal', 'roll', 'pitch', 'yaw',
   'steps', 'tap', 'tap-arrow', 'tap-text', 'level', 'level-fill', 'level-peak',
   'song-button', 'song-status', 'notes', 'song-progress', 'volume', 'volume-value',
-  'button-state', 'button-label', 'led-swatch', 'led-color', 'log', 'log-count', 'quaternion', 'snapshot-time',
+  'button-state', 'button-label', 'led-swatch', 'led-color', 'log', 'log-count', 'quaternion', 'snapshot-time', 'mic-toggle', 'mic-hint',
 ];
 
 const camel = (id) => id.replace(/-(\w)/g, (_, c) => c.toUpperCase());
@@ -121,12 +121,16 @@ function renderMotion(dom, m, newTap) {
 }
 
 function renderSound(dom, snd, peak) {
-  setText(dom.level, fmt(snd.level_dbfs, 1, 'dBFS'));
-  const pct = dbfsToPercent(snd.level_dbfs);
+  const mic = micView(snd);
+  dom.micToggle.closest('.sound').classList.toggle('mic-off', !mic.enabled);
+  if (!dom.micToggle.disabled) dom.micToggle.checked = mic.enabled;
+  setText(dom.micHint, mic.hint);
+  setText(dom.level, fmt(mic.level, 1, 'dBFS'));
+  const pct = dbfsToPercent(mic.level);
   dom.levelFill.style.width = `${pct}%`;
   dom.levelFill.style.setProperty('--meter-width', `${pct > 0 ? (100 / pct) * 100 : 100}%`);
   dom.levelPeak.style.left = `calc(${dbfsToPercent(peak?.value)}% - 3px)`;
-  dom.levelPeak.hidden = !peak;
+  dom.levelPeak.hidden = !peak || !mic.enabled;
 
   const playing = Boolean(snd.song?.playing);
   setAttr(dom.songButton, 'aria-pressed', String(playing));

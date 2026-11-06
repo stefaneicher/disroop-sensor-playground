@@ -19,3 +19,11 @@ export function updatePeak(peak, level, now) {
   const decayed = peak.value - ((held - HOLD_MS) / 1000) * DECAY_DB_PER_S;
   return decayed > level ? { value: decayed, at: peak.at } : { value: level, at: now };
 }
+
+// Microphone is off by default (BLE stability); older bridges without mic_enabled count as on when a level arrives.
+export function micView(sound) {
+  const enabled = typeof sound?.mic_enabled === 'boolean' ? sound.mic_enabled : isNum(sound?.level_dbfs);
+  if (!enabled) return { enabled, level: null, hint: 'Mikrofon aus' };
+  const level = isNum(sound.level_dbfs) ? sound.level_dbfs : null;
+  return { enabled, level, hint: level === null ? 'warte auf Daten' : '' };
+}

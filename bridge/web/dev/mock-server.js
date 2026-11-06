@@ -58,6 +58,13 @@ export function startMockServer({ port = 8053, host = '127.0.0.1', now = () => D
       log(body.action === 'play' ? `Lied startet (Lautstärke ${volume})` : 'Lied gestoppt');
       return send(res, 202);
     },
+    'POST /api/mic': async (req, res) => {
+      const body = await readJson(req);
+      if (typeof body?.enabled !== 'boolean') return send(res, 400, 'enabled must be true|false');
+      sim.mic(body.enabled);
+      log(body.enabled ? 'Mikrofon ein' : 'Mikrofon aus');
+      return send(res, 202);
+    },
     'POST /api/led': async (req, res) => {
       const body = await readJson(req);
       if (!body || ![body.r, body.g, body.b].every(isByte)) return send(res, 400, 'r, g, b must be 0..255');

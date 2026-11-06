@@ -35,6 +35,7 @@ function songState(song, chorus, now) {
 export function createSim({ chorus, startTs = Date.now() }) {
   let led = { r: 0, g: 0, b: 0 };
   let song = null;
+  let micEnabled = false;
 
   function motion(t) {
     const e = t - startTs;
@@ -94,7 +95,11 @@ export function createSim({ chorus, startTs = Date.now() }) {
         },
         motion: motion(t),
         environment: environment(t),
-        sound: { level_dbfs: round(Math.max(-100, Math.min(0, level)), 1), song: songNow },
+        sound: {
+          level_dbfs: micEnabled ? round(Math.max(-100, Math.min(0, level)), 1) : null,
+          mic_enabled: micEnabled,
+          song: songNow,
+        },
         ui: { button_pressed: e % 10000 >= 9000, led: { ...led } },
       };
     },
@@ -103,6 +108,7 @@ export function createSim({ chorus, startTs = Date.now() }) {
       else if (action === 'stop') song = null;
       else throw new Error(`unknown song action: ${action}`);
     },
+    mic(enabled) { micEnabled = Boolean(enabled); },
     led(rgb) { led = { r: rgb.r, g: rgb.g, b: rgb.b }; },
   };
 }

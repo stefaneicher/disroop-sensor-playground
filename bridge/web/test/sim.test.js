@@ -13,12 +13,14 @@ function shape(v) {
 
 test('sim snapshots have exactly the shape of telemetry.example.json', () => {
   const sim = createSim({ chorus, startTs: 1_000_000 });
+  sim.mic(true);
   assert.deepEqual(shape(sim.snapshot(1_000_000)), shape(example));
   assert.equal(sim.snapshot(1_000_000).device.source, 'sim');
 });
 
 test('sim values stay within physical ranges', () => {
   const sim = createSim({ chorus, startTs: 0 });
+  sim.mic(true);
   for (let t = 0; t < 120_000; t += 777) {
     const s = sim.snapshot(t);
     assert.ok(s.motion.heading_deg >= 0 && s.motion.heading_deg < 360);
@@ -42,4 +44,13 @@ test('led sets the reported LED colour', () => {
   const sim = createSim({ chorus, startTs: 0 });
   sim.led({ r: 1, g: 2, b: 3 });
   assert.deepEqual(sim.snapshot(0).ui.led, { r: 1, g: 2, b: 3 });
+});
+
+test('microphone is off by default and reports no level until enabled', () => {
+  const sim = createSim({ chorus, startTs: 0 });
+  assert.equal(sim.snapshot(0).sound.mic_enabled, false);
+  assert.equal(sim.snapshot(0).sound.level_dbfs, null);
+  sim.mic(true);
+  assert.equal(sim.snapshot(0).sound.mic_enabled, true);
+  assert.equal(typeof sim.snapshot(0).sound.level_dbfs, 'number');
 });
