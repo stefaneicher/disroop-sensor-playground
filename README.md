@@ -4,6 +4,17 @@ Live-Demo mit dem **Nordic Thingy:52**: Alle Sensorwerte laufen per Bluetooth LE
 
 ![Web-Dashboard](docs/img/dashboard.png)
 
+> **Keine Firmware, kein Flashen, kein Debugger.** Für dieses Projekt wird keine Firmware gebaut. Der Thingy läuft unverändert mit der Nordic-Werksfirmware (v2.x). Unsere Software ist ein reiner **BLE-Client**:
+> - **Empfangen:** Sie abonniert die GATT-Notifications des Thingy (Sensordaten) und dekodiert sie.
+> - **Senden:** Sie schreibt Befehle in GATT-Characteristics: Ton für das Lied, LED-Farbe, Sensor-Intervalle, NFC-Inhalt.
+>
+> Das hat Grenzen: Es geht nur, was die Werksfirmware anbietet. So ist z. B. die Mikrofon-Abtastrate fest auf 16 kHz. Deshalb ist die Lautstärkemessung standardmässig aus, sie würde die BLE-Verbindung überlasten.
+>
+> ```
+> Thingy:52 (Werks-FW) ──BLE──▶ thingy.exe (Windows) ──▶ Terminal + Web-Dashboard :8052
+>                      ──BLE──▶ Android-App ch.disroop.thingylive (direkt, Start per NFC)
+> ```
+
 ## Features
 
 - **`thingy.exe`** (Go, Windows): verbindet sich per BLE mit dem Thingy und zeigt alle Werte live im Terminal:
