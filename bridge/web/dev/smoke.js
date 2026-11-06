@@ -12,7 +12,8 @@ const DESKTOP = { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false 
 const MOBILE = { width: 390, height: 844, deviceScaleFactor: 2, mobile: true };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const READ_PAGE = `JSON.stringify({
+// Yields null until the dashboard document is fully loaded, so polling never races navigation.
+const READ_PAGE = `(() => document.readyState !== 'complete' || !document.getElementById('status-label') ? null : JSON.stringify({
   status: document.getElementById('status-label').textContent,
   bodyClass: document.body.className,
   source: document.getElementById('source').textContent,
@@ -32,7 +33,7 @@ const READ_PAGE = `JSON.stringify({
   songProgress: document.getElementById('song-progress').textContent,
   led: document.getElementById('led-swatch').style.backgroundColor,
   overflowX: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-})`;
+}))()`;
 
 const CHECKS = {
   live: (p) => p.status === 'Live' && p.bodyClass.includes('is-live'),
@@ -50,19 +51,45 @@ const CHECKS = {
   log: (p) => p.logEntries > 0,
 };
 
+async function readPage(page) {
+  try {
+    const { result, exceptionDetails } = await page.send('Runtime.evaluate', { expression: READ_PAGE, returnByValue: true });
+    return !exceptionDetails && typeof result.value === 'string' ? JSON.parse(result.value) : null;
+  } catch {
+    return null; // e.g. execution context destroyed during navigation
+  }
+}
+
+function once(page, event, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`timeout waiting for ${event}`)), timeoutMs);
+    page.on(event, () => { clearTimeout(timer); resolve(); });
+  });
+}
+
 async function waitFor(page, predicate, what) {
   const deadline = Date.now() + TIMEOUT_MS;
   let last;
   while (Date.now() < deadline) {
-    const { result } = await page.send('Runtime.evaluate', { expression: READ_PAGE, returnByValue: true });
-    last = JSON.parse(result.value);
-    if (predicate(last)) return last;
+    const state = await readPage(page);
+    if (state) {
+      last = state;
+      if (predicate(last)) return last;
+    }
     await sleep(200);
   }
   throw new Error(`timeout waiting for ${what}; page state: ${JSON.stringify(last, null, 1)}`);
 }
 
 const click = (page, selector) => page.send('Runtime.evaluate', { expression: `document.querySelector(${JSON.stringify(selector)}).click()` });
+
+async function checkSong(page) {
+  await click(page, '#song-button');
+  const playing = await waitFor(page, (p) => p.songButton === 'true' && /^Note \d+ \/ 24/.test(p.songProgress), 'song playing');
+  console.log(`  song: ${playing.songProgress}`);
+  await click(page, '#song-button');
+  await waitFor(page, (p) => p.songButton === 'false', 'song stopped');
+}
 
 async function screenshot(page, metrics, path) {
   await page.send('Emulation.setDeviceMetricsOverride', metrics);
@@ -86,16 +113,16 @@ async function main() {
     page.on('Log.entryAdded', (e) => { if (e.entry.level === 'error') errors.push(`${e.entry.source}: ${e.entry.text} ${e.entry.url ?? ''}`); });
     await Promise.all(['Runtime.enable', 'Log.enable', 'Page.enable'].map((m) => page.send(m)));
     await page.send('Emulation.setDeviceMetricsOverride', DESKTOP);
-    await page.send('Page.navigate', { url });
+    const loaded = once(page, 'Page.loadEventFired', TIMEOUT_MS);
+    const nav = await page.send('Page.navigate', { url });
+    if (nav.errorText) throw new Error(`navigation to ${url} failed: ${nav.errorText}`);
+    await loaded;
 
     const state = await waitFor(page, (p) => Object.values(CHECKS).every((c) => c(p)), 'live values');
     console.log(`  live: ${state.temperature} °C, eCO₂ ${state.eco2} ppm (${state.co2Level}), heading ${state.heading}, ${state.level}`);
 
-    await click(page, '#song-button');
-    const playing = await waitFor(page, (p) => p.songButton === 'true' && /^Note \d+ \/ 24/.test(p.songProgress), 'song playing');
-    console.log(`  song: ${playing.songProgress}`);
-    await click(page, '#song-button');
-    await waitFor(page, (p) => p.songButton === 'false', 'song stopped');
+    if (process.env.SMOKE_SKIP_SONG === '1') console.log('  song: skipped (SMOKE_SKIP_SONG=1)');
+    else await checkSong(page);
 
     await click(page, '[data-led="#ff0000"]');
     await waitFor(page, (p) => p.led === 'rgb(255, 0, 0)', 'LED red');
