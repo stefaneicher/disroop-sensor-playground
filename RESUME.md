@@ -7,7 +7,7 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 - **TDD**, Clean Code, Best Practices je Disziplin, **Smoke-Tests**.
 - **Keine Fragen stellen**, ausser die Hardware ist nicht erreichbar (keine BLE-Verbindung).
 - **Alles wird im Devcontainer-Image gebaut** (`.devcontainer/`), auch von `./project` und der CI. Lokal wird nichts installiert.
-- Nach jedem Schritt JOURNAL.md, PROGRESS.md und RESUME.md nachführen, committen und pushen. Commit-Trailer: `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`.
+- Nach jedem sinnvollen Schritt JOURNAL.md, PROGRESS.md und RESUME.md nachführen, dann **direkt auf `main` committen und pushen** (keine Branches, keine PRs). Commit-Trailer: `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`.
 - Antworten an den User kurz und auf Deutsch.
 
 ## Entscheide (vom User freigegeben im Lavish-Plan)
