@@ -119,10 +119,11 @@ Thingy:52 live   Quelle: sim   Verbunden: ja   Web: http://localhost:8052
 Öffne http://localhost:8052, während `thingy.exe` läuft.
 
 ![Dashboard](img/dashboard.png)
+*Screenshot im Simulator-Modus (`thingy.exe --sim`), Disroop-Look.*
 
 - **Kopfzeile:**
   - Gerätename und Adresse
-  - Verbindungsstatus, Badge `SIM` im Simulator-Modus
+  - Ein Status-Badge: `LIVE` (grün) bei echter Verbindung, `SIMULATOR` (violett, plus Banner) im Simulator-Modus
   - „Daten veraltet“, wenn 3 s lang nichts kommt
   - Zeit des letzten Werts, RSSI-Balken, Akku
 - **Umgebung:** Temperatur, Feuchte, Luftdruck, eCO₂ mit Ampel (< 800 gut, < 1500 mässig, sonst schlecht), TVOC, Farbfeld mit RGBC-Rohwerten
@@ -133,7 +134,9 @@ Thingy:52 live   Quelle: sim   Verbunden: ja   Web: http://localhost:8052
 - **Taster & LED:** Tasterstatus, Farbwähler und die Presets Rot, Grün, Blau, Aus
 - **Protokoll:** Meldungen der Bridge, z. B. Verbindungen und Fehler
 
-Der Mobile-Screenshot liegt in [img/dashboard-mobile.png](img/dashboard-mobile.png).
+Mobile-Ansicht:
+
+<img src="img/dashboard-mobile.png" width="300" alt="Dashboard mobil">
 
 Die API (`/api/state`, `/api/stream`, `/api/song`, `/api/led`, `/healthz`) ist in [protocol.md §2](protocol.md#2-bridge-api-http-auf-1270018052-web-gui-und-smoke-tests) beschrieben. Aus WSL heraus:
 
