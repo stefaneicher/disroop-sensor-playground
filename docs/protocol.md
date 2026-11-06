@@ -31,7 +31,7 @@ Gefundenes Gerät: `E3:58:08:1B:53:5F`.
 | `EF680502` | Speaker | write w/o resp | im Freq-Modus: u16 hz, u16 duration_ms, u8 volume 0..100 |
 | `EF680503` | Speaker-Status | notify | u8 |
 | `EF680504` | Mikrofon | notify | IMA/DVI-ADPCM-Frame: i16 predictor **big-endian** (htons in FW), u8 step_index, danach 4-Bit-Samples (**high nibble zuerst**), 16 kHz mono |
-| `EF680109` | NFC | read/write | rohe **NDEF-Message** (ohne TLV), max. 247 B, wird persistent gespeichert |
+| `EF680109` | NFC (**erst ab FW v2.2.0**, fehlt in v2.1.0) | read/write | rohe **NDEF-Message** (ohne TLV), max. 247 B, wird persistent gespeichert |
 | `2A19` (Service `180F`) | Akku | read/notify | u8 % |
 
 ### Startsequenz (Client)
