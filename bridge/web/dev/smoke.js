@@ -15,8 +15,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 // Yields null until the dashboard document is fully loaded, so polling never races navigation.
 const READ_PAGE = `(() => document.readyState !== 'complete' || !document.getElementById('status-label') ? null : JSON.stringify({
   status: document.getElementById('status-label')?.textContent,
+  badge: document.getElementById('status')?.dataset.kind,
+  simBanner: document.getElementById('sim-banner')?.hidden === false,
   bodyClass: document.body.className,
-  source: document.getElementById('source')?.textContent,
   temperature: document.getElementById('temperature')?.textContent,
   humidity: document.getElementById('humidity')?.textContent,
   pressure: document.getElementById('pressure')?.textContent,
@@ -38,8 +39,9 @@ const READ_PAGE = `(() => document.readyState !== 'complete' || !document.getEle
 }))()`;
 
 const CHECKS = {
-  live: (p) => p.status === 'Live' && p.bodyClass.includes('is-live'),
-  source: (p) => /SIMULATOR|BLE/.test(p.source),
+  live: (p) => p.bodyClass.includes('is-live')
+    && ((p.badge === 'sim' && p.status === 'SIMULATOR – keine echten Daten' && p.simBanner)
+      || (p.badge === 'live' && p.status === 'LIVE – Thingy' && !p.simBanner)),
   temperature: (p) => /^-?\d+\.\d$/.test(p.temperature),
   humidity: (p) => /^\d+$/.test(p.humidity),
   pressure: (p) => /^\d+\.\d$/.test(p.pressure),
@@ -122,7 +124,8 @@ async function main() {
     const page = await browser.newPage();
     page.on('Runtime.exceptionThrown', (e) => errors.push(e.exceptionDetails.exception?.description ?? e.exceptionDetails.text));
     page.on('Runtime.consoleAPICalled', (e) => { if (e.type === 'error') errors.push(`console.error: ${e.args.map((a) => a.value ?? a.description).join(' ')}`); });
-    page.on('Log.entryAdded', (e) => { if (e.entry.level === 'error') errors.push(`${e.entry.source}: ${e.entry.text} ${e.entry.url ?? ''}`); });
+    let bridgeDown = false; // connection-refused retries are expected while the bridge is deliberately stopped
+    page.on('Log.entryAdded', (e) => { if (e.entry.level === 'error' && !(bridgeDown && e.entry.source === 'network')) errors.push(`${e.entry.source}: ${e.entry.text} ${e.entry.url ?? ''}`); });
     await Promise.all(['Runtime.enable', 'Log.enable', 'Page.enable'].map((m) => page.send(m)));
     await page.send('Emulation.setDeviceMetricsOverride', DESKTOP);
     const loaded = once(page, 'Page.loadEventFired', TIMEOUT_MS);
@@ -150,11 +153,15 @@ async function main() {
     }
     if (mock) {
       const { port } = mock;
+      bridgeDown = true;
       await mock.close();
       mock = null;
-      await waitFor(page, (p) => /is-(reconnecting|stale)/.test(p.bodyClass), 'reconnecting state after bridge stop');
+      await waitFor(page, (p) => p.badge === 'connecting' && p.status === 'Verbindet…', 'orange "Verbindet…" after bridge stop');
+      await waitFor(page, (p) => p.badge === 'nodata' && p.status === 'Keine Daten', 'red "Keine Daten" after 3 s without data');
       mock = await startMockServer({ port });
       await waitFor(page, CHECKS.live, 'live again after bridge restart');
+      await sleep(500);
+      bridgeDown = false;
       console.log('  reconnect: OK');
     }
     if (opts.screenshot) {

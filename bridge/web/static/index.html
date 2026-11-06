@@ -19,9 +19,7 @@
       </div>
     </div>
     <div class="status-row">
-      <span class="pill status" id="status" role="status" aria-live="polite"><i class="dot"></i><span id="status-label">Verbinde …</span></span>
-      <span class="pill source" id="source" hidden>SIM</span>
-      <span class="pill stale-badge" id="stale-badge">Daten veraltet</span>
+      <span class="pill status" id="status" data-kind="connecting" role="status" aria-live="polite"><i class="dot"></i><span id="status-label">Verbindet…</span></span>
       <span class="pill metric" title="Zeitpunkt des letzten Messwerts"><span id="snapshot-time">–</span></span>
       <span class="pill metric" title="Signalstärke (RSSI)">
         <span class="bars" id="rssi-bars" data-bars="0" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
@@ -33,6 +31,7 @@
       </span>
     </div>
   </header>
+  <div class="sim-banner" id="sim-banner" role="note" hidden>Simulator-Modus: Werte sind simuliert.</div>
 
   <main class="grid">
     <section class="tiles" aria-label="Umgebung">

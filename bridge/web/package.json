@@ -1,0 +1,14 @@
+{
+  "name": "thingy52-live-web",
+  "private": true,
+  "type": "module",
+  "description": "Thingy:52 live dashboard (TypeScript, no bundler). Build: ./project web build",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "typescript": "7.0.2"
+  }
+}

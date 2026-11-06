@@ -9,6 +9,8 @@ GOENV='export GOMODCACHE=/opt/cache/gomod GOFLAGS=-buildvcs=false; cd bridge'
 
 # shared/chorus.json is the single source of the song; go:embed needs a copy inside the module (gitignored).
 sync_chorus() { cp "$ROOT/shared/chorus.json" "$ROOT/bridge/internal/song/chorus.json"; }
+# The embedded dashboard is TypeScript; compile it to bridge/web/static/js before go test/build.
+build_web() { "$ROOT/scripts/web.sh" build; }
 
 usage() {
   cat <<U
@@ -26,6 +28,7 @@ U
 
 do_test() {
   sync_chorus
+  build_web
   indev "$GOENV
     set -e
     unformatted=\$(gofmt -l .); if [ -n \"\$unformatted\" ]; then echo \"gofmt needed:\"; echo \"\$unformatted\"; exit 1; fi
@@ -40,6 +43,7 @@ do_test() {
 
 do_build() {
   sync_chorus
+  build_web
   mkdir -p "$ROOT/build"
   indev "$GOENV
     set -e

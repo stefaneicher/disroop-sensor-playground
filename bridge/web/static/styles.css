@@ -61,19 +61,21 @@ h1 span { color: var(--accent); }
   padding: 5px 11px; border-radius: 999px; font-size: .82rem;
   background: var(--panel); border: 1px solid var(--line); white-space: nowrap;
 }
-.status .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
-.is-live .status { border-color: rgba(34, 197, 94, .45); }
-.is-live .status .dot { background: var(--good); box-shadow: 0 0 0 0 rgba(34, 197, 94, .7); animation: pulse 1.6s infinite; }
-.is-connecting .status .dot, .is-reconnecting .status .dot { background: var(--warn); animation: blink 1s infinite; }
-.is-reconnecting .status, .is-stale .status { border-color: rgba(250, 204, 21, .45); }
-.is-stale .status .dot { background: var(--warn); }
-.is-device-offline .status { border-color: rgba(239, 68, 68, .5); }
-.is-device-offline .status .dot { background: var(--bad); }
-.source { font-weight: 700; letter-spacing: .08em; font-size: .72rem; }
-.source[data-source="sim"] { color: #c4b5fd; border-color: rgba(167, 139, 250, .5); background: rgba(124, 58, 237, .15); }
-.source[data-source="ble"] { color: #7dd3fc; border-color: rgba(56, 189, 248, .5); background: rgba(14, 165, 233, .15); }
-.stale-badge { display: none; color: var(--warn); border-color: rgba(250, 204, 21, .45); }
-.is-stale .stale-badge { display: inline-flex; }
+.status { font-weight: 650; letter-spacing: .02em; }
+.status .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); flex: none; }
+.status[data-kind="live"] { color: #86efac; border-color: rgba(34, 197, 94, .55); background: rgba(22, 163, 74, .14); }
+.status[data-kind="live"] .dot { background: var(--good); box-shadow: 0 0 0 0 rgba(34, 197, 94, .7); animation: pulse 1.6s infinite; }
+.status[data-kind="sim"] { color: #c4b5fd; border-color: rgba(167, 139, 250, .6); background: rgba(124, 58, 237, .18); }
+.status[data-kind="sim"] .dot { background: #a78bfa; }
+.status[data-kind="connecting"] { color: #fdba74; border-color: rgba(249, 115, 22, .55); background: rgba(234, 88, 12, .14); }
+.status[data-kind="connecting"] .dot { background: #f97316; animation: blink 1s infinite; }
+.status[data-kind="nodata"] { color: #fca5a5; border-color: rgba(239, 68, 68, .6); background: rgba(220, 38, 38, .16); }
+.status[data-kind="nodata"] .dot { background: var(--bad); }
+.sim-banner {
+  padding: 6px clamp(14px, 3vw, 32px); text-align: center; font-size: .82rem; font-weight: 600;
+  color: #ddd6fe; background: repeating-linear-gradient(135deg, rgba(124, 58, 237, .28) 0 14px, rgba(124, 58, 237, .18) 14px 28px);
+  border-bottom: 1px solid rgba(167, 139, 250, .45);
+}
 .metric { font-family: var(--mono); font-size: .8rem; }
 
 .bars { display: inline-flex; gap: 2px; align-items: flex-end; height: 14px; }
