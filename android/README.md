@@ -9,6 +9,7 @@ Die Android-App verbindet sich **direkt per BLE** mit dem Thingy:52 und zeigt di
 ```bash
 ./project android test      # JUnit :protocol + :app (inkl. SimulatorSmokeTest) + Android-Lint
 ./project android build     # → build/thingylive-debug.apk
+./project android screenshots  # Roborazzi/Robolectric → docs/img/android-*.png (Simulator-Daten)
 ./project android badging   # Paket, SDK, Berechtigungen der APK
 ./project android clean
 ```
@@ -21,7 +22,7 @@ Installation: `adb install -r build\thingylive-debug.apk` (Windows) oder die APK
 |---|---|
 | Paket | `ch.disroop.thingylive`, App-Name „Thingy Live“ |
 | SDK | minSdk 26 (Android 8), target/compileSdk 36 |
-| UI | Jetpack Compose, Material 3, eine Activity (`MainActivity`, `singleTop`) |
+| UI | Jetpack Compose, Material 3, eine Activity (`MainActivity`, `singleTop`). Disroop-Look wie das Dashboard: fest dunkel (Grau/Lime), Logo in der Top-Bar und als App-Icon |
 | Sprache | Kotlin, JVM 17 (App) / Toolchain 21 (`:protocol`), Gradle-Wrapper, Versionskatalog `gradle/libs.versions.toml` |
 | Signatur | Debug-Build mit **öffentlichem Demo-Keystore** `keystore/demo-debug.keystore`, nur für die Demo |
 | Berechtigungen | `BLUETOOTH_SCAN` (neverForLocation) + `BLUETOOTH_CONNECT` ab Android 12. Bis Android 11: `BLUETOOTH`, `BLUETOOTH_ADMIN`, `ACCESS_FINE_LOCATION`. Dazu `NFC`. |

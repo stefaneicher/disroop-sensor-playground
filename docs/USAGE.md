@@ -42,6 +42,7 @@ Alle Befehle laufen im Repo-Ordner unter **WSL**. Builds und Tests laufen im Dev
 |---|---|
 | `test` | Unit-Tests `:protocol` und `:app` (inkl. Simulator-Smoke-Test) und Android-Lint |
 | `build` | `assembleDebug` → `build/thingylive-debug.apk` |
+| `screenshots` | Screenshots der App mit Simulator-Daten (Roborazzi/Robolectric, ohne Emulator) → `docs/img/android-*.png` |
 | `badging` | Paket, SDK, Berechtigungen und Activity der APK anzeigen (`aapt2`) |
 | `clean` | Gradle-Ausgaben löschen |
 
@@ -170,11 +171,15 @@ curl.exe -s -X POST -H "Content-Type: application/json" -d '{"r":255,"g":0,"b":0
 
 ## Android-App
 
+<img src="img/android-live-top.png" width="220" alt="Live-Ansicht oben"> <img src="img/android-live-motion.png" width="220" alt="Bewegung"> <img src="img/android-live-sound.png" width="220" alt="Kompass, Mikrofon"> <img src="img/android-scan.png" width="220" alt="Suche Thingy">
+
+*Simulator-Modus: Live-Werte, Bewegung, Kompass & Mikrofon. Rechts: Die App sucht einen Thingy.*
+
 - **Start:** über das App-Icon „Thingy Live“ oder per NFC-Tap am Thingy. Beim ersten Start erlaubst du „Geräte in der Nähe“. Unter Android ≤ 11 heisst die Berechtigung „Standort“.
 - **Verbinden:** Die App scannt und verbindet sich mit dem **nächsten** Thingy, also dem mit dem stärksten Signal. Bei Abbruch verbindet sie sich automatisch neu.
 - **Hintergrund:** Geht die App in den Hintergrund, trennt sie die Verbindung. Der Thingy ist dann wieder frei für `thingy.exe`.
 - **Karten:**
-  - Status mit Signal und Akku, Schalter **Simulator**
+  - Verbindung mit Signal und Akku, Schalter **Simulator**
   - Lied & LED
   - Umgebung mit Luftqualität
   - Bewegung (Verläufe)

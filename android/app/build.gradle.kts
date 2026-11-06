@@ -53,6 +53,22 @@ android {
 
     testOptions {
         unitTests.isReturnDefaultValues = true
+        unitTests.isIncludeAndroidResources = true
+    }
+}
+
+// Screenshot tests (Roborazzi + Robolectric) only run on demand: ./project android screenshots
+// (-Pscreenshots). They record PNGs to build/screenshots and are excluded from the normal test run.
+val screenshots = providers.gradleProperty("screenshots").isPresent
+tasks.withType<Test>().configureEach {
+    if (screenshots) {
+        filter.includeTestsMatching("*ScreenshotTest")
+        systemProperty("roborazzi.test.record", "true")
+        // Robolectric's SDK 36 sandbox needs JDK internals (FileDescriptor via SharedSecrets) on JDK 17+.
+        jvmArgs("--add-opens=java.base/jdk.internal.access=ALL-UNNAMED", "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED")
+        outputs.upToDateWhen { false }
+    } else {
+        exclude("**/*ScreenshotTest*")
     }
 }
 
@@ -69,4 +85,9 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
 }

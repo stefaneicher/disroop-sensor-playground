@@ -1,5 +1,6 @@
 package ch.disroop.thingylive.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -8,31 +9,35 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import ch.disroop.thingylive.R
 import ch.disroop.thingylive.connection.LinkState
 import ch.disroop.thingylive.protocol.AirQuality
 import ch.disroop.thingylive.protocol.Rgb
@@ -54,29 +59,50 @@ interface ScreenActions {
 @Composable
 fun ThingyScreen(state: UiState, actions: ScreenActions) {
     val s = state.snapshot
-    LazyColumn(
-        modifier = Modifier.fillMaxSize().background(Palette.background),
-        contentPadding = WindowInsets.safeDrawing.asPaddingValues(),
-    ) {
-        item { Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            StatusCard(state, actions)
-            SongCard(state, actions)
-            EnvironmentCard(s.environment)
-            MotionCard(state)
-            OrientationCard(s.motion)
-            SoundCard(state, actions)
-        } }
+    Scaffold(containerColor = Palette.background, topBar = { DisroopTopBar() }) { padding ->
+        LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = padding) {
+            item { Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                StatusCard(state, actions)
+                SongCard(state, actions)
+                EnvironmentCard(s.environment)
+                MotionCard(state)
+                OrientationCard(s.motion)
+                SoundCard(state, actions)
+            } }
+        }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DisroopTopBar() = Column {
+    TopAppBar(
+        title = {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Image(painterResource(R.drawable.disroop_logo), contentDescription = "Disroop", Modifier.size(38.dp))
+                Text(
+                    buildAnnotatedString {
+                        append("Thingy:52 ")
+                        withStyle(SpanStyle(color = Palette.accent)) { append("Live") }
+                    },
+                    style = MaterialTheme.typography.titleLarge,
+                )
+                Text("by Disroop", style = MaterialTheme.typography.labelSmall, color = Palette.muted)
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Palette.background, titleContentColor = Palette.text),
+    )
+    HorizontalDivider(thickness = 2.dp, color = Palette.lime700)
 }
 
 @Composable
 private fun StatusCard(state: UiState, actions: ScreenActions) {
     val s = state.snapshot
-    SectionCard("Thingy Live") {
+    SectionCard("Verbindung") {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Dot(if (s.connected) Palette.green else if (state.link is LinkState.Unavailable) Palette.red else Palette.yellow, 10)
             Text(state.link.label(), fontWeight = FontWeight.SemiBold)
-            if (state.simulator) Text("· Simulator", color = Palette.sky)
+            if (state.simulator) Text("· Simulator", color = Palette.teal, fontWeight = FontWeight.SemiBold)
         }
         Text(listOfNotNull(s.device.name, s.device.address).joinToString(" · ").ifEmpty { "Kein Gerät" }, color = Palette.muted)
         TileRow {
@@ -85,7 +111,7 @@ private fun StatusCard(state: UiState, actions: ScreenActions) {
         }
         val link = state.link
         if (link is LinkState.Unavailable && link.reason != LinkState.Reason.SCAN_FAILED) {
-            OutlinedButton(onClick = { actions.onFixLink(link.reason) }) {
+            DisroopButton(onClick = { actions.onFixLink(link.reason) }) {
                 Text(if (link.reason == LinkState.Reason.NO_PERMISSION) "Berechtigung erteilen" else "Bluetooth einschalten")
             }
         }
@@ -107,14 +133,10 @@ private fun SongCard(state: UiState, actions: ScreenActions) {
     val song = s.sound.song
     SectionCard("Lied & LED") {
         if (song.playing) {
-            Button(
-                onClick = actions::onStopSong,
-                colors = ButtonDefaults.buttonColors(containerColor = Palette.red),
-                modifier = Modifier.fillMaxWidth(),
-            ) { Text("■ Stopp") }
+            DisroopButton(onClick = actions::onStopSong, modifier = Modifier.fillMaxWidth(), pressed = true) { Text("■ Stopp") }
             Text("Note ${song.noteIndex + 1} / ${state.songLength} · Endlosschleife", color = Palette.muted)
         } else {
-            Button(onClick = actions::onPlaySong, enabled = s.connected, modifier = Modifier.fillMaxWidth()) {
+            DisroopButton(onClick = actions::onPlaySong, enabled = s.connected, modifier = Modifier.fillMaxWidth()) {
                 Text("♪ Highway to Hell")
             }
             Text("Tipp: Taster am Thingy startet und stoppt das Lied.", color = Palette.muted)

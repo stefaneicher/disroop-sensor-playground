@@ -1,17 +1,27 @@
 package ch.disroop.thingylive.ui
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 
+/** Disroop look (disroop.ch, web dashboard): gray-900/800 surfaces with a lime accent. */
 object Palette {
-    val background = Color(0xFF0F172A)
-    val card = Color(0xFF1E293B)
-    val muted = Color(0xFF94A3B8)
-    val sky = Color(0xFF38BDF8)
+    val background = Color(0xFF111827)
+    val card = Color(0xFF1F2937)
+    val line = Color(0xFF374151)
+    val text = Color(0xFFF9FAFB)
+    val muted = Color(0xFF9CA3AF)
+    val accent = Color(0xFFA3E635)
+    val lime500 = Color(0xFF84CC16)
+    val lime600 = Color(0xFF65A30D)
+    val lime700 = Color(0xFF4D7C0F)
+    val lime800 = Color(0xFF3F6212)
+    val teal = Color(0xFF2AA5A1)
     val green = Color(0xFF22C55E)
-    val yellow = Color(0xFFEAB308)
+    val yellow = Color(0xFFFACC15)
     val red = Color(0xFFEF4444)
     val axisX = Color(0xFFF87171)
     val axisY = Color(0xFF4ADE80)
@@ -19,16 +29,37 @@ object Palette {
 }
 
 private val colors = darkColorScheme(
-    primary = Palette.sky,
+    primary = Palette.accent,
     onPrimary = Palette.background,
-    secondary = Palette.green,
+    primaryContainer = Palette.lime800,
+    onPrimaryContainer = Palette.accent,
+    secondary = Palette.teal,
+    onSecondary = Palette.background,
+    secondaryContainer = Palette.line,
+    onSecondaryContainer = Palette.text,
     background = Palette.background,
+    onBackground = Palette.text,
     surface = Palette.background,
-    surfaceContainer = Palette.card,
-    surfaceContainerHighest = Palette.card,
+    onSurface = Palette.text,
+    surfaceVariant = Palette.line,
     onSurfaceVariant = Palette.muted,
+    surfaceContainer = Palette.card,
+    surfaceContainerHigh = Palette.card,
+    surfaceContainerHighest = Palette.line,
+    outline = Palette.line,
+    outlineVariant = Palette.line,
     error = Palette.red,
 )
 
+private val typography = Typography().run {
+    copy(
+        titleLarge = titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+        titleMedium = titleMedium.copy(fontWeight = FontWeight.Bold),
+        labelLarge = labelLarge.copy(fontWeight = FontWeight.SemiBold),
+    )
+}
+
+/** The app is always dark, like the dashboard. */
 @Composable
-fun ThingyTheme(content: @Composable () -> Unit) = MaterialTheme(colorScheme = colors, content = content)
+fun ThingyTheme(content: @Composable () -> Unit) =
+    MaterialTheme(colorScheme = colors, typography = typography, content = content)

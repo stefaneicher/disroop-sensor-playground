@@ -5,6 +5,12 @@ Live-Demo mit dem **Nordic Thingy:52**: Alle Sensorwerte laufen per Bluetooth LE
 ![Web-Dashboard](docs/img/dashboard.png)
 *Web-Dashboard im Simulator-Modus (`thingy.exe --sim`). Mobile-Ansicht: [docs/img/dashboard-mobile.png](docs/img/dashboard-mobile.png)*
 
+### Android-App
+
+<img src="docs/img/android-live-top.png" width="240" alt="Android-App: Verbindung, Lied & LED, Umgebung"> <img src="docs/img/android-live-motion.png" width="240" alt="Android-App: Bewegung"> <img src="docs/img/android-live-sound.png" width="240" alt="Android-App: Kompass & Lage, Mikrofon & Taster">
+
+*Android-App im Simulator-Modus. Die Bilder erzeugt `./project android screenshots`.*
+
 > **Keine Firmware, kein Flashen, kein Debugger.** Für dieses Projekt wird keine Firmware gebaut. Der Thingy läuft unverändert mit der Nordic-Werksfirmware (v2.x). Unsere Software ist ein reiner **BLE-Client**:
 > - **Empfangen:** Sie abonniert die GATT-Notifications des Thingy (Sensordaten) und dekodiert sie.
 > - **Senden:** Sie schreibt Befehle in GATT-Characteristics: Ton für das Lied, LED-Farbe, Sensor-Intervalle, NFC-Inhalt.

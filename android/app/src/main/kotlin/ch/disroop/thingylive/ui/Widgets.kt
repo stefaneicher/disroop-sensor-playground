@@ -1,12 +1,15 @@
 package ch.disroop.thingylive.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +18,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -47,10 +52,11 @@ fun SectionCard(title: String, modifier: Modifier = Modifier, content: @Composab
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Palette.card),
+        colors = CardDefaults.cardColors(containerColor = Palette.card, contentColor = Palette.text),
+        border = BorderStroke(1.dp, Palette.line),
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold)
             content()
         }
     }
@@ -62,6 +68,7 @@ fun ValueTile(label: String, value: String, modifier: Modifier = Modifier, trail
         modifier
             .clip(RoundedCornerShape(10.dp))
             .background(Palette.background.copy(alpha = 0.6f))
+            .border(1.dp, Palette.line, RoundedCornerShape(10.dp))
             .padding(horizontal = 10.dp, vertical = 8.dp),
     ) {
         Text(label, style = MaterialTheme.typography.labelSmall, color = Palette.muted)
@@ -74,6 +81,29 @@ fun ValueTile(label: String, value: String, modifier: Modifier = Modifier, trail
         }
     }
 }
+
+/** Disroop button: lime-800 with lime text and a lime-600 border; gray while [pressed] (e.g. "Stopp"). */
+@Composable
+fun DisroopButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    pressed: Boolean = false,
+    content: @Composable RowScope.() -> Unit,
+) = Button(
+    onClick = onClick,
+    modifier = modifier,
+    enabled = enabled,
+    shape = RoundedCornerShape(8.dp),
+    border = BorderStroke(1.dp, if (!enabled) Palette.line else if (pressed) Color(0xFF4B5563) else Palette.lime600),
+    colors = ButtonDefaults.buttonColors(
+        containerColor = if (pressed) Palette.line else Palette.lime800,
+        contentColor = if (pressed) Palette.text else Palette.accent,
+        disabledContainerColor = Palette.card,
+        disabledContentColor = Palette.muted,
+    ),
+    content = content,
+)
 
 @Composable
 fun Dot(color: Color, size: Int = 14) = Box(Modifier.size(size.dp).clip(CircleShape).background(color))
@@ -132,7 +162,7 @@ fun CompassDial(headingDeg: Double?, modifier: Modifier = Modifier) {
                 drawLine(Palette.red, c, Offset(c.x, c.y - tip), strokeWidth = 4.dp.toPx())
                 drawLine(Palette.muted, c, Offset(c.x, c.y + tip * 0.6f), strokeWidth = 4.dp.toPx())
             }
-            drawCircle(Palette.sky, 5.dp.toPx(), c)
+            drawCircle(Palette.accent, 5.dp.toPx(), c)
         }
     }
 }

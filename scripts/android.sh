@@ -21,6 +21,7 @@ Usage: ./project android <command>
 
   test     unit tests (:protocol, :app incl. simulator smoke test) + Android lint
   build    assembleDebug -> $APK_DST
+  screenshots  render the UI (simulator data) via Roborazzi/Robolectric -> docs/img/android-*.png
   badging  print package/permission/activity summary of the built APK (aapt2)
   clean    remove Gradle build outputs
 U
@@ -34,6 +35,11 @@ case "$cmd" in
   build)
     indev "$GRADLE :app:assembleDebug && mkdir -p /workspace/build && cp $APK_SRC /workspace/$APK_DST"
     ls -l "$ROOT/$APK_DST"
+    ;;
+  screenshots)
+    rm -rf "$ROOT/android/app/build/screenshots"
+    indev "$GRADLE -Pscreenshots :app:testDebugUnitTest && cp app/build/screenshots/android-*.png /workspace/docs/img/"
+    ls -l "$ROOT"/docs/img/android-*.png
     ;;
   badging)
     indev "/opt/android-sdk/build-tools/*/aapt2 dump badging /workspace/$APK_DST | grep -E '^(package|minSdkVersion|targetSdkVersion|application-label:|launchable-activity|uses-permission|uses-feature)'"
