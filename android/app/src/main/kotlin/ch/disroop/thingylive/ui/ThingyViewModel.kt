@@ -34,6 +34,11 @@ data class UiState(
     val songLength: Int = 0,
     val accelHistory: List<Vec3> = emptyList(),
     val gyroHistory: List<Vec3> = emptyList(),
+    val songVolume: Int = SongPlayer.DEFAULT_VOLUME,
+    /** "Lautstärke messen": microphone stream requested (off by default, it can overload the link). */
+    val micEnabled: Boolean = false,
+    /** The link dropped shortly after enabling the microphone, so it was switched off automatically. */
+    val micAutoDisabled: Boolean = false,
 )
 
 /** Owns the active [ThingyConnection] and folds its raw events into a [UiState]. */
@@ -49,6 +54,7 @@ class ThingyViewModel(
     private var connection: ThingyConnection? = null
     private var connectionJob: Job? = null
     private var songJob: Job? = null
+    private var micEnabledAtMs = 0L
 
     /** Connects (BLE, or the simulator when selected or Bluetooth is missing). No-op while running. */
     fun start() {
@@ -84,7 +90,7 @@ class ThingyViewModel(
         updateSong(playing = true, noteIndex = -1)
         songJob = viewModelScope.launch {
             try {
-                SongPlayer(thingy).play(song) { index, color ->
+                SongPlayer(thingy).play(song, volume = { _state.value.songVolume }, loop = true) { index, color ->
                     _state.update { it.withSnapshot { copy(ui = ui.copy(led = color)) } }
                     if (index >= 0) updateSong(playing = true, noteIndex = index)
                 }
@@ -99,6 +105,22 @@ class ThingyViewModel(
     }
 
     fun toggleSong() = if (songJob?.isActive == true) stopSong() else playSong()
+
+    /** 0..100; a playing song picks it up with the next note. */
+    fun setSongVolume(volume: Int) = _state.update { it.copy(songVolume = volume.coerceIn(0, SongPlayer.MAX_VOLUME)) }
+
+    /** Switches "Lautstärke messen" on or off. Enabling needs a connection; disabling always works. */
+    fun setMicrophone(enabled: Boolean) {
+        val thingy = connection
+        val connected = thingy?.link?.value is LinkState.Connected
+        if (enabled && !connected) return
+        if (enabled) micEnabledAtMs = clock()
+        _state.update { state ->
+            val cleared = if (enabled) state else state.withSnapshot { copy(sound = sound.copy(levelDbfs = null)) }
+            cleared.copy(micEnabled = enabled, micAutoDisabled = false)
+        }
+        if (thingy != null && connected) applyMicrophone(thingy, enabled)
+    }
 
     fun setLed(color: Rgb) {
         val thingy = connection ?: return
@@ -116,6 +138,7 @@ class ThingyViewModel(
             simulator = simulator,
             bleAvailable = connections.bleAvailable,
             songLength = song.notes.size,
+            songVolume = _state.value.songVolume,
         )
         connectionJob = viewModelScope.launch {
             launch(start = CoroutineStart.UNDISPATCHED) { next.link.collect(::onLink) }
@@ -125,12 +148,38 @@ class ThingyViewModel(
     }
 
     private fun onLink(link: LinkState) {
-        val lostConnection = _state.value.link is LinkState.Connected && link !is LinkState.Connected
-        if (lostConnection) stopSong()
+        val wasConnected = _state.value.link is LinkState.Connected
+        val isConnected = link is LinkState.Connected
+        if (wasConnected && !isConnected) {
+            stopSong()
+            onMicrophoneLinkLost()
+        }
+        if (!wasConnected && isConnected && _state.value.micEnabled) {
+            micEnabledAtMs = clock()
+            connection?.let { applyMicrophone(it, enabled = true) }
+        }
         _state.update { state ->
             val device = state.snapshot.device
             val connectedDevice = if (link is LinkState.Connected) device.copy(name = link.name, address = link.address) else device
             state.copy(link = link, snapshot = state.snapshot.copy(connected = link is LinkState.Connected, device = connectedDevice))
+        }
+    }
+
+    /**
+     * The link is always reconfigured without microphone. A drop shortly after enabling it is most likely
+     * caused by the audio stream, so it stays off; otherwise it is re-enabled after the reconnect.
+     */
+    private fun onMicrophoneLinkLost() = _state.update { state ->
+        if (!state.micEnabled) return@update state
+        val unstable = clock() - micEnabledAtMs <= MIC_UNSTABLE_WINDOW_MS
+        state.withSnapshot { copy(sound = sound.copy(levelDbfs = null)) }
+            .copy(micEnabled = !unstable, micAutoDisabled = unstable)
+    }
+
+    private fun applyMicrophone(thingy: ThingyConnection, enabled: Boolean) {
+        viewModelScope.launch {
+            val ok = thingy.setMicrophone(enabled)
+            if (!ok && enabled && connection === thingy) _state.update { it.copy(micEnabled = false) }
         }
     }
 
@@ -139,6 +188,7 @@ class ThingyViewModel(
             is ConnectionEvent.Data -> NotificationDecoder.decode(event.uuid, event.value)
             is ConnectionEvent.Rssi -> TelemetryEvent.Rssi(event.dbm)
         } ?: return
+        if (telemetry is TelemetryEvent.MicLevel && !_state.value.micEnabled) return
         val wasPressed = _state.value.snapshot.ui.buttonPressed == true
         _state.update { state ->
             val next = state.copy(snapshot = state.snapshot.reduce(telemetry, clock()))
@@ -163,6 +213,9 @@ class ThingyViewModel(
     companion object {
         /** 10 s of motion at 10 Hz. */
         const val HISTORY_SIZE = 100
+
+        /** A disconnect within this time after enabling the microphone switches it off for good. */
+        const val MIC_UNSTABLE_WINDOW_MS = 30_000L
 
         fun factory(connections: ConnectionFactory): ViewModelProvider.Factory = viewModelFactory {
             initializer { ThingyViewModel(connections) }

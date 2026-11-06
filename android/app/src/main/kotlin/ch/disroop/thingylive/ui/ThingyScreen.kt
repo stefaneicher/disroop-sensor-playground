@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import ch.disroop.thingylive.protocol.AirQuality
 import ch.disroop.thingylive.protocol.Rgb
 import ch.disroop.thingylive.protocol.Rgbc
 import ch.disroop.thingylive.protocol.Snapshot
+import kotlin.math.roundToInt
 
 /** Callbacks from the screen; implemented by the activity / ViewModel. */
 interface ScreenActions {
@@ -44,6 +46,8 @@ interface ScreenActions {
     fun onPlaySong()
     fun onStopSong()
     fun onLed(color: Rgb)
+    fun onSongVolume(volume: Int)
+    fun onMicrophoneChange(enabled: Boolean)
     fun onFixLink(reason: LinkState.Reason)
 }
 
@@ -56,11 +60,11 @@ fun ThingyScreen(state: UiState, actions: ScreenActions) {
     ) {
         item { Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             StatusCard(state, actions)
-            SongCard(s, state.songLength, actions)
+            SongCard(state, actions)
             EnvironmentCard(s.environment)
             MotionCard(state)
             OrientationCard(s.motion)
-            SoundCard(s)
+            SoundCard(state, actions)
         } }
     }
 }
@@ -98,7 +102,8 @@ private fun StatusCard(state: UiState, actions: ScreenActions) {
 }
 
 @Composable
-private fun SongCard(s: Snapshot, songLength: Int, actions: ScreenActions) {
+private fun SongCard(state: UiState, actions: ScreenActions) {
+    val s = state.snapshot
     val song = s.sound.song
     SectionCard("Lied & LED") {
         if (song.playing) {
@@ -107,13 +112,23 @@ private fun SongCard(s: Snapshot, songLength: Int, actions: ScreenActions) {
                 colors = ButtonDefaults.buttonColors(containerColor = Palette.red),
                 modifier = Modifier.fillMaxWidth(),
             ) { Text("■ Stopp") }
-            Text("Note ${song.noteIndex + 1} / $songLength", color = Palette.muted)
+            Text("Note ${song.noteIndex + 1} / ${state.songLength} · Endlosschleife", color = Palette.muted)
         } else {
             Button(onClick = actions::onPlaySong, enabled = s.connected, modifier = Modifier.fillMaxWidth()) {
                 Text("♪ Highway to Hell")
             }
             Text("Tipp: Taster am Thingy startet und stoppt das Lied.", color = Palette.muted)
         }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("Lautstärke Lied", Modifier.weight(1f), style = MaterialTheme.typography.labelMedium, color = Palette.muted)
+            Text("${state.songVolume} %", fontWeight = FontWeight.SemiBold)
+        }
+        Slider(
+            value = state.songVolume.toFloat(),
+            onValueChange = { actions.onSongVolume(it.roundToInt()) },
+            valueRange = 0f..100f,
+            modifier = Modifier.semantics { contentDescription = "Lautstärke Lied" },
+        )
         Text("LED-Farbe", style = MaterialTheme.typography.labelMedium, color = Palette.muted)
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
             LED_PRESETS.forEach { (name, rgb) -> LedChip(name, rgb, selected = s.ui.led == rgb, enabled = s.connected, actions::onLed) }
@@ -198,13 +213,33 @@ private fun OrientationCard(m: Snapshot.Motion) {
 }
 
 @Composable
-private fun SoundCard(s: Snapshot) {
+private fun SoundCard(state: UiState, actions: ScreenActions) {
+    val s = state.snapshot
     SectionCard("Mikrofon & Taster") {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Lautstärke", Modifier.weight(1f), color = Palette.muted)
-            Text(s.sound.levelDbfs.format(1, " dBFS"), fontWeight = FontWeight.SemiBold)
+            Text("Lautstärke messen", Modifier.weight(1f))
+            Switch(
+                checked = state.micEnabled,
+                onCheckedChange = actions::onMicrophoneChange,
+                enabled = s.connected || state.micEnabled,
+            )
         }
-        LevelMeter(s.sound.levelDbfs)
+        if (state.micEnabled) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("Lautstärke", Modifier.weight(1f), color = Palette.muted)
+                Text(s.sound.levelDbfs.format(1, " dBFS"), fontWeight = FontWeight.SemiBold)
+            }
+            LevelMeter(s.sound.levelDbfs)
+        } else {
+            Text(
+                if (state.micAutoDisabled) {
+                    "Verbindung kurz nach dem Einschalten abgebrochen – Mikrofon automatisch aus."
+                } else {
+                    "Aus: Der Audio-Stream kann die BLE-Verbindung überlasten."
+                },
+                color = Palette.muted,
+            )
+        }
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Dot(if (s.ui.buttonPressed == true) Palette.green else Palette.muted.copy(alpha = 0.4f), 18)
             Text(

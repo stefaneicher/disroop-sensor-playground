@@ -15,18 +15,21 @@ import kotlinx.coroutines.withContext
  * Timing uses coroutine [delay], so tests run it on virtual time.
  */
 class SongPlayer(private val thingy: ThingyConnection) {
-    /** [onNote] receives (note index, LED colour); (-1, OFF) when the song ends or is cancelled. */
-    suspend fun play(song: Song, volume: Int = DEFAULT_VOLUME, onNote: (Int, Rgb) -> Unit = { _, _ -> }) {
+    /**
+     * [volume] is read per note, so changes apply immediately. With [loop] the song repeats after
+     * `pause_ms` until cancelled. [onNote] receives (note index, LED colour); (-1, OFF) at the end.
+     */
+    suspend fun play(
+        song: Song,
+        volume: () -> Int = { DEFAULT_VOLUME },
+        loop: Boolean = false,
+        onNote: (Int, Rgb) -> Unit = { _, _ -> },
+    ) {
         try {
-            song.notes.forEachIndexed { index, note ->
-                val color = NoteColors.forHz(note.hz)
-                thingy.write(ThingyUuids.SPEAKER, ThingyCommands.speakerTone(note.hz, note.onMs, volume), withResponse = false)
-                thingy.write(ThingyUuids.LED, ThingyCommands.ledConstant(color))
-                onNote(index, color)
-                delay(note.onMs.toLong())
-                thingy.write(ThingyUuids.LED, ThingyCommands.ledOff())
-                onNote(index, Rgb.OFF)
-                delay(note.offMs.toLong())
+            playOnce(song, volume, onNote)
+            while (loop) {
+                delay(song.pauseMs.toLong())
+                playOnce(song, volume, onNote)
             }
         } finally {
             withContext(NonCancellable) {
@@ -36,7 +39,21 @@ class SongPlayer(private val thingy: ThingyConnection) {
         }
     }
 
+    private suspend fun playOnce(song: Song, volume: () -> Int, onNote: (Int, Rgb) -> Unit) {
+        song.notes.forEachIndexed { index, note ->
+            val color = NoteColors.forHz(note.hz)
+            thingy.write(ThingyUuids.SPEAKER, ThingyCommands.speakerTone(note.hz, note.onMs, volume()), withResponse = false)
+            thingy.write(ThingyUuids.LED, ThingyCommands.ledConstant(color))
+            onNote(index, color)
+            delay(note.onMs.toLong())
+            thingy.write(ThingyUuids.LED, ThingyCommands.ledOff())
+            onNote(index, Rgb.OFF)
+            delay(note.offMs.toLong())
+        }
+    }
+
     companion object {
         const val DEFAULT_VOLUME = 100
+        const val MAX_VOLUME = 100
     }
 }

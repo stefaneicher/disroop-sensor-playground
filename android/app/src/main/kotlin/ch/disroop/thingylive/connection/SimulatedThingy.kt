@@ -38,7 +38,11 @@ class SimulatedThingy : ThingyConnection {
     private val _events = MutableSharedFlow<ConnectionEvent>(extraBufferCapacity = 64, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     override val events = _events.asSharedFlow()
 
+    @Volatile
+    private var microphone = false
+
     override suspend fun run() {
+        microphone = false
         _link.value = LinkState.Connecting(ADDRESS)
         delay(CONNECT_DELAY_MS)
         _link.value = LinkState.Connected(NAME, ADDRESS)
@@ -47,7 +51,7 @@ class SimulatedThingy : ThingyConnection {
                 emit(ThingyUuids.BUTTON, NotificationEncoder.button(false))
                 every(MOTION_PERIOD_MS) { tick -> emitMotion(tick * MOTION_PERIOD_MS / 1000.0) }
                 every(ENV_PERIOD_MS) { tick -> emitEnvironment(tick) }
-                every(MIC_PERIOD_MS) { tick -> emitMicrophone(tick * MIC_PERIOD_MS / 1000.0) }
+                every(MIC_PERIOD_MS) { tick -> if (microphone) emitMicrophone(tick * MIC_PERIOD_MS / 1000.0) }
                 every(STATUS_PERIOD_MS) { tick ->
                     _events.emit(ConnectionEvent.Rssi(-45 - (tick % 7).toInt()))
                     emit(ThingyUuids.BATTERY_LEVEL, NotificationEncoder.battery(87 - (tick / 30).toInt()))
@@ -63,6 +67,11 @@ class SimulatedThingy : ThingyConnection {
     }
 
     override suspend fun write(uuid: UUID, value: ByteArray, withResponse: Boolean): Boolean = true
+
+    override suspend fun setMicrophone(enabled: Boolean): Boolean {
+        microphone = enabled
+        return true
+    }
 
     private fun kotlinx.coroutines.CoroutineScope.every(periodMs: Long, block: suspend (Long) -> Unit) = launch {
         var tick = 0L

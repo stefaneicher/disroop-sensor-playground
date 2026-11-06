@@ -79,6 +79,8 @@ class MainActivity : ComponentActivity(), ScreenActions {
     override fun onPlaySong() = viewModel.playSong()
     override fun onStopSong() = viewModel.stopSong()
     override fun onLed(color: Rgb) = viewModel.setLed(color)
+    override fun onSongVolume(volume: Int) = viewModel.setSongVolume(volume)
+    override fun onMicrophoneChange(enabled: Boolean) = viewModel.setMicrophone(enabled)
 
     override fun onFixLink(reason: LinkState.Reason) {
         when (reason) {

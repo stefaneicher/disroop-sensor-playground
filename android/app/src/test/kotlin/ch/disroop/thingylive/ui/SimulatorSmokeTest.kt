@@ -37,7 +37,9 @@ class SimulatorSmokeTest {
         }
         val vm = ThingyViewModel(factory, clock = { testScheduler.currentTime }, song = { Song.highwayToHell() })
         vm.start()
-        advanceTimeBy(15_000)
+        advanceTimeBy(1_000)
+        vm.setMicrophone(true)
+        advanceTimeBy(14_000)
         runCurrent()
 
         val s = vm.state.value.snapshot

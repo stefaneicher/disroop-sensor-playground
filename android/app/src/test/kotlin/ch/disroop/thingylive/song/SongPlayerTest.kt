@@ -23,7 +23,7 @@ class SongPlayerTest {
         val thingy = FakeConnection().apply { now = { testScheduler.currentTime } }
         val progress = mutableListOf<Pair<Int, Rgb>>()
 
-        SongPlayer(thingy).play(song, volume = 80) { index, color -> progress += index to color }
+        SongPlayer(thingy).play(song, volume = { 80 }) { index, color -> progress += index to color }
 
         val speaker = thingy.writes.filter { it.uuid == ThingyUuids.SPEAKER }
         assertEquals(listOf(0L, 150L), speaker.map { it.atMs })
@@ -59,5 +59,22 @@ class SongPlayerTest {
         assertEquals(1, thingy.writes.count { it.uuid == ThingyUuids.SPEAKER })
         assertEquals(ThingyCommands.ledOff().toList(), thingy.writes.last().value)
         assertEquals(-1 to Rgb.OFF, last)
+    }
+
+    @Test fun `looping repeats the song after the pause until cancelled`() = runTest {
+        val thingy = FakeConnection().apply { now = { testScheduler.currentTime } }
+        var volume = 100
+        val job = launch { SongPlayer(thingy).play(song, volume = { volume }, loop = true) }
+        advanceTimeBy(200)
+        volume = 30
+        advanceTimeBy(375 + 1500 + 10 - 200)
+        runCurrent()
+        job.cancel()
+        job.join()
+
+        val speaker = thingy.writes.filter { it.uuid == ThingyUuids.SPEAKER }
+        assertEquals(listOf(0L, 150L, 1875L), speaker.map { it.atMs })
+        assertEquals(ThingyCommands.speakerTone(440, 100, 100).toList(), speaker[0].value)
+        assertEquals("volume changes apply to the next note", ThingyCommands.speakerTone(440, 100, 30).toList(), speaker[2].value)
     }
 }

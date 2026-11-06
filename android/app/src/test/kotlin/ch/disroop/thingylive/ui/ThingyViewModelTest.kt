@@ -4,6 +4,8 @@ import ch.disroop.thingylive.connection.ConnectionFactory
 import ch.disroop.thingylive.connection.FakeConnection
 import ch.disroop.thingylive.connection.LinkState
 import ch.disroop.thingylive.connection.ThingyConnection
+import ch.disroop.thingylive.protocol.AudioLevel
+import ch.disroop.thingylive.protocol.ImaAdpcm
 import ch.disroop.thingylive.protocol.Note
 import ch.disroop.thingylive.protocol.NotificationEncoder
 import ch.disroop.thingylive.protocol.Rgb
@@ -40,8 +42,10 @@ class ThingyViewModelTest {
         override fun simulator(): ThingyConnection = sim
     }
 
-    private fun TestScope.viewModel(bleAvailable: Boolean = true) =
-        ThingyViewModel(factory(bleAvailable), clock = { testScheduler.currentTime }, song = { song })
+    private fun TestScope.viewModel(bleAvailable: Boolean = true): ThingyViewModel {
+        ble.now = { testScheduler.currentTime }
+        return ThingyViewModel(factory(bleAvailable), clock = { testScheduler.currentTime }, song = { song })
+    }
 
     @Before fun setUp() = Dispatchers.setMain(dispatcher)
 
@@ -120,14 +124,137 @@ class ThingyViewModelTest {
         vm.stop()
     }
 
-    @Test fun `song finishes by itself`() = runTest(dispatcher) {
+    @Test fun `song loops after the pause until stopped`() = runTest(dispatcher) {
         val vm = viewModel()
         vm.start()
+        runCurrent()
         vm.playSong()
-        advanceTimeBy(song.durationMs + 1)
+        advanceTimeBy(song.durationMs + song.pauseMs + 1)
+        runCurrent()
+        assertTrue(vm.state.value.snapshot.sound.song.playing)
+        assertEquals(0, vm.state.value.snapshot.sound.song.noteIndex)
+        assertEquals(3, ble.writes.count { it.uuid == ThingyUuids.SPEAKER })
+        vm.stopSong()
         runCurrent()
         assertFalse(vm.state.value.snapshot.sound.song.playing)
         vm.stop()
+    }
+
+    @Test fun `song volume is applied to the next tones`() = runTest(dispatcher) {
+        val vm = viewModel()
+        vm.start()
+        runCurrent()
+        assertEquals(100, vm.state.value.songVolume)
+        vm.setSongVolume(40)
+        vm.playSong()
+        runCurrent()
+        assertEquals(40, vm.state.value.songVolume)
+        assertEquals(ThingyCommands.speakerTone(440, 100, 40).toList(), ble.writes.first { it.uuid == ThingyUuids.SPEAKER }.value)
+        vm.setSongVolume(150)
+        assertEquals(100, vm.state.value.songVolume)
+        vm.stop()
+    }
+
+    @Test fun `microphone is off by default and toggled on request`() = runTest(dispatcher) {
+        val vm = viewModel()
+        vm.start()
+        runCurrent()
+        assertFalse(vm.state.value.micEnabled)
+        val frame = ImaAdpcm.encode(ShortArray(256) { if (it % 2 == 0) 8000 else -8000 })
+        ble.emit(ThingyUuids.MICROPHONE, frame)
+        runCurrent()
+        assertEquals("ignored while off", null, vm.state.value.snapshot.sound.levelDbfs)
+
+        vm.setMicrophone(true)
+        runCurrent()
+        assertTrue(vm.state.value.micEnabled)
+        assertEquals(listOf(true), ble.microphoneCalls)
+        ble.emit(ThingyUuids.MICROPHONE, frame)
+        runCurrent()
+        assertEquals(AudioLevel.dbfs(ImaAdpcm.decode(frame)), vm.state.value.snapshot.sound.levelDbfs!!, 1e-9)
+
+        vm.setMicrophone(false)
+        runCurrent()
+        assertFalse(vm.state.value.micEnabled)
+        assertEquals(null, vm.state.value.snapshot.sound.levelDbfs)
+        assertEquals(listOf(true, false), ble.microphoneCalls)
+        vm.stop()
+    }
+
+    @Test fun `microphone stays off when enabling fails`() = runTest(dispatcher) {
+        val vm = viewModel()
+        vm.start()
+        runCurrent()
+        ble.microphoneResult = false
+        vm.setMicrophone(true)
+        runCurrent()
+        assertFalse(vm.state.value.micEnabled)
+        vm.stop()
+    }
+
+    @Test fun `disconnect shortly after enabling the microphone switches it off for good`() = runTest(dispatcher) {
+        val vm = viewModel()
+        vm.start()
+        runCurrent()
+        vm.setMicrophone(true)
+        runCurrent()
+        advanceTimeBy(5_000)
+        ble.link.value = LinkState.Scanning
+        runCurrent()
+        assertFalse(vm.state.value.micEnabled)
+        assertTrue(vm.state.value.micAutoDisabled)
+
+        ble.link.value = LinkState.Connected("Thingy", "E3:58:08:1B:53:5F")
+        runCurrent()
+        assertEquals("not re-enabled after the reconnect", listOf(true), ble.microphoneCalls)
+        vm.setMicrophone(true)
+        runCurrent()
+        assertFalse("manual enable clears the notice", vm.state.value.micAutoDisabled)
+        vm.stop()
+    }
+
+    @Test fun `microphone is restored after a reconnect when it ran stable before`() = runTest(dispatcher) {
+        val vm = viewModel()
+        vm.start()
+        runCurrent()
+        vm.setMicrophone(true)
+        runCurrent()
+        advanceTimeBy(ThingyViewModel.MIC_UNSTABLE_WINDOW_MS + 1)
+        ble.link.value = LinkState.Scanning
+        runCurrent()
+        assertTrue(vm.state.value.micEnabled)
+        assertEquals(null, vm.state.value.snapshot.sound.levelDbfs)
+
+        ble.link.value = LinkState.Connected("Thingy", "E3:58:08:1B:53:5F")
+        runCurrent()
+        assertEquals(listOf(true, true), ble.microphoneCalls)
+        assertFalse(vm.state.value.micAutoDisabled)
+        vm.stop()
+    }
+
+    @Test fun `microphone can be disabled while reconnecting`() = runTest(dispatcher) {
+        val vm = viewModel()
+        vm.start()
+        runCurrent()
+        vm.setMicrophone(true)
+        runCurrent()
+        advanceTimeBy(ThingyViewModel.MIC_UNSTABLE_WINDOW_MS + 1)
+        ble.link.value = LinkState.Scanning
+        runCurrent()
+        vm.setMicrophone(false)
+        ble.link.value = LinkState.Connected("Thingy", "E3:58:08:1B:53:5F")
+        runCurrent()
+        assertFalse(vm.state.value.micEnabled)
+        assertEquals(listOf(true), ble.microphoneCalls)
+        vm.stop()
+    }
+
+    @Test fun `microphone cannot be enabled while not connected`() = runTest(dispatcher) {
+        val vm = viewModel()
+        vm.setMicrophone(true)
+        runCurrent()
+        assertFalse(vm.state.value.micEnabled)
+        assertTrue(ble.microphoneCalls.isEmpty())
     }
 
     @Test fun `button press on the thingy toggles the song`() = runTest(dispatcher) {

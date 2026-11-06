@@ -96,6 +96,9 @@ class BleThingyConnection(private val context: Context) : ThingyConnection {
     override suspend fun write(uuid: UUID, value: ByteArray, withResponse: Boolean): Boolean =
         session?.write(uuid, value, withResponse) ?: false
 
+    override suspend fun setMicrophone(enabled: Boolean): Boolean =
+        session?.execute(StartSequence.microphone(enabled)) ?: false
+
     private suspend fun unavailable(reason: LinkState.Reason) {
         _link.value = LinkState.Unavailable(reason)
         delay(RETRY_DELAY_MS)
@@ -184,15 +187,25 @@ class BleThingyConnection(private val context: Context) : ThingyConnection {
         val disconnected = CompletableDeferred<Unit>()
         lateinit var gatt: BluetoothGatt
 
-        suspend fun configure() {
-            for (step in StartSequence.steps()) {
-                when (step) {
+        suspend fun configure() = execute(StartSequence.steps())
+
+        /** Runs [steps] in order; false if a non-optional step failed. */
+        suspend fun execute(steps: List<GattStep>): Boolean {
+            var ok = true
+            for (step in steps) {
+                val success = when (step) {
                     is GattStep.Write -> write(step.uuid, step.value, withResponse = true)
                     is GattStep.ReadModifyWrite -> write(step.uuid, step.transform(read(step.uuid) ?: ByteArray(0)), true)
-                    is GattStep.Read -> read(step.uuid)?.let { _events.tryEmit(ConnectionEvent.Data(step.uuid, it)) }
-                    is GattStep.Subscribe -> if (!subscribe(step.uuid) && !step.optional) Log.w(TAG, "notify ${step.uuid} failed")
+                    is GattStep.Read -> read(step.uuid)?.also { _events.tryEmit(ConnectionEvent.Data(step.uuid, it)) } != null
+                    is GattStep.Subscribe -> setNotify(step.uuid, enabled = true) || step.optional
+                    is GattStep.Unsubscribe -> setNotify(step.uuid, enabled = false)
+                }
+                if (!success) {
+                    Log.w(TAG, "GATT step failed: $step")
+                    ok = false
                 }
             }
+            return ok
         }
 
         suspend fun pollRssi() {
@@ -218,11 +231,12 @@ class BleThingyConnection(private val context: Context) : ThingyConnection {
             return queue.execute { gatt.readCharacteristic(characteristic) }.takeIf { it.success }?.value
         }
 
-        private suspend fun subscribe(uuid: UUID): Boolean {
+        private suspend fun setNotify(uuid: UUID, enabled: Boolean): Boolean {
             val characteristic = find(uuid) ?: return false
             val cccd = characteristic.getDescriptor(ThingyUuids.CCCD) ?: return false
-            if (!gatt.setCharacteristicNotification(characteristic, true)) return false
-            return queue.execute { startDescriptorWrite(cccd, BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE) }.success
+            if (!gatt.setCharacteristicNotification(characteristic, enabled)) return false
+            val value = if (enabled) BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE else BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE
+            return queue.execute { startDescriptorWrite(cccd, value) }.success
         }
 
         private fun find(uuid: UUID): BluetoothGattCharacteristic? =

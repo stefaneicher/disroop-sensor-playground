@@ -54,7 +54,8 @@ Architekturdiagramm: [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md#android-app)
   - Ein Tap verbindet sofort per BLE und beendet dabei den Simulator.
   - Den Tag schreibt die Bridge: `./project bridge nfc`. Die App selbst schreibt keine Tags.
 - **Simulator:** Per Schalter in der Status-Karte. Ohne BLE-Hardware (Emulator) ist er automatisch aktiv. Er sendet dieselben rohen Bytes wie die Firmware.
-- **Lied:** Knopf in der Karte „Lied & LED“ oder Taster am Thingy. Die App spielt die 24 Noten **einmal**, die Bridge im Dashboard dagegen in Schleife.
+- **Lied:** Knopf in der Karte „Lied & LED“ oder Taster am Thingy. Die App spielt die 24 Noten in **Endlosschleife** mit `pause_ms` (1500 ms) aus `shared/chorus.json` dazwischen, bis du stoppst oder die Verbindung abbricht. Der Schieber „Lautstärke Lied“ (0..100) wirkt ab der nächsten Note.
+- **Lautstärke messen:** Das Mikrofon ist **standardmässig aus**, weil der ADPCM-Stream (~32 kB/s) die BLE-Verbindung überlasten kann. Die Startsequenz abonniert es nicht. Der Schalter in der Karte „Mikrofon & Taster“ schreibt die Sound-Config und schaltet die Mikrofon-Notification (CCCD) ein oder aus. Bricht die Verbindung innerhalb von 30 s nach dem Einschalten ab, bleibt das Mikrofon danach aus. Lief es stabil, schaltet die App es nach dem Reconnect wieder ein.
 - **Hintergrund:** In `onStop` trennt die App, damit `thingy.exe` den Thingy wieder nutzen kann.
 
 ## Offen

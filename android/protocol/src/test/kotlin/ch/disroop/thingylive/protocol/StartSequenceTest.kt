@@ -23,13 +23,13 @@ class StartSequenceTest {
         assertArrayEquals(bytes(0xE8, 3, 0xE8, 3, 0xE8, 3, 0xE8, 3, 1, 9, 8, 7), result)
     }
 
-    @Test fun `subscribes to every notify characteristic`() {
+    @Test fun `subscribes to every notify characteristic except the microphone`() {
         val subscribed = steps.filterIsInstance<GattStep.Subscribe>().map { it.uuid }.toSet()
         val expected = setOf(
             ThingyUuids.TEMPERATURE, ThingyUuids.PRESSURE, ThingyUuids.HUMIDITY, ThingyUuids.GAS, ThingyUuids.COLOR,
             ThingyUuids.BUTTON, ThingyUuids.TAP, ThingyUuids.ORIENTATION, ThingyUuids.QUATERNION,
             ThingyUuids.PEDOMETER, ThingyUuids.RAW_MOTION, ThingyUuids.EULER, ThingyUuids.HEADING,
-            ThingyUuids.GRAVITY, ThingyUuids.SPEAKER_STATUS, ThingyUuids.MICROPHONE, ThingyUuids.BATTERY_LEVEL,
+            ThingyUuids.GRAVITY, ThingyUuids.SPEAKER_STATUS, ThingyUuids.BATTERY_LEVEL,
         )
         assertEquals(expected, subscribed)
         assertTrue(steps.filterIsInstance<GattStep.Subscribe>().filter { it.optional }.map { it.uuid }
@@ -38,5 +38,17 @@ class StartSequenceTest {
 
     @Test fun `reads battery once`() {
         assertTrue(steps.any { it is GattStep.Read && it.uuid == ThingyUuids.BATTERY_LEVEL })
+    }
+
+    @Test fun `enabling the microphone writes the sound config and subscribes the microphone`() {
+        val steps = StartSequence.microphone(enabled = true)
+        val config = steps[0] as GattStep.Write
+        assertEquals(ThingyUuids.SOUND_CONFIG, config.uuid)
+        assertArrayEquals(ThingyCommands.soundConfig(), config.value)
+        assertEquals(listOf(GattStep.Subscribe(ThingyUuids.MICROPHONE)), steps.drop(1))
+    }
+
+    @Test fun `disabling the microphone only unsubscribes it`() {
+        assertEquals(listOf(GattStep.Unsubscribe(ThingyUuids.MICROPHONE)), StartSequence.microphone(enabled = false))
     }
 }

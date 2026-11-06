@@ -16,6 +16,8 @@ class FakeConnection(override val source: Snapshot.Source = Snapshot.Source.BLE)
     var runs = 0
         private set
     var now: () -> Long = { 0 }
+    val microphoneCalls = mutableListOf<Boolean>()
+    var microphoneResult = true
 
     override suspend fun run() {
         runs++
@@ -30,6 +32,11 @@ class FakeConnection(override val source: Snapshot.Source = Snapshot.Source.BLE)
     override suspend fun write(uuid: UUID, value: ByteArray, withResponse: Boolean): Boolean {
         writes += Write(uuid, value.toList(), withResponse, now())
         return true
+    }
+
+    override suspend fun setMicrophone(enabled: Boolean): Boolean {
+        microphoneCalls += enabled
+        return microphoneResult
     }
 
     fun emit(uuid: UUID, value: ByteArray) {

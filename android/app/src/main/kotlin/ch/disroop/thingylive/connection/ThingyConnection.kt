@@ -17,6 +17,9 @@ interface ThingyConnection {
     suspend fun run()
 
     suspend fun write(uuid: UUID, value: ByteArray, withResponse: Boolean = true): Boolean
+
+    /** Starts/stops the microphone stream on the current link (off after every (re)connect). */
+    suspend fun setMicrophone(enabled: Boolean): Boolean
 }
 
 sealed interface ConnectionEvent {
