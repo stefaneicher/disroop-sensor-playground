@@ -87,11 +87,10 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 - Machbarkeits-Scanner: `C:\Users\stefa\AppData\Local\Temp\blescan\` (Go, `tinygo.org/x/bluetooth`, im `golang:1.27`-Container gebaut).
 
 ## Nächste Schritte
-Stand 21:28: Devcontainer, `./project`, Verträge (`docs/protocol.md`, Schema, ENGINEERING.md) sind committed (`e62a051`).
-Drei Background-Agents laufen: **bridge** (`bridge/`, `scripts/bridge.sh`), **web** (`bridge/web/static|test|dev`, `scripts/web.sh`), **android** (`android/`, `scripts/android.sh`). Agents committen nicht.
-Bricht die Session ab: `git status` prüfen. Was halbfertig ist, mit `./project <area> test` validieren, dann den Agent mit demselben Auftrag neu starten (Prompts sinngemäss wie in ENGINEERING.md und protocol.md).
-1. Agent-Ergebnisse integrieren, `./project test` und `./project build`, committen.
-2. Hardware-Smoke-Test: `./project bridge run`, http://localhost:8052, Lied abspielen.
-3. NFC-AAR schreiben (`./project bridge nfc`).
-4. CI-Workflows im Devcontainer-Image, Release mit exe + apk.
-5. README, Abschluss-Lavish, Report.
+Stand 2026-11-07 15:15. Alles gepusht, CI grün. Apps im Repo: `bridge/` (thingy.exe + Dashboard), `android/`, `tennis/`.
+- Demo starten: exe nach `%TEMP%\thingy-demo\` kopieren und dort laufen lassen, sonst ist `build/thingy.exe` für Builds gesperrt. Dashboard: `thingy.exe -no-tui`, Tennis: `thingy.exe tennis` (oder `--sim`).
+- Im Spielmodus sind Euler/Heading pausiert, sonst bricht BLE bei 100 Hz ab (siehe docs/TENNIS.md).
+1. Tennis live mit echten Schwüngen testen (Thingy aufwecken: Knopf), Schwellen ggf. nachjustieren.
+2. User bestätigen lassen, dass NFC-Tap die App öffnet.
+3. Copilot-Diktat: Konzept `/mnt/c/Users/stefa/IdeaProjects/copilot-diktat/.lavish/diktat-konzept.html` (`lavish-axi … --reopen`), nach Entscheid neues Repo `copilot-diktat` anlegen (Whisper im Docker + Copilot SDK + Go-Tray-App).
+4. Optional: Release-Tag v0.1.0 mit exe + apk (APK nach Android-Änderungen neu bauen).
