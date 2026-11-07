@@ -611,23 +611,79 @@ func TestTapReachesTheMotionHub(t *testing.T) {
 	}
 }
 
-func TestSetMotionHzWritesTheConfigNowAndOnReconnect(t *testing.T) {
+func indexOf(ops []string, s string) int {
+	for i, o := range ops {
+		if o == s {
+			return i
+		}
+	}
+	return -1
+}
+
+const (
+	motionConfig10Hz  = "write motion_config E8 03 F4 01 64 00 0A 00 01"
+	motionConfig100Hz = "write motion_config E8 03 F4 01 64 00 64 00 01"
+)
+
+func TestGameModePausesEulerAndHeadingBeforeRaisingTheRate(t *testing.T) {
 	s, _, _ := newTestSession("ble")
 	dev := newFakeDevice()
 	_ = s.Attach(dev)
-	s.SetMotionHz(100)
-	if ops := dev.list(); ops[len(ops)-1] != "write motion_config E8 03 F4 01 64 00 64 00 01" {
-		t.Fatalf("last op %q", ops[len(ops)-1])
+	before := len(dev.list())
+	s.SetGameMode(100)
+	ops := dev.list()[before:]
+	want := []string{"unsub euler", "unsub heading", motionConfig100Hz}
+	if strings.Join(ops, "|") != strings.Join(want, "|") {
+		t.Fatalf("ops %v, want %v", ops, want)
 	}
-	s.Detach()
-	next := newFakeDevice()
-	_ = s.Attach(next)
-	if !contains(next.list(), "write motion_config E8 03 F4 01 64 00 64 00 01") {
-		t.Fatalf("reconnect did not restore 100 Hz: %v", next.list())
+	if !s.GameMode() {
+		t.Fatal("game mode not reported")
 	}
-	s.SetMotionHz(0) // back to the default
-	if ops := next.list(); ops[len(ops)-1] != "write motion_config E8 03 F4 01 64 00 0A 00 01" {
-		t.Fatalf("last op %q", ops[len(ops)-1])
+}
+
+func TestLeavingGameModeLowersTheRateBeforeResubscribing(t *testing.T) {
+	s, _, _ := newTestSession("ble")
+	s.Skip = map[string]bool{"heading": true}
+	dev := newFakeDevice()
+	_ = s.Attach(dev)
+	s.SetGameMode(100)
+	before := len(dev.list())
+	s.SetGameMode(0)
+	ops := dev.list()[before:]
+	want := []string{motionConfig10Hz, "sub euler"} // heading stays skipped
+	if strings.Join(ops, "|") != strings.Join(want, "|") {
+		t.Fatalf("ops %v, want %v", ops, want)
+	}
+	s.SetGameMode(0) // already off: no BLE traffic
+	if n := len(dev.list()); n != before+2 {
+		t.Fatalf("second SetGameMode(0) wrote: %v", dev.list()[before+2:])
+	}
+}
+
+func TestGameModeSurvivesAReconnectWithTheRateWrittenAfterTheSubscriptions(t *testing.T) {
+	s, _, _ := newTestSession("ble")
+	s.SetGameMode(60) // before the first connection
+	for range 2 {
+		dev := newFakeDevice()
+		_ = s.Attach(dev)
+		ops := dev.list()
+		if subscribed(dev, thingy.EulerChar) || subscribed(dev, thingy.HeadingChar) {
+			t.Fatalf("paused characteristics subscribed: %v", ops)
+		}
+		if !subscribed(dev, thingy.QuaternionChar) || !subscribed(dev, thingy.RawMotionChar) || !subscribed(dev, thingy.TapChar) {
+			t.Fatalf("game characteristics missing: %v", ops)
+		}
+		game := indexOf(ops, "write motion_config E8 03 F4 01 64 00 3C 00 01")
+		lastSub := 0
+		for i, o := range ops {
+			if strings.HasPrefix(o, "sub ") {
+				lastSub = i
+			}
+		}
+		if game < lastSub || ops[0] != motionConfig10Hz {
+			t.Fatalf("60 Hz must follow the subscriptions (game %d, last sub %d): %v", game, lastSub, ops)
+		}
+		s.Detach()
 	}
 }
 

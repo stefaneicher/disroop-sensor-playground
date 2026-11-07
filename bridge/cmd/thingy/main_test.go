@@ -24,10 +24,14 @@ func TestParseArgs(t *testing.T) {
 		{[]string{"song", "--volume", "40", "--addr", "E3:58:08:1B:53:5F"}, options{command: "song", addr: "E3:58:08:1B:53:5F", port: 8052, volume: 40, backup: "build/nfc-backup.hex"}},
 		{[]string{"nfc", "--restore"}, options{command: "nfc", restore: true, port: 8052, volume: 100, backup: "build/nfc-backup.hex"}},
 		{[]string{"tennis", "--sim", "--no-browser"}, options{command: "tennis", sim: true, noBrowser: true, port: 8052, volume: 100, backup: "build/nfc-backup-sim.hex"}},
+		{[]string{"tennis", "-motion-hz", "50"}, options{command: "tennis", motionHz: 50, port: 8052, volume: 100, backup: "build/nfc-backup.hex"}},
 	}
 	for _, tt := range tests {
 		got, err := parseArgs(tt.args, &bytes.Buffer{})
 		got.timeout = 0
+		if tt.want.motionHz == 0 {
+			tt.want.motionHz = gameMotionHz
+		}
 		if err != nil || got != tt.want {
 			t.Errorf("%v: got %+v, %v want %+v", tt.args, got, err, tt.want)
 		}
@@ -35,7 +39,7 @@ func TestParseArgs(t *testing.T) {
 }
 
 func TestParseArgsRejectsInvalid(t *testing.T) {
-	for _, args := range [][]string{{"fly"}, {"--volume", "101"}, {"song", "extra"}} {
+	for _, args := range [][]string{{"fly"}, {"--volume", "101"}, {"song", "extra"}, {"-motion-hz", "4"}, {"-motion-hz", "201"}} {
 		if _, err := parseArgs(args, &bytes.Buffer{}); err == nil {
 			t.Errorf("%v: want error", args)
 		}

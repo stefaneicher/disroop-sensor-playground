@@ -46,6 +46,7 @@ type Session struct {
 	Motion *motion.Hub
 
 	micMu          sync.Mutex // serializes mic (un)subscriptions
+	gameMu         sync.Mutex // serializes game mode switches with the subscriptions of Attach
 	mu             sync.Mutex
 	dev            device.Device
 	meter          *thingy.LevelMeter
@@ -60,7 +61,7 @@ type Session struct {
 	battery        *battery.Tracker
 	batteryTrend   battery.Trend
 	batteryChecked time.Time // last re-evaluation of the trend
-	motionHz       uint16    // motion_freq_hz override, 0 = thingy.DefaultMotionConfig
+	gameHz         uint16    // motion_freq_hz in game mode, 0 = no game (thingy.DefaultMotionConfig)
 }
 
 // NewSession returns a session that writes into store. The microphone is off.
@@ -232,31 +233,33 @@ func (s *Session) waitForDrop(ctx context.Context, dev device.Device) {
 }
 
 // Attach runs the startup sequence of docs/protocol.md and subscribes to all notifications.
+// In game mode it leaves thingy.GamePausedChars out and raises motion_freq_hz only after all
+// subscriptions are done.
 func (s *Session) Attach(dev device.Device) error {
 	if err := Configure(dev, s.logf); err != nil {
 		return err
 	}
-	s.mu.Lock()
-	hz := s.motionHz
-	s.mu.Unlock()
-	if hz != 0 {
-		if err := dev.Write(thingy.MotionConfigChar, motionConfig(hz).Bytes()); err != nil {
-			s.logf("Motion-Frequenz %d Hz setzen fehlgeschlagen: %v", hz, err)
-		}
-	}
+	s.gameMu.Lock()
 	s.mu.Lock()
 	s.dev = dev
 	s.decodeFailures = map[string]bool{}
 	s.micReady, s.micOn, s.micSince = false, false, time.Time{}
 	s.battery.Reset()
 	s.batteryTrend, s.batteryChecked = battery.Unknown, time.Time{}
+	hz := s.gameHz
 	s.mu.Unlock()
 
 	for _, c := range thingy.NotifyChars {
-		if c != thingy.MicrophoneChar && !s.Skip[c.Name] {
+		if c != thingy.MicrophoneChar && !s.Skip[c.Name] && (hz == 0 || !gamePaused(c)) {
 			s.subscribe(dev, c)
 		}
 	}
+	if hz != 0 {
+		if err := dev.Write(thingy.MotionConfigChar, motionConfig(hz).Bytes()); err != nil {
+			s.logf("Motion-Frequenz %d Hz setzen fehlgeschlagen: %v", hz, err)
+		}
+	}
+	s.gameMu.Unlock()
 	info := dev.Info()
 	s.store.Update(func(snap *telemetry.Snapshot) {
 		snap.Connected = true
@@ -370,21 +373,65 @@ func motionConfig(hz uint16) thingy.MotionConfigValue {
 	return cfg
 }
 
-// SetMotionHz sets motion_freq_hz (quaternion, raw motion, euler …) now and after reconnects;
-// 0 restores the default of thingy.DefaultMotionConfig.
-func (s *Session) SetMotionHz(hz uint16) {
+func gamePaused(c thingy.Char) bool {
+	for _, p := range thingy.GamePausedChars {
+		if p == c {
+			return true
+		}
+	}
+	return false
+}
+
+// SetGameMode switches the game mode for the fast motion channel, now and after reconnects:
+// hz > 0 unsubscribes thingy.GamePausedChars and then sets motion_freq_hz to hz; 0 restores the
+// default rate of thingy.DefaultMotionConfig and then subscribes them again. All notifications that
+// follow motion_freq_hz together overload the BLE link at a game rate (docs/TENNIS.md).
+func (s *Session) SetGameMode(hz uint16) {
+	s.gameMu.Lock()
+	defer s.gameMu.Unlock()
 	s.mu.Lock()
-	s.motionHz = hz
+	was := s.gameHz
+	s.gameHz = hz
 	dev := s.dev
 	s.mu.Unlock()
+	if was == hz {
+		return
+	}
 	cfg := motionConfig(hz)
-	s.logf("Motion-Frequenz %d Hz", cfg.MotionHz)
+	if hz != 0 {
+		s.logf("Spielmodus: Motion-Frequenz %d Hz, Euler und Kompass pausiert", cfg.MotionHz)
+	} else {
+		s.logf("Spielmodus aus: Motion-Frequenz %d Hz", cfg.MotionHz)
+	}
 	if dev == nil {
 		return
+	}
+	if was == 0 {
+		for _, c := range thingy.GamePausedChars {
+			if !s.Skip[c.Name] {
+				if err := dev.Unsubscribe(c); err != nil {
+					s.logf("Abo %s beenden fehlgeschlagen: %v", c.Name, err)
+				}
+			}
+		}
 	}
 	if err := dev.Write(thingy.MotionConfigChar, cfg.Bytes()); err != nil {
 		s.logf("Motion-Frequenz setzen fehlgeschlagen: %v", err)
 	}
+	if hz == 0 {
+		for _, c := range thingy.GamePausedChars {
+			if !s.Skip[c.Name] {
+				s.subscribe(dev, c)
+			}
+		}
+	}
+}
+
+// GameMode reports whether the game mode is on.
+func (s *Session) GameMode() bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.gameHz != 0
 }
 
 // beepSounds is the device feedback of POST /api/beep: a short tone plus an LED color.

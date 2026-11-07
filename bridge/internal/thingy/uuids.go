@@ -72,6 +72,17 @@ var NotifyChars = []Char{
 	BatteryChar,
 }
 
+// GamePausedChars are the notifications that also follow motion_freq_hz but are not needed by a game
+// on /api/motion (quaternion and raw motion). The game mode unsubscribes them: at 100 Hz all four
+// streams together (400 notifications/s) make the Windows BLE link drop within seconds.
+var GamePausedChars = []Char{EulerChar, HeadingChar}
+
+// Motion rate limits of motion_freq_hz (EF680401) in the firmware.
+const (
+	MinMotionHz = 5
+	MaxMotionHz = 200
+)
+
 // Services lists every service the bridge uses.
 var Services = []string{ConfigService, EnvironmentService, UIService, MotionService, SoundService, BatteryService}
 

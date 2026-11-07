@@ -152,10 +152,14 @@ func (c *Connector) Connect(ctx context.Context) (device.Device, error) {
 	c.logf("Gefunden: %s %s (%d dBm), verbinde …", info.Name, info.Address, info.RSSI)
 	dev, err := c.adapter.Connect(found.Address, bluetooth.ConnectionParams{
 		ConnectionTimeout: bluetooth.NewDuration(connectTimeout),
-		Priority:          bluetooth.ConnectionPriorityThroughput,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("verbinden: %w", err)
+	}
+	// Short connection interval for the fast motion channel (Windows 11: ThroughputOptimized).
+	// tinygo would request it inside Connect too, but hides the error.
+	if err := dev.RequestConnectionParams(bluetooth.ConnectionParams{Priority: bluetooth.ConnectionPriorityThroughput}); err != nil {
+		c.logf("Verbindungsparameter „Durchsatz“ nicht übernommen: %v", err)
 	}
 	d := &Device{dev: dev, info: info, logf: c.logf, gens: map[string]*atomic.Int64{}, chars: map[string]bluetooth.DeviceCharacteristic{}, done: make(chan struct{})}
 	if err := d.discover(); err != nil {

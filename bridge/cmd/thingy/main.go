@@ -27,6 +27,7 @@ import (
 	"github.com/stefaneicher/thingy52-live/bridge/internal/song"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/telemetry"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/tennisapp"
+	"github.com/stefaneicher/thingy52-live/bridge/internal/thingy"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/tui"
 	"github.com/stefaneicher/thingy52-live/bridge/web"
 )
@@ -34,7 +35,7 @@ import (
 const (
 	reconnectAfter = 3 * time.Second
 	micDelay       = 5 * time.Second // BLE: let the link settle before the mic stream starts
-	gameMotionHz   = 100             // motion_freq_hz while a game listens on /api/motion
+	gameMotionHz   = 100             // default motion_freq_hz while a game listens on /api/motion (-motion-hz)
 )
 
 type options struct {
@@ -50,6 +51,7 @@ type options struct {
 	restore   bool
 	backup    string
 	timeout   time.Duration
+	motionHz  int
 }
 
 const usageText = `Aufruf: thingy [tennis|scan|song|nfc] [Optionen]
@@ -82,6 +84,7 @@ func parseArgs(args []string, stderr io.Writer) (options, error) {
 	fs.StringVar(&o.backup, "backup", "", "nfc: Backup-Datei (Standard build/nfc-backup.hex)")
 	fs.DurationVar(&o.timeout, "timeout", 10*time.Second, "scan: Suchdauer")
 	fs.BoolVar(&o.noBrowser, "no-browser", false, "tennis: Browser nicht öffnen")
+	fs.IntVar(&o.motionHz, "motion-hz", gameMotionHz, "Motion-Frequenz (Hz) im Spielmodus, solange ein Spiel /api/motion nutzt (5..200)")
 	if err := fs.Parse(args); err != nil {
 		return o, err
 	}
@@ -96,6 +99,9 @@ func parseArgs(args []string, stderr io.Writer) (options, error) {
 	}
 	if o.volume < 0 || o.volume > 100 {
 		return o, errors.New("--volume muss 0..100 sein")
+	}
+	if o.motionHz < thingy.MinMotionHz || o.motionHz > thingy.MaxMotionHz {
+		return o, fmt.Errorf("--motion-hz muss %d..%d sein", thingy.MinMotionHz, thingy.MaxMotionHz)
 	}
 	if fs.NArg() > 0 {
 		return o, fmt.Errorf("unerwartete Argumente: %v", fs.Args())
@@ -210,9 +216,9 @@ func live(ctx context.Context, o options, stdout io.Writer) error {
 	session.Motion = hub
 	hub.OnActive = func(active bool) {
 		if active {
-			session.SetMotionHz(gameMotionHz)
+			session.SetGameMode(uint16(o.motionHz))
 		} else {
-			session.SetMotionHz(0)
+			session.SetGameMode(0)
 		}
 	}
 	chorus := song.Chorus()
