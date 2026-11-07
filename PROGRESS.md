@@ -33,3 +33,5 @@ Stand: 2026-11-07 20:30. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 ## Erkenntnisse
 - Toolversionen (geprüft 2026-11-06): Go 1.27.3, Node 26.13.0 (LTS), Gradle 9.9.0, Android platform 36, build-tools 36.1.0, cmdline-tools 16111833 (android-37 nicht im alten Repo-Format verfügbar), Docker 29.9.3.
 - PowerShell kann keine WinRT-BLE-Events abonnieren → BLE nur über die Go-exe.
+
+- Motion One: Aufsetzen (Agents, Skills, Struktur) PASS; Smoke-Tests und V1 NOT RUN. Siehe devices/motion-one/management/PROJECT_STATE.md

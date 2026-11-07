@@ -58,4 +58,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # --- Python-Helfer (Mesh-Prüfung der STL vor dem Slicen) ----------------------------------------------------------
 RUN pip3 install --no-cache-dir --break-system-packages trimesh numpy
 
+# --- Mechanik: CadQuery (parametrisches CAD), Gmsh (Vernetzung) und CalculiX (FEM) -------------------------------
+RUN apt-get update && apt-get install -y --no-install-recommends gmsh calculix-ccx libgl1 \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip3 install --no-cache-dir --break-system-packages cadquery gmsh meshio lxml
+
 WORKDIR /workspace

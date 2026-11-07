@@ -37,3 +37,8 @@
 - `disroop-motion-one-tools` (devices/motion-one/docker): KiCad 10, FreeCAD 1.1.4, Blender 5.2.3, Bambu Studio 02.09 (P2S-Profile), ngspice, pandoc+xelatex, ffmpeg, trimesh; alles headless.
 - `./project hw image|smoke|sh|run`; Smoke-Test 8/8 PASS (echter P2S-G-Code).
 - preflight.sh prüft das Image samt Smoke-Test; Windows-Programme nur noch optional. Prompt 1 und PREFLIGHT.md verweisen darauf.
+
+## 2026-11-07 23:30 Motion One: Prompt 1 gestartet
+- Inspektion: WSL2, 12 Kerne, 7 GB RAM, keine GPU; Werkzeug-Image ok, es fehlten CadQuery/Gmsh/CalculiX und eine Firmware-Toolchain.
+- 5 Custom Agents (`.github/agents/`), 9 Skills (`.github/skills/`), Projektstruktur und Management-Dateien unter `devices/motion-one/` angelegt.
+- Werkzeug-Image um CadQuery, Gmsh und CalculiX erweitert (Build läuft).
