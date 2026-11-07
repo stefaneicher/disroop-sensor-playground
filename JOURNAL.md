@@ -31,3 +31,9 @@
 | 2026-11-07 21:50 | Master-Prompt in zwei Teile geteilt: `PROMPT_1_ENTWICKLUNG.md` (Gerät) und `PROMPT_2_MARKTAUFTRITT.md` (Marketingvideo nach dem fal.ai-Verfahren aus dem Vacuum-Video, Produktseite DE/EN/FR/IT auf GitHub Pages mit Live-Demo der Spiele, Thingy:52-Variante, Stripe-Kauf im Testmodus, Warteliste, Preis = 4 × Herstellkosten). Vorab-Smoke-Test `preflight.sh`: bereit sind Docker, gh, Copilot CLI, GitHub MCP, KiCad 10.0.7, FreeCAD 1.1, Blender 5.2.3; fehlen Playwright MCP, Slicer, ffmpeg/pandoc/ngspice/xelatex im Image, GitHub Pages | `LICENSE`: © 2026 Stefan Eicher, alle Rechte vorbehalten |
 | 2026-11-07 21:55 | Vorab-Setup Schritt 1: Playwright MCP eingerichtet und getestet (JLCPCB-Teileseite per MCP geladen). Drucker-Hypothese Bambu Lab P2S Combo mit Bambu Studio in Prompt 1. VS-Code-Farben im Disroop-Stil (`.vscode/settings.json`) | Slicer-Installation wartet auf User |
 | 2026-11-07 22:30 | Spielnamen ohne „Thingy“: überall nur noch „Tennis“ und „Ski“ (Code, Doku, App). Prompt 1 nach Lavish-Review: Sensorik als Vorschlag, 2–3 Bestücker-Angebote mit Preis/Lieferbarkeit, Stückzahl 2–5 (max. 10), Best Practices je Disziplin, Gyro-Bereich aus menschlichen Winkelgeschwindigkeiten | Tests bridge/tennis/python grün |
+
+## 2026-11-07 23:30 – Werkzeug-Image
+
+- `disroop-motion-one-tools` (devices/motion-one/docker): KiCad 10, FreeCAD 1.1.4, Blender 5.2.3, Bambu Studio 02.09 (P2S-Profile), ngspice, pandoc+xelatex, ffmpeg, trimesh; alles headless.
+- `./project hw image|smoke|sh|run`; Smoke-Test 8/8 PASS (echter P2S-G-Code).
+- preflight.sh prüft das Image samt Smoke-Test; Windows-Programme nur noch optional. Prompt 1 und PREFLIGHT.md verweisen darauf.

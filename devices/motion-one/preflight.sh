@@ -51,32 +51,28 @@ check_mcp 'blender'    "Blender"                             nein
 check_mcp 'jlc|lcsc'   "JLCPCB/LCSC-Teilesuche"              nein
 check_mcp 'stripe'     "Stripe (Prompt 2, Testmodus)"        nein
 
-# --- Windows-Programme ---
-p=$(find_win kicad-cli.exe) && row Programme "KiCad (kicad-cli)" PASS "$("$p" version 2>/dev/null | tr -d '\r')" \
-  || row Programme "KiCad (kicad-cli)" MISSING "KiCad 9/10 installieren"
-p=$(find_win freecadcmd.exe) && row Programme "FreeCAD (freecadcmd)" PASS "${p#/mnt/c/}" \
-  || row Programme "FreeCAD (freecadcmd)" OPTIONAL "CadQuery im Container genügt"
-p=$(find_win blender.exe) && row Programme "Blender" PASS "$("$p" --version 2>/dev/null | head -1 | tr -d '\r')" \
-  || row Programme "Blender" MISSING "Blender installieren"
-slicer=""
-for s in prusa-slicer-console.exe prusa-slicer.exe orca-slicer.exe bambu-studio.exe CuraEngine.exe; do
-  p=$(find_win "$s") && { slicer="$s: ${p#/mnt/c/}"; break; }
-done
-[ -n "$slicer" ] && row Programme "Slicer mit CLI" PASS "$slicer" \
-  || row Programme "Slicer mit CLI" MISSING "PrusaSlicer oder OrcaSlicer installieren bzw. im Container bereitstellen"
-
-# --- Container-Werkzeuge ---
-if docker image inspect "$IMAGE" >/dev/null 2>&1; then
-  for t in ffmpeg pandoc ngspice python3 node git xelatex freecadcmd blender; do
-    if docker run --rm --entrypoint sh "$IMAGE" -c "command -v $t" >/dev/null 2>&1; then
-      row Container "$t" PASS "im Image"
-    elif [ "$t" = freecadcmd ] || [ "$t" = blender ]; then
-      row Container "$t" OPTIONAL "fehlt im Image; Windows-Version (oben) oder CadQuery nutzbar"
-    else
-      row Container "$t" MISSING "im Image ergänzen (Dockerfile oder eigenes Geräte-Image)"
-    fi
-  done
+# --- Werkzeug-Image (alle Hardware-Werkzeuge headless im Container) ---
+HW_IMAGE=disroop-motion-one-tools
+if docker image inspect "$HW_IMAGE" >/dev/null 2>&1; then
+  row Werkzeuge "Image $HW_IMAGE" PASS "$(docker image inspect -f '{{.Size}}' "$HW_IMAGE" | awk '{printf "%.1f GB", $1/1e9}')"
+  smoke=$(./project hw smoke /tmp/motion-one-tools-smoke 2>/dev/null)
+  while read -r st name rest; do
+    [ "$st" = PASS ] || [ "$st" = FAIL ] || continue
+    row Werkzeuge "$name" "$st" "$rest"
+  done <<<"$smoke"
+else
+  row Werkzeuge "Image $HW_IMAGE" MISSING "./project hw image (einmalig ca. 20-30 min, ca. 7.5 GB)"
 fi
+
+# --- Windows-Programme (nur zum Anschauen und Drucken, nicht für den Prompt nötig) ---
+win_opt() { # exe | Name
+  if find_win "$1" >/dev/null; then row Windows "$2" PASS "installiert (optional)"
+  else row Windows "$2" OPTIONAL "nur zum Anschauen bzw. Drucken"; fi
+}
+win_opt kicad.exe KiCad
+win_opt freecad.exe FreeCAD
+win_opt blender.exe Blender
+win_opt bambu-studio.exe "Bambu Studio"
 
 # --- Dienste für Prompt 2 ---
 repo=$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null)
@@ -91,7 +87,7 @@ row "Prompt 2" "Warteliste (Formulardienst mit Double-Opt-in)" MANUELL "Dienst w
   echo "# Vorab-Smoke-Test"
   echo
   echo "Erzeugt: $(date '+%Y-%m-%d %H:%M %Z') mit \`devices/motion-one/preflight.sh\`. Prüft nur, installiert nichts."
-  echo "Status: PASS = bereit, MISSING = fehlt (Pflicht), OPTIONAL = Kommandozeile reicht, MANUELL = nur du kannst das, INFO."
+  echo "Status: PASS = bereit, MISSING = fehlt (Pflicht), OPTIONAL = nicht nötig, MANUELL = nur du kannst das, INFO."
   echo
   echo "| Bereich | Prüfung | Status | Detail |"
   echo "|---|---|---|---|"

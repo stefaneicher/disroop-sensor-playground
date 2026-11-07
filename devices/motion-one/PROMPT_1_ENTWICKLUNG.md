@@ -71,7 +71,7 @@ PASS, PARTIAL, FAIL, BLOCKED und NOT RUN und mach aus einem FAIL nie einen Erfol
 - Fertigung: Gehäuse per FDM-3D-Druck (PLA oder PETG, 0,4-mm-Düse). Leiterplatte inklusive Bestückung bei einem
   Online-Bestücker.
 - Mein 3D-Drucker und Slicer: Bambu Lab P2S Combo (geschlossen, Bauraum 256 × 256 × 256 mm, AMS für mehrere Farben,
-  0,4-mm-Düse) mit **Bambu Studio** (Kommandozeile `bambu-studio.exe --slice`, OrcaSlicer als Alternative). Damit es auch auf anderen Bambu-Druckern passt, jedes Teil ≤ 180 × 180 × 180 mm halten
+  0,4-mm-Düse) mit **Bambu Studio** (im Werkzeug-Image: `bambu-studio --slice` mit den Systemprofilen „Bambu Lab P2S 0.4 nozzle“). Damit es auch auf anderen Bambu-Druckern passt, jedes Teil ≤ 180 × 180 × 180 mm halten
   (A1 mini); Mehrfarbigkeit nur als Option, nicht als Voraussetzung. Liefere zusätzlich ein Bambu-Studio-Projekt (.3mf mit
   Platte, Material und Profil).
 - Bestücker, Lieferbarkeit und Preis: Evaluiere mehrere Online-Bestücker (z. B. JLCPCB mit LCSC-Teilen, PCBWay,
@@ -118,8 +118,13 @@ zweiten Manager.
 
 Lies zuerst `README.md`, `RESUME.md`, `docs/protocol.md`, `docs/TENNIS.md`, `docs/SKI.md` und `ENGINEERING.md`.
 Halte dich an die Regeln dieses Repos:
-- Alles wird im Devcontainer-Image gebaut (`.devcontainer/`, Aufruf über `./project …`). Lokal wird nichts installiert.
-  Erweitere das Image bzw. lege ein eigenes Geräte-Image an, statt Tools auf dem Host zu installieren.
+- Alles läuft in Containern, lokal wird nichts installiert. Software (Bridge, Web, App) im Devcontainer-Image
+  (`.devcontainer/`, `./project …`). Hardware-Werkzeuge im Werkzeug-Image `disroop-motion-one-tools`
+  (`devices/motion-one/docker/`, `./project hw image|smoke|sh|run`): KiCad 10 (`kicad-cli`), FreeCAD 1.1 (`freecadcmd`),
+  Blender 5.2 (`blender -b`), Bambu Studio mit den P2S-Systemprofilen (`bambu-studio --slice`), ngspice, pandoc + xelatex,
+  ffmpeg, trimesh. `devices/motion-one/docker/smoke.sh` zeigt eine funktionierende Aufrufzeile je Werkzeug. Fehlt etwas
+  (z. B. Firmware-Toolchain, Gmsh/CalculiX, CadQuery), erweitere dieses Image bzw. lege ein weiteres an und ergänze den
+  Smoke-Test.
 - Best Practices in jeder Disziplin, nicht nur im Code. Jede Disziplin hat eine kurze, prüfbare Checkliste (in
   `requirements/`) und einen Smoke-Test bzw. Review, bevor ihr Ergebnis weitergegeben wird:
   - Code und Firmware: TDD, Clean Code, Smoke-Tests.
@@ -151,12 +156,12 @@ wandert, wird mit Revisions-ID und SHA-256 übertragen.
 ## 3. Software und MCP-Verbindungen herstellen
 
 Finde durch Inspektion heraus, nicht durch Fragen: Betriebssystem, CPU, RAM, freier Speicher, GPU; Docker-Status; vorhandene
-Images; installierte bzw. im Container verfügbare KiCad-Version (inkl. `kicad-cli`), ngspice, FreeCAD oder CadQuery, Gmsh/CalculiX,
-Blender, ffmpeg, ein Slicer mit CLI (PrusaSlicer, OrcaSlicer oder CuraEngine), Firmware-Toolchain (Zephyr SDK / nRF Connect SDK,
+Images; Werkzeug-Image `disroop-motion-one-tools` (`./project hw smoke`: KiCad, FreeCAD, Blender, Bambu Studio, ngspice, pandoc,
+xelatex, ffmpeg), was darin noch fehlt (Gmsh/CalculiX, CadQuery), Firmware-Toolchain (Zephyr SDK / nRF Connect SDK,
 `west`, `nrfutil`), Python, Git, Pandoc und LaTeX; bestehende MCP-Konfigurationen und belegte Ports.
 
 Regeln:
-- Vorhandenes wiederverwenden. Freie, geprüfte Abhängigkeiten im Devcontainer-Image installieren.
+- Vorhandenes wiederverwenden. Freie, geprüfte Abhängigkeiten im passenden Image installieren (siehe §2), nie auf dem Host.
 - FRAGEN vor Administrator- oder systemweiten Änderungen, vor dem Ersetzen funktionierender Software, vor kostenpflichtigen
   Diensten und vor Änderungen an Sicherheits- oder Netzwerkeinstellungen.
 - Keine pauschalen Freigaben (`--allow-all`, `--yolo`) und kein Umgehen von Sicherheitswarnungen.

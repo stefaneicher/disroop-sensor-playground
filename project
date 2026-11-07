@@ -29,6 +29,9 @@ Usage: ./project <command> [args]
   android <cmd>         Android commands              (see scripts/android.sh)
   run [args]            build and start thingy.exe (terminal + web on :8052)
   play [--sim]          build and start Tennis (thingy.exe tennis, opens /tennis/)
+  hw image|smoke|sh|run <cmd>
+                        Motion One hardware tools image (KiCad, FreeCAD, Blender, Bambu Studio, ngspice,
+                        pandoc/xelatex, ffmpeg): build, smoke test, shell, or run a command
 U
 }
 
@@ -40,6 +43,7 @@ case "$cmd" in
   run)     "$ROOT/scripts/bridge.sh" run "$@" ;;
   play)    "$ROOT/scripts/bridge.sh" run tennis "$@" ;;
   bridge|web|tennis|android) "$ROOT/scripts/$cmd.sh" "$@" ;;
+  hw)      "$ROOT/devices/motion-one/docker/hw.sh" "$@" ;;
   help|-h|--help) usage ;;
   *) usage; exit 1 ;;
 esac
