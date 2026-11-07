@@ -30,7 +30,7 @@ Offen (vor Prompt 1):
    copilot mcp add playwright -- npx -y @playwright/mcp@latest --headless --browser chromium
    npx -y @playwright/mcp@latest install-browser chrome-for-testing   # ohne sudo; Standard „chrome“ fehlt in WSL
    ```
-2. **Slicer**: Bambu Studio installieren (https://bambulab.com/download/studio). Drucker-Hypothese in Prompt 1 §0: Bambu Lab P2S Combo.
+2. **Slicer**: Bambu Studio installieren (https://bambulab.com/download/studio). Drucker (festgelegt in Prompt 1 §0): Bambu Lab P2S Combo.
 3. **ffmpeg, pandoc, ngspice, xelatex** fehlen im Devcontainer-Image; das erledigt der Agent in Prompt 1 (Image erweitern).
 4. Optional: MCP-Server für KiCad, FreeCAD, Blender; sonst arbeitet der Agent über deren Kommandozeilen.
 

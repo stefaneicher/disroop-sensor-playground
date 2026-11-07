@@ -69,9 +69,8 @@ PASS, PARTIAL, FAIL, BLOCKED und NOT RUN und mach aus einem FAIL nie einen Erfol
   BLE-Modul. Gehäuse wird selbst gedruckt, Leiterplatte wird bestückt bestellt.
 - Fertigung: Gehäuse per FDM-3D-Druck (PLA oder PETG, 0,4-mm-Düse). Leiterplatte inklusive Bestückung bei einem
   Online-Bestücker. Kandidat: JLCPCB (PCBA mit LCSC-Bauteilen); PCBWay als Alternative prüfen.
-- Mein 3D-Drucker und Slicer: ANNAHME Bambu Lab P2S Combo (geschlossen, Bauraum 256 × 256 × 256 mm, AMS für mehrere Farben,
-  0,4-mm-Düse) mit **Bambu Studio** (Kommandozeile `bambu-studio.exe --slice`, OrcaSlicer als Alternative). Bestätige das Modell
-  mit mir nach der Inspektion. Damit es auch auf anderen Bambu-Druckern passt, jedes Teil ≤ 180 × 180 × 180 mm halten
+- Mein 3D-Drucker und Slicer: Bambu Lab P2S Combo (geschlossen, Bauraum 256 × 256 × 256 mm, AMS für mehrere Farben,
+  0,4-mm-Düse) mit **Bambu Studio** (Kommandozeile `bambu-studio.exe --slice`, OrcaSlicer als Alternative). Damit es auch auf anderen Bambu-Druckern passt, jedes Teil ≤ 180 × 180 × 180 mm halten
   (A1 mini); Mehrfarbigkeit nur als Option, nicht als Voraussetzung. Liefere zusätzlich ein Bambu-Studio-Projekt (.3mf mit
   Platte, Material und Profil).
 - Lieferbarkeit: Jedes Bauteil muss beim gewählten Bestücker zum Zeitpunkt der Bestellung an Lager sein.
