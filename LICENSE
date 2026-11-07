@@ -1,0 +1,15 @@
+Copyright (c) 2026 Stefan Eicher. Alle Rechte vorbehalten. / All rights reserved.
+
+Dieser Vermerk gilt für den gesamten Inhalt dieses Repositorys (Quellcode, Dokumentation, Prompts, Bilder, Medien,
+Konstruktions- und Fertigungsdaten), soweit nicht anders angegeben. Ohne schriftliche Erlaubnis des Rechteinhabers
+darf der Inhalt nicht vervielfältigt, verbreitet oder verändert werden; das Ansehen auf GitHub ist erlaubt.
+
+This notice applies to all content of this repository (source code, documentation, prompts, images, media,
+design and manufacturing data) unless stated otherwise. No part may be copied, distributed or modified without the
+written permission of the copyright holder; viewing on GitHub is permitted.
+
+Ausgenommen / Excluded:
+- Abhängigkeiten von Dritten (z. B. three.js, Go- und Gradle-Bibliotheken) stehen unter ihren eigenen Lizenzen.
+- „Nordic Thingy:52“ ist eine Marke von Nordic Semiconductor ASA.
+- „Highway to Hell“ (Tonfolge in shared/chorus.json) gehört den jeweiligen Rechteinhabern.
+- Der Master-Prompt „Vacuum“ von 203x Uplink, auf den devices/motion-one/ verweist, gehört seinem Autor.

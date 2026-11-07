@@ -108,7 +108,7 @@ tennis/                 Thingy Tennis: eigenes Spiel (TypeScript + three.js, kei
 android/                Android-App (Kotlin, Compose) + reines Kotlin-Modul :protocol
 shared/                 chorus.json (Lied), telemetry.example.json (Beispiel-Snapshot)
 docs/                   Protokoll-Vertrag, Schema, Architektur, Anleitungen
-devices/motion-one/     Eigener Controller „Disroop Motion One“: Master-Prompt für die KI-Entwicklung (Hardware, Gehäuse, Firmware)
+devices/motion-one/     Eigener Controller „Disroop Motion One“: Vorab-Test und zwei Master-Prompts (Entwicklung, Marktauftritt)
 build/                  Build-Ausgaben (nicht im Git)
 ```
 
@@ -126,4 +126,4 @@ Die Übersicht findest du in [docs/index.md](docs/index.md):
 
 ## Lizenz
 
-Demo-Projekt, aktuell ohne Lizenzdatei. „Highway to Hell“ ist hier nur als grobe Tonfolge des Refrains enthalten (`shared/chorus.json`).
+© 2026 Stefan Eicher. Alle Rechte vorbehalten, siehe [LICENSE](LICENSE). „Highway to Hell“ ist hier nur als grobe Tonfolge des Refrains enthalten (`shared/chorus.json`).

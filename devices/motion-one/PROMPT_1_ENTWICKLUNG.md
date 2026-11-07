@@ -1,14 +1,16 @@
-MASTER-PROMPT: DISROOP MOTION ONE – EIN SPIELCONTROLLER, KOMPLETT MIT KI ENTWICKELT
+MASTER-PROMPT 1 VON 2 (ENTWICKLUNG): DISROOP MOTION ONE – EIN SPIELCONTROLLER, KOMPLETT MIT KI ENTWICKELT
 Vorbild: Master-Prompt „Vacuum“ von 203x Uplink (Analyse in ANALYSE.md). Angepasst auf unseren Spielcontroller,
 auf GitHub Copilot CLI und auf die Arbeitsweise dieses Repos (Docker-only, TDD, direkt auf main).
 
 SO WIRD ER BENUTZT
 1. Voraussetzungen: Windows mit WSL (Ubuntu) und Docker, GitHub Copilot CLI, dieses Repo ausgecheckt.
    GUI-Programme (KiCad, FreeCAD, Blender, ein Slicer) nur, wenn der Agent sie nach seiner Inspektion verlangt.
-2. Copilot CLI im Repo-Wurzelordner starten. Projektordner des Geräts: devices/motion-one/.
-3. Abschnitt 0 prüfen und bei Bedarf anpassen. Alles andere bleibt, wie es ist.
-4. Alles zwischen den beiden KOPIER-Zeilen als EINE Nachricht einfügen.
-5. Der Agent inspiziert den Rechner, installiert Fehlendes im Devcontainer und liefert EINE Liste mit Dingen,
+2. Vorab-Smoke-Test laufen lassen: `devices/motion-one/preflight.sh` (siehe PREFLIGHT.md). Er zeigt, welche Programme
+   und MCP-Server schon bereit sind und was du noch einrichten musst. Ergebnis landet in devices/motion-one/preflight/.
+3. Copilot CLI im Repo-Wurzelordner starten. Projektordner des Geräts: devices/motion-one/.
+4. Abschnitt 0 prüfen und bei Bedarf anpassen. Alles andere bleibt, wie es ist.
+5. Alles zwischen den beiden KOPIER-Zeilen als EINE Nachricht einfügen.
+6. Der Agent inspiziert den Rechner, installiert Fehlendes im Devcontainer und liefert EINE Liste mit Dingen,
    die nur du tun kannst (z. B. MCP-Server freigeben, Konto beim Bestücker anlegen, Bestellung bezahlen).
    Erledigen, dann `weiter` schreiben.
 
@@ -17,6 +19,7 @@ Gut zu wissen
   Funk-, EMV- und Akku-Zulassungen (CE/RED, FCC, UN38.3) sind nicht Teil davon.
 - Der Lauf dauert Stunden und braucht viel Kontingent.
 - Geld fliesst nur nach deinem ausdrücklichen OK. Der Agent bereitet die Bestellung bis zum Bezahlen vor.
+- Danach folgt PROMPT_2_MARKTAUFTRITT.md (Marketingvideo, Produktseite mit Live-Demo und Kauf/Warteliste).
 - Keine API-Keys oder Passwörter in den Chat. Wenn ein Dienst einen Key braucht, legst du ihn selbst in eine Datei
   wie ~/.env (nicht im Repo).
 
@@ -29,12 +32,12 @@ Abschnitt 0 bis zu einem FERTIGUNGSREIFEN PROTOTYP-PAKET und setze dafür echte 
 
 Liefere einen durchgängigen Entwicklungsablauf: Anforderungen, Elektronik mit vollständiger elektrischer Analyse (KiCad, ngspice),
 Firmware, Gehäuse (parametrisches CAD, Festigkeit, 3D-Druck), Beschaffung und Bestückungsauftrag, Montage- und Bedienungsanleitung
-sowie ein Marketingvideo. Am Ende stehen:
+sowie Renderings als Grundlage für den Marktauftritt (Marketingvideo und Produktseite folgen in Prompt 2). Am Ende stehen:
 - eine 3D-druckbare Datei (3MF, zusätzlich STL), die ich direkt einem Slicer übergeben kann, plus ein getesteter Slicer-Lauf,
 - ein Bestellpaket für die bestückte Leiterplatte (Gerber, Bohrdaten, BOM, Bestückungsliste) beim gewählten Bestücker,
   hochgeladen und bis zum Bezahlen vorbereitet,
 - Firmware-Image mit Anleitung zum Programmieren,
-- Montageanleitung, Bedienungsanleitung, Marketingvideo und ein technischer Bericht.
+- Montageanleitung, Bedienungsanleitung, Renderings und ein technischer Bericht.
 
 Bleib nicht bei einem Plan oder bei Agent-Definitionen stehen: Umgebung aufsetzen, testen, dann das Gerät entwickeln.
 Halte nur für nötige Freigaben, Software-Aktionen oder Entscheidungen an.
@@ -66,6 +69,8 @@ PASS, PARTIAL, FAIL, BLOCKED und NOT RUN und mach aus einem FAIL nie einen Erfol
   BLE-Modul. Gehäuse wird selbst gedruckt, Leiterplatte wird bestückt bestellt.
 - Fertigung: Gehäuse per FDM-3D-Druck (PLA oder PETG, 0,4-mm-Düse). Leiterplatte inklusive Bestückung bei einem
   Online-Bestücker. Kandidat: JLCPCB (PCBA mit LCSC-Bauteilen); PCBWay als Alternative prüfen.
+- Mein 3D-Drucker und Slicer: ____________ (von mir auszufüllen; leer = frag mich nach der Inspektion, bevor du ein
+  Druckprofil festlegst).
 - Lieferbarkeit: Jedes Bauteil muss beim gewählten Bestücker zum Zeitpunkt der Bestellung an Lager sein.
 - Ziel-Stückzahl V1: 5 Leiterplatten, davon 2 bestückt (anpassen, falls der Bestücker anderes verlangt).
 - Projektordner: `devices/motion-one/` in diesem Repo.
@@ -84,7 +89,7 @@ dokumentiert). Keine separaten Chatfenster, keine `copilot -p`-Arbeiterprozesse 
   IMU-Treiber, Sensorfusion, Energiesparen, Bootloader- bzw. Programmierweg.
 - `mechanical-engineer`: parametrisches Gehäuse (CadQuery oder FreeCAD), Ergonomie, Toleranzen für FDM, Festigkeit,
   Slicer-Test, druckbare Exporte.
-- `docs-media-engineer`: Renderings und Explosionsansicht (Blender), Montageanleitung, Bedienungsanleitung, Marketingvideo.
+- `docs-media-engineer`: Renderings und Explosionsansicht (Blender), Montageanleitung, Bedienungsanleitung, Übergabe an Prompt 2.
 
 Du verantwortest Anforderungen, Delegation, Schnittstellen, Integrations-Reviews, Berichte und den Release-Status.
 Spezialisten delegieren nicht weiter; fachübergreifende Fragen melden sie dir über ihre Handoff-Datei.
@@ -147,6 +152,22 @@ Regeln:
 Nach der Inspektion gibst du mir EINE zusammengefasste Liste der Aktionen, die nur ich ausführen kann. Pro Punkt: Anwendung,
 genaue Aktion, und wie man prüft, dass es geklappt hat. Stell keine Fragen, die ein Befehl beantworten kann.
 Während du wartest, ruht nur die betroffene Arbeit.
+
+MCP-Server: Lies zuerst `devices/motion-one/preflight/PREFLIGHT_RESULT.md` (Ergebnis des Vorab-Smoke-Tests). Gleiche dann
+mit mir ab, in EINER Frage mit Tabelle: welche MCP-Server schon eingerichtet und freigegeben sind, welche noch fehlen und
+welche du durch die Kommandozeile ersetzen willst. Ausgangsliste (Stand und Paketnamen selbst prüfen, Quelle notieren):
+
+| Zweck | Kandidat | Pflicht? | Ersatz ohne MCP |
+|---|---|---|---|
+| Repo, Issues, CI | GitHub MCP (in Copilot CLI eingebaut) | ja | `gh` |
+| Elektronik | ein KiCad-MCP-Server (Community, z. B. für KiCad 9/10) | nein | `kicad-cli`, KiCad-Python-API |
+| Mechanik | FreeCAD-MCP (Community) | nein | `freecadcmd`, CadQuery |
+| Renderings | Blender-MCP (Community, Add-on + Server) | nein | `blender -b --python` |
+| Browser, Bauteil-Recherche, Bestellseiten | Playwright MCP (Microsoft) | ja | keiner (Lagerabfragen brauchen echte Seiten/APIs) |
+| Bauteile/Lager | JLCPCB/LCSC-Teilesuche (offizielle API oder Community-MCP) | nein | Playwright auf den öffentlichen Seiten |
+| Dokumentation | Microsoft Learn / Context7 o. ä. für aktuelle API-Doku | nein | Webabruf |
+
+Ein MCP-Server gilt erst als bereit, wenn ein echter Tool-Aufruf aus JEDEM Spezialisten, der ihn braucht, geklappt hat.
 
 ## 4. Skills
 
@@ -299,9 +320,9 @@ Importiere die freigegebene CAD- und Board-Geometrie in Blender; kein Nachbau. T
   Keine erfundenen Anzugsmomente; fehlende Werte als offen markieren.
 - Bedienungsanleitung für Spieler: Laden über USB-C, Ein/Aus, Koppeln mit Bridge und Android-App, Kalibrieren, Tennis und Ski
   spielen, LED-Bedeutungen, Akku-Sicherheit, Fehlerbehebung.
-- Marketingvideo 30–60 s (MP4, 1080p) aus echter Geometrie und echten Spielaufnahmen bzw. Screenshots dieses Repos
-  (z. B. `docs/img/`). Kennzeichne es als Visualisierung; keine Versprechen, die nicht belegt sind (Laufzeit, Reichweite,
-  Latenz nur mit Status).
+- Übergabe an Prompt 2: Blender-Szene mit Material- und Kameraeinstellungen, Renderings in hoher Auflösung (mindestens 3840 px
+  Breite, transparenter Hintergrund) und eine Liste belegter Produktaussagen mit Status aus `management/metrics.json`
+  in `media/HANDOFF_MARKETING.md`. Das Marketingvideo entsteht erst in Prompt 2.
 Prüfe Bewegungs- und Werkzeugzugänglichkeit. Die Animation ist kein Montagetest.
 
 ## 12. Koordination und Handoffs
@@ -336,7 +357,7 @@ Veröffentliche `releases/V1_BASELINE/` mit:
 - `pcba/`: Gerber-ZIP, BOM, CPL, Lagernachweis mit Datum, Angebot,
 - `firmware/`: Image, Prüfsumme, Programmieranleitung,
 - `docs/`: Montageanleitung, Bedienungsanleitung, Bericht (PDF),
-- `media/`: Renderings, Explosionsansicht, Marketingvideo,
+- `media/`: Renderings, Explosionsansicht, `HANDOFF_MARKETING.md`,
 - ein SHA-256-Manifest und den Verifikationsstatus jeder Anforderung.
 Releases sind unveränderlich; spätere Arbeit bekommt eine neue Revision. Unfertiges bleibt PARTIAL, FAIL oder BLOCKED.
 Schreibe zusätzlich `REPRODUCE.md` und ein kurzes `DEMO_RUNBOOK.md`. Verlinke das Gerät im Haupt-`README.md`.
@@ -354,7 +375,7 @@ alt und neu vergleichen, Dokumente aktualisieren, neues Release veröffentlichen
 Beginne mit der Inspektion von Repo und Umgebung und dem Aufsetzen der Spezialisten. Dann die Smoke-Tests, dann V1.
 Frag nur, was nötig ist. Schliesse mit der dokumentierten V1-Baseline und einer Zusammenfassung: Artefakte,
 Verifikationsergebnisse, echte Blocker, offene Risiken, gemessener Aufwand und die genauen nächsten Schritte für mich
-(Bestellung freigeben, drucken, programmieren, zusammenbauen).
+(Bestellung freigeben, drucken, programmieren, zusammenbauen) und der Hinweis, dass jetzt PROMPT_2_MARKTAUFTRITT.md folgen kann.
 
 Das Ergebnis ist ein nachvollziehbares Entwicklungsprojekt mit Fertigungsdaten für einen Prototyp, keine Behauptung
 von Produktionsreife, Zulassung oder physischer Sicherheit.

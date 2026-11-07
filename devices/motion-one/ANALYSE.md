@@ -48,7 +48,7 @@ Der Prompt lässt eine KI einen Akku-Handstaubsauger als **digitalen Demonstrato
 | „Nicht bestellen“ | User will automatische Bestellung | Bestellung bis zum Warenkorb vorbereiten (Upload, Preis, DFM-Prüfung); **Bezahlen nur nach ausdrücklichem OK** |
 | Keine Firmware-Route | Staubsauger braucht wenig Software | Eigene Firmware-Route mit Build, Unit-Tests und Protokoll-Kompatibilität |
 | Keine Systemanforderung aus der Nutzung | Ziele sind grob geschätzt | Anforderungen aus unseren Spielen ableiten (Raten, Bereiche, Schwellen, Latenz), mit Quelle im Repo |
-| Marketing nur angedeutet | Video kommt im Prompt nicht vor | Eigener Auftrag: 30–60-s-Video aus echter Geometrie, keine unbelegten Versprechen |
+| Marketing nur angedeutet | TV-Spot und Produktseite kommen im Prompt nicht vor (Marketing-Agent „nur auf Wunsch“) | Eigener Prompt 2: Video nach dem Verfahren aus dem Video, Produktseite mit Kauf und Warteliste |
 | Keine Integrationsprüfung gegen bestehende Software | Gerät steht allein | Akzeptanz: bestehende Bridge, Web-Spiele und Android-App funktionieren **ohne Codeänderung** |
 | Kein Flash-Pfad | Darf nicht flashen | Programmierweg festlegen (SWD-Pads plus Debugger oder Bootloader); flashen erst am echten Board und nur auf Anweisung |
 | Akku nur als Zukaufteil | Laden ist nicht Teil der Elektronik | LiPo mit Schutzschaltung, **Laden über USB-C** auf dem eigenen Board, mit Lade- und Thermikanalyse |
@@ -83,3 +83,20 @@ Der Prompt lässt eine KI einen Akku-Handstaubsauger als **digitalen Demonstrato
 | BLE-Last | 100 Hz × mehrere Ströme bricht unter Windows ab | `JOURNAL.md`, 2026-11-07 |
 
 Das neue Gerät soll deshalb das bestehende Format liefern (kompatibel) und zusätzlich einen erweiterten Kanal mit grösserem Gyro-Bereich anbieten.
+
+## 6. Wie der TV-Spot entstand (aus Video und Beschreibung)
+
+Quelle: Videobeschreibung und Transkript (Kapitel „What the agents cannot see“, 10:29–12:13).
+- Ein **Marketing-Agent** arbeitete in **11 Runden**: erst billige Bildentwürfe, dann Keyframes aus den **echten CAD-Renderings**,
+  dann Videomodelle. Jede Runde hatte eine **Budgetgrenze und ein Kostenbuch**; bei gleich guten Modellen wählte er das günstigere.
+- Bild- und Videomodelle liefen über **fal.ai** (Schlüssel in `~/.env`, nur in Skripten geladen). Kosten gesamt etwa **18 USD**.
+  Sprecherstimme ebenfalls KI; Musik von Epidemic Sound.
+- Der Mensch prüfte die Keyframes: **fünf Fehler in einer Minute** (Hand auf statt am Griff, zwei Arme mit einer Hand, zu lange
+  Finger, falscher Behälter, zu kleiner Filter), alle vom Agenten freigegeben. Fazit: Agents sehen Bildfehler schlecht.
+- Die durchsichtige Staubbox scheiterte 12-mal per Prompt; gelöst durch ein **Blender-Rendering, das hineinkomponiert** wurde.
+- Jede Aussage im Spot hängt an einer bestandenen Anforderung; nicht erfüllte Ziele machten Wörter wie „leicht“ oder
+  „sicher, zertifiziert“ verboten.
+
+Übernommen in Prompt 2: Runden mit Budget und Kostenbuch, Gerät nur aus echten Renderings, Halt zur menschlichen
+Keyframe-Prüfung mit Checkliste (Hände, Finger, Griff, Geometrie, Schrift), Claims nur mit Beleg.
+Neu gegenüber dem Vorbild: Produktseite mit Live-Demo der Spiele, Kauf im Testmodus, Warteliste, vier Sprachen.
