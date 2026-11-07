@@ -1,8 +1,8 @@
 // Assembles tennis/dist: tsc output (dist/js), static files and the vendored three.js (no CDN at runtime).
 // Usage (from tennis/): node dev/build.js
-import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
-import { dirname, join } from 'node:path';
+import { dirname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -20,4 +20,25 @@ for (const f of ['build/three.module.js', 'build/three.core.js', 'LICENSE']) {
   if (!existsSync(src)) throw new Error(`missing ${src} (npm ci?)`);
   cpSync(src, join(dist, 'vendor', 'three', f.replace('build/', '')));
 }
-console.log('built tennis/dist');
+
+// three/addons (examples/jsm) actually used by src/, plus their relative imports (walked recursively).
+const ADDONS = [
+  'postprocessing/EffectComposer.js', 'postprocessing/RenderPass.js', 'postprocessing/UnrealBloomPass.js',
+  'postprocessing/OutputPass.js', 'postprocessing/ShaderPass.js', 'postprocessing/SMAAPass.js', 'postprocessing/GTAOPass.js',
+  'objects/Sky.js', 'utils/BufferGeometryUtils.js',
+];
+const jsm = join(three, 'examples', 'jsm');
+const seen = new Set();
+const walk = (rel) => {
+  rel = normalize(rel).replaceAll('\\', '/');
+  if (seen.has(rel)) return;
+  seen.add(rel);
+  const src = join(jsm, rel);
+  if (!existsSync(src)) throw new Error(`missing addon ${src}`);
+  const out = join(dist, 'vendor', 'three', 'addons', rel);
+  mkdirSync(dirname(out), { recursive: true });
+  cpSync(src, out);
+  for (const m of readFileSync(src, 'utf8').matchAll(/from\s+'(\.{1,2}\/[^']+)'/g)) walk(join(dirname(rel), m[1]));
+};
+ADDONS.forEach(walk);
+console.log(`built tennis/dist (${seen.size} three addons)`);

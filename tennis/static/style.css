@@ -56,3 +56,7 @@ body.demo .keys, body.demo .hint { display: none; }
   .top { left: 8px; right: 8px; gap: 6px; }
   .msg { bottom: 16px; font-size: .85rem; }
 }
+
+.back-link { pointer-events: auto; align-self: flex-start; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: rgba(17, 24, 39, .82); color: var(--lime); font: 700 .85rem system-ui, sans-serif; text-decoration: none; }
+.back-link:hover { background: var(--lime); color: #111827; }
+.menu-back { display: block; margin-top: 10px; text-align: center; }

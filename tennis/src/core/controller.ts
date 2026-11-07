@@ -3,6 +3,7 @@ import { Calibration, steer } from './calibration.ts';
 import type { MotionFrame } from './motion.ts';
 import { toThree, type Quat } from './quat.ts';
 import { SwingDetector, type SwingEvent } from './swing.ts';
+import { DriftMonitor, levelled } from './wizard.ts';
 
 export const LONG_PRESS_MS = 800;
 
@@ -13,6 +14,7 @@ export interface ControllerOutput {
 
 export class MotionController {
   readonly calibration = new Calibration();
+  readonly drift = new DriftMonitor();
   private readonly detector = new SwingDetector();
   latest: MotionFrame | null = null;
   private downT = -1;
@@ -23,6 +25,7 @@ export class MotionController {
     const out: ControllerOutput = { swings: [], button: null };
     const e = this.detector.feed(f.t, f.gyro, f.q, this.calibration.roll0);
     if (e) out.swings.push({ ...e, ageMs: f.t - e.t });
+    if (this.calibration.done) this.drift.feed(f.t, f.q, f.gyro, this.calibration.roll(f.q));
     if (f.button && this.downT < 0) {
       this.downT = f.t;
       this.longSent = false;
@@ -40,6 +43,7 @@ export class MotionController {
   calibrate(): boolean {
     if (!this.latest) return false;
     this.calibration.set(this.latest.q);
+    this.drift.reset(this.latest.q);
     return true;
   }
 
@@ -58,5 +62,11 @@ export class MotionController {
   racket(): Quat | null {
     if (!this.latest) return null;
     return toThree(this.calibration.relative(this.latest.q));
+  }
+
+  /** Orientation for the Thingy preview (three.js axes): relative to the neutral pose, or levelled before calibrating. */
+  preview(levelledPose = !this.calibration.done): Quat | null {
+    if (!this.latest) return null;
+    return levelledPose ? toThree(levelled(this.latest.q)) : this.racket();
   }
 }
