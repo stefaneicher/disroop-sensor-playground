@@ -25,10 +25,16 @@ static/js/
   connection.js     EventSource mit Reconnect (backoff.js: 0.5 s … 10 s)
   state.js          reiner Reducer: Verbindung, Snapshot, Log, „veraltet“ nach 3 s
   view.js           dünne DOM-Schicht
-  live-chart.js     Canvas-Charts (chart.js = Mathematik, ringbuffer.js = Verlauf)
+  time-chart.js     Canvas-Zeitdiagramm (Achsen, Fadenkreuz, Zoom/Pan, Legende, Y Auto/Fest)
+  chart-group.js    gemeinsames Zeitfenster + rAF-Schleife; chart-toolbar.js Bedienleiste
+  axis.js           „schöne“ Achsen-Ticks, Zeit-Ticks; timefmt.js Zeitbeschriftung
+  timewindow.js     Zeitfenster-Mathematik (Zoom, Pan, Pause/Live, Presets)
+  series.js         Ringpuffer (typed arrays, 5 min); decimate.js Min/Max-Dezimierung
+  heading.js        Kurs: Glättung (Kreismittel), Kippkompensation, Feldqualität, Skala
+  compass-view.js   Kursinstrument (SVG); attitude-view.js künstlicher Horizont (SVG)
   format.js         Zahlen/Einheiten, fehlende Werte als „–“
-  classify.js       eCO₂-Ampel, Akku-Stufe, RSSI-Balken
-  orientation.js    3D-Würfel (Quaternion/Euler → CSS matrix3d)
+  classify.js       eCO₂-Ampel, Akku-Stufe/-Trend, RSSI-Balken
+  orientation.js    3D-Würfel (Quaternion/Euler → CSS matrix3d), Roll/Pitch für den Horizont
   level.js          Pegel-Peak, color.js Farben, chorus.js Noten (Spiegel von shared/chorus.json)
   throttle.js, api.js   Drosselung, POST /api/song und /api/led
 test/*.test.js      node --test, ein Test pro Logikmodul + Mock-Server + Simulator
@@ -40,6 +46,6 @@ dev/
 
 ## Regeln
 
-- Alle Entscheide stecken in **reinen Modulen** mit Tests. `view.js` und `live-chart.js` schreiben nur ins DOM bzw. Canvas.
+- Alle Entscheide stecken in **reinen Modulen** mit Tests. `view.js`, `time-chart.js`, `compass-view.js` und `attitude-view.js` schreiben nur ins DOM bzw. Canvas.
 - Die Daten kommen ausschliesslich über die API aus [docs/protocol.md](../../docs/protocol.md#2-bridge-api-http-auf-1270018052-web-gui-und-smoke-tests). Das Snapshot-Format ist [docs/telemetry.schema.json](../../docs/telemetry.schema.json). Fehlende Werte sind `null` und werden als „–“ angezeigt.
 - Änderst du `shared/chorus.json`, musst du auch `static/js/chorus.js` anpassen. `test/chorus.test.js` prüft, dass beide übereinstimmen.

@@ -24,10 +24,13 @@
       <span class="pill metric" title="Signalstärke (RSSI)">
         <span class="bars" id="rssi-bars" data-bars="0" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span id="rssi">–</span>
+        <button class="info" data-info="rssi"></button>
       </span>
-      <span class="pill metric" title="Akku">
-        <span class="battery" id="battery-icon" data-level="none" aria-hidden="true"><i id="battery-fill"></i></span>
+      <span class="pill metric battery-pill" id="battery-pill" data-trend="unknown" title="Akku">
+        <span class="battery" id="battery-icon" data-level="none" aria-hidden="true"><i id="battery-fill"></i><svg class="bolt" viewBox="0 0 10 14"><path d="M6 0 L0 8 H4 L3 14 L10 5 H6 Z"/></svg></span>
         <span id="battery">–</span>
+        <span class="battery-trend" id="battery-trend" title="geschätzt aus dem Verlauf des Akkustands">?</span>
+        <button class="info" data-info="battery"></button>
       </span>
     </div>
   </header>
@@ -36,78 +39,135 @@
   <main class="grid">
     <section class="tiles" aria-label="Umgebung">
       <article class="tile">
-        <h2>Temperatur</h2>
+        <h2>Temperatur <button class="info" data-info="temperature"></button></h2>
         <div class="value" id="temperature">–</div>
         <div class="sub">°C</div>
       </article>
       <article class="tile">
-        <h2>Feuchte</h2>
+        <h2>Feuchte <button class="info" data-info="humidity"></button></h2>
         <div class="value" id="humidity">–</div>
         <div class="sub">% rel.</div>
       </article>
       <article class="tile">
-        <h2>Luftdruck</h2>
+        <h2>Luftdruck <button class="info" data-info="pressure"></button></h2>
         <div class="value" id="pressure">–</div>
         <div class="sub">hPa</div>
       </article>
       <article class="tile co2" id="co2-tile" data-level="none">
-        <h2>eCO₂ <i class="lamp" aria-hidden="true"></i></h2>
+        <h2>eCO₂ <button class="info" data-info="eco2"></button> <i class="lamp" aria-hidden="true"></i></h2>
         <div class="value" id="eco2">–</div>
         <div class="sub">ppm · <span id="co2-label">–</span></div>
         <div class="scale" aria-hidden="true"><i id="co2-marker"></i></div>
       </article>
       <article class="tile">
-        <h2>TVOC</h2>
+        <h2>TVOC <button class="info" data-info="tvoc"></button></h2>
         <div class="value" id="tvoc">–</div>
         <div class="sub">ppb</div>
       </article>
       <article class="tile color-tile">
-        <h2>Farbe</h2>
+        <h2>Farbe <button class="info" data-info="color"></button></h2>
         <div class="swatch" id="color-swatch"></div>
         <div class="sub mono" id="color-raw">R– G– B– C–</div>
       </article>
     </section>
 
-    <section class="card charts" aria-label="Bewegungssensoren">
-      <header class="card-head"><h2>Bewegung</h2><span class="hint">letzte 30 s</span></header>
+    <section class="card charts" id="charts" aria-label="Bewegungssensoren">
+      <header class="card-head">
+        <h2>Bewegung <span class="hint" data-span-label>30 s</span></h2>
+        <div class="toolbar" role="toolbar" aria-label="Zeitachse">
+          <div class="seg" role="group" aria-label="Zeitfenster">
+            <button type="button" data-span="10000">10 s</button><button type="button" data-span="30000">30 s</button><button type="button" data-span="60000">1 min</button><button type="button" data-span="300000">5 min</button>
+          </div>
+          <button type="button" class="tool" data-pause aria-pressed="false">❚❚ Pause</button>
+          <button type="button" class="tool" data-time-mode>Zeit: relativ</button>
+          <button type="button" class="tool" data-reset title="Zoom und Verschiebung zurücksetzen, zurück zu Live">⟲ Zurücksetzen</button>
+        </div>
+      </header>
+      <p class="chart-help">Mausrad/Pinch: zoomen · Ziehen: verschieben · Doppelklick oder ⟲: zurücksetzen · Legende: Kurve ein/aus</p>
       <div class="chart" id="chart-accel">
-        <div class="chart-head"><h3>Beschleunigung <small>g</small></h3><div class="legend" data-legend></div></div>
+        <div class="chart-head"><h3>Beschleunigung <small>g</small> <button class="info" data-info="accel"></button></h3><div class="chart-tools"><div class="legend" data-legend></div><button type="button" class="tool small" data-yscale aria-pressed="true">Y: Auto</button></div></div>
         <canvas aria-label="Beschleunigung x y z"></canvas>
       </div>
       <div class="chart" id="chart-gyro">
-        <div class="chart-head"><h3>Gyroskop <small>°/s</small></h3><div class="legend" data-legend></div></div>
+        <div class="chart-head"><h3>Gyroskop <small>°/s</small> <button class="info" data-info="gyro"></button></h3><div class="chart-tools"><div class="legend" data-legend></div><button type="button" class="tool small" data-yscale aria-pressed="true">Y: Auto</button></div></div>
         <canvas aria-label="Gyroskop x y z"></canvas>
       </div>
       <div class="chart" id="chart-compass">
-        <div class="chart-head"><h3>Kompass <small>µT</small></h3><div class="legend" data-legend></div></div>
+        <div class="chart-head"><h3>Magnetfeld <small>µT</small> <button class="info" data-info="magnet"></button></h3><div class="chart-tools"><div class="legend" data-legend></div><button type="button" class="tool small" data-yscale aria-pressed="true">Y: Auto</button></div></div>
         <canvas aria-label="Magnetfeld x y z"></canvas>
       </div>
     </section>
 
+    <section class="card compass-card" id="compass" aria-label="Kompass">
+      <header class="card-head">
+        <h2>Kompass <button class="info" data-info="heading"></button></h2>
+        <div class="seg" role="group" aria-label="Ausrichtung der Kompassrose">
+          <button type="button" data-compass-mode="north" aria-pressed="false">Norden oben</button><button type="button" data-compass-mode="heading" aria-pressed="true">Kurs oben</button>
+        </div>
+      </header>
+      <div class="compass-body">
+        <svg class="hsi" viewBox="-112 -114 224 228" role="img" aria-label="Kursanzeige">
+          <circle r="109" class="hsi-bezel"/>
+          <g id="compass-bezel"></g>
+          <g id="compass-card" class="hsi-card">
+            <circle r="100" class="hsi-face"/>
+            <g id="compass-scale"></g>
+            <g id="compass-trail" class="trail"></g>
+          </g>
+          <g id="compass-pointer" class="hsi-pointer">
+            <path class="lubber" d="M0,-99 L-6,-111 L6,-111 Z"/>
+            <line class="lubber-line" y1="-99" y2="-62"/>
+            <path class="ownship" d="M0,-34 L5,-14 L5,4 L22,14 L22,19 L5,13 L4,26 L10,31 L10,34 L0,31 L-10,34 L-10,31 L-4,26 L-5,13 L-22,19 L-22,14 L-5,4 L-5,-14 Z"/>
+          </g>
+        </svg>
+        <div class="compass-readout">
+          <div class="heading-big"><b id="heading">–</b><span id="heading-cardinal"></span></div>
+          <dl class="kv">
+            <div><dt>Magnetfeld <button class="info" data-info="magnet"></button></dt><dd id="field-magnitude">–</dd></div>
+            <div><dt>Kursquelle</dt><dd id="heading-source">–</dd></div>
+          </dl>
+          <div class="quality" id="field-quality" data-level="none" title="Plausibel: 25–65 µT (Erdmagnetfeld)"><i aria-hidden="true"></i><span id="field-label">–</span></div>
+          <p class="calib-hint" id="compass-hint" role="status" hidden></p>
+        </div>
+      </div>
+    </section>
+
     <section class="card pose" aria-label="Lage">
-      <header class="card-head"><h2>Lage</h2><span class="hint" id="orientation">–</span></header>
+      <header class="card-head"><h2>Lage <button class="info" data-info="attitude"></button></h2><span class="hint" id="orientation">–</span></header>
       <div class="pose-visuals">
-        <div class="scene" aria-hidden="true">
-          <div class="tilt">
-            <div class="cube" id="cube">
-              <div class="face top"><span class="led" id="cube-led"></span><b>Thingy:52</b><span class="axis-y">Y</span><span class="axis-x">X</span></div>
-              <div class="face bottom"></div>
-              <div class="face front"></div>
-              <div class="face back"></div>
-              <div class="face left"></div>
-              <div class="face right"></div>
+        <figure class="adi-wrap">
+          <svg class="adi" viewBox="-62 -62 124 124" role="img" aria-label="Künstlicher Horizont">
+            <defs><clipPath id="adi-clip"><circle r="50"/></clipPath></defs>
+            <g clip-path="url(#adi-clip)">
+              <g id="horizon">
+                <rect x="-200" y="-400" width="400" height="400" class="sky"/>
+                <rect x="-200" y="0" width="400" height="400" class="ground"/>
+                <line x1="-200" x2="200" class="horizon-line"/>
+                <g id="pitch-ladder"></g>
+              </g>
+            </g>
+            <circle r="50" class="adi-ring"/>
+            <g id="roll-scale"></g>
+            <g id="roll-pointer"><path d="M0,-49 L-4,-42 L4,-42 Z" class="roll-pointer"/></g>
+            <path class="aircraft" d="M-32,0 H-12 L-6,7 M32,0 H12 L6,7"/>
+            <circle r="2.2" class="aircraft-dot"/>
+          </svg>
+          <figcaption>Künstlicher Horizont</figcaption>
+        </figure>
+        <figure class="scene-wrap">
+          <div class="scene" aria-hidden="true">
+            <div class="tilt">
+              <div class="cube" id="cube">
+                <div class="face top"><span class="led" id="cube-led"></span><b>Thingy:52</b><span class="axis-y">Y</span><span class="axis-x">X</span></div>
+                <div class="face bottom"></div>
+                <div class="face front"></div>
+                <div class="face back"></div>
+                <div class="face left"></div>
+                <div class="face right"></div>
+              </div>
             </div>
           </div>
-        </div>
-        <figure class="compass">
-          <svg viewBox="-60 -60 120 120" role="img" aria-label="Kompass">
-            <circle r="56" class="rose-ring"/>
-            <g class="ticks" id="compass-ticks"></g>
-            <text y="-40" class="rose-n">N</text><text x="42" y="4" >O</text><text y="47">S</text><text x="-42" y="4">W</text>
-            <g id="needle"><path d="M0,-38 L6,0 L0,6 L-6,0 Z" class="needle-n"/><path d="M0,38 L6,0 L0,-6 L-6,0 Z" class="needle-s"/></g>
-            <circle r="3" class="needle-hub"/>
-          </svg>
-          <figcaption><b id="heading">–</b> <span id="heading-cardinal"></span></figcaption>
+          <figcaption>3D-Lage</figcaption>
         </figure>
       </div>
       <dl class="euler">
@@ -115,15 +175,15 @@
         <div><dt>Pitch</dt><dd id="pitch">–</dd></div>
         <div><dt>Yaw</dt><dd id="yaw">–</dd></div>
       </dl>
-      <p class="quat mono" id="quaternion" title="Quaternion">q –</p>
+      <div class="quat-row"><p class="quat mono" id="quaternion">q –</p><button class="info" data-info="quaternion"></button></div>
       <div class="pose-stats">
-        <div class="stat"><span class="label">Schritte</span><b id="steps">–</b></div>
-        <div class="stat tap" id="tap"><span class="label">Tap</span><b><span id="tap-arrow">–</span> <span id="tap-text">–</span></b></div>
+        <div class="stat"><span class="label">Schritte <button class="info" data-info="steps"></button></span><b id="steps">–</b></div>
+        <div class="stat tap" id="tap"><span class="label">Tap <button class="info" data-info="tap"></button></span><b><span id="tap-arrow">–</span> <span id="tap-text">–</span></b></div>
       </div>
     </section>
 
     <section class="card sound" aria-label="Mikrofon">
-      <header class="card-head"><h2>Mikrofon</h2><span class="hint mono" id="level">–</span></header>
+      <header class="card-head"><h2>Mikrofon <button class="info" data-info="level"></button></h2><span class="hint mono" id="level">–</span></header>
       <div class="mic-row">
         <label class="switch"><input type="checkbox" role="switch" id="mic-toggle"><span class="track" aria-hidden="true"></span>Lautstärke messen</label>
         <span class="hint" id="mic-hint">Mikrofon aus</span>
@@ -134,7 +194,7 @@
       </div>
       <div class="meter-scale" aria-hidden="true"><span>−80</span><span>−60</span><span>−40</span><span>−20</span><span>0 dBFS</span></div>
       <div class="chart" id="chart-level">
-        <div class="chart-head"><h3>Pegel-Verlauf <small>dBFS</small></h3><div class="legend" data-legend></div></div>
+        <div class="chart-head"><h3>Pegel-Verlauf <small>dBFS</small> <button class="info" data-info="level"></button></h3><div class="chart-tools"><div class="legend" data-legend></div><button type="button" class="tool small" data-yscale aria-pressed="false">Y: Fest</button></div></div>
         <canvas aria-label="Pegel-Verlauf"></canvas>
       </div>
     </section>
@@ -173,7 +233,19 @@
       <header class="card-head"><h2>Protokoll</h2><span class="hint" id="log-count">0</span></header>
       <ol class="log-list mono" id="log" aria-live="off"></ol>
     </section>
+
+    <section class="card glossary" id="glossary" aria-label="Messgrössen erklärt">
+      <details id="glossary-details">
+        <summary class="card-head"><h2>Messgrössen erklärt</h2><span class="hint">Was wird gemessen, Einheit, Sensor, typische Werte</span></summary>
+        <div class="glossary-wrap">
+          <table class="glossary-table">
+            <thead><tr><th scope="col">Grösse</th><th scope="col">Einheit</th><th scope="col">Sensor</th><th scope="col">Erklärung</th><th scope="col">Typisch</th></tr></thead>
+            <tbody id="glossary-rows"></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
   </main>
-  <footer class="foot"><a href="https://disroop.ch" target="_blank" rel="noopener"><img src="disroop.png" alt="">Disroop</a> · Disrupt and rebuild. · Nordic Thingy:52 · Werksfirmware über Bluetooth LE · Server-Sent Events <code>/api/stream</code></footer>
+  <footer class="foot"><a href="https://disroop.ch" target="_blank" rel="noopener"><img src="disroop.png" alt="">Disroop</a> · Disrupt and rebuild. · Nordic Thingy:52 · Werksfirmware über Bluetooth LE · Server-Sent Events <code>/api/stream</code> · <a class="foot-link" href="#glossary">Messgrössen erklärt</a></footer>
 </body>
 </html>

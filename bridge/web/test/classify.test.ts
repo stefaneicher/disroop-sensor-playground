@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { co2Level, batteryLevel, rssiBars } from '../src/classify.ts';
+import { co2Level, batteryLevel, rssiBars, batteryTrendView } from '../src/classify.ts';
 
 test('co2Level uses traffic-light thresholds 800 / 1500 ppm', () => {
   assert.deepEqual(co2Level(612), { level: 'good', label: 'gut' });
@@ -25,4 +25,10 @@ test('rssiBars maps dBm to 0..4 bars', () => {
   assert.equal(rssiBars(-85), 1);
   assert.equal(rssiBars(-99), 0);
   assert.equal(rssiBars(null), 0);
+});
+
+test('batteryTrendView labels the trend and treats missing values as unknown', () => {
+  assert.deepEqual(batteryTrendView('charging'), { trend: 'charging', text: '⚡ lädt' });
+  assert.deepEqual(batteryTrendView('discharging'), { trend: 'discharging', text: 'Akkubetrieb' });
+  for (const v of ['unknown', undefined, null, 'bogus']) assert.deepEqual(batteryTrendView(v), { trend: 'unknown', text: '?' });
 });

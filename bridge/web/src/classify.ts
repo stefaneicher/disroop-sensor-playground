@@ -23,3 +23,14 @@ export function rssiBars(dbm: unknown): number {
   const below = RSSI_STEPS.findIndex((step) => dbm >= step);
   return below === -1 ? 0 : RSSI_STEPS.length - below;
 }
+
+export type BatteryTrend = 'charging' | 'discharging' | 'unknown';
+export interface BatteryTrendView { trend: BatteryTrend; text: string }
+export const BATTERY_TREND_TITLE = 'geschätzt aus dem Verlauf des Akkustands';
+
+// device.battery_trend is a heuristic from the bridge; a missing or unexpected value counts as "unknown".
+export function batteryTrendView(trend: unknown): BatteryTrendView {
+  if (trend === 'charging') return { trend, text: '⚡ lädt' };
+  if (trend === 'discharging') return { trend, text: 'Akkubetrieb' };
+  return { trend: 'unknown', text: '?' };
+}

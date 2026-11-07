@@ -5,7 +5,11 @@ import { updatePeak, micView, type Peak } from './level.ts';
 import { hexToRgb } from './color.ts';
 import { throttle } from './throttle.ts';
 import { postSong, postLed, postMic } from './api.ts';
-import { LiveChart } from './live-chart.ts';
+import { TimeChart } from './time-chart.ts';
+import { ChartGroup } from './chart-group.ts';
+import { bindChartToolbar } from './chart-toolbar.ts';
+import { CompassInstrument } from './compass-view.ts';
+import { bindInfo } from './info-view.ts';
 import { bindDom, renderConnection, renderSnapshot, renderLog } from './view.ts';
 import type { Snapshot } from './telemetry.ts';
 
@@ -21,14 +25,19 @@ const chartRoot = (id: string): HTMLElement => {
 const errorText = (err: unknown): string => (err instanceof Error ? err.message : String(err));
 
 const dom = bindDom(document);
-const charts: Record<MotionSeries, LiveChart> = {
-  accel_g: new LiveChart(chartRoot('chart-accel'), { minSpan: 0.5, digits: 2 }),
-  gyro_dps: new LiveChart(chartRoot('chart-gyro'), { minSpan: 20, digits: 1 }),
-  compass_ut: new LiveChart(chartRoot('chart-compass'), { minSpan: 20, digits: 1 }),
+const group = new ChartGroup(30_000);
+const charts: Record<MotionSeries, TimeChart> = {
+  accel_g: new TimeChart(chartRoot('chart-accel'), group, { unit: 'g', minSpan: 0.5, digits: 2, fixedRange: { min: -2, max: 2 } }),
+  gyro_dps: new TimeChart(chartRoot('chart-gyro'), group, { unit: '°/s', minSpan: 20, digits: 1, fixedRange: { min: -250, max: 250 } }),
+  compass_ut: new TimeChart(chartRoot('chart-compass'), group, { unit: 'µT', minSpan: 20, digits: 1, fixedRange: { min: -100, max: 100 } }),
 };
-const levelChart = new LiveChart(chartRoot('chart-level'), {
-  digits: 1, fixedRange: { min: -80, max: 0 }, axes: [{ key: 'v', label: 'Pegel', color: '#a3e635' }],
+const levelChart = new TimeChart(chartRoot('chart-level'), group, {
+  unit: 'dBFS', digits: 1, autoScale: false, minSpan: 10, fixedRange: { min: -80, max: 0 },
+  series: [{ key: 'v', label: 'Pegel', color: '#a3e635' }],
 });
+bindChartToolbar(chartRoot('charts'), group);
+bindInfo(document);
+const compass = new CompassInstrument(chartRoot('compass'));
 
 let state = initialState();
 let peak: Peak | null = null;
@@ -56,15 +65,15 @@ function render(): void {
     renderLog(dom, state.log);
     renderedLog = state.log;
   }
-  Object.values(charts).forEach((c) => c.draw());
-  levelChart.draw();
 }
 
 function onTelemetry(snapshot: Snapshot): void {
-  for (const [key, chart] of Object.entries(charts) as [MotionSeries, LiveChart][]) chart.push(snapshot.motion?.[key]);
+  const now = Date.now();
+  for (const [key, chart] of Object.entries(charts) as [MotionSeries, TimeChart][]) chart.push(now, snapshot.motion?.[key]);
   const mic = micView(snapshot.sound);
-  levelChart.push({ v: mic.level });
-  peak = mic.enabled ? updatePeak(peak, mic.level, Date.now()) : null;
+  levelChart.push(now, { v: mic.level });
+  compass.update(snapshot.motion, now);
+  peak = mic.enabled ? updatePeak(peak, mic.level, now) : null;
   dispatch({ type: 'telemetry', snapshot });
 }
 

@@ -30,6 +30,17 @@ const READ_PAGE = `(() => document.readyState !== 'complete' || !document.getEle
   micHint: document.getElementById('mic-hint')?.textContent,
   battery: document.getElementById('battery')?.textContent,
   cube: document.getElementById('cube')?.style.transform ?? '',
+  field: document.getElementById('field-magnitude')?.textContent,
+  fieldQuality: document.getElementById('field-quality')?.dataset.level,
+  compassCard: document.getElementById('compass-card')?.style.transform ?? '',
+  compassTicks: document.querySelectorAll('#compass-scale .tick').length,
+  horizon: document.getElementById('horizon')?.getAttribute('transform') ?? '',
+  batteryTrend: document.getElementById('battery-pill')?.dataset.trend,
+  legendButtons: document.querySelectorAll('.legend .series').length,
+  paused: document.querySelector('[data-pause]')?.getAttribute('aria-pressed'),
+  span: document.querySelector('[data-span-label]')?.textContent,
+  spanPressed: document.querySelector('[data-span][aria-pressed="true"]')?.dataset.span ?? null,
+  yscale: document.querySelector('#chart-accel [data-yscale]')?.textContent,
   notes: document.getElementById('notes')?.children.length,
   logEntries: document.getElementById('log')?.children.length,
   songButton: document.getElementById('song-button')?.getAttribute('aria-pressed'),
@@ -51,6 +62,11 @@ const CHECKS = {
   level: (p) => (p.micOn ? /dBFS$/.test(p.level) : p.level === '–' && p.micHint === 'Mikrofon aus'),
   battery: (p) => /^\d+ %$/.test(p.battery),
   cube: (p) => p.cube.startsWith('matrix3d('),
+  field: (p) => /^\d+\.\d µT$/.test(p.field) && ['good', 'bad'].includes(p.fieldQuality),
+  compass: (p) => p.compassTicks === 72 && /^rotate\(-?\d+(\.\d+)?deg\)$/.test(p.compassCard),
+  horizon: (p) => /^rotate\(.+\) translate\(0 .+\)$/.test(p.horizon),
+  batteryTrend: (p) => ['charging', 'discharging', 'unknown'].includes(p.batteryTrend),
+  legend: (p) => p.legendButtons === 10,
   notes: (p) => p.notes === 24,
   log: (p) => p.logEntries > 0,
 };
@@ -97,6 +113,33 @@ async function checkMic(page, initiallyOn) {
   }
 }
 
+// Time window, pause/live, wheel zoom, reset, Y scale and legend toggles must work without JS errors.
+async function checkChartControls(page) {
+  await click(page, '[data-span="10000"]');
+  await waitFor(page, (p) => p.span === '10 s' && p.spanPressed === '10000', 'window 10 s');
+  await click(page, '[data-pause]');
+  await waitFor(page, (p) => p.paused === 'true' && /angehalten/.test(p.span), 'paused');
+  await page.send('Runtime.evaluate', { expression: `(() => { const c = document.querySelector('#chart-accel canvas'); const r = c.getBoundingClientRect();
+    c.dispatchEvent(new WheelEvent('wheel', { deltaY: 300, clientX: r.left + r.width / 2, clientY: r.top + 40, bubbles: true, cancelable: true }));
+    c.dispatchEvent(new PointerEvent('pointermove', { pointerType: 'mouse', clientX: r.left + r.width / 2, clientY: r.top + 40, bubbles: true })); })()` });
+  await waitFor(page, (p) => p.spanPressed === null && p.span !== '10 s', 'wheel zoom');
+  await click(page, '#chart-accel [data-yscale]');
+  await waitFor(page, (p) => p.yscale === 'Y: Fest', 'fixed y scale');
+  await click(page, '#chart-accel [data-yscale]');
+  await click(page, '#chart-accel .series');
+  await click(page, '#chart-accel .series');
+  await click(page, '[data-time-mode]');
+  await click(page, '[data-time-mode]');
+  await click(page, '[data-compass-mode="north"]');
+  await click(page, '[data-compass-mode="heading"]');
+  await click(page, '[data-reset]');
+  await waitFor(page, (p) => p.paused === 'false' && p.span === '10 s', 'reset to live 10 s');
+  await click(page, '[data-span="30000"]');
+  await page.send('Runtime.evaluate', { expression: `document.querySelector('#chart-accel canvas').dispatchEvent(new PointerEvent('pointerleave', { pointerType: 'mouse' }))` });
+  await waitFor(page, (p) => p.paused === 'false' && p.span === '30 s', 'live 30 s');
+  console.log('  charts: Zeitfenster, Pause/Live, Zoom, Zurücksetzen, Y-Skala, Legende OK');
+}
+
 async function checkSong(page) {
   await click(page, '#song-button');
   const playing = await waitFor(page, (p) => p.songButton === 'true' && /^Note \d+ \/ 24/.test(p.songProgress), 'song playing');
@@ -137,6 +180,7 @@ async function main() {
     console.log(`  live: ${state.temperature} °C, eCO₂ ${state.eco2} ppm (${state.co2Level}), heading ${state.heading}, ${state.level}`);
 
     await checkMic(page, state.micOn);
+    await checkChartControls(page);
 
     if (process.env.SMOKE_SKIP_SONG === '1') console.log('  song: skipped (SMOKE_SKIP_SONG=1)');
     else await checkSong(page);
@@ -165,7 +209,13 @@ async function main() {
       console.log('  reconnect: OK');
     }
     if (opts.screenshot) {
+      await sleep(25000); // let the 30 s chart window fill up after the reconnect test
+      await page.send('Emulation.setDeviceMetricsOverride', DESKTOP);
+      await sleep(300);
+      await page.send('Runtime.evaluate', { expression: `(() => { const c = document.querySelector('#chart-accel canvas'); const r = c.getBoundingClientRect();
+        c.dispatchEvent(new PointerEvent('pointermove', { pointerType: 'mouse', clientX: r.left + r.width * 0.62, clientY: r.top + 40 })); })()` });
       await screenshot(page, DESKTOP, opts.screenshot);
+      await page.send('Runtime.evaluate', { expression: `document.querySelector('#chart-accel canvas').dispatchEvent(new PointerEvent('pointerleave', { pointerType: 'mouse' }))` });
       await screenshot(page, MOBILE, opts.screenshot.replace(/(\.png)?$/, '-mobile.png'));
     }
     if (errors.length) throw new Error(`JS errors:\n${errors.join('\n')}`);

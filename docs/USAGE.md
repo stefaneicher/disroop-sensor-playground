@@ -127,13 +127,26 @@ Thingy:52 live   Quelle: sim   Verbunden: ja   Web: http://localhost:8052
   - Ein Status-Badge: `LIVE` (grün) bei echter Verbindung, `SIMULATOR` (violett, plus Banner) im Simulator-Modus
   - „Daten veraltet“, wenn 3 s lang nichts kommt
   - Zeit des letzten Werts, RSSI-Balken, Akku
+  - Akku-Trend neben dem Akku: „⚡ lädt“ (lime), „Akkubetrieb“ oder dezent „?“. Der Trend ist aus dem Verlauf des Akkustands geschätzt, denn die Werksfirmware meldet den Ladestatus nicht.
 - **Umgebung:** Temperatur, Feuchte, Luftdruck, eCO₂ mit Ampel (< 800 gut, < 1500 mässig, sonst schlecht), TVOC, Farbfeld mit RGBC-Rohwerten
-- **Bewegung:** Live-Charts der letzten 30 s für Beschleunigung, Gyroskop und Kompass
-- **Lage:** 3D-Würfel, Kompassrose mit Kurs, Roll/Pitch/Yaw, Quaternion, Schritte, Tap-Richtung
-- **Mikrofon:** Pegelanzeige in dBFS mit Peak und Verlauf
+- **Bewegung:** Diagramme für Beschleunigung (g), Gyroskop (°/s) und Magnetfeld (µT) mit Y-Achse samt Einheit, Zeitachse und Gitter. Alle Diagramme teilen dasselbe Zeitfenster.
+  - Zeitfenster: 10 s, 30 s, 1 min oder 5 min
+  - **Pause/Live** hält die Anzeige an. Die Daten laufen im Hintergrund weiter.
+  - **Zeit:** schaltet die Achse zwischen relativ („−30 s … jetzt“) und Uhrzeit um
+  - Mausrad oder Pinch zoomt die Zeitachse. Ziehen verschiebt das Fenster und pausiert dabei. Doppelklick oder **⟲ Zurücksetzen** kehrt zum gewählten Zeitfenster live zurück.
+  - Fährst du mit der Maus oder dem Finger über ein Diagramm, zeigt ein Fadenkreuz Zeit und x/y/z.
+  - Ein Klick auf die Legende blendet eine Kurve ein oder aus.
+  - **Y: Auto/Fest** wählt zwischen automatischer und fester Skala.
+- **Kompass:** Kursinstrument wie im Flugzeug: drehende Skala mit Strichen alle 5°/10°, Himmelsrichtungen (N, NO, O … NW) und Kurs-Spur.
+  - **Kurs oben/Norden oben** schaltet die Ausrichtung um. Die Wahl wird gespeichert.
+  - Grosse Kursanzeige, geglättet
+  - Feldstärke in µT. Liegt sie ausserhalb von 25–65 µT, erscheint der Hinweis „Kompass kalibrieren“: Drehe das Thingy in einer 8er-Bewegung.
+- **Lage:** künstlicher Horizont (Roll/Pitch), 3D-Würfel, Roll/Pitch/Yaw, Quaternion, Schritte, Tap-Richtung
+- **Mikrofon:** Pegelanzeige in dBFS mit Peak und Pegel-Verlauf
 - **Lied:** ▶/■ und Lautstärke-Regler. Die Noten werden während des Spielens hervorgehoben. Im Dashboard läuft das Lied in einer **Schleife** mit 1.5 s Pause, bis du es stoppst.
 - **Taster & LED:** Tasterstatus, Farbwähler und die Presets Rot, Grün, Blau, Aus
 - **Protokoll:** Meldungen der Bridge, z. B. Verbindungen und Fehler
+- **ⓘ-Symbole:** Jede Karte und jedes Diagramm hat ein ⓘ. Antippen, Klicken oder Enter öffnet eine kurze Erklärung der Messgrösse mit Einheit, Sensor und typischen Werten. Esc schliesst sie. Der aufklappbare Abschnitt „Messgrössen erklärt“ am Seitenende zeigt alle Erklärungen als Tabelle. Siehe auch [MESSGROESSEN.md](MESSGROESSEN.md).
 
 Mobile-Ansicht:
 

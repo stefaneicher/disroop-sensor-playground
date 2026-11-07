@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { eulerToQuaternion, quaternionToMatrix3d, orientationTransform } from '../src/orientation.ts';
+import { eulerToQuaternion, quaternionToMatrix3d, orientationTransform, quaternionToEuler, attitudeOf, horizonTransform } from '../src/orientation.ts';
 
 const close = (a: number | undefined, b: number): boolean => a !== undefined && Math.abs(a - b) < 1e-9;
 
@@ -26,4 +26,23 @@ test('orientationTransform prefers euler, falls back to quaternion, else null', 
     quaternionToMatrix3d({ w: 1, x: 0, y: 0, z: 0 }));
   assert.equal(orientationTransform({ euler_deg: { roll: null, pitch: 0, yaw: 0 }, quaternion: null }), null);
   assert.equal(orientationTransform(null), null);
+});
+
+test('quaternionToEuler inverts eulerToQuaternion', () => {
+  const e = { roll: 20, pitch: -35, yaw: 120 };
+  const back = quaternionToEuler(eulerToQuaternion(e));
+  for (const k of ['roll', 'pitch', 'yaw'] as const) assert.ok(Math.abs(back[k] - e[k]) < 1e-4, `${k}: ${back[k]}`);
+});
+
+test('attitudeOf prefers euler and falls back to the quaternion', () => {
+  assert.deepEqual(attitudeOf({ euler_deg: { roll: 5, pitch: -3, yaw: 0 }, quaternion: null }), { roll: 5, pitch: -3 });
+  const q = eulerToQuaternion({ roll: 10, pitch: 15, yaw: 40 });
+  const a = attitudeOf({ euler_deg: null, quaternion: q });
+  assert.ok(a && Math.abs(a.roll - 10) < 1e-4 && Math.abs(a.pitch - 15) < 1e-4);
+  assert.equal(attitudeOf(null), null);
+});
+
+test('horizonTransform banks against roll and clamps pitch', () => {
+  assert.equal(horizonTransform({ roll: 20, pitch: 10 }, 1.5), 'rotate(-20) translate(0 15)');
+  assert.equal(horizonTransform({ roll: 0, pitch: 200 }, 1), 'rotate(0) translate(0 90)');
 });

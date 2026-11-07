@@ -49,3 +49,35 @@ export function orientationTransform(motion: Partial<Pick<Motion, 'euler_deg' | 
   if (q && isNum(q.w) && isNum(q.x) && isNum(q.y) && isNum(q.z)) return quaternionToMatrix3d({ w: q.w, x: q.x, y: q.y, z: q.z });
   return null;
 }
+
+const DEG = 180 / Math.PI;
+
+// Inverse of eulerToQuaternion (ZYX); pitch is clamped at ±90° (gimbal lock).
+export function quaternionToEuler(q: Quaternion): Euler {
+  const n = Math.hypot(q.w, q.x, q.y, q.z) || 1;
+  const [w, x, y, z] = [q.w / n, q.x / n, q.y / n, q.z / n];
+  const roll = Math.atan2(2 * (w * x + y * z), 1 - 2 * (x * x + y * y)) * DEG;
+  const pitch = Math.asin(Math.max(-1, Math.min(1, 2 * (w * y - z * x)))) * DEG;
+  const yaw = Math.atan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z)) * DEG;
+  return { roll: clean(roll), pitch: clean(pitch), yaw: clean(yaw) };
+}
+
+export interface Attitude { roll: number; pitch: number }
+
+// Roll/pitch for the artificial horizon: euler preferred, else derived from the quaternion.
+export function attitudeOf(motion: Partial<Pick<Motion, 'euler_deg' | 'quaternion'>> | null | undefined): Attitude | null {
+  const e = motion?.euler_deg;
+  if (e && isNum(e.roll) && isNum(e.pitch)) return { roll: e.roll, pitch: e.pitch };
+  const q = motion?.quaternion;
+  if (q && isNum(q.w) && isNum(q.x) && isNum(q.y) && isNum(q.z)) {
+    const { roll, pitch } = quaternionToEuler({ w: q.w, x: q.x, y: q.y, z: q.z });
+    return { roll, pitch };
+  }
+  return null;
+}
+
+// SVG transform for the horizon (sky/ground) layer: banks opposite to roll, moves down when the nose pitches up.
+export function horizonTransform({ roll, pitch }: Attitude, unitsPerDeg: number): string {
+  const p = Math.max(-90, Math.min(90, pitch));
+  return `rotate(${clean(-roll)}) translate(0 ${clean(p * unitsPerDeg)})`;
+}

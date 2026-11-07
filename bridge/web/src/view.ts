@@ -1,6 +1,7 @@
 // Thin DOM layer: writes reducer state into the page. All decisions live in the pure modules.
-import { DASH, fmt, fmtSigned, orientationLabel, tapArrow, cardinal, clock, isNum } from './format.ts';
-import { co2Level, batteryLevel, rssiBars } from './classify.ts';
+import { DASH, fmt, fmtSigned, orientationLabel, tapArrow, clock, isNum } from './format.ts';
+import { co2Level, batteryLevel, rssiBars, batteryTrendView } from './classify.ts';
+import { buildAttitude, renderAttitude } from './attitude-view.ts';
 import { normalizeColor, rgbToHex } from './color.ts';
 import { orientationTransform } from './orientation.ts';
 import { dbfsToPercent, micView, type Peak } from './level.ts';
@@ -13,12 +14,13 @@ import type { Device, Environment, Motion, Snapshot, Sound, Ui } from './telemet
 const ELEMENTS = {
   'status': HTMLElement, 'status-label': HTMLElement, 'sim-banner': HTMLElement,
   'device-name': HTMLElement, 'device-address': HTMLElement, 'rssi': HTMLElement, 'rssi-bars': HTMLElement,
-  'battery': HTMLElement, 'battery-icon': HTMLElement, 'battery-fill': HTMLElement,
+  'battery': HTMLElement, 'battery-icon': HTMLElement, 'battery-fill': HTMLElement, 'battery-pill': HTMLElement,
+  'battery-trend': HTMLElement,
   'temperature': HTMLElement, 'humidity': HTMLElement, 'pressure': HTMLElement, 'co2-tile': HTMLElement,
   'eco2': HTMLElement, 'co2-label': HTMLElement, 'co2-marker': HTMLElement, 'tvoc': HTMLElement,
   'color-swatch': HTMLElement, 'color-raw': HTMLElement,
-  'orientation': HTMLElement, 'cube': HTMLElement, 'cube-led': HTMLElement, 'needle': SVGGElement,
-  'compass-ticks': SVGGElement, 'heading': HTMLElement, 'heading-cardinal': HTMLElement,
+  'orientation': HTMLElement, 'cube': HTMLElement, 'cube-led': HTMLElement,
+  'horizon': SVGGElement, 'pitch-ladder': SVGGElement, 'roll-scale': SVGGElement, 'roll-pointer': SVGGElement,
   'roll': HTMLElement, 'pitch': HTMLElement, 'yaw': HTMLElement, 'quaternion': HTMLElement,
   'steps': HTMLElement, 'tap': HTMLElement, 'tap-arrow': HTMLElement, 'tap-text': HTMLElement,
   'level': HTMLElement, 'level-fill': HTMLElement, 'level-peak': HTMLElement,
@@ -43,21 +45,9 @@ export function bindDom(doc: Document): Dom {
     dom[camel(id)] = el;
   }
   const typed = dom as Dom;
-  buildCompassTicks(doc, typed.compassTicks);
+  buildAttitude(typed.pitchLadder, typed.rollScale);
   buildNotes(doc, typed.notes);
   return typed;
-}
-
-function buildCompassTicks(doc: Document, group: SVGGElement): void {
-  for (let deg = 0; deg < 360; deg += 15) {
-    const line = doc.createElementNS('http://www.w3.org/2000/svg', 'line');
-    const major = deg % 90 === 0;
-    line.setAttribute('y1', '-56');
-    line.setAttribute('y2', major ? '-48' : '-52');
-    line.setAttribute('transform', `rotate(${deg})`);
-    if (major) line.setAttribute('class', 'major');
-    group.append(line);
-  }
 }
 
 function buildNotes(doc: Document, list: HTMLOListElement): void {
@@ -101,6 +91,10 @@ function renderDevice(dom: Dom, d: Partial<Device>): void {
   setText(dom.battery, fmt(d.battery_pct, 0, '%'));
   setAttr(dom.batteryIcon, 'data-level', batteryLevel(d.battery_pct));
   dom.batteryFill.style.width = `${isNum(d.battery_pct) ? clampPct(d.battery_pct) : 0}%`;
+  // battery_trend may be missing on older bridges: treated as "unknown".
+  const trend = batteryTrendView((d as { battery_trend?: unknown }).battery_trend);
+  setAttr(dom.batteryPill, 'data-trend', trend.trend);
+  setText(dom.batteryTrend, trend.text);
 }
 
 function renderEnvironment(dom: Dom, e: Partial<Environment>): void {
@@ -124,9 +118,7 @@ function renderMotion(dom: Dom, m: Partial<Motion>, newTap: boolean): void {
   setText(dom.orientation, orientationLabel(m.orientation));
   const transform = orientationTransform(m);
   if (transform) dom.cube.style.transform = transform;
-  setAttr(dom.needle, 'transform', `rotate(${isNum(m.heading_deg) ? m.heading_deg : 0})`);
-  setText(dom.heading, fmt(m.heading_deg, 0, '°').replace(' °', '°'));
-  setText(dom.headingCardinal, isNum(m.heading_deg) ? cardinal(m.heading_deg) : '');
+  renderAttitude(dom.horizon, dom.rollPointer, m);
   const e = m.euler_deg;
   setText(dom.roll, degrees(fmtSigned(e?.roll, 1)));
   setText(dom.pitch, degrees(fmtSigned(e?.pitch, 1)));
