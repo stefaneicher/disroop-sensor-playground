@@ -1,0 +1,23 @@
+{
+  "cad_volume_d5": 7607.300918301275,
+  "formula_volume_d5": 7607.3009183012755,
+  "cad_volume_d6": 7434.513322353836,
+  "formula_volume_d6": 7434.513322353837,
+  "step_import_volume": 7434.513322353816,
+  "step_import_rel_err": 2.8136849358895755e-15,
+  "step_bbox": [
+    20.0,
+    20.0,
+    20.0
+  ],
+  "stl_watertight": true,
+  "stl_winding_consistent": true,
+  "stl_volume": 7434.747657034008,
+  "stl_faces": 520,
+  "stl_euler": 0,
+  "3mf_watertight": true,
+  "3mf_winding_consistent": true,
+  "3mf_volume": 7434.747656607695,
+  "3mf_faces": 520,
+  "3mf_euler": 0
+}

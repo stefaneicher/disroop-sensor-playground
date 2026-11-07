@@ -19,3 +19,6 @@ bridge/internal/tennisapp/dist/*
 devices/motion-one/logs/tools-smoke/
 devices/motion-one/firmware/build/
 devices/motion-one/logs/fw-smoke/
+devices/motion-one/logs/media-smoke/
+devices/motion-one/logs/mech-smoke/
+devices/motion-one/logs/pcb-smoke/

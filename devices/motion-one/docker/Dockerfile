@@ -59,8 +59,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip3 install --no-cache-dir --break-system-packages trimesh numpy
 
 # --- Mechanik: CadQuery (parametrisches CAD), Gmsh (Vernetzung) und CalculiX (FEM) -------------------------------
-RUN apt-get update && apt-get install -y --no-install-recommends gmsh calculix-ccx libgl1 python-is-python3 \
+RUN apt-get update && apt-get install -y --no-install-recommends gmsh calculix-ccx libgl1 python-is-python3 poppler-utils time \
     && rm -rf /var/lib/apt/lists/* \
-    && pip3 install --no-cache-dir --break-system-packages cadquery gmsh meshio lxml
+    && pip3 install --no-cache-dir --break-system-packages cadquery gmsh meshio lxml networkx
 
 WORKDIR /workspace
