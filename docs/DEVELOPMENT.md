@@ -28,11 +28,12 @@ Lokal brauchst du nur WSL2 und Docker. Installiere keine Toolchains lokal.
 
 | Bereich | Befehl | Was läuft |
 |---|---|---|
-| alles | `./project test` | bridge → web → android |
+| alles | `./project test` | bridge → web → tennis → android |
 | Bridge (Go) | `./project bridge test` | `gofmt -l`, `go vet` + `staticcheck` (Linux **und** `GOOS=windows`), `go test -race ./...`, Build, Smoke |
 | Bridge-Smoke | `./project bridge smoke` | [bridge/scripts/smoke.sh](../bridge/scripts/smoke.sh): siehe unten |
 | Web-Unit | `./project web unit` | `node --test bridge/web/test/` |
 | Web-Smoke | `./project web smoke` | [dev/smoke.js](../bridge/web/dev/smoke.js): Mock-Server + headless Chromium (CDP) |
+| Tennis | `./project tennis test` | Build, `tsc` strikt, `node --test tennis/test/`, Smoke im headless Chromium (Software-WebGL) |
 | Android | `./project android test` | `./gradlew test :app:lintDebug` (JUnit `:protocol` + `:app`, Lint mit `abortOnError`) |
 
 Einzelne Go-Tests im Container:
@@ -53,7 +54,9 @@ docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/workspace -v thin
   - SSE: 3–32 `telemetry`-Events in 3 s
   - `POST /api/song` play/stop, `POST /api/led`
   - MIME-Typ von `/`
-  - Dashboard-Smoke im headless Chromium gegen die echte Bridge
+  - `POST /api/beep` (204, unbekannte Art 400), `/tennis/` samt lokalem three.js
+  - WebSocket `/api/motion` mit ≥ 50 Frames/s (`tennis/dev/motion-rate.js`)
+  - Tennis-Smoke (SIM-Badge, Motion-Frames im Browser) und Dashboard-Smoke im headless Chromium gegen die echte Bridge
   - sauberes Beenden bei `SIGINT`
 
   Das Log liegt in `build/smoke-bridge.log`.

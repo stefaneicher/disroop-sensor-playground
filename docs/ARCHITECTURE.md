@@ -84,15 +84,17 @@ Die ganze Logik ist ohne Gerät testbar: Decoder, Store, Session, Player, Server
 
 | Paket | Aufgabe |
 |---|---|
-| `cmd/thingy` | Flags, Unterbefehle (`scan`, `song`, `nfc`), Verdrahtung |
+| `cmd/thingy` | Flags, Unterbefehle (`tennis`, `scan`, `song`, `nfc`), Verdrahtung |
 | `internal/thingy` | UUIDs, Decoder, Encoder (LED, Speaker, Configs, NDEF/AAR), IMA-ADPCM, Pegelmesser |
 | `internal/device` (+ `ble`, `sim`) | Port und Adapter zum Thingy |
 | `internal/app` | Session (Startsequenz, Reconnect, Notifications → Store), NFC-Programmierung |
 | `internal/telemetry` | Snapshot-Typen, Store, LogBus |
 | `internal/song` | Lied parsen und abspielen, Farbe pro Tonhöhe |
-| `internal/server` | HTTP-API, SSE, MIME-Typen, CORS |
+| `internal/server` | HTTP-API, SSE, WebSocket `/api/motion`, `/api/beep`, MIME-Typen, CORS |
+| `internal/motion` | schneller Motion-Kanal: Quaternion/Raw/Taster/Tippen → Frames, 100 Hz solange ein Client zuhört |
 | `internal/tui` | Terminal-Live-Ansicht (ANSI, auf Windows mit VT-Modus) |
 | `web` | `go:embed` des Dashboards |
+| `internal/tennisapp` | `go:embed` von Thingy Tennis (`tennis/` gebaut nach `dist/`), Details [TENNIS.md](TENNIS.md) |
 
 ## Web-Dashboard
 

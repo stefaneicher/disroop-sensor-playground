@@ -11,6 +11,12 @@ Live-Demo mit dem **Nordic Thingy:52**: Alle Sensorwerte laufen per Bluetooth LE
 
 *Android-App im Simulator-Modus. Die Bilder erzeugt `./project android screenshots`.*
 
+### Thingy Tennis
+
+<img src="docs/img/tennis.png" width="640" alt="Thingy Tennis: Flutlicht-Platz in 3rd-Person-Ansicht">
+
+*Tennis im Browser, der Thingy ist der Schläger: `thingy.exe tennis` (live) oder `thingy.exe tennis --sim`. Mehr in [docs/TENNIS.md](docs/TENNIS.md).*
+
 > **Keine Firmware, kein Flashen, kein Debugger.** Für dieses Projekt wird keine Firmware gebaut. Der Thingy läuft unverändert mit der Nordic-Werksfirmware (v2.x). Unsere Software ist ein reiner **BLE-Client**:
 > - **Empfangen:** Sie abonniert die GATT-Notifications des Thingy (Sensordaten) und dekodiert sie.
 > - **Senden:** Sie schreibt Befehle in GATT-Characteristics: Ton für das Lied, LED-Farbe, Sensor-Intervalle, NFC-Inhalt.
@@ -32,6 +38,7 @@ Live-Demo mit dem **Nordic Thingy:52**: Alle Sensorwerte laufen per Bluetooth LE
 - **Lied:** „Highway to Hell“ (Refrain, 24 Noten) über den Thingy-Lautsprecher. Die LED-Farbe folgt der Tonhöhe. Starten und stoppen geht per Taster am Thingy, im Dashboard oder in der App.
 - **NFC:** `thingy.exe nfc` schreibt einen Android Application Record auf den NFC-Tag des Thingy. Hältst du das Handy an den Thingy, öffnet sich die App.
 - **Android-App** `ch.disroop.thingylive`: verbindet sich direkt per BLE und zeigt dieselben Werte. Sie hat einen eingebauten Simulator.
+- **Thingy Tennis** (`tennis/`, eigenes Programm): Tennis-Spiel mit three.js, der Thingy ist der Schläger. Schwung = Schlag, Neigen = laufen. Die Bridge liefert die Bewegung mit 100 Hz per WebSocket und spielt das Spiel unter `/tennis/` aus. Ohne Thingy mit Tastatur oder im Simulator spielbar.
 - **Simulator** (`--sim`) für Demos, Tests und CI ohne Hardware.
 - **Alles im Docker-Devcontainer:** Lokal wird ausser Docker nichts installiert.
 
@@ -53,6 +60,8 @@ Live-Demo mit dem **Nordic Thingy:52**: Alle Sensorwerte laufen per Bluetooth LE
 Dann im Browser http://localhost:8052 öffnen. `Strg+C` beendet die exe.
 
 **Ohne Hardware:** `./project bridge run --sim` startet die exe mit dem Simulator.
+
+**Thingy Tennis:** `./project play` (echter Thingy) oder `./project play --sim` baut alles, startet `thingy.exe tennis` und öffnet http://127.0.0.1:8052/tennis/. Mit dem Invoke-CLI: `./t tennis.play [--sim]`. Anleitung: [docs/TENNIS.md](docs/TENNIS.md).
 
 > Die exe läuft über WSL-Interop **unter Windows**, weil WSL kein Bluetooth hat. Der Port lauscht nur auf `127.0.0.1` von Windows. Aus WSL brauchst du deshalb `curl.exe` statt `curl`, siehe [Troubleshooting](docs/TROUBLESHOOTING.md).
 
@@ -79,10 +88,11 @@ Der Thingy nimmt nur **eine** BLE-Verbindung an. Während `nfc` läuft, müssen 
 
 ```
 project                 CLI: ./project <befehl>, ruft scripts/<bereich>.sh auf
-scripts/                bridge.sh, web.sh, android.sh (Builds und Tests im Devcontainer)
+scripts/                bridge.sh, web.sh, tennis.sh, android.sh (Builds und Tests im Devcontainer)
 .devcontainer/          Toolchain-Image (Go, Node, JDK 21, Android SDK, Chromium)
 bridge/                 Go: thingy.exe (BLE, Decoder, Telemetrie, TUI, HTTP/SSE, Lied, NFC)
 bridge/web/             Web-Dashboard (ES-Module ohne Build-Step), Tests, Mock-Server
+tennis/                 Thingy Tennis: eigenes Spiel (TypeScript + three.js, kein Bundler), von der exe unter /tennis/ ausgeliefert
 android/                Android-App (Kotlin, Compose) + reines Kotlin-Modul :protocol
 shared/                 chorus.json (Lied), telemetry.example.json (Beispiel-Snapshot)
 docs/                   Protokoll-Vertrag, Schema, Architektur, Anleitungen
@@ -98,7 +108,8 @@ Die Übersicht findest du in [docs/index.md](docs/index.md):
 - [Entwicklung](docs/DEVELOPMENT.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 - [Protokoll-Vertrag](docs/protocol.md)
-- READMEs der Bereiche: [bridge](bridge/README.md), [web](bridge/web/README.md), [android](android/README.md)
+- [Thingy Tennis](docs/TENNIS.md)
+- READMEs der Bereiche: [bridge](bridge/README.md), [web](bridge/web/README.md), [tennis](tennis/README.md), [android](android/README.md)
 
 ## Lizenz
 

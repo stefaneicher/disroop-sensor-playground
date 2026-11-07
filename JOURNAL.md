@@ -17,3 +17,4 @@
 | 2026-11-06 21:40 | Agent web fertig: 56 Unit-Tests grün, Smoke OK, Screenshots | committed |
 | 2026-11-06 22:53 | NFC schreiben scheitert: Thingy hat FW v2.1.0 (TCS 0107 = 02 01 00), NFC-Char 0109 gibt es erst ab v2.2.0 → User macht DFU-Update per nRF-Thingy-App | wartet auf User |
 | 2026-11-06 23:25 | NFC | DFU auf FW v2.2.0 erfolgreich (0107=02 02 00), NFC-Tag auf AAR ch.disroop.thingylive geschrieben+verifiziert, Backup build/nfc-backup.hex |
+| 2026-11-07 11:45 | Thingy Tennis als eigenes Programm `tennis/` (three.js, TS ohne Bundler), WebSocket `/api/motion` 100 Hz, `/api/beep`, `thingy.exe tennis`, Sim-Schwünge | Tests grün (Go, 36 TS-Unit, Smokes), Doku docs/TENNIS.md |

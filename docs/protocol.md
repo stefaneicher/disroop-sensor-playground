@@ -88,9 +88,41 @@ Bytes: `D4 0F 15` + ASCII `android.com:pkg` + ASCII `ch.disroop.thingylive` (39 
 | POST | `/api/song` | Body `{"action":"play"\|"stop","volume":0..100}` → 202 |
 | POST | `/api/led` | Body `{"r":0..255,"g":..,"b":..}` → 204 |
 | POST | `/api/mic` | Body `{"enabled":true\|false}` → 202, Mikrofon/Lautstärke ein/aus |
+| GET | `/api/motion` | WebSocket, schneller Motion-Kanal für Spiele (siehe „Motion-Kanal“) |
+| POST | `/api/beep` | Body `{"kind":"hit"\|"point"\|"miss"}` (leer = `hit`) → 204: kurzer Ton + LED-Farbe, max. 1 pro 100 ms (sonst 429) |
+| GET | `/tennis/` | Thingy Tennis (eingebettet aus `bridge/internal/tennisapp/dist`, gebaut aus `tennis/`), 404 mit Bauhinweis, wenn nicht eingebaut |
 | GET | `/healthz` | `ok` |
 
 Fehler: 400 ungültige Eingabe, 405 falsche Methode, 502 Schreibfehler am Gerät, 503 nicht verbunden. CORS `*`.
+
+### Motion-Kanal (`GET /api/motion`, WebSocket)
+`/api/stream` ist auf 10 Hz gedrosselt – zu langsam für ein Spiel. `/api/motion` schickt dagegen **jede** Motion-Notification
+als JSON-Textnachricht (ein Frame pro Raw-Motion-Notification `EF680406`, ohne Raw Motion pro Quaternion `EF680404`):
+
+```json
+{"t":1794047798656,"q":[0.996,0.004,0.066,0.056],"gyro":[1.2,-0.8,-525.3],"accel":[-0.01,-1.1,0.99],"button":false,"tap":{"dir":"x+","count":1}}
+```
+
+| Feld | Inhalt |
+|---|---|
+| `t` | Zeitstempel der Bridge, Unix-ms |
+| `q` | Quaternion `[w,x,y,z]` (`EF680404`, int32 / 2^30) |
+| `gyro` | Gyroskop °/s (`EF680406`, /32), Achsen wie der Thingy |
+| `accel` | Beschleunigung g (`EF680406`, /1024) |
+| `button` | Taster gedrückt (`EF680302`) |
+| `tap` | nur im Frame direkt nach einem Tippen (`EF680402`), sonst weggelassen |
+
+- Meldet sich der **erste** Client an, setzt die Bridge `motion_freq_hz` (`EF680401`) auf **100 Hz**; nach dem **letzten** Abmelden
+  wieder auf den Standard (10 Hz). Auch nach einem Reconnect gilt der aktuelle Wert.
+- Langsame Clients verlieren die ältesten Frames (Puffer 32), die Bridge blockiert nie.
+- Origin: nur `127.0.0.1`, `localhost`, `[::1]` (beliebiger Port).
+- Simulator: 100 Frames/s mit Vorhand- und Rückhand-Schwüngen (Gyro-Spitzen bis ~700 °/s um die Hochachse, passendes
+  Quaternion, jeder dritte Schwung ein Slice mit 50° Roll). Im Tennis-Modus (`thingy tennis`) startet der Taster nie das Lied,
+  sonst nur, solange kein Client am Motion-Kanal hängt.
+
+### `thingy tennis`
+`thingy.exe tennis [--sim] [--port N] [--no-browser]` startet die Bridge wie ohne Befehl und öffnet
+`http://127.0.0.1:<port>/tennis/` im Standardbrowser. Spielanleitung und Sensor-Mapping: [TENNIS.md](TENNIS.md).
 
 ### Snapshot
 Schema: `docs/telemetry.schema.json`, Beispiel: `shared/telemetry.example.json`.
