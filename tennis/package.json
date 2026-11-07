@@ -2,7 +2,7 @@
   "name": "thingy-tennis",
   "private": true,
   "type": "module",
-  "description": "Thingy Tennis: Tennis-Spiel mit dem Nordic Thingy:52 als Schläger (three.js, kein Bundler). Build: ./project tennis build",
+  "description": "Tennis- und Ski-Spiel mit dem Nordic Thingy:52 als Schläger (three.js, kein Bundler). Build: ./project tennis build",
   "scripts": {
     "build": "node dev/build.js",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json",

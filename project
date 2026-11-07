@@ -25,10 +25,10 @@ Usage: ./project <command> [args]
   build                 build thingy.exe and the Android APK
   bridge <cmd> [args]   bridge/terminal/web commands  (see scripts/bridge.sh)
   web <cmd>             dashboard commands            (see scripts/web.sh)
-  tennis <cmd>          Thingy Tennis game commands   (see scripts/tennis.sh)
+  tennis <cmd>          Tennis game commands   (see scripts/tennis.sh)
   android <cmd>         Android commands              (see scripts/android.sh)
   run [args]            build and start thingy.exe (terminal + web on :8052)
-  play [--sim]          build and start Thingy Tennis (thingy.exe tennis, opens /tennis/)
+  play [--sim]          build and start Tennis (thingy.exe tennis, opens /tennis/)
 U
 }
 

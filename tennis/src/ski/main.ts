@@ -1,4 +1,4 @@
-/** Thingy Ski: Lauberhorn and Streif downhill, steered by tilting the Thingy:52 (roll = steer, nose down = tuck, shock = jump). */
+/** Ski: Lauberhorn and Streif downhill, steered by tilting the Thingy:52 (roll = steer, nose down = tuck, shock = jump). */
 import * as THREE from 'three';
 import { MotionController } from '../core/controller.ts';
 import type { MotionFrame } from '../core/motion.ts';

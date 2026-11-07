@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Thingy Tennis (tennis/). Called via ./project tennis <cmd>. Everything runs inside the devcontainer image.
+# Tennis (tennis/). Called via ./project tennis <cmd>. Everything runs inside the devcontainer image.
 set -euo pipefail
 ROOT="${ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 IMAGE="${IMAGE:-disroop-sensor-playground-dev}"

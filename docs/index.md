@@ -9,7 +9,7 @@
 | [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | Thingy schläft, eine Verbindung, WSL/Bluetooth, Docker, NFC, Android |
 | [protocol.md](protocol.md) | **Vertrag:** GATT-Characteristics, Startsequenz, Lied, NFC-AAR, Bridge-HTTP-API |
 | [telemetry.schema.json](telemetry.schema.json) | **Vertrag:** JSON-Schema des Telemetrie-Snapshots |
-| [TENNIS.md](TENNIS.md) | Thingy Tennis: starten, spielen, Sensor-Mapping, Architektur |
+| [TENNIS.md](TENNIS.md) | Tennis: starten, spielen, Sensor-Mapping, Architektur |
 | [ENGINEERING.md](ENGINEERING.md) | Engineering-Regeln (TDD, Clean Code, Simulator first) |
 | [plan.html](plan.html) | ursprünglicher Projektplan (Lavish) |
 

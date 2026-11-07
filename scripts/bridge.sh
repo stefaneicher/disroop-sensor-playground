@@ -11,7 +11,7 @@ GOENV='export GOMODCACHE=/opt/cache/gomod GOFLAGS=-buildvcs=false; cd bridge'
 sync_chorus() { cp "$ROOT/shared/chorus.json" "$ROOT/bridge/internal/song/chorus.json"; }
 # The embedded dashboard is TypeScript; compile it to bridge/web/static/js before go test/build.
 build_web() { "$ROOT/scripts/web.sh" build; }
-# Thingy Tennis is embedded under /tennis/: build it into bridge/internal/tennisapp/dist.
+# Tennis is embedded under /tennis/: build it into bridge/internal/tennisapp/dist.
 build_tennis() { "$ROOT/scripts/tennis.sh" build; }
 
 usage() {
@@ -22,7 +22,7 @@ Usage: ./project bridge <command> [args]
   build           build/thingy.exe (Windows) and build/thingy-linux
   smoke           start build/thingy-linux --sim in the container and check the HTTP API
   run [args]      build and start thingy.exe on Windows (terminal + web on :8052)
-  run tennis [--sim]  same, starts Thingy Tennis and opens http://127.0.0.1:8052/tennis/
+  run tennis [--sim]  same, starts Tennis and opens http://127.0.0.1:8052/tennis/
   scan            list Thingys in range
   song [args]     connect and play the chorus once
   nfc [--restore] write the Android app record to the NFC tag (backup in build/nfc-backup.hex)

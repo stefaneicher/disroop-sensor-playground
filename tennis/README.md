@@ -1,4 +1,4 @@
-# tennis – Thingy Tennis
+# tennis – Tennis und Ski
 
 Tennis-Spiel im Browser mit dem Thingy:52 als Schläger (three.js, TypeScript ohne Bundler). Spielanleitung, Sensor-Mapping
 und Architektur: [docs/TENNIS.md](../docs/TENNIS.md).

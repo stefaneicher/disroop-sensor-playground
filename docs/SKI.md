@@ -1,4 +1,4 @@
-# Thingy Ski – Lauberhorn und Streif
+# Ski – Lauberhorn und Streif
 
 Abfahrtsspiel im Browser (three.js) und in der Android-App, gesteuert mit dem Thingy:52.
 Der Thingy wird wie ein Lenker flach in der Hand gehalten, Ladebuchse zu dir.

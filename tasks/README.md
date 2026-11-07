@@ -28,7 +28,7 @@ Beim ersten Aufruf installiert `./t` Invoke nach `.tools/py` (nur im Projekt, gi
 | `./t android.apk --install` | APK per `adb.exe` aufs Handy (sonst Anleitung zum Sideloaden) |
 | `./t hw.smoke --nfc` | Hardware-Smoke-Test gegen den echten Thingy |
 | `./t web.serve` · `web.open` · `web.screenshot` | Dashboard mit Mock-Daten, im Browser öffnen, Screenshots |
-| `./t tennis.play` · `./t tennis.play --sim` | Thingy Tennis: Bridge starten und `/tennis/` öffnen (live :8052, Simulator :8060) |
+| `./t tennis.play` · `./t tennis.play --sim` | Tennis: Bridge starten und `/tennis/` öffnen (live :8052, Simulator :8060) |
 | `./t tennis.test` · `tennis.build` · `tennis.screenshot` | Spiel testen, bauen, `docs/img/tennis.png` erzeugen |
 | `./t status` · `./t docs` | Letzte Commits und offene Meilensteine · Dokumentation |
 | `./t release 0.1.0` | Probelauf für ein GitHub-Release, echt mit `--no-dry-run` |

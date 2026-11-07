@@ -1,6 +1,6 @@
 # Disroop Motion One
 
-Ein eigener Handcontroller für Thingy Tennis und Thingy Ski, der den Nordic Thingy:52 als Bewegungssensor ersetzt.
+Ein eigener Handcontroller für Tennis und Ski, der den Nordic Thingy:52 als Bewegungssensor ersetzt.
 Er spricht dasselbe BLE-Profil (siehe [docs/protocol.md](../../docs/protocol.md)), damit Bridge, Web-Spiele und Android-App
 ohne Änderung funktionieren. Er wird mit USB-C geladen.
 

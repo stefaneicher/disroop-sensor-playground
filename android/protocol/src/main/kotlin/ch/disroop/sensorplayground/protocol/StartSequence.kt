@@ -51,7 +51,7 @@ object StartSequence {
     ) + required.map { GattStep.Subscribe(it) } + optional.map { GattStep.Subscribe(it, optional = true) }
 
     /**
-     * Thingy Tennis: only quaternion, raw motion, button and tap at [hz]. Euler, compass/heading and the
+     * Tennis: only quaternion, raw motion, button and tap at [hz]. Euler, compass/heading and the
      * environment sensors stay off, otherwise ~400 notifications/s overload the BLE link (docs/TENNIS.md).
      */
     fun game(hz: Int = GAME_HZ): List<GattStep> = listOf(

@@ -52,15 +52,16 @@ PASS, PARTIAL, FAIL, BLOCKED und NOT RUN und mach aus einem FAIL nie einen Erfol
 
 ## 0. Mein Gerät (von mir ausgefüllt)
 
-- Gerät: „Disroop Motion One“, ein Handcontroller für die Spiele dieses Repos (Thingy Tennis, Thingy Ski).
+- Gerät: „Disroop Motion One“, ein Handcontroller für die Spiele dieses Repos (Tennis, Ski).
   Er ersetzt den Nordic Thingy:52 als Bewegungssensor. Inspiration: Griff und Haptik von PlayStation-Move, Wii-Remote und
   Xbox-Controller, aber als Einhand-Gerät, das man wie einen Schlägergriff hält.
 - Kompatibilität (Pflicht): Das Gerät spricht den Teil des Thingy:52-BLE-Profils, den Bridge, Web-Spiele und Android-App nutzen
   (Advertising-Name, Services und Formate laut `docs/protocol.md`, mindestens Motion-Config `EF680401`, Quaternion `EF680404`,
   Raw `EF680406`, Euler `EF680407`, Heading `EF680409`, Taster `EF680302`, LED `EF680301`, Speaker `EF680502`, Akku `180F/2A19`).
   Bestehende Software muss OHNE Codeänderung damit spielen können.
-- Sensorik: IMU mit Beschleunigung und Gyroskop (6-Achsen), Magnetometer optional. Werte aus den Spielen ableiten
-  (siehe §6), nicht schätzen.
+- Sensorik (Vorschlag, die Spezialisten dürfen und sollen ihn erweitern oder verbessern): IMU mit Beschleunigung und
+  Gyroskop (6-Achsen), Magnetometer optional. Messbereiche aus den Spielen und aus Messdaten menschlicher Bewegungen
+  ableiten (siehe §6), nicht schätzen.
 - Akku und Laden: wiederaufladbarer LiPo-Akku mit Schutzschaltung, **Laden über USB-C** auf dem eigenen Board
   (Laderegler, Ladeanzeige, Spielen während des Ladens möglich).
 - Bedienung: mindestens ein Haupttaster (Kalibrieren, Aufschlag, Sprung), ein Ein/Aus-Konzept, RGB-LED, Summer oder kleiner
@@ -68,13 +69,20 @@ PASS, PARTIAL, FAIL, BLOCKED und NOT RUN und mach aus einem FAIL nie einen Erfol
 - Zukaufteile (nicht selbst entwickeln): Akku-Zelle, Vibrationsmotor, Schrauben/Einpressmuttern, ggf. ein vorzertifiziertes
   BLE-Modul. Gehäuse wird selbst gedruckt, Leiterplatte wird bestückt bestellt.
 - Fertigung: Gehäuse per FDM-3D-Druck (PLA oder PETG, 0,4-mm-Düse). Leiterplatte inklusive Bestückung bei einem
-  Online-Bestücker. Kandidat: JLCPCB (PCBA mit LCSC-Bauteilen); PCBWay als Alternative prüfen.
+  Online-Bestücker.
 - Mein 3D-Drucker und Slicer: Bambu Lab P2S Combo (geschlossen, Bauraum 256 × 256 × 256 mm, AMS für mehrere Farben,
   0,4-mm-Düse) mit **Bambu Studio** (Kommandozeile `bambu-studio.exe --slice`, OrcaSlicer als Alternative). Damit es auch auf anderen Bambu-Druckern passt, jedes Teil ≤ 180 × 180 × 180 mm halten
   (A1 mini); Mehrfarbigkeit nur als Option, nicht als Voraussetzung. Liefere zusätzlich ein Bambu-Studio-Projekt (.3mf mit
   Platte, Material und Profil).
-- Lieferbarkeit: Jedes Bauteil muss beim gewählten Bestücker zum Zeitpunkt der Bestellung an Lager sein.
-- Ziel-Stückzahl V1: 5 Leiterplatten, davon 2 bestückt (anpassen, falls der Bestücker anderes verlangt).
+- Bestücker, Lieferbarkeit und Preis: Evaluiere mehrere Online-Bestücker (z. B. JLCPCB mit LCSC-Teilen, PCBWay,
+  Aisler, Eurocircuits) und stelle mir **zwei bis drei Angebote** gegenüber, die alle Anforderungen erfüllen. Je Angebot:
+  - Lieferbarkeit: jedes Bauteil beim Bestücker an Lager (Lagerstand mit Datum und Quelle), Ersatzteil je kritischem
+    Bauteil, Zukaufteile (Akku, Motor, Schrauben) mit Bezugsquelle in die Schweiz.
+  - Preis: Leiterplatte, Bestückung, Bauteile, Einrichtkosten, Versand und Zoll in die Schweiz, Total und Preis pro Gerät.
+  - Lieferzeit bis zu mir, Mindestmengen und Einschränkungen (z. B. einseitige Bestückung, Bauteile auf Bestellung).
+  - Empfehlung mit Begründung; ich wähle aus. Bestellt wird nichts ohne meine Freigabe.
+- Stückzahl V1: mindestens 2 bestückte Geräte, sinnvoll bis 5. Nur wenn die Mindestbestellung des Bestückers grösser ist
+  oder es im Vergleich deutlich günstiger pro Stück wird, bis höchstens 10.
 - Projektordner: `devices/motion-one/` in diesem Repo.
 
 Alles in Abschnitt 0 ist eine Startannahme, keine geprüfte Spezifikation.
@@ -112,7 +120,17 @@ Lies zuerst `README.md`, `RESUME.md`, `docs/protocol.md`, `docs/TENNIS.md`, `doc
 Halte dich an die Regeln dieses Repos:
 - Alles wird im Devcontainer-Image gebaut (`.devcontainer/`, Aufruf über `./project …`). Lokal wird nichts installiert.
   Erweitere das Image bzw. lege ein eigenes Geräte-Image an, statt Tools auf dem Host zu installieren.
-- TDD, Clean Code, Smoke-Tests.
+- Best Practices in jeder Disziplin, nicht nur im Code. Jede Disziplin hat eine kurze, prüfbare Checkliste (in
+  `requirements/`) und einen Smoke-Test bzw. Review, bevor ihr Ergebnis weitergegeben wird:
+  - Code und Firmware: TDD, Clean Code, Smoke-Tests.
+  - Schema: ERC sauber, Datenblatt-Referenzschaltungen, Schutz (ESD, Verpolung, Akku), Testpunkte.
+  - Leiterplatte: DRC sauber, Herstellerregeln des gewählten Bestückers (DFM), Antennen-Freiraum, Wärme, Bestückungsseite.
+  - Bauteilanalyse: Datenblattwerte belegt, Toleranzen und Derating, Lieferbarkeit und Alternativen.
+  - 3D-Druck: druckbar ohne oder mit wenig Stützmaterial, Wandstärken, Toleranzen für Passungen, getesteter Slice-Lauf.
+  - Ergonomie: Griff, Gewicht und Schwerpunkt, Daumenerreichbarkeit, keine scharfen Kanten, Links- und Rechtshänder.
+  - Erscheinung: ansprechendes, stimmiges Design in Disroop-Farben (`bridge/web/static/styles.css`), saubere Oberflächen,
+    Renderings, die den Anspruch zeigen.
+  - Dokumentation und Marketing: richtig, verständlich, konsistent mit dem gebauten Stand; keine Behauptung ohne Beleg.
 - Nach jedem sinnvollen Schritt `JOURNAL.md`, `PROGRESS.md`, `RESUME.md` nachführen, direkt auf `main` committen und pushen.
   Commit-Trailer: `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`.
 
@@ -214,10 +232,16 @@ Konfigurationseintrag, ein Mock-Ergebnis oder ein bloss gestarteter Prozess ist 
 Bevor du optimierst, schreibe Anforderungen mit IDs und Verifikationsmethode. Leite die Zahlen aus dem Repo ab und zitiere
 die Stelle (QUELLE), statt zu schätzen. Bekannte Startwerte:
 - Bewegungsrate: Spiele nutzen 100 Hz, Minimum 50 Hz (`docs/TENNIS.md`). Ziel: 100 Hz stabil über BLE, intern höhere ODR.
-- Gyroskop: Schlag ab ~350 °/s, Tempo bis ~1200 °/s (`docs/TENNIS.md`). Messbereich mindestens ±2000 °/s.
+- Gyroskop: Das Spiel erkennt einen Schlag ab ~350 °/s, die heutige Tempo-Skala endet bei ~1200 °/s (`docs/TENNIS.md`).
+  Das ist NICHT die Auslegungsgrenze. Lege den Messbereich aus einer Analyse realer menschlicher Winkelgeschwindigkeiten
+  aus: Recherchiere Messwerte (Handgelenk und Unterarm bei Tennis-Aufschlag und Vorhand, schnelle Ski- bzw. Gesten-
+  bewegungen) aus Studien oder Sensordaten, zitiere die Quellen, und nimm die Spitzenwerte plus Reserve. Diese Werte liegen
+  oft deutlich über 2000 °/s; wähle die IMU so, dass sie nicht übersteuert (z. B. ±4000 °/s), und begründe die Wahl
+  gegen Auflösung und Rauschen.
   Achtung: das Thingy-Rohformat (i16 `/32`) begrenzt auf ±1024 °/s. Liefere das kompatible Format UND einen
   dokumentierten erweiterten Kanal ohne diese Grenze; die Erweiterung der Bridge ist ein separater Change.
-- Beschleunigung: Ski-Sprung bei Ruck > 2,1 g (`docs/SKI.md`); Schläge erzeugen deutlich mehr. Bereich mindestens ±16 g.
+- Beschleunigung: Ski-Sprung bei Ruck > 2,1 g (`docs/SKI.md`); Schläge erzeugen deutlich mehr. Bereich ebenfalls aus
+  recherchierten Messwerten ableiten (Startwert mindestens ±16 g; prüfe, ob ±32 g nötig ist).
 - Lage: Lenken über Roll mit 3° Totzone, voller Einschlag bei ~32° (`docs/SKI.md`). Rauschen und Drift der Orientierung
   müssen deutlich unter der Totzone liegen; Sensorfusion (Quaternion) im Gerät.
 - Latenz: heute ≈ 30–60 ms BLE (`docs/TENNIS.md`). Ziel: Latenz im Gerät (Sensor → Notification) < 10 ms; Budget bis zum
@@ -274,7 +298,9 @@ Bauteile und Beschaffung:
   (bei JLCPCB: Basic Parts vor Extended Parts).
 - Lieferbarkeit: Für jede Position Bestand, Preis, Teilenummer, Abfragezeitpunkt und Quelle festhalten. Mindestbestand
   ≥ 10 × Bedarf. Für jedes kritische Teil ein geprüftes Alternativteil.
-- Kostenaufstellung für 5 Platinen bzw. 2 bestückte, inkl. Einrichtungskosten und Versand (Angebot oder Rechner des Bestückers als QUELLE).
+- Angebotsvergleich nach §0: zwei bis drei Bestücker, die alles erfüllen, für die gewählte Stückzahl (2 bis 5, höchstens 10)
+  inkl. Einrichtungskosten, Versand und Zoll in die Schweiz (Angebot oder Rechner des Bestückers als QUELLE). Die Design-
+  Regeln des empfohlenen Bestückers gelten für ERC/DRC; Abweichungen bei den anderen Kandidaten benennen.
 
 Stimme Board-Umriss, Bohrungen, Bauhöhen, Steckerposition, Taster- und LED-Positionen mit Mechanik ab. ERC und DRC mit den
 Design-Regeln des Bestückers laufen lassen und jede Ausnahme begründen. Bestanden-DRC ist kein Hardwaretest.

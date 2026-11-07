@@ -92,7 +92,7 @@ Bytes: `D4 0F 1B` + ASCII `android.com:pkg` + ASCII `ch.disroop.sensorplayground
 | POST | `/api/mic` | Body `{"enabled":true\|false}` → 202, Mikrofon/Lautstärke ein/aus; im Spielmodus `enabled:true` → 409 `{"error":"Mikrofon ist im Spielmodus gesperrt (Bluetooth-Bandbreite)"}` |
 | GET | `/api/motion` | WebSocket, schneller Motion-Kanal für Spiele (siehe „Motion-Kanal“) |
 | POST | `/api/beep` | Body `{"kind":"hit"\|"point"\|"miss"}` (leer = `hit`) → 204: kurzer Ton + LED-Farbe, max. 1 pro 100 ms (sonst 429) |
-| GET | `/tennis/` | Thingy Tennis (eingebettet aus `bridge/internal/tennisapp/dist`, gebaut aus `tennis/`), 404 mit Bauhinweis, wenn nicht eingebaut |
+| GET | `/tennis/` | Tennis (eingebettet aus `bridge/internal/tennisapp/dist`, gebaut aus `tennis/`), 404 mit Bauhinweis, wenn nicht eingebaut |
 | GET | `/healthz` | `ok` |
 
 Fehler: 400 ungültige Eingabe, 405 falsche Methode, 409 im Spielmodus gesperrt, 502 Schreibfehler am Gerät, 503 nicht verbunden. CORS `*`.

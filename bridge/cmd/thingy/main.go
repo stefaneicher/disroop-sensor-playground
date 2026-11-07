@@ -57,7 +57,7 @@ type options struct {
 const usageText = `Aufruf: thingy [tennis|scan|song|nfc] [Optionen]
 
   (ohne Befehl)  verbinden, Live-Anzeige im Terminal und Web-GUI auf http://127.0.0.1:8052
-  tennis         wie ohne Befehl, öffnet zusätzlich Thingy Tennis (http://127.0.0.1:8052/tennis/) im Browser
+  tennis         wie ohne Befehl, öffnet zusätzlich Tennis (http://127.0.0.1:8052/tennis/) im Browser
   scan           Thingys in Reichweite auflisten
   song           verbinden und „Highway to Hell“ einmal abspielen
   nfc            NFC-Tag auf die Android-App umschreiben (Backup zuerst), --restore schreibt das Backup zurück
@@ -254,7 +254,7 @@ func live(ctx context.Context, o options, stdout io.Writer) error {
 	logs.Logf("Web-GUI: %s", url)
 	if o.command == "tennis" {
 		game := fmt.Sprintf("http://127.0.0.1:%d/tennis/", o.port)
-		logs.Logf("Thingy Tennis: %s", game)
+		logs.Logf("Tennis: %s", game)
 		if !o.noBrowser {
 			if err := openBrowser(game); err != nil {
 				logs.Logf("Browser öffnen fehlgeschlagen (%v) – bitte %s selbst öffnen", err, game)

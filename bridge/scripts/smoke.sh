@@ -70,7 +70,7 @@ sleep 0.2
 [[ "$(beep '{"kind":"boing"}')" == 400 ]] || fail "POST /api/beep with unknown kind not rejected"
 ok "POST /api/beep 204/400"
 
-curl -fs "$BASE/tennis/" | grep -q 'Thingy Tennis' || fail "/tennis/ does not serve the game"
+curl -fs "$BASE/tennis/" | grep -q 'Tennis' || fail "/tennis/ does not serve the game"
 [[ "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/tennis/vendor/three/three.module.js")" == 200 ]] || fail "/tennis/ vendored three.js missing"
 ok "/tennis/ serves the game with vendored three.js"
 

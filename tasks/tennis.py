@@ -1,4 +1,4 @@
-"""Thingy Tennis (tennis/): play with the Thingy as racket, build, test, screenshot."""
+"""Tennis (tennis/): play with the Thingy as racket, build, test, screenshot."""
 from __future__ import annotations
 
 from invoke import Exit, task
@@ -17,7 +17,7 @@ def play_command(sim: bool, port: int, no_browser: bool = False, no_tui: bool = 
             "no_browser": "Browser nicht öffnen", "no_tui": "nur Meldungen statt Live-Anzeige",
             "build": "thingy.exe vorher neu bauen", "force": FORCE_HELP})
 def play(c, sim=False, port=None, no_browser=False, no_tui=False, build=False, force=False):
-    """Startet die Bridge und öffnet Thingy Tennis im Browser (Thingy = Schläger, --sim ohne Hardware)."""
+    """Startet die Bridge und öffnet Tennis im Browser (Thingy = Schläger, --sim ohne Hardware)."""
     port = int(port or (SIM_PORT if sim else LIVE_PORT))
     if not sim:
         check_hw_lock(force)
@@ -31,7 +31,7 @@ def play(c, sim=False, port=None, no_browser=False, no_tui=False, build=False, f
 
 @task(name="open", help={"port": "8052 = Bridge live, 8060 = Simulator"})
 def open_(c, port=LIVE_PORT):
-    """Öffnet Thingy Tennis einer laufenden Bridge im Windows-Browser."""
+    """Öffnet Tennis einer laufenden Bridge im Windows-Browser."""
     if not port_in_use(c, int(port)):
         raise Exit(f"❌ Keine Bridge auf Port {port} – zuerst ./t tennis.play (oder --sim).", code=1)
     open_browser(c, url(int(port), "/tennis/"))

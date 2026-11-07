@@ -194,7 +194,7 @@ func get(t *testing.T, url string) (int, string, string) {
 
 func TestTennisAppIsServedUnderTennis(t *testing.T) {
 	f := newGameFixture(t, Config{Tennis: fstest.MapFS{
-		"index.html":                 {Data: []byte("<title>Thingy Tennis</title>")},
+		"index.html":                 {Data: []byte("<title>Tennis</title>")},
 		"js/main.js":                 {Data: []byte("export {}")},
 		"vendor/three/three.core.js": {Data: []byte("export {}")},
 	}})
@@ -204,7 +204,7 @@ func TestTennisAppIsServedUnderTennis(t *testing.T) {
 	if code, _, loc := get(t, f.srv.URL+"/ski"); code != http.StatusMovedPermanently || loc != "/tennis/ski/" {
 		t.Fatalf("/ski: %d %q", code, loc)
 	}
-	if code, body, _ := get(t, f.srv.URL+"/tennis/"); code != 200 || !strings.Contains(body, "Thingy Tennis") {
+	if code, body, _ := get(t, f.srv.URL+"/tennis/"); code != 200 || !strings.Contains(body, "Tennis") {
 		t.Fatalf("/tennis/: %d %q", code, body)
 	}
 	for _, p := range []string{"/tennis/js/main.js", "/tennis/vendor/three/three.core.js"} {

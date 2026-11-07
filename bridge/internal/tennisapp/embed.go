@@ -1,4 +1,4 @@
-// Package tennisapp embeds the Thingy Tennis game (tennis/). `./project tennis build` copies the
+// Package tennisapp embeds the Tennis game (tennis/). `./project tennis build` copies the
 // built app into dist/ (gitignored, except .keep); without it /tennis/ shows a build hint.
 package tennisapp
 

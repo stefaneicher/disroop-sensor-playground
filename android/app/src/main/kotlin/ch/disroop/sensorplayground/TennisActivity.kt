@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 /**
- * Thingy Tennis: the browser game from `tennis/` (bundled as assets) in a WebView. The Thingy is read directly
+ * Tennis: the browser game from `tennis/` (bundled as assets) in a WebView. The Thingy is read directly
  * over BLE (100 Hz game mode) and its frames are pushed into the page, which replaces the bridge's WebSocket.
  */
 class TennisActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-/** Thingy Tennis: wires the motion link, controller, game core, arena, HUD, menu and sounds. */
+/** Tennis: wires the motion link, controller, game core, arena, HUD, menu and sounds. */
 import { MotionController } from './core/controller.ts';
 import { DIFFICULTIES, type Difficulty } from './core/cpu.ts';
 import { Autopilot, Game, type GameEvent, type GameSwing } from './core/game.ts';

@@ -100,9 +100,9 @@ func (s *server) beep(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-const tennisMissing = `<!doctype html><meta charset="utf-8"><title>Thingy Tennis</title>
+const tennisMissing = `<!doctype html><meta charset="utf-8"><title>Tennis</title>
 <body style="font-family:system-ui;background:#111827;color:#e5e7eb;padding:2rem">
-<h1>Thingy Tennis ist nicht eingebaut</h1>
+<h1>Tennis ist nicht eingebaut</h1>
 <p>Diese thingy.exe wurde ohne die Tennis-App gebaut. Bauen mit <code>./project tennis build</code>, danach <code>./project bridge build</code>.</p>`
 
 // tennisHandler serves the embedded game under /tennis/, or a build hint if it was not built in.

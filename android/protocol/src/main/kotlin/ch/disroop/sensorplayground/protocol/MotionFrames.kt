@@ -3,7 +3,7 @@ package ch.disroop.sensorplayground.protocol
 import java.util.Locale
 
 /**
- * Folds quaternion, raw motion, button and tap notifications into the frames of the Thingy Tennis game
+ * Folds quaternion, raw motion, button and tap notifications into the frames of the Tennis game
  * (same JSON as the bridge's `/api/motion`, see docs/protocol.md). A frame is produced per raw-motion
  * notification, and at once for a button change; quaternion-only updates are published while no raw data arrives.
  */

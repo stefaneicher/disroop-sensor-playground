@@ -58,7 +58,7 @@ class AndroidConnectionFactory(private val context: Context) : ConnectionFactory
 
     override fun ble(): ThingyConnection = BleThingyConnection(context)
 
-    /** Connection for Thingy Tennis: 100 Hz quaternion + raw motion only. */
+    /** Connection for Tennis: 100 Hz quaternion + raw motion only. */
     fun game(): ThingyConnection = BleThingyConnection(context, StartSequence.game())
     override fun simulator(): ThingyConnection = SimulatedThingy()
 }

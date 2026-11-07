@@ -1,10 +1,10 @@
-# Thingy Tennis
+# Tennis
 
 Tennis im Browser, der **Thingy:52 ist der Schläger**. Ein eigenes Programm im Repo (`tennis/`). Die Bridge liefert es unter
 http://127.0.0.1:8052/tennis/ aus, die Bewegungsdaten kommen über den schnellen WebSocket `/api/motion` (100 Hz).
 Ohne Thingy spielst du mit der Tastatur, und der Simulator schwingt für Demos.
 
-![Thingy Tennis](img/tennis.png)
+![Tennis](img/tennis.png)
 *Demo-Rally, 3rd-Person-Kamera (`./project tennis screenshot`).*
 
 ## Starten

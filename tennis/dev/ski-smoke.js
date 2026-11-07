@@ -1,4 +1,4 @@
-// Headless Chromium check of Thingy Ski (tennis/dist/ski): renders both courses, no JS errors, the autopilot descends.
+// Headless Chromium check of Ski (tennis/dist/ski): renders both courses, no JS errors, the autopilot descends.
 // Usage (repo root): node tennis/dev/ski-smoke.js [--shots docs/img]  (writes ski-lauberhorn.png, ski-streif.png, ski-cockpit.png, ski-tv.png)
 import { createServer } from 'node:http';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';

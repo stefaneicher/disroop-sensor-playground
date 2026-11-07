@@ -47,7 +47,7 @@ type Config struct {
 	Motion        *motion.Hub   // fast motion channel GET /api/motion (nil = 404)
 	Beep          BeepControl   // POST /api/beep (nil = 404)
 	BeepInterval  time.Duration // minimum time between beeps (default 100 ms), faster requests get 429
-	Tennis        fs.FS         // the Thingy Tennis app under /tennis/ (nil = not served)
+	Tennis        fs.FS         // the Tennis app under /tennis/ (nil = not served)
 }
 
 type server struct {
