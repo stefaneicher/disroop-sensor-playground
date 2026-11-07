@@ -41,6 +41,8 @@ android {
         localeFilters += setOf("de", "en")
     }
 
+    sourceSets.getByName("main").assets.srcDir(rootProject.file("../tennis/dist"))
+
     buildFeatures {
         compose = true
     }

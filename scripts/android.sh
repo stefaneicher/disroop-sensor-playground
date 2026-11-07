@@ -27,12 +27,17 @@ Usage: ./project android <command>
 U
 }
 
+# The Tennis game is bundled into the APK as assets (tennis/dist).
+tennis_dist() { "$ROOT/scripts/tennis.sh" build; }
+
 cmd="${1:-help}"
 case "$cmd" in
   test)
+    tennis_dist
     indev "$GRADLE test :app:lintDebug"
     ;;
   build)
+    tennis_dist
     indev "$GRADLE :app:assembleDebug && mkdir -p /workspace/build && cp $APK_SRC /workspace/$APK_DST"
     ls -l "$ROOT/$APK_DST"
     ;;

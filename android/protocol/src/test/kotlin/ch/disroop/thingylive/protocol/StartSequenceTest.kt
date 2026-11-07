@@ -51,4 +51,13 @@ class StartSequenceTest {
     @Test fun `disabling the microphone only unsubscribes it`() {
         assertEquals(listOf(GattStep.Unsubscribe(ThingyUuids.MICROPHONE)), StartSequence.microphone(enabled = false))
     }
+
+    @Test fun `game mode runs motion at 100 Hz and skips euler, heading, compass and environment`() {
+        val game = StartSequence.game()
+        assertArrayEquals(ThingyCommands.motionConfig(1000, 1000, 1000, 100, true), (game[0] as GattStep.Write).value)
+        assertEquals(
+            setOf(ThingyUuids.BUTTON, ThingyUuids.TAP, ThingyUuids.RAW_MOTION, ThingyUuids.QUATERNION),
+            game.filterIsInstance<GattStep.Subscribe>().map { it.uuid }.toSet(),
+        )
+    }
 }

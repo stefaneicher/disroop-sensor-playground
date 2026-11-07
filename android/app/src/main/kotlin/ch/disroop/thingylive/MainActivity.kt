@@ -82,6 +82,8 @@ class MainActivity : ComponentActivity(), ScreenActions {
     override fun onSongVolume(volume: Int) = viewModel.setSongVolume(volume)
     override fun onMicrophoneChange(enabled: Boolean) = viewModel.setMicrophone(enabled)
 
+    override fun onOpenTennis() = startActivity(Intent(this, TennisActivity::class.java))
+
     override fun onFixLink(reason: LinkState.Reason) {
         when (reason) {
             LinkState.Reason.NO_PERMISSION -> openAppSettings()

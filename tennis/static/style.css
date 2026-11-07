@@ -60,3 +60,4 @@ body.demo .keys, body.demo .hint { display: none; }
 .back-link { pointer-events: auto; align-self: flex-start; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: rgba(17, 24, 39, .82); color: var(--lime); font: 700 .85rem system-ui, sans-serif; text-decoration: none; }
 .back-link:hover { background: var(--lime); color: #111827; }
 .menu-back { display: block; margin-top: 10px; text-align: center; }
+html.native .back-link { display: none; }

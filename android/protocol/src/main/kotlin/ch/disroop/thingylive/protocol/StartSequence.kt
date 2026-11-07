@@ -29,6 +29,7 @@ sealed interface GattStep {
 object StartSequence {
     private const val ENV_INTERVAL_MS = 1000
     private const val GAS_MODE_1S = 1
+    const val GAME_HZ = 100
 
     private val required = listOf(
         ThingyUuids.TEMPERATURE, ThingyUuids.PRESSURE, ThingyUuids.HUMIDITY, ThingyUuids.GAS, ThingyUuids.COLOR,
@@ -48,6 +49,22 @@ object StartSequence {
         GattStep.Write(ThingyUuids.SOUND_CONFIG, ThingyCommands.soundConfig()),
         GattStep.Read(ThingyUuids.BATTERY_LEVEL),
     ) + required.map { GattStep.Subscribe(it) } + optional.map { GattStep.Subscribe(it, optional = true) }
+
+    /**
+     * Thingy Tennis: only quaternion, raw motion, button and tap at [hz]. Euler, compass/heading and the
+     * environment sensors stay off, otherwise ~400 notifications/s overload the BLE link (docs/TENNIS.md).
+     */
+    fun game(hz: Int = GAME_HZ): List<GattStep> = listOf(
+        GattStep.Write(
+            ThingyUuids.MOTION_CONFIG,
+            ThingyCommands.motionConfig(pedometerMs = 1000, temperatureMs = 1000, compassMs = 1000, motionHz = hz, wakeOnMotion = true),
+        ),
+        GattStep.Write(ThingyUuids.SOUND_CONFIG, ThingyCommands.soundConfig()),
+        GattStep.Subscribe(ThingyUuids.BUTTON),
+        GattStep.Subscribe(ThingyUuids.TAP, optional = true),
+        GattStep.Subscribe(ThingyUuids.RAW_MOTION),
+        GattStep.Subscribe(ThingyUuids.QUATERNION),
+    )
 
     /**
      * "Lautstärke messen": the firmware streams ADPCM while the microphone CCCD is enabled. Enabling

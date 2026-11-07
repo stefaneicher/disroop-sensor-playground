@@ -125,3 +125,7 @@ und ein vorher eingeschaltetes Mikrofon läuft wieder.
 - Vor-/Rückhand hängt an der Haltung bei der Kalibrierung; nach dem Umgreifen neu kalibrieren (Taster lang drücken).
 - Nur Einzel, ein Satz, eine Person gegen die CPU. Kein Mehrspieler.
 - Der Software-Renderer im Headless-Test ist langsam; der Smoke prüft deshalb Spielzeit statt Bildrate.
+
+## Android-App
+
+Die App enthält das Spiel (`tennis/dist` als Assets, Button „🎾 Tennis spielen“). `TennisActivity` zeigt es in einer WebView und liest den Thingy direkt per BLE (Spielmodus: 100 Hz, nur Quaternion und Raw). Frames kommen per `window.__thingyFrame`, Beeps/LED gehen per `ThingyNative.beep` an den Thingy. Der Thingy hat nur eine Verbindung: PC-Bridge und App nicht gleichzeitig. Die APK gibt es als Artifact `thingylive-debug` im CI-Lauf auf main (bzw. am Release bei Tag `v*`).

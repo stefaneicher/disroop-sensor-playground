@@ -57,6 +57,9 @@ class AndroidConnectionFactory(private val context: Context) : ConnectionFactory
             context.getSystemService(BluetoothManager::class.java)?.adapter != null
 
     override fun ble(): ThingyConnection = BleThingyConnection(context)
+
+    /** Connection for Thingy Tennis: 100 Hz quaternion + raw motion only. */
+    fun game(): ThingyConnection = BleThingyConnection(context, StartSequence.game())
     override fun simulator(): ThingyConnection = SimulatedThingy()
 }
 
@@ -65,7 +68,10 @@ class AndroidConnectionFactory(private val context: Context) : ConnectionFactory
  * [StartSequence] through a serialized [GattQueue] and reconnects automatically.
  */
 @SuppressLint("MissingPermission") // run() checks BlePermissions before any Bluetooth call.
-class BleThingyConnection(private val context: Context) : ThingyConnection {
+class BleThingyConnection(
+    private val context: Context,
+    private val startSteps: List<GattStep> = StartSequence.steps(),
+) : ThingyConnection {
     override val source = Snapshot.Source.BLE
     private val _link = MutableStateFlow<LinkState>(LinkState.Idle)
     override val link = _link.asStateFlow()
@@ -187,7 +193,7 @@ class BleThingyConnection(private val context: Context) : ThingyConnection {
         val disconnected = CompletableDeferred<Unit>()
         lateinit var gatt: BluetoothGatt
 
-        suspend fun configure() = execute(StartSequence.steps())
+        suspend fun configure() = execute(startSteps)
 
         /** Runs [steps] in order; false if a non-optional step failed. */
         suspend fun execute(steps: List<GattStep>): Boolean {

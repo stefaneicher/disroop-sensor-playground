@@ -50,5 +50,12 @@
                     android:scheme="vnd.android.nfc" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".TennisActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout"
+            android:label="Thingy Tennis"
+            android:screenOrientation="sensorLandscape" />
     </application>
 </manifest>

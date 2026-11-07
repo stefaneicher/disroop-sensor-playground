@@ -55,6 +55,7 @@ interface ScreenActions {
     fun onSongVolume(volume: Int)
     fun onMicrophoneChange(enabled: Boolean)
     fun onFixLink(reason: LinkState.Reason)
+    fun onOpenTennis() {}
 }
 
 @Composable
@@ -64,6 +65,7 @@ fun ThingyScreen(state: UiState, actions: ScreenActions) {
         LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = padding) {
             item { Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 StatusCard(state, actions)
+                TennisCard(actions)
                 SongCard(state, actions)
                 EnvironmentCard(s.environment)
                 MotionCard(state)
@@ -94,6 +96,14 @@ private fun DisroopTopBar() = Column {
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Palette.background, titleContentColor = Palette.text),
     )
     HorizontalDivider(thickness = 2.dp, color = Palette.lime700)
+}
+
+@Composable
+private fun TennisCard(actions: ScreenActions) {
+    SectionCard("Thingy Tennis") {
+        Text("Spiele Tennis auf dem Handy: der Thingy ist der Schläger.", color = Palette.muted)
+        DisroopButton(onClick = actions::onOpenTennis) { Text("🎾 Tennis spielen") }
+    }
 }
 
 @Composable
