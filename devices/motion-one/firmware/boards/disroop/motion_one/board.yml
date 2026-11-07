@@ -1,0 +1,5 @@
+board:
+  name: motion_one
+  full_name: Disroop Motion One (Ebyte E73-2G4M08S1C, nRF52840)
+  socs:
+    - name: nrf52840

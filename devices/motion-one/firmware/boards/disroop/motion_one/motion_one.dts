@@ -1,0 +1,42 @@
+/* Disroop Motion One V1: nRF52840 im Ebyte E73-2G4M08S1C, IMU ICM-45686 an SPI.
+ * ALLE Pins stehen in motion_one-pins.dtsi (Platzhalter bis PINOUT_V1.json). */
+/dts-v1/;
+#include <nordic/nrf52840_qiaa.dtsi>
+#include <nordic/nrf52840_partition_uf2_sdv6.dtsi>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+#include <zephyr/dt-bindings/pwm/pwm.h>
+#include <zephyr/dt-bindings/adc/nrf-saadc.h>
+#include <zephyr/dt-bindings/gpio/gpio.h>
+
+/ {
+	model = "Disroop Motion One V1";
+	compatible = "disroop,motion-one";
+
+	chosen {
+		zephyr,console = &uart0;
+	};
+};
+
+/* E73: ANNAHME kein 32-kHz-Quarz bestueckt/angeschlossen -> RC; DCDC-Bauteile im Modul unbekannt -> LDO (Default) */
+&lfclk {
+	k32src = "rc";
+	k32src-accuracy-ppm = <500>;
+};
+
+&uicr {
+	gpio-as-nreset;
+};
+
+&gpiote {
+	status = "okay";
+};
+
+&gpio0 {
+	status = "okay";
+};
+
+&gpio1 {
+	status = "okay";
+};
+
+#include "motion_one-pins.dtsi"

@@ -1,0 +1,167 @@
+/*
+ * EINZIGE Datei mit Pinbelegung fuer Motion One V1.
+ * STATUS: PLATZHALTER (ANNAHME) - devices/motion-one/electronics/PINOUT_V1.json existierte beim Build nicht.
+ * Bei Uebernahme NUR die Werte in dieser Datei aendern (P0.xx = NRF_PSEL(..., 0, xx) bzw. <&gpio0 xx ...>).
+ * Wahl der Platzhalter: LED/Taster wie nRF52840-DK (PCA10056: LED1..3 P0.13..15 aktiv-low, Button1 P0.11),
+ * damit der Adafruit-Bootloader-Build "pca10056" ohne eigene Bootloader-Board-Definition Status/DFU zeigt.
+ * Gemieden: P0.09/P0.10 (NFC), P0.18 (Reset), P0.00/P0.01 (32k-Quarz).
+ */
+
+&pinctrl {
+	spi3_default: spi3_default {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 26)>,  /* PLATZHALTER ICM SCLK */
+				<NRF_PSEL(SPIM_MOSI, 0, 27)>, /* PLATZHALTER ICM SDI */
+				<NRF_PSEL(SPIM_MISO, 0, 6)>;  /* PLATZHALTER ICM SDO */
+		};
+	};
+	spi3_sleep: spi3_sleep {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 26)>, <NRF_PSEL(SPIM_MOSI, 0, 27)>,
+				<NRF_PSEL(SPIM_MISO, 0, 6)>;
+			low-power-enable;
+		};
+	};
+	pwm0_default: pwm0_default {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 0, 13)>, /* PLATZHALTER LED rot */
+				<NRF_PSEL(PWM_OUT1, 0, 14)>, /* PLATZHALTER LED gruen */
+				<NRF_PSEL(PWM_OUT2, 0, 15)>; /* PLATZHALTER LED blau */
+			nordic,invert;
+		};
+	};
+	pwm0_sleep: pwm0_sleep {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 0, 13)>, <NRF_PSEL(PWM_OUT1, 0, 14)>,
+				<NRF_PSEL(PWM_OUT2, 0, 15)>;
+			low-power-enable;
+		};
+	};
+	pwm1_default: pwm1_default {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 0, 22)>; /* PLATZHALTER Summer (Transistor) */
+		};
+	};
+	pwm1_sleep: pwm1_sleep {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 0, 22)>;
+			low-power-enable;
+		};
+	};
+	uart0_default: uart0_default {
+		group1 {
+			psels = <NRF_PSEL(UART_TX, 0, 24)>; /* PLATZHALTER Log-TX (Testpad) */
+		};
+	};
+	uart0_sleep: uart0_sleep {
+		group1 {
+			psels = <NRF_PSEL(UART_TX, 0, 24)>;
+			low-power-enable;
+		};
+	};
+};
+
+&spi3 {
+	compatible = "nordic,nrf-spim";
+	status = "okay";
+	pinctrl-0 = <&spi3_default>;
+	pinctrl-1 = <&spi3_sleep>;
+	pinctrl-names = "default", "sleep";
+	cs-gpios = <&gpio0 8 GPIO_ACTIVE_LOW>; /* PLATZHALTER ICM CS */
+
+	imu: icm45686@0 {
+		compatible = "disroop,icm45686";
+		reg = <0>;
+		spi-max-frequency = <8000000>; /* ICM max. 24 MHz (QUELLE hal_tdk/Zephyr-Binding), 8 MHz Reserve */
+		int1-gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>; /* PLATZHALTER ICM INT1 */
+	};
+};
+
+&pwm0 {
+	status = "okay";
+	pinctrl-0 = <&pwm0_default>;
+	pinctrl-1 = <&pwm0_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&pwm1 {
+	status = "okay";
+	pinctrl-0 = <&pwm1_default>;
+	pinctrl-1 = <&pwm1_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&uart0 {
+	compatible = "nordic,nrf-uarte";
+	status = "okay";
+	current-speed = <115200>;
+	pinctrl-0 = <&uart0_default>;
+	pinctrl-1 = <&uart0_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&adc {
+	status = "okay";
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	channel@0 {
+		reg = <0>;
+		zephyr,gain = "ADC_GAIN_1_6";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 40)>;
+		zephyr,input-positive = <NRF_SAADC_AIN2>; /* PLATZHALTER VBAT-Teiler an P0.04 */
+		zephyr,resolution = <12>;
+		zephyr,oversampling = <4>;
+	};
+};
+
+/ {
+	pwmleds {
+		compatible = "pwm-leds";
+		led_red: led_red {
+			pwms = <&pwm0 0 PWM_MSEC(1) PWM_POLARITY_NORMAL>;
+		};
+		led_green: led_green {
+			pwms = <&pwm0 1 PWM_MSEC(1) PWM_POLARITY_NORMAL>;
+		};
+		led_blue: led_blue {
+			pwms = <&pwm0 2 PWM_MSEC(1) PWM_POLARITY_NORMAL>;
+		};
+		buzzer: buzzer {
+			pwms = <&pwm1 0 PWM_USEC(2273) PWM_POLARITY_NORMAL>;
+		};
+	};
+
+	buttons {
+		compatible = "gpio-keys";
+		button0: button_0 {
+			gpios = <&gpio0 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; /* PLATZHALTER Taster */
+			zephyr,code = <INPUT_KEY_0>;
+		};
+	};
+
+	vibration {
+		compatible = "gpio-leds";
+		vib0: vib_0 {
+			gpios = <&gpio0 23 GPIO_ACTIVE_HIGH>; /* PLATZHALTER Vibrationsmotor (optional, MOSFET) */
+		};
+	};
+
+	zephyr,user {
+		io-channels = <&adc 0>;
+		/* PLATZHALTER/ANNAHME VBAT-Teiler 1 MOhm / 1 MOhm -> Faktor 2 */
+		vbat-divider-num = <2>;
+		vbat-divider-den = <1>;
+	};
+
+	aliases {
+		led-red = &led_red;
+		led-green = &led_green;
+		led-blue = &led_blue;
+		buzzer = &buzzer;
+		sw0 = &button0;
+		vib0 = &vib0;
+		imu0 = &imu;
+	};
+};

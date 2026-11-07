@@ -1,0 +1,8 @@
+description: TDK ICM-45686 IMU an SPI (schlanker App-Treiber, ohne hal_tdk)
+compatible: "disroop,icm45686"
+include: spi-device.yaml
+properties:
+  int1-gpios:
+    type: phandle-array
+    required: true
+    description: INT1 (Push-Pull, aktiv high), FIFO-Watermark und Wake-on-Motion
