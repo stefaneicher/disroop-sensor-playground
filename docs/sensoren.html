@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thingy:52 – Sensoren und Komponenten</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/daisyui.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/themes.css">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.2.4/dist/index.global.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :where(.grid, .flex) > * { min-width: 0; }
+  :where(p, h1, h2, h3, li, td, th, .badge, a) { overflow-wrap: anywhere; }
+  body { background: var(--color-base-200); color: var(--color-base-content); }
+  .env { border-top: 4px solid #0ea5e9; } .mot { border-top: 4px solid #8b5cf6; }
+  .snd { border-top: 4px solid #f97316; } .ioc { border-top: 4px solid #16a34a; } .rad { border-top: 4px solid #e11d48; }
+</style>
+</head>
+<body class="min-h-screen">
+<main class="max-w-6xl mx-auto p-4 md:p-8 space-y-8">
+
+<header class="space-y-2">
+  <div class="badge badge-neutral">Komponenten-Katalog</div>
+  <h1 class="text-3xl md:text-4xl font-bold">Thingy:52: jeder Sensor, was er misst und wie genau</h1>
+  <p class="text-lg opacity-80 max-w-3xl"><b>Kurzfassung:</b> 5 Chips liefern Messwerte (Klima, Druck, Luftqualität, Licht, Bewegung), dazu Mikrofon, Lautsprecher, LED, Taster und NFC.
+  Die Werte stammen aus den Herstellerdatenblättern (typische Angaben, nicht garantiert). Ob eine Grösse im Dashboard live erscheint, steht jeweils unten in der Karte.</p>
+  <div class="flex flex-wrap gap-2 pt-1">
+    <span class="badge badge-info">Umwelt</span><span class="badge" style="background:#8b5cf6;color:#fff">Bewegung</span>
+    <span class="badge badge-warning">Ton</span><span class="badge badge-success">Ein-/Ausgabe</span><span class="badge badge-error">Funk</span>
+  </div>
+</header>
+
+<section class="space-y-3">
+  <h2 class="text-2xl font-bold">Umwelt</h2>
+  <div class="grid md:grid-cols-2 gap-4">
+
+  <article class="card bg-base-100 shadow env"><div class="card-body">
+    <h3 class="card-title">🌡 HTS221 <span class="badge badge-outline">ST</span></h3>
+    <p>Temperatur und relative Luftfeuchte.</p>
+    <table class="table table-sm"><tbody>
+      <tr><th>Bereich</th><td>Temperatur −40…+120 °C · Feuchte 0…100 % rH</td></tr>
+      <tr><th>Genauigkeit</th><td>±0.5 °C (15–40 °C) · ±3.5 % rH (20–80 %)</td></tr>
+      <tr><th>Auflösung</th><td>16 Bit, Messrate 1 / 7 / 12.5 Hz</td></tr>
+      <tr><th>Anschluss</th><td>I²C 0x5F</td></tr>
+      <tr><th>BLE</th><td>Temperatur 0201, Feuchte 0203 (Intervall in 0206)</td></tr>
+    </tbody></table>
+    <p class="text-sm opacity-75">Hinweis: Die Eigenwärme des Boards (vor allem beim Laden) hebt die Temperatur um 1–3 °C. Dashboard: Temperatur, Feuchte.</p>
+    <div class="card-actions"><a class="link" href="https://www.st.com/en/mems-and-sensors/hts221.html">Datenblatt ST</a></div>
+  </div></article>
+
+  <article class="card bg-base-100 shadow env"><div class="card-body">
+    <h3 class="card-title">⛰ LPS22HB <span class="badge badge-outline">ST</span></h3>
+    <p>Barometer: Luftdruck, daraus Höhenänderung.</p>
+    <table class="table table-sm"><tbody>
+      <tr><th>Bereich</th><td>260…1260 hPa</td></tr>
+      <tr><th>Genauigkeit</th><td>±0.1 hPa relativ, ±1 hPa absolut (typ.), Rauschen ~0.65 Pa RMS</td></tr>
+      <tr><th>Auflösung</th><td>24 Bit, Messrate 1…75 Hz</td></tr>
+      <tr><th>Anschluss</th><td>I²C 0x5C</td></tr>
+      <tr><th>BLE</th><td>Druck 0202 (int32 + Bruchteil, hPa)</td></tr>
+    </tbody></table>
+    <p class="text-sm opacity-75">Ca. 1 hPa je 8 m Höhe: Treppensteigen ist sichtbar. Dashboard: Luftdruck.</p>
+    <div class="card-actions"><a class="link" href="https://www.st.com/en/mems-and-sensors/lps22hb.html">Datenblatt ST</a></div>
+  </div></article>
+
+  <article class="card bg-base-100 shadow env"><div class="card-body">
+    <h3 class="card-title">💨 CCS811 <span class="badge badge-outline">ScioSense (ex ams)</span></h3>
+    <p>Gassensor (Metalloxid): schätzt eCO₂ und TVOC aus dem Widerstand.</p>
+    <table class="table table-sm"><tbody>
+      <tr><th>Bereich</th><td>eCO₂ 400…8192 ppm · TVOC 0…1187 ppb</td></tr>
+      <tr><th>Genauigkeit</th><td>Schätzwerte, nur für Trends. Einlaufzeit ~20 min nach dem Einschalten, erste Stabilisierung bis ~48 h</td></tr>
+      <tr><th>Messmodi</th><td>250 ms / 1 s / 10 s / 60 s (Thingy: gas_mode in 0206)</td></tr>
+      <tr><th>Anschluss</th><td>I²C 0x5A</td></tr>
+      <tr><th>BLE</th><td>Gas 0204 (u16 eCO₂, u16 TVOC)</td></tr>
+    </tbody></table>
+    <p class="text-sm opacity-75">Reagiert auf Atem, Alkohol, Reiniger. Dashboard: eCO₂, TVOC.</p>
+    <div class="card-actions"><a class="link" href="https://www.sciosense.com/ccs811/">Datenblatt ScioSense</a></div>
+  </div></article>
+
+  <article class="card bg-base-100 shadow env"><div class="card-body">
+    <h3 class="card-title">🎨 BH1745NUC <span class="badge badge-outline">ROHM</span></h3>
+    <p>Farb- und Lichtsensor: vier Kanäle Rot, Grün, Blau, Clear (ungefiltert).</p>
+    <table class="table table-sm"><tbody>
+      <tr><th>Auflösung</th><td>16 Bit je Kanal, einstellbarer Gain (1×, 2×, 16×)</td></tr>
+      <tr><th>Messzeit</th><td>160 ms … 5120 ms</td></tr>
+      <tr><th>Ausgabe</th><td>Rohzählwerte, keine Lux. Clear entspricht etwa der Helligkeit</td></tr>
+      <tr><th>Anschluss</th><td>I²C 0x38</td></tr>
+      <tr><th>BLE</th><td>Farbe 0205 (4× u16 RGBC)</td></tr>
+    </tbody></table>
+    <p class="text-sm opacity-75">Eignet sich zum Unterscheiden von Farbkarten, nicht als kalibriertes Luxmeter. Dashboard: Farbfeld, RGBC.</p>
+    <div class="card-actions"><a class="link" href="https://www.rohm.com/products/sensors-mems/color-sensor-ics/bh1745nuc-product">Datenblatt ROHM</a></div>
+  </div></article>
+
+  </div>
+</section>
+
+<section class="space-y-3">
+  <h2 class="text-2xl font-bold">Bewegung</h2>
+  <div class="grid md:grid-cols-2 gap-4">
+
+  <article class="card bg-base-100 shadow mot"><div class="card-body">
+    <h3 class="card-title">🧭 MPU-9250 <span class="badge badge-outline">TDK InvenSense</span></h3>
+    <p>9-Achsen-Sensor: Beschleunigung, Drehrate und (über den AK8963) Magnetfeld. Die Firmware fusioniert alles zu Quaternion, Euler, Kurs, Schritten und Taps.</p>
+    <table class="table table-sm"><tbody>
+      <tr><th>Beschleunigung</th><td>±2 / ±4 / ±8 / ±16 g, 16 Bit</td></tr>
+      <tr><th>Gyro</th><td>±250 / ±500 / ±1000 / ±2000 °/s, 16 Bit</td></tr>
+      <tr><th>Magnetometer AK8963</th><td>±4912 µT, 16 Bit (0.15 µT/Bit), max. 100 Hz</td></tr>
+      <tr><th>Messrate Thingy</th><td>5…200 Hz (motion_freq_hz in 0401), 100 Hz im Tennis-Spielmodus</td></tr>
+      <tr><th>Anschluss</th><td>I²C 0x68 (Magnetometer 0x0C)</td></tr>
+      <tr><th>BLE</th><td>Raw 0406 (Accel /1024 → g, Gyro /32 → °/s, Kompass /16 → µT), Quaternion 0404, Euler 0407, Heading 0409, Gravity 040A, Tap 0402, Orientation 0403, Schritte 0405</td></tr>
+    </tbody></table>
+    <p class="text-sm opacity-75">Doppeltes Integrieren der Beschleunigung driftet innerhalb von Sekunden weg, für Position taugt es nicht ohne Zusatzreferenz. Dashboard: Lage, 3D-Würfel, 3D-Raum, Kompass, Schritte, Tap.</p>
+    <div class="card-actions"><a class="link" href="https://invensense.tdk.com/products/motion-tracking/9-axis/mpu-9250/">Datenblatt TDK</a></div>
+  </div></article>
+
+  <article class="card bg-base-100 shadow mot"><div class="card-body">
+    <h3 class="card-title">🔌 SX1509B <span class="badge badge-outline">Semtech</span></h3>
+    <p>I/O-Expander: steuert RGB-LED, Sensor-Spannungen und Mikrofon-Versorgung, damit der nRF52832 Pins spart.</p>
+    <table class="table table-sm"><tbody>
+      <tr><th>Anschluss</th><td>I²C 0x3E</td></tr>
+      <tr><th>BLE</th><td>nur indirekt (LED 0301, MOSFET 0303)</td></tr>
+    </tbody></table>
+    <p class="text-sm opacity-75">Ohne eingeschaltete Sensor-Spannung schweigt der Bus.</p>
+  </div></article>
+
+  </div>
+</section>
+
+<section class="space-y-3">
+  <h2 class="text-2xl font-bold">Ton, Licht, Bedienung, Funk</h2>
+  <div class="grid md:grid-cols-2 gap-4">
+
+  <article class="card bg-base-100 shadow snd"><div class="card-body">
+    <h3 class="card-title">🎤 Mikrofon (PDM-MEMS)</h3>
+    <p>Digitales Mikrofon, die Firmware sendet IMA-ADPCM-Audio per BLE.</p>
+    <table class="table table-sm"><tbody>
+      <tr><th>BLE</th><td>0504 (3-Byte-Header + ADPCM-Nibbles), Konfiguration 0501</td></tr>
+      <tr><th>Pegel</th><td>Dashboard rechnet aus dem RMS dBFS (kein kalibrierter dB SPL)</td></tr>
+      <tr><th>Grenze</th><td>Lastet den Funk stark: im Tennis-Spielmodus gesperrt</td></tr>
+    </tbody></table>
+  </div></article>
+
+  <article class="card bg-base-100 shadow snd"><div class="card-body">
+    <h3 class="card-title">🔊 Lautsprecher</h3>
+    <p>Kleiner Lautsprecher mit Verstärker, Tonfrequenz, PCM oder Samples.</p>
+    <table class="table table-sm"><tbody>
+      <tr><th>BLE</th><td>0502 (u16 Hz, u16 ms, u8 Lautstärke 0…100), Status 0503</td></tr>
+      <tr><th>Genutzt</th><td>Lied „Highway to Hell“ (<code>shared/chorus.json</code>), Tennis-Beeps</td></tr>
+    </tbody></table>
+  </div></article>
+
+  <article class="card bg-base-100 shadow ioc"><div class="card-body">
+    <h3 class="card-title">💡 RGB-LED und Taster</h3>
+    <table class="table table-sm"><tbody>
+      <tr><th>LED 0301</th><td>aus, konstant, atmend, Einzelblitz</td></tr>
+      <tr><th>Taster 0302</th><td>Notify 0/1, im Tennis zum Kalibrieren</td></tr>
+      <tr><th>MOSFET 0303</th><td>4 Leistungsausgänge (z. B. Motor)</td></tr>
+    </tbody></table>
+  </div></article>
+
+  <article class="card bg-base-100 shadow rad"><div class="card-body">
+    <h3 class="card-title">📡 nRF52832, Bluetooth und NFC <span class="badge badge-outline">Nordic</span></h3>
+    <table class="table table-sm"><tbody>
+      <tr><th>Prozessor</th><td>Cortex-M4F 64 MHz, 512 KB Flash, 64 KB RAM</td></tr>
+      <tr><th>Funk</th><td>Bluetooth 5, Signal im Dashboard als RSSI (dBm)</td></tr>
+      <tr><th>NFC</th><td>Tag mit NDEF, schreibbar ab Firmware 2.2.0 (Characteristic 0109), zeigt auf <code>ch.disroop.thingylive</code></td></tr>
+      <tr><th>Akku</th><td>Li-Po 1440 mAh, Stand per Standard-Service 180F/2A19</td></tr>
+    </tbody></table>
+    <div class="card-actions"><a class="link" href="https://www.nordicsemi.com/Products/nRF52832">Produktseite Nordic</a></div>
+  </div></article>
+
+  </div>
+</section>
+
+<footer class="text-sm opacity-70 pb-8">Quellen: Datenblätter der Hersteller (ST, ScioSense, ROHM, TDK/AKM, Nordic), Nordic-Thingy52-FW, <code>docs/protocol.md</code>. Werte sind typische Datenblattangaben und nicht direkt am Board nachgemessen.</footer>
+</main>
+</body>
+</html>
