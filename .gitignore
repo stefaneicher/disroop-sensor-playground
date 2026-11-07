@@ -16,3 +16,4 @@ android/.idea/
 # tennis: build output embedded by the bridge (./project tennis build)
 bridge/internal/tennisapp/dist/*
 !bridge/internal/tennisapp/dist/.keep
+devices/motion-one/logs/tools-smoke/

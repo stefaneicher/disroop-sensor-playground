@@ -88,5 +88,11 @@ if [ -s render.png ]; then
   [ -s clip.mp4 ] && ok ffmpeg "$(size clip.mp4)" || bad ffmpeg "siehe ffmpeg.log"
 else bad ffmpeg "kein render.png als Eingabe"; fi
 
+# CadQuery, Gmsh, CalculiX: parametrischer Würfel, Vernetzung, Solver-Version
+python3 -c "import cadquery as cq; cq.exporters.export(cq.Workplane().box(20,20,20).faces('>Z').hole(5),'cube.stl')" >cq.log 2>&1
+[ -s cube.stl ] && ok CadQuery "$(size cube.stl)" || bad CadQuery "siehe cq.log"
+gv=$(gmsh --version 2>&1 | tail -1); [ -n "$gv" ] && gmsh -version >/dev/null 2>&1 && ok Gmsh "$gv" || bad Gmsh "gmsh --version: $gv"
+command -v ccx >/dev/null && ok CalculiX "$(ccx -v 2>&1 | grep -m1 Version)" || bad CalculiX "ccx fehlt"
+
 echo "Fehler: $fails"
 exit $fails

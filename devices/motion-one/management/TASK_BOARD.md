@@ -3,7 +3,7 @@
 |---|---|---|---|
 | T01 | Inspektion Repo/Umgebung | Manager | PASS |
 | T02 | Agents + Skills anlegen | Manager | PASS |
-| T03 | Werkzeug-Image um CadQuery/Gmsh/CalculiX erweitern | Manager | PARTIAL |
+| T03 | Werkzeug-Image um CadQuery/Gmsh/CalculiX erweitern | Manager | PASS |
 | T04 | Firmware-Image (Zephyr/NCS) | firmware-engineer | NOT RUN |
 | T05 | Smoke-Tests §5 je Spezialist | alle | NOT RUN |
 | T06 | Anforderungen V1 (§6) | systems-engineer | NOT RUN |
