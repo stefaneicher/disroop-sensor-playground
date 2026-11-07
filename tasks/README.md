@@ -23,11 +23,13 @@ Beim ersten Aufruf installiert `./t` Invoke nach `.tools/py` (nur im Projekt, gi
 | `./t scan` · `./t song --volume 40` · `./t song --stop` | Thingys suchen, Lied abspielen/stoppen |
 | `./t led --color blau` | LED setzen (`rot`, `gruen`, `#ff8800`, `255,128,0`, `aus` …), braucht eine laufende Bridge |
 | `./t nfc` · `./t nfc --restore` | NFC-Tag auf die App umschreiben (Backup zuerst) bzw. zurückschreiben |
-| `./t test` · `./t test --area web` | Tests im Devcontainer (`bridge`, `web`, `android`, `cli`) |
+| `./t test` · `./t test --area web` | Tests im Devcontainer (`bridge`, `web`, `tennis`, `android`, `cli`) |
 | `./t build` · `./t ci` | Alles bauen · Tests + Build wie in der CI |
 | `./t android.apk --install` | APK per `adb.exe` aufs Handy (sonst Anleitung zum Sideloaden) |
 | `./t hw.smoke --nfc` | Hardware-Smoke-Test gegen den echten Thingy |
 | `./t web.serve` · `web.open` · `web.screenshot` | Dashboard mit Mock-Daten, im Browser öffnen, Screenshots |
+| `./t tennis.play` · `./t tennis.play --sim` | Thingy Tennis: Bridge starten und `/tennis/` öffnen (live :8052, Simulator :8060) |
+| `./t tennis.test` · `tennis.build` · `tennis.screenshot` | Spiel testen, bauen, `docs/img/tennis.png` erzeugen |
 | `./t status` · `./t docs` | Letzte Commits und offene Meilensteine · Dokumentation |
 | `./t release 0.1.0` | Probelauf für ein GitHub-Release, echt mit `--no-dry-run` |
 | `./t clean` | `build/` aufräumen (behält `hw-lock` und NFC-Backups) |

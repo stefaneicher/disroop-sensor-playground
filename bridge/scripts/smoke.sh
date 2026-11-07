@@ -64,6 +64,25 @@ ct="$(curl -fsI "$BASE/" | tr -d '\r' | awk -F': ' 'tolower($1)=="content-type"{
 [[ "$ct" == text/html* ]] || fail "/ content type $ct"
 ok "/ serves the dashboard"
 
+beep() { curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d "$1" "$BASE/api/beep"; }
+[[ "$(beep '{"kind":"hit"}')" == 204 ]] || fail "POST /api/beep hit"
+sleep 0.2
+[[ "$(beep '{"kind":"boing"}')" == 400 ]] || fail "POST /api/beep with unknown kind not rejected"
+ok "POST /api/beep 204/400"
+
+curl -fs "$BASE/tennis/" | grep -q 'Thingy Tennis' || fail "/tennis/ does not serve the game"
+[[ "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/tennis/vendor/three/three.module.js")" == 200 ]] || fail "/tennis/ vendored three.js missing"
+ok "/tennis/ serves the game with vendored three.js"
+
+if command -v node >/dev/null; then
+  node tennis/dev/motion-rate.js "ws://127.0.0.1:$PORT/api/motion" 3 50 || fail "/api/motion below 50 Hz"
+  ok "WebSocket /api/motion ≥ 50 Hz"
+fi
+if [[ -f tennis/dev/smoke.js ]] && command -v node >/dev/null; then
+  node tennis/dev/smoke.js --url "$BASE/tennis/" --expect-sim || fail "tennis smoke against the bridge"
+  ok "tennis smoke (headless Chromium, SIM badge, motion in the browser) against the bridge"
+fi
+
 if [[ -f bridge/web/dev/smoke.js ]] && command -v node >/dev/null; then
   node bridge/web/dev/smoke.js --url "$BASE/" || fail "web dashboard smoke against the bridge"
   ok "web dashboard smoke (headless Chromium) against the bridge"

@@ -5,7 +5,7 @@ from invoke import Exit, task
 
 from ._lib import BUILD, HW_LOCK, ROOT, indev_command, project, say, sh
 
-AREAS = ("bridge", "web", "android", "cli")
+AREAS = ("bridge", "web", "tennis", "android", "cli")
 # Never delete: lock of a running hardware test and the NFC backups needed for `./t nfc --restore`.
 KEEP = ("hw-lock", "nfc-backup")
 SELFTEST = "python3 -B -m unittest discover -s tasks/tests -t . -v"
@@ -25,9 +25,9 @@ def selftest(c, local=False):
     sh(c, f"PYTHONPATH=.tools/py:. {SELFTEST}" if local else indev_command(SELFTEST))
 
 
-@task(help={"area": "nur einen Bereich testen: bridge | web | android | cli"})
+@task(help={"area": "nur einen Bereich testen: bridge | web | tennis | android | cli"})
 def test(c, area=None):
-    """Alle Tests im Devcontainer (Go, Web, Android, CLI) – oder nur --area …"""
+    """Alle Tests im Devcontainer (Go, Web, Tennis, Android, CLI) – oder nur --area …"""
     for a in areas_for(area):
         say(f"\n🧪 Teste {a} …")
         selftest(c) if a == "cli" else project(c, a, "test")

@@ -103,7 +103,7 @@ class ProgressTest(unittest.TestCase):
 
 class DevTest(unittest.TestCase):
     def test_areas(self):
-        self.assertEqual(areas_for(None), ["bridge", "web", "android", "cli"])
+        self.assertEqual(areas_for(None), ["bridge", "web", "tennis", "android", "cli"])
         self.assertEqual(areas_for("web"), ["web"])
         with self.assertRaises(Exit):
             areas_for("ios")

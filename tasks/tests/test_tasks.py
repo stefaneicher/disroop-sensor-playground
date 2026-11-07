@@ -3,7 +3,7 @@ from unittest import mock
 
 from invoke import Exit, MockContext, Result
 
-from tasks import ns, thingy
+from tasks import ns, tennis, thingy
 from tasks.checks import Check, format_checks
 from tasks.release import release
 
@@ -12,6 +12,7 @@ EXPECTED = {
     "live", "sim", "scan", "song", "led", "nfc", "docs", "status", "release",
     "bridge.build", "bridge.test", "bridge.smoke",
     "web.serve", "web.open", "web.screenshot", "web.test",
+    "tennis.play", "tennis.open", "tennis.build", "tennis.test", "tennis.screenshot",
     "android.build", "android.test", "android.apk", "hw.smoke",
 }
 
@@ -50,6 +51,20 @@ class LedTest(unittest.TestCase):
         with self.assertRaises(Exit) as err:
             thingy.led(ctx(stdout='{"error":"not connected"}\n503'), color="rot")
         self.assertIn("nicht verbunden", err.exception.message)
+
+
+class TennisTest(unittest.TestCase):
+    def test_play_command_starts_the_tennis_bridge(self):
+        self.assertEqual(tennis.play_command(True, 8060), "build/thingy.exe tennis --sim --port 8060")
+        self.assertEqual(tennis.play_command(False, 8052, no_browser=True),
+                         "build/thingy.exe tennis --port 8052 --no-browser")
+
+    def test_play_only_opens_the_game_when_a_bridge_runs(self):
+        c = ctx(exited=0)
+        with mock.patch.object(tennis, "ensure_exe"), mock.patch.object(tennis, "run_bridge") as run:
+            tennis.play(c, sim=True)
+        run.assert_not_called()
+        self.assertIn("http://127.0.0.1:8060/tennis/", commands(c)[-1])
 
 
 class SongTest(unittest.TestCase):
