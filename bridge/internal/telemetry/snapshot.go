@@ -89,6 +89,7 @@ type Song struct {
 type Sound struct {
 	LevelDBFS  *float64 `json:"level_dbfs"`
 	MicEnabled bool     `json:"mic_enabled"`
+	MicBlocked bool     `json:"mic_blocked"` // game mode: the mic cannot be switched on (BLE bandwidth)
 	Song       Song     `json:"song"`
 }
 

@@ -4,7 +4,7 @@ import { co2Level, batteryLevel, rssiBars, batteryTrendView } from './classify.t
 import { buildAttitude, renderAttitude } from './attitude-view.ts';
 import { normalizeColor, rgbToHex } from './color.ts';
 import { orientationTransform } from './orientation.ts';
-import { dbfsToPercent, micView, type Peak } from './level.ts';
+import { dbfsToPercent, micView, MIC_BLOCKED_HINT, type Peak } from './level.ts';
 import { CHORUS_HZ, songProgress } from './chorus.ts';
 import { statusBadge } from './badge.ts';
 import type { ConnectionView, LogEntry } from './state.ts';
@@ -138,7 +138,12 @@ function renderMotion(dom: Dom, m: Partial<Motion>, newTap: boolean): void {
 function renderSound(dom: Dom, snd: Partial<Sound>, peak: Peak | null): void {
   const mic = micView(snd);
   dom.micToggle.closest('.sound')?.classList.toggle('mic-off', !mic.enabled);
-  if (!dom.micToggle.disabled) dom.micToggle.checked = mic.enabled;
+  if (mic.blocked !== (dom.micToggle.dataset.blocked === 'true')) {
+    dom.micToggle.dataset.blocked = String(mic.blocked);
+    dom.micToggle.disabled = mic.blocked;
+    dom.micToggle.title = mic.blocked ? `Mikrofon ${MIC_BLOCKED_HINT}` : '';
+  }
+  if (mic.blocked || !dom.micToggle.disabled) dom.micToggle.checked = mic.enabled;
   setText(dom.micHint, mic.hint);
   setText(dom.level, fmt(mic.level, 1, 'dBFS'));
   const pct = dbfsToPercent(mic.level);

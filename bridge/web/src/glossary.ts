@@ -103,7 +103,7 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     id: 'level', title: 'Mikrofon-Pegel', unit: 'dBFS', sensor: 'MEMS-Mikrofon (PDM)',
     text: 'Lautstärke in Dezibel relativ zum digitalen Vollausschlag (Full Scale). 0 dBFS ist das lauteste mögliche Signal, alle anderen Werte sind negativ. +6 dB entsprechen etwa der doppelten Amplitude; es ist kein kalibrierter Schalldruck (dB SPL). Das Mikrofon misst nur, wenn es eingeschaltet ist.',
     typical: 'Stille ~−70 dBFS; Sprechen −40 bis −20; sehr laut nahe 0',
-    fields: ['sound.level_dbfs', 'sound.mic_enabled'],
+    fields: ['sound.level_dbfs', 'sound.mic_enabled', 'sound.mic_blocked'],
   },
   {
     id: 'rssi', title: 'Signalstärke (RSSI)', unit: 'dBm', sensor: 'Bluetooth-Funk (nRF52832 / PC-Adapter)',

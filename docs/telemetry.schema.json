@@ -48,6 +48,8 @@
       "properties": {
         "level_dbfs": { "$ref": "#/$defs/num" },
         "mic_enabled": { "type": "boolean" },
+        "mic_blocked": { "type": "boolean",
+                         "description": "true im Spielmodus (/api/motion): Mikrofon gesperrt wegen Bluetooth-Bandbreite, POST /api/mic enabled=true → 409" },
         "song": { "type": "object", "properties": { "playing": { "type": "boolean" }, "note_index": { "type": "integer" } } }
       }
     },

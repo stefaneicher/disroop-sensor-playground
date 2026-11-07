@@ -57,6 +57,7 @@ export interface Snapshot {
   sound: {
     level_dbfs: Num;
     mic_enabled?: boolean;
+    mic_blocked?: boolean;
     song: {
       playing?: boolean;
       note_index?: number;

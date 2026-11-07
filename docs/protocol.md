@@ -64,6 +64,8 @@ Lange Lastspitzen (Lied in Endlosschleife) können den Wert vorübergehend senke
 
 ### Lautstärke aus dem Mikrofon
 Das Mikrofon ist **standardmässig aus**, weil der Audio-Stream (~32 kB/s) zusammen mit allen anderen Notifications die BLE-Verbindung unter Windows abbrechen lässt. Einschalten auf Wunsch über `POST /api/mic` oder `--mic`. Bei Abbruch schaltet die Bridge es automatisch wieder aus.
+Im **Spielmodus** (siehe „Motion-Kanal“) ist es gesperrt: `sound.mic_blocked` ist `true`, `POST /api/mic` mit `enabled:true`
+antwortet 409.
 Frame IMA-ADPCM-dekodieren, RMS über den Frame bilden, `level_dbfs = 20*log10(rms/32768)` auf −100..0 klemmen.
 Geglättet (EMA α=0.3) mit ~10 Hz publizieren.
 
@@ -87,13 +89,13 @@ Bytes: `D4 0F 15` + ASCII `android.com:pkg` + ASCII `ch.disroop.thingylive` (39 
 | GET | `/api/stream` | Server-Sent Events: `event: telemetry` + `data: <Snapshot>` mit ≤ 10 Hz; `event: log` + `data: {"msg": "..."}` |
 | POST | `/api/song` | Body `{"action":"play"\|"stop","volume":0..100}` → 202 |
 | POST | `/api/led` | Body `{"r":0..255,"g":..,"b":..}` → 204 |
-| POST | `/api/mic` | Body `{"enabled":true\|false}` → 202, Mikrofon/Lautstärke ein/aus |
+| POST | `/api/mic` | Body `{"enabled":true\|false}` → 202, Mikrofon/Lautstärke ein/aus; im Spielmodus `enabled:true` → 409 `{"error":"Mikrofon ist im Spielmodus gesperrt (Bluetooth-Bandbreite)"}` |
 | GET | `/api/motion` | WebSocket, schneller Motion-Kanal für Spiele (siehe „Motion-Kanal“) |
 | POST | `/api/beep` | Body `{"kind":"hit"\|"point"\|"miss"}` (leer = `hit`) → 204: kurzer Ton + LED-Farbe, max. 1 pro 100 ms (sonst 429) |
 | GET | `/tennis/` | Thingy Tennis (eingebettet aus `bridge/internal/tennisapp/dist`, gebaut aus `tennis/`), 404 mit Bauhinweis, wenn nicht eingebaut |
 | GET | `/healthz` | `ok` |
 
-Fehler: 400 ungültige Eingabe, 405 falsche Methode, 502 Schreibfehler am Gerät, 503 nicht verbunden. CORS `*`.
+Fehler: 400 ungültige Eingabe, 405 falsche Methode, 409 im Spielmodus gesperrt, 502 Schreibfehler am Gerät, 503 nicht verbunden. CORS `*`.
 
 ### Motion-Kanal (`GET /api/motion`, WebSocket)
 `/api/stream` ist auf 10 Hz gedrosselt – zu langsam für ein Spiel. `/api/motion` schickt dagegen **jede** Motion-Notification
@@ -118,6 +120,11 @@ als JSON-Textnachricht (ein Frame pro Raw-Motion-Notification `EF680406`, ohne R
   `motion_freq_hz` folgen (Quaternion, Raw Motion, Euler, Kompass), zusammen ergeben bei 100 Hz 400 Notifications/s. Daran
   bricht die Windows-BLE-Verbindung nach 2–10 s ab. Mit nur Quaternion und Raw Motion (200/s) bleibt sie stabil.
   Umwelt, Taster, Tippen, Orientierung und Schritte laufen weiter; Euler und Kurs im Dashboard stehen während des Spiels still.
+- **Mikrofon im Spielmodus:** Der ADPCM-Strom (`EF680504`) zusätzlich zu Quaternion und Raw Motion bei 100 Hz bricht die
+  Verbindung ebenfalls ab. Ist das Mikrofon an, beendet die Bridge sein Abo beim Spielstart als Erstes und schaltet es nach
+  dem Spiel wieder ein (auch mit `--mic`). Während des Spiels ist `sound.mic_blocked` `true`, `sound.mic_enabled` `false`,
+  und `POST /api/mic` mit `enabled:true` antwortet 409. Ausschalten (`enabled:false`) geht immer; dann bleibt es nach dem
+  Spiel aus.
 - Nach einem Reconnect im Spielmodus abonniert die Bridge Euler und Kompass gar nicht erst und schreibt die Spielfrequenz
   erst, wenn alle Abos stehen.
 - Langsame Clients verlieren die ältesten Frames (Puffer 32), die Bridge blockiert nie.

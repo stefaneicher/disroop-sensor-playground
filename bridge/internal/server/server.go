@@ -27,9 +27,10 @@ type LEDControl interface {
 	LED(r, g, b uint8) error
 }
 
-// MicControl switches the microphone (sound level) on or off.
+// MicControl switches the microphone (sound level) on or off. An error means it cannot be
+// switched now (409, e.g. in game mode).
 type MicControl interface {
-	SetMic(on bool)
+	SetMic(on bool) error
 }
 
 // Config holds the dependencies of the handler.
@@ -203,6 +204,9 @@ func (s *server) mic(w http.ResponseWriter, r *http.Request) {
 		badRequest(w, `body must be {"enabled":true|false}`)
 		return
 	}
-	s.Mic.SetMic(*req.Enabled)
+	if err := s.Mic.SetMic(*req.Enabled); err != nil {
+		writeJSON(w, http.StatusConflict, map[string]string{"error": err.Error()})
+		return
+	}
 	writeJSON(w, http.StatusAccepted, map[string]bool{"enabled": *req.Enabled})
 }

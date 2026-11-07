@@ -106,7 +106,7 @@ dom.micToggle.addEventListener('change', async () => {
   } catch (err) {
     localLog(`Mikrofon: ${errorText(err)}`);
   } finally {
-    dom.micToggle.disabled = false;
+    dom.micToggle.disabled = dom.micToggle.dataset.blocked === 'true';
   }
 });
 

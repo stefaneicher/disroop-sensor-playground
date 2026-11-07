@@ -28,9 +28,15 @@ test('updatePeak ignores missing levels', () => {
 });
 
 test('micView shows the level only while the microphone is on', () => {
-  assert.deepEqual(micView({ mic_enabled: true, level_dbfs: -38.5 }), { enabled: true, level: -38.5, hint: '' });
-  assert.deepEqual(micView({ mic_enabled: false, level_dbfs: -38.5 }), { enabled: false, level: null, hint: 'Mikrofon aus' });
-  assert.deepEqual(micView({ mic_enabled: true, level_dbfs: null }), { enabled: true, level: null, hint: 'warte auf Daten' });
+  assert.deepEqual(micView({ mic_enabled: true, level_dbfs: -38.5 }), { enabled: true, blocked: false, level: -38.5, hint: '' });
+  assert.deepEqual(micView({ mic_enabled: false, level_dbfs: -38.5 }), { enabled: false, blocked: false, level: null, hint: 'Mikrofon aus' });
+  assert.deepEqual(micView({ mic_enabled: true, level_dbfs: null }), { enabled: true, blocked: false, level: null, hint: 'warte auf Daten' });
+});
+
+test('micView reports the microphone as blocked in game mode', () => {
+  assert.deepEqual(micView({ mic_enabled: false, mic_blocked: true, level_dbfs: null }),
+    { enabled: false, blocked: true, level: null, hint: 'im Spielmodus gesperrt (Bluetooth-Bandbreite)' });
+  assert.equal(micView({ mic_enabled: false, mic_blocked: false }).blocked, false);
 });
 
 test('micView treats a missing mic_enabled as on when a level arrives', () => {

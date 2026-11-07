@@ -3,6 +3,7 @@ package app
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 	"sync"
@@ -684,6 +685,71 @@ func TestGameModeSurvivesAReconnectWithTheRateWrittenAfterTheSubscriptions(t *te
 			t.Fatalf("60 Hz must follow the subscriptions (game %d, last sub %d): %v", game, lastSub, ops)
 		}
 		s.Detach()
+	}
+}
+
+func micReadySession(t *testing.T) (*Session, *telemetry.Store, *fakeDevice) {
+	t.Helper()
+	s, store, _ := newTestSession("ble")
+	dev := newFakeDevice()
+	_ = s.Attach(dev)
+	waitFor(t, func() bool { s.mu.Lock(); defer s.mu.Unlock(); return s.micReady })
+	return s, store, dev
+}
+
+func TestMicIsRejectedInGameMode(t *testing.T) {
+	s, store, dev := micReadySession(t)
+	s.SetGameMode(100)
+	if err := s.SetMic(true); !errors.Is(err, ErrMicGameMode) {
+		t.Fatalf("SetMic(true) in game mode: %v", err)
+	}
+	snap := store.Snapshot()
+	if subscribed(dev, thingy.MicrophoneChar) || snap.Sound.MicEnabled || !snap.Sound.MicBlocked {
+		t.Fatalf("mic must stay off and blocked: %+v %v", snap.Sound, dev.list())
+	}
+	if err := s.SetMic(false); err != nil {
+		t.Fatalf("SetMic(false) in game mode: %v", err)
+	}
+	s.SetGameMode(0)
+	if subscribed(dev, thingy.MicrophoneChar) || store.Snapshot().Sound.MicBlocked {
+		t.Fatalf("rejected mic came on after the game: %+v %v", store.Snapshot().Sound, dev.list())
+	}
+}
+
+func TestGameModePausesTheMicFirstAndRestoresItAfterwards(t *testing.T) {
+	s, store, dev := micReadySession(t)
+	if err := s.SetMic(true); err != nil || !subscribed(dev, thingy.MicrophoneChar) {
+		t.Fatalf("mic not on: %v %v", err, dev.list())
+	}
+	before := len(dev.list())
+	s.SetGameMode(100)
+	ops := dev.list()[before:]
+	if len(ops) == 0 || ops[0] != "unsub microphone" || indexOf(ops, motionConfig100Hz) < 0 {
+		t.Fatalf("mic must be unsubscribed before the rate rises: %v", ops)
+	}
+	if snap := store.Snapshot(); snap.Sound.MicEnabled || !snap.Sound.MicBlocked || snap.Sound.LevelDBFS != nil {
+		t.Fatalf("sound in game mode %+v", snap.Sound)
+	}
+	before = len(dev.list())
+	s.SetGameMode(0)
+	ops = dev.list()[before:]
+	if indexOf(ops, "sub microphone") <= indexOf(ops, motionConfig10Hz) {
+		t.Fatalf("mic must come back after the rate is lowered: %v", ops)
+	}
+	if snap := store.Snapshot(); !snap.Sound.MicEnabled || snap.Sound.MicBlocked || !s.MicEnabled() {
+		t.Fatalf("sound after the game %+v", snap.Sound)
+	}
+}
+
+func TestMicSwitchedOffDuringTheGameStaysOff(t *testing.T) {
+	s, store, dev := micReadySession(t)
+	_ = s.SetMic(true)
+	s.SetGameMode(100)
+	_ = s.SetMic(false)
+	before := len(dev.list())
+	s.SetGameMode(0)
+	if contains(dev.list()[before:], "sub microphone") || store.Snapshot().Sound.MicEnabled {
+		t.Fatalf("mic came back: %v", dev.list()[before:])
 	}
 }
 

@@ -211,7 +211,9 @@ func live(ctx context.Context, o options, stdout io.Writer) error {
 	if !o.sim {
 		session.MicDelay = micDelay
 	}
-	session.SetMic(o.mic)
+	if err := session.SetMic(o.mic); err != nil {
+		logs.Logf("Mikrofon: %v", err)
+	}
 	hub := motion.NewHub(time.Now)
 	session.Motion = hub
 	hub.OnActive = func(active bool) {

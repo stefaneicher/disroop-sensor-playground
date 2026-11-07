@@ -104,6 +104,7 @@ export function createSim({ chorus, startTs = Date.now() }) {
         sound: {
           level_dbfs: micEnabled ? round(Math.max(-100, Math.min(0, level)), 1) : null,
           mic_enabled: micEnabled,
+          mic_blocked: false,
           song: songNow,
         },
         ui: { button_pressed: e % 10000 >= 9000, led: { ...led } },

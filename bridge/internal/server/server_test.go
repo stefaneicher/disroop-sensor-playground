@@ -3,6 +3,7 @@ package server
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -36,9 +37,15 @@ func (f *fakeLED) LED(r, g, b uint8) error { f.rgb = [3]uint8{r, g, b}; return f
 type fakeMic struct {
 	mu  sync.Mutex
 	set []bool
+	err error
 }
 
-func (f *fakeMic) SetMic(on bool) { f.mu.Lock(); f.set = append(f.set, on); f.mu.Unlock() }
+func (f *fakeMic) SetMic(on bool) error {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.set = append(f.set, on)
+	return f.err
+}
 
 type fixture struct {
 	srv   *httptest.Server
@@ -339,5 +346,20 @@ func TestMicSwitch(t *testing.T) {
 	res, _ := http.Get(f.srv.URL + "/api/mic")
 	if res.StatusCode != http.StatusMethodNotAllowed {
 		t.Errorf("GET /api/mic: %d", res.StatusCode)
+	}
+}
+
+func TestMicRejectedWhileBlockedIs409(t *testing.T) {
+	f := newFixture(t)
+	f.mic.err = errors.New("Mikrofon ist im Spielmodus gesperrt (Bluetooth-Bandbreite)")
+	res, err := http.Post(f.srv.URL+"/api/mic", "application/json", strings.NewReader(`{"enabled":true}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer res.Body.Close()
+	var body map[string]string
+	_ = json.NewDecoder(res.Body).Decode(&body)
+	if res.StatusCode != http.StatusConflict || body["error"] != f.mic.err.Error() {
+		t.Fatalf("%d %v", res.StatusCode, body)
 	}
 }

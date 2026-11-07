@@ -23,12 +23,17 @@ export function updatePeak(peak: Peak | null, level: unknown, now: number): Peak
   return decayed > level ? { value: decayed, at: peak.at } : { value: level, at: now };
 }
 
-export interface MicView { enabled: boolean; level: number | null; hint: string }
+export interface MicView { enabled: boolean; blocked: boolean; level: number | null; hint: string }
+
+export const MIC_BLOCKED_HINT = 'im Spielmodus gesperrt (Bluetooth-Bandbreite)';
 
 // Microphone is off by default (BLE stability); older bridges without mic_enabled count as on when a level arrives.
+// In game mode (mic_blocked) the bridge rejects switching it on.
 export function micView(sound: Partial<Sound> | null | undefined): MicView {
-  const enabled = typeof sound?.mic_enabled === 'boolean' ? sound.mic_enabled : isNum(sound?.level_dbfs);
-  if (!enabled) return { enabled, level: null, hint: 'Mikrofon aus' };
+  const blocked = sound?.mic_blocked === true;
+  const enabled = !blocked && (typeof sound?.mic_enabled === 'boolean' ? sound.mic_enabled : isNum(sound?.level_dbfs));
+  if (blocked) return { enabled, blocked, level: null, hint: MIC_BLOCKED_HINT };
+  if (!enabled) return { enabled, blocked, level: null, hint: 'Mikrofon aus' };
   const level = isNum(sound?.level_dbfs) ? sound.level_dbfs : null;
-  return { enabled, level, hint: level === null ? 'warte auf Daten' : '' };
+  return { enabled, blocked, level, hint: level === null ? 'warte auf Daten' : '' };
 }

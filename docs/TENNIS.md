@@ -109,9 +109,14 @@ Beeps. Bricht die Verbindung trotzdem ab (schwaches Funksignal, viele andere BLE
 
 - Bridge neu bauen bzw. aktuelle `thingy.exe` verwenden; im Log muss beim Spielstart „Spielmodus: Motion-Frequenz …“ stehen.
 - Rate senken: `thingy.exe tennis --motion-hz 50`. Das Spiel braucht mindestens 50 Hz.
-- Mikrofon aus lassen (Standard). Es streamt zusätzlich ≈ 32 kB/s.
+- Mikrofon: Im Spielmodus ist es gesperrt. Die Bridge schaltet es beim Spielstart aus und danach wieder ein, falls es an war.
 - Steht im Log „Verbindungsparameter „Durchsatz“ nicht übernommen“, nutzt Windows ein langes Verbindungsintervall
   (Windows 10 kennt die Voreinstellung nicht). Dann hilft vor allem eine niedrigere Rate.
+
+**Mikrofon-Schalter im Dashboard ist grau** („im Spielmodus gesperrt (Bluetooth-Bandbreite)“): Das ist Absicht. Mikrofon
+plus 100-Hz-Motion brach die Verbindung ab („Mikrofon ein“, 3 s später „BLE: Windows meldet Verbindungsabbruch“). Solange
+ein Spiel `/api/motion` offen hat, lehnt die Bridge `POST /api/mic` mit 409 ab. Nach dem Spiel ist der Schalter wieder frei,
+und ein vorher eingeschaltetes Mikrofon läuft wieder.
 
 ## Grenzen
 

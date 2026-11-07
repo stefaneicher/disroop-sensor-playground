@@ -30,6 +30,10 @@ const (
 	MicDropWindow = 30 * time.Second
 )
 
+// ErrMicGameMode rejects switching the mic on in game mode: on top of the fast motion channel the
+// mic stream overloads the BLE link (docs/TENNIS.md).
+var ErrMicGameMode = errors.New("Mikrofon ist im Spielmodus gesperrt (Bluetooth-Bandbreite)")
+
 // Session owns the current connection.
 type Session struct {
 	store *telemetry.Store
@@ -58,6 +62,7 @@ type Session struct {
 	micOn          bool      // mic notifications are subscribed on the current connection
 	micSince       time.Time // mic start on the current connection, zero if none
 	micDrops       int
+	micResume      bool // the game mode switched the mic off, switch it on again afterwards
 	battery        *battery.Tracker
 	batteryTrend   battery.Trend
 	batteryChecked time.Time // last re-evaluation of the trend
@@ -137,14 +142,30 @@ func (s *Session) checkMicDrop(ctx context.Context, since time.Time) {
 	s.mu.Unlock()
 	if off {
 		s.logf("Mikrofon automatisch ausgeschaltet: Verbindung brach %d× kurz nach dem Mikrofon-Start ab", MicMaxDrops)
-		s.SetMic(false)
+		_ = s.SetMic(false)
 	}
 }
 
 // SetMic switches the microphone (sound level) on or off, also while connected.
-func (s *Session) SetMic(on bool) {
+// In game mode switching it on fails with ErrMicGameMode.
+func (s *Session) SetMic(on bool) error {
 	s.micMu.Lock()
 	defer s.micMu.Unlock()
+	s.mu.Lock()
+	game := s.gameHz != 0
+	if !on {
+		s.micResume = false
+	}
+	s.mu.Unlock()
+	if on && game {
+		return ErrMicGameMode
+	}
+	s.setMic(on)
+	return nil
+}
+
+// setMic switches the mic; the caller holds micMu.
+func (s *Session) setMic(on bool) {
 	s.mu.Lock()
 	changed := s.micWanted != on
 	s.micWanted = on
@@ -385,7 +406,8 @@ func gamePaused(c thingy.Char) bool {
 // SetGameMode switches the game mode for the fast motion channel, now and after reconnects:
 // hz > 0 unsubscribes thingy.GamePausedChars and then sets motion_freq_hz to hz; 0 restores the
 // default rate of thingy.DefaultMotionConfig and then subscribes them again. All notifications that
-// follow motion_freq_hz together overload the BLE link at a game rate (docs/TENNIS.md).
+// follow motion_freq_hz together overload the BLE link at a game rate (docs/TENNIS.md). The mic is
+// switched off first as well (sound.mic_blocked) and on again after the game if it was on.
 func (s *Session) SetGameMode(hz uint16) {
 	s.gameMu.Lock()
 	defer s.gameMu.Unlock()
@@ -403,9 +425,49 @@ func (s *Session) SetGameMode(hz uint16) {
 	} else {
 		s.logf("Spielmodus aus: Motion-Frequenz %d Hz", cfg.MotionHz)
 	}
-	if dev == nil {
+	s.store.Update(func(snap *telemetry.Snapshot) { snap.Sound.MicBlocked = hz != 0 })
+	if was == 0 {
+		s.pauseMic()
+	}
+	if dev != nil {
+		s.switchGameRate(dev, was, hz, cfg)
+	}
+	if hz == 0 {
+		s.resumeMic()
+	}
+}
+
+// pauseMic switches the mic off for the game mode and remembers to switch it on again afterwards.
+func (s *Session) pauseMic() {
+	s.micMu.Lock()
+	defer s.micMu.Unlock()
+	s.mu.Lock()
+	wanted := s.micWanted
+	s.mu.Unlock()
+	if !wanted {
 		return
 	}
+	s.logf("Mikrofon im Spielmodus ausgeschaltet (Bluetooth-Bandbreite), danach wieder ein")
+	s.setMic(false)
+	s.mu.Lock()
+	s.micResume = true
+	s.mu.Unlock()
+}
+
+// resumeMic switches the mic on again if pauseMic switched it off.
+func (s *Session) resumeMic() {
+	s.micMu.Lock()
+	defer s.micMu.Unlock()
+	s.mu.Lock()
+	resume := s.micResume
+	s.micResume = false
+	s.mu.Unlock()
+	if resume {
+		s.setMic(true)
+	}
+}
+
+func (s *Session) switchGameRate(dev device.Device, was, hz uint16, cfg thingy.MotionConfigValue) {
 	if was == 0 {
 		for _, c := range thingy.GamePausedChars {
 			if !s.Skip[c.Name] {
