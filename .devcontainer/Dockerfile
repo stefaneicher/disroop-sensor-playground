@@ -1,4 +1,4 @@
-# Single toolchain image for disroop-thingy-arcade. Used by VS Code "Reopen in Container",
+# Single toolchain image for disroop-sensor-playground. Used by VS Code "Reopen in Container",
 # by ./project and by GitHub Actions - everything is built and tested here.
 FROM debian:trixie-slim
 

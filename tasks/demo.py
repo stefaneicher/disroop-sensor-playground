@@ -14,7 +14,7 @@ TALKING_POINTS = """
   3. Knopf drücken → Anzeige «Knopf» im Dashboard
   4. Im Dashboard «Lied abspielen» → Refrain mit LED-Farben pro Ton
   5. In einem zweiten Terminal:  ./t led --color blau   ·   ./t song --volume 40
-  6. Handy an den Thingy halten (NFC) → die App «Thingy Arcade» öffnet sich (nach ./t nfc)
+  6. Handy an den Thingy halten (NFC) → die App «Sensor Playground» öffnet sich (nach ./t nfc)
   7. Sprachen im Projekt: Go (Bridge), JavaScript (Dashboard), Kotlin (App), Python (dieses CLI), Bash
 Beenden: Ctrl+C
 """

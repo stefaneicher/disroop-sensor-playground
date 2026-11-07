@@ -7,7 +7,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/device"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/device"
 )
 
 var errUnsupported = errors.New("Bluetooth wird nur unter Windows unterstützt (--sim verwenden)")

@@ -87,4 +87,4 @@ const (
 var Services = []string{ConfigService, EnvironmentService, UIService, MotionService, SoundService, BatteryService}
 
 // AppPackage is the Android package the NFC tag opens.
-const AppPackage = "ch.disroop.thingyarcade"
+const AppPackage = "ch.disroop.sensorplayground"

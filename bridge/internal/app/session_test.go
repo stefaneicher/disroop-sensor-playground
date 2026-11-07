@@ -11,11 +11,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/device"
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/device/sim"
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/motion"
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/telemetry"
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/thingy"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/device"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/device/sim"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/motion"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/telemetry"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/thingy"
 )
 
 // fakeDevice records every operation.

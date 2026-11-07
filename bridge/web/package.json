@@ -1,8 +1,8 @@
 {
-  "name": "disroop-thingy-arcade-web",
+  "name": "disroop-sensor-playground-web",
   "private": true,
   "type": "module",
-  "description": "Disroop Thingy Arcade dashboard (TypeScript, no bundler). Build: ./project web build",
+  "description": "Disroop Sensor Playground dashboard (TypeScript, no bundler). Build: ./project web build",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json"

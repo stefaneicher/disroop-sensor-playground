@@ -7,9 +7,9 @@ Alle Befehle laufen im Repo-Ordner unter **WSL**. Builds und Tests laufen im Dev
 | Befehl | Wirkung |
 |---|---|
 | `./project help` | Übersicht |
-| `./project image` | Devcontainer-Image `disroop-thingy-arcade-dev` neu bauen. Andere Befehle bauen es beim ersten Gebrauch automatisch. |
+| `./project image` | Devcontainer-Image `disroop-sensor-playground-dev` neu bauen. Andere Befehle bauen es beim ersten Gebrauch automatisch. |
 | `./project test` | alle Tests: bridge, web, android |
-| `./project build` | `build/thingy.exe`, `build/thingy-linux` und `build/disroop-thingy-arcade-debug.apk` |
+| `./project build` | `build/thingy.exe`, `build/thingy-linux` und `build/disroop-sensor-playground-debug.apk` |
 | `./project run [args]` | wie `./project bridge run [args]` |
 
 ### `./project bridge …` ([scripts/bridge.sh](../scripts/bridge.sh))
@@ -41,7 +41,7 @@ Alle Befehle laufen im Repo-Ordner unter **WSL**. Builds und Tests laufen im Dev
 | Befehl | Wirkung |
 |---|---|
 | `test` | Unit-Tests `:protocol` und `:app` (inkl. Simulator-Smoke-Test) und Android-Lint |
-| `build` | `assembleDebug` → `build/disroop-thingy-arcade-debug.apk` |
+| `build` | `assembleDebug` → `build/disroop-sensor-playground-debug.apk` |
 | `screenshots` | Screenshots der App mit Simulator-Daten (Roborazzi/Robolectric, ohne Emulator) → `docs/img/android-*.png` |
 | `badging` | Paket, SDK, Berechtigungen und Activity der APK anzeigen (`aapt2`) |
 | `clean` | Gradle-Ausgaben löschen |
@@ -86,7 +86,7 @@ Direkt unter Windows (PowerShell, im Repo-Ordner): `.\build\thingy.exe --sim`
 ### Terminal-Ansicht
 
 ```
-Disroop Thingy Arcade   Quelle: sim   Verbunden: ja   Web: http://localhost:8052
+Disroop Sensor Playground   Quelle: sim   Verbunden: ja   Web: http://localhost:8052
 
   Gerät           Thingy (Simulator)  SIM:00:00:00:00:52  RSSI -43 dBm
   Akku            62 %  ↑ lädt
@@ -176,7 +176,7 @@ curl.exe -s -X POST -H "Content-Type: application/json" -d '{"r":255,"g":0,"b":0
 1. `thingy.exe` und die App trennen. Der Thingy erlaubt nur eine Verbindung.
 2. `./project bridge nfc`:
    - Liest den aktuellen NDEF-Inhalt und speichert ihn **nur beim ersten Mal** nach `build/nfc-backup.hex`. Ein vorhandenes Backup bleibt unverändert.
-   - Schreibt den Android Application Record `ch.disroop.thingyarcade` (39 Bytes), liest ihn zurück und prüft ihn.
+   - Schreibt den Android Application Record `ch.disroop.sensorplayground` (39 Bytes), liest ihn zurück und prüft ihn.
 3. App installieren, NFC am Handy einschalten und das Handy an den Thingy halten. Die App öffnet sich und verbindet sich per BLE.
 4. Ursprünglichen Inhalt wiederherstellen (Nordic-Thingy-App): `./project bridge nfc --restore`
 
@@ -188,7 +188,7 @@ curl.exe -s -X POST -H "Content-Type: application/json" -d '{"r":255,"g":0,"b":0
 
 *Simulator-Modus: Live-Werte, Bewegung, Kompass & Mikrofon. Rechts: Die App sucht einen Thingy.*
 
-- **Start:** über das App-Icon „Thingy Arcade“ oder per NFC-Tap am Thingy. Beim ersten Start erlaubst du „Geräte in der Nähe“. Unter Android ≤ 11 heisst die Berechtigung „Standort“.
+- **Start:** über das App-Icon „Sensor Playground“ oder per NFC-Tap am Thingy. Beim ersten Start erlaubst du „Geräte in der Nähe“. Unter Android ≤ 11 heisst die Berechtigung „Standort“.
 - **Verbinden:** Die App scannt und verbindet sich mit dem **nächsten** Thingy, also dem mit dem stärksten Signal. Bei Abbruch verbindet sie sich automatisch neu.
 - **Hintergrund:** Geht die App in den Hintergrund, trennt sie die Verbindung. Der Thingy ist dann wieder frei für `thingy.exe`.
 - **Karten:**

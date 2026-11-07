@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/thingy"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/thingy"
 )
 
 // record subscribes to c and collects every payload (Step runs synchronously, no locking needed).

@@ -33,7 +33,7 @@ Exit-Code 0 = alle Schritte PASS (WARN zählt nicht als Fehler), sonst 1.
 | song | `POST /api/song play` → 202, `playing:true`, `note_index` läuft weiter, `stop` → `playing:false` |
 | led | `POST /api/led` rot → 204, `ui.led` = {255,0,0}, danach aus → {0,0,0} |
 | web | `GET /` liefert HTML. Headless-Chrome-Screenshot → `build/hw-dashboard.png` |
-| nfc (nur `--nfc`) | Bridge stoppen, `thingy.exe nfc`: Backup nach `build/nfc-backup.hex` (nur beim ersten Mal), AAR `ch.disroop.thingyarcade` schreiben, zurücklesen und vergleichen |
+| nfc (nur `--nfc`) | Bridge stoppen, `thingy.exe nfc`: Backup nach `build/nfc-backup.hex` (nur beim ersten Mal), AAR `ch.disroop.sensorplayground` schreiben, zurücklesen und vergleichen |
 
 Am Ende stoppt das Skript die Bridge, auch bei Abbruch (`trap EXIT`). Zuerst kommt SIGINT, dann `taskkill` auf die Windows-PID, falls nötig.
 

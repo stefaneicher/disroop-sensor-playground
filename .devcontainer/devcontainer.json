@@ -1,9 +1,9 @@
 {
-  "name": "disroop-thingy-arcade",
+  "name": "disroop-sensor-playground",
   "build": { "dockerfile": "Dockerfile" },
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
-  "mounts": ["source=disroop-thingy-arcade-cache,target=/opt/cache,type=volume"],
+  "mounts": ["source=disroop-sensor-playground-cache,target=/opt/cache,type=volume"],
   "customizations": {
     "vscode": {
       "extensions": [

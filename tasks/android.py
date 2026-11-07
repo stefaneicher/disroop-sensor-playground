@@ -1,4 +1,4 @@
-"""Android app (ch.disroop.thingyarcade): build, tests, install."""
+"""Android app (ch.disroop.sensorplayground): build, tests, install."""
 from __future__ import annotations
 
 import glob
@@ -11,7 +11,7 @@ from ._lib import APK, ROOT, project, say, sh
 ADB_GLOBS = ("/mnt/c/Users/*/AppData/Local/Android/Sdk/platform-tools/adb.exe",
              "/mnt/c/Program Files*/Android/*/platform-tools/adb.exe")
 SIDELOAD = """So kommt die App aufs Handy ohne adb:
-  1. build/disroop-thingy-arcade-debug.apk aufs Handy kopieren (USB, Mail, Google Drive …)
+  1. build/disroop-sensor-playground-debug.apk aufs Handy kopieren (USB, Mail, Google Drive …)
   2. Datei antippen → «Installation aus unbekannten Quellen» erlauben → Installieren"""
 
 
@@ -26,7 +26,7 @@ def find_adb() -> str | None:
 
 @task
 def build(c):
-    """Baut die Debug-APK nach build/disroop-thingy-arcade-debug.apk."""
+    """Baut die Debug-APK nach build/disroop-sensor-playground-debug.apk."""
     project(c, "android", "build")
 
 

@@ -28,7 +28,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ThingyArcade">
+        android:theme="@style/Theme.SensorPlayground">
 
         <activity
             android:name=".MainActivity"
@@ -38,7 +38,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- The AAR "ch.disroop.thingyarcade" on the Thingy tag alone launches the app.
+            <!-- The AAR "ch.disroop.sensorplayground" on the Thingy tag alone launches the app.
                  This filter only matches tags whose first record is an Android Application Record
                  (which Android restricts to the named package), so it never hijacks other tags. -->
             <intent-filter>

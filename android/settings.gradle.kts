@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "disroop-thingy-arcade"
+rootProject.name = "disroop-sensor-playground"
 include(":protocol", ":app")

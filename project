@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# disroop-thingy-arcade command line. Every build/test step runs inside the devcontainer image.
+# disroop-sensor-playground command line. Every build/test step runs inside the devcontainer image.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export ROOT
-IMAGE="disroop-thingy-arcade-dev"
+IMAGE="disroop-sensor-playground-dev"
 export IMAGE
 
 # Run a command inside the devcontainer image (builds the image on first use).
@@ -12,7 +12,7 @@ indev() {
     docker build -t "$IMAGE" "$ROOT/.devcontainer" >&2
   fi
   docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp \
-    -v "$ROOT":/workspace -v disroop-thingy-arcade-cache:/opt/cache -w /workspace "$IMAGE" bash -c "$*"
+    -v "$ROOT":/workspace -v disroop-sensor-playground-cache:/opt/cache -w /workspace "$IMAGE" bash -c "$*"
 }
 export -f indev
 

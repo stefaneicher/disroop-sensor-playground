@@ -11,7 +11,7 @@ import (
 
 	"github.com/coder/websocket"
 
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/device"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/device"
 )
 
 // BeepControl gives short feedback on the Thingy (tone + LED).

@@ -14,8 +14,8 @@ import (
 
 	"tinygo.org/x/bluetooth"
 
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/device"
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/thingy"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/device"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/thingy"
 )
 
 const (

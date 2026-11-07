@@ -3,4 +3,4 @@ from invoke import Program
 
 from . import ns
 
-Program(namespace=ns, name="disroop-thingy-arcade", binary="./t", version="1").run()
+Program(namespace=ns, name="disroop-sensor-playground", binary="./t", version="1").run()

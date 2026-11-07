@@ -1,4 +1,4 @@
-module github.com/stefaneicher/disroop-thingy-arcade/bridge
+module github.com/stefaneicher/disroop-sensor-playground/bridge
 
 go 1.27.3
 

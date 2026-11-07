@@ -1,4 +1,4 @@
-# disroop-thingy-arcade
+# disroop-sensor-playground
 
 **Ein kleiner Sensor-Würfel wird zum Gamecontroller:** Der Nordic Thingy:52 schickt seine Sensordaten per Bluetooth live an ein Dashboard. Er dient als Tennisschläger, und auf der Lauberhorn-Abfahrt lenkst du damit den Skifahrer.
 
@@ -37,7 +37,7 @@ Alle Sensorwerte laufen per Bluetooth LE live ins Terminal, in ein Web-Dashboard
 >
 > ```
 > Thingy:52 (Werks-FW) ──BLE──▶ thingy.exe (Windows) ──▶ Terminal + Web-Dashboard :8052
->                      ──BLE──▶ Android-App ch.disroop.thingyarcade (direkt, Start per NFC)
+>                      ──BLE──▶ Android-App ch.disroop.sensorplayground (direkt, Start per NFC)
 > ```
 
 ## Features
@@ -49,7 +49,7 @@ Alle Sensorwerte laufen per Bluetooth LE live ins Terminal, in ein Web-Dashboard
 - **Web-Dashboard** auf http://localhost:8052. Es ist in die exe eingebettet und bekommt die Daten live per Server-Sent Events. Es zeigt Charts, 3D-Lage und Kompass, und du kannst damit das Lied und die LED steuern.
 - **Lied:** „Highway to Hell“ (Refrain, 24 Noten) über den Thingy-Lautsprecher. Die LED-Farbe folgt der Tonhöhe. Starten und stoppen geht per Taster am Thingy, im Dashboard oder in der App.
 - **NFC:** `thingy.exe nfc` schreibt einen Android Application Record auf den NFC-Tag des Thingy. Hältst du das Handy an den Thingy, öffnet sich die App.
-- **Android-App** `ch.disroop.thingyarcade`: verbindet sich direkt per BLE und zeigt dieselben Werte. Sie hat einen eingebauten Simulator.
+- **Android-App** `ch.disroop.sensorplayground`: verbindet sich direkt per BLE und zeigt dieselben Werte. Sie hat einen eingebauten Simulator.
 - **Thingy Tennis** (`tennis/`, eigenes Programm): Tennis-Spiel mit three.js, der Thingy ist der Schläger. Schwung = Schlag, Neigen = laufen. Die Bridge liefert die Bewegung mit 100 Hz per WebSocket und spielt das Spiel unter `/tennis/` aus. Ohne Thingy mit Tastatur oder im Simulator spielbar. Dazu **Thingy Ski** (`tennis/src/ski/`): Lauberhorn und Streif in 3D, siehe [docs/SKI.md](docs/SKI.md).
 - **Simulator** (`--sim`) für Demos, Tests und CI ohne Hardware.
 - **Alles im Docker-Devcontainer:** Lokal wird ausser Docker nichts installiert.
@@ -65,7 +65,7 @@ Alle Sensorwerte laufen per Bluetooth LE live ins Terminal, in ein Web-Dashboard
 
 ```bash
 ./project image          # Devcontainer-Image bauen (einmalig, dauert einige Minuten)
-./project build          # build/thingy.exe, build/thingy-linux, build/disroop-thingy-arcade-debug.apk
+./project build          # build/thingy.exe, build/thingy-linux, build/disroop-sensor-playground-debug.apk
 ./project bridge run     # thingy.exe auf Windows starten: Terminal-Live-Ansicht + Web-GUI
 ```
 
@@ -79,10 +79,10 @@ Dann im Browser http://localhost:8052 öffnen. `Strg+C` beendet die exe.
 
 ## Android-App installieren
 
-1. APK bauen mit `./project android build`. Das ergibt `build/disroop-thingy-arcade-debug.apk`. Ein GitHub-Release mit fertiger APK ist geplant, siehe [Releases](https://github.com/stefaneicher/disroop-thingy-arcade/releases).
+1. APK bauen mit `./project android build`. Das ergibt `build/disroop-sensor-playground-debug.apk`. Ein GitHub-Release mit fertiger APK ist geplant, siehe [Releases](https://github.com/stefaneicher/disroop-sensor-playground/releases).
 2. Installieren:
    - **Sideload:** APK aufs Handy kopieren, öffnen und „Unbekannte Apps installieren“ erlauben.
-   - **adb (Windows):** `adb install -r build\disroop-thingy-arcade-debug.apk`
+   - **adb (Windows):** `adb install -r build\disroop-sensor-playground-debug.apk`
 3. Beim ersten Start die Berechtigung „Geräte in der Nähe“ (Bluetooth) erteilen.
 
 Die APK ist mit einem öffentlich eingecheckten Demo-Schlüssel signiert. Neuinstallationen über lokale und CI-Builds hinweg funktionieren deshalb. Für den produktiven Einsatz ist sie nicht gedacht.
@@ -90,7 +90,7 @@ Die APK ist mit einem öffentlich eingecheckten Demo-Schlüssel signiert. Neuins
 ## NFC: Handy an den Thingy halten
 
 ```bash
-./project bridge nfc             # Backup nach build/nfc-backup.hex, dann AAR "ch.disroop.thingyarcade" schreiben
+./project bridge nfc             # Backup nach build/nfc-backup.hex, dann AAR "ch.disroop.sensorplayground" schreiben
 ./project bridge nfc --restore   # Original-Inhalt (Nordic-App) aus dem Backup zurückschreiben
 ```
 
@@ -108,6 +108,7 @@ tennis/                 Thingy Tennis: eigenes Spiel (TypeScript + three.js, kei
 android/                Android-App (Kotlin, Compose) + reines Kotlin-Modul :protocol
 shared/                 chorus.json (Lied), telemetry.example.json (Beispiel-Snapshot)
 docs/                   Protokoll-Vertrag, Schema, Architektur, Anleitungen
+devices/motion-one/     Eigener Controller „Disroop Motion One“: Master-Prompt für die KI-Entwicklung (Hardware, Gehäuse, Firmware)
 build/                  Build-Ausgaben (nicht im Git)
 ```
 

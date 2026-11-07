@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "ch.disroop.thingyarcade"
+    namespace = "ch.disroop.sensorplayground"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "ch.disroop.thingyarcade"
+        applicationId = "ch.disroop.sensorplayground"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

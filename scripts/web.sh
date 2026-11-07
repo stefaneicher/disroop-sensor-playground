@@ -2,10 +2,10 @@
 # Owned by the web agent. Called via ./project web <cmd>. Everything runs inside the devcontainer image.
 set -euo pipefail
 ROOT="${ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
-IMAGE="${IMAGE:-disroop-thingy-arcade-dev}"
+IMAGE="${IMAGE:-disroop-sensor-playground-dev}"
 if ! declare -F indev >/dev/null; then
   indev() {
-    docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$ROOT":/workspace -v disroop-thingy-arcade-cache:/opt/cache \
+    docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$ROOT":/workspace -v disroop-sensor-playground-cache:/opt/cache \
       -w /workspace "$IMAGE" bash -c "$*"
   }
 fi

@@ -79,12 +79,12 @@ Windows merkt sich GATT-Daten. Nach Firmware-Änderungen am Thingy oder bei selt
   - NFC am Handy einschalten, Bildschirm entsperren.
   - Die NFC-Antenne sitzt meist in der Mitte der Handy-Rückseite. Halte sie an die Oberseite des Thingy.
   - Die App muss installiert sein. Sonst führt der AAR in den Play Store, wo es die App nicht gibt.
-  - Prüfen, ob der Tag umgeschrieben ist: Mit „NFC Tools“ o. ä. lesen, erwartet ist der Record `android.com:pkg` → `ch.disroop.thingyarcade`.
+  - Prüfen, ob der Tag umgeschrieben ist: Mit „NFC Tools“ o. ä. lesen, erwartet ist der Record `android.com:pkg` → `ch.disroop.sensorplayground`.
 
 ## Android-App
 
 - **„Berechtigung erteilen“:** Ab Android 12 braucht die App „Geräte in der Nähe“ (`BLUETOOTH_SCAN`/`BLUETOOTH_CONNECT`), unter Android 8–11 „Standort“. Der Knopf öffnet die App-Einstellungen.
 - **„Bluetooth einschalten“:** Bluetooth ist aus. Der Knopf fordert das Einschalten an.
 - **Kein Thingy:** Er schläft (Knopf drücken), oder `thingy.exe` bzw. eine andere App ist verbunden.
-- **Installation scheitert** mit „App nicht installiert“ oder Signaturkonflikt: Alte Version deinstallieren, dann `adb install -r build\disroop-thingy-arcade-debug.apk`. Alle Builds nutzen denselben Demo-Schlüssel.
+- **Installation scheitert** mit „App nicht installiert“ oder Signaturkonflikt: Alte Version deinstallieren, dann `adb install -r build\disroop-sensor-playground-debug.apk`. Alle Builds nutzen denselben Demo-Schlüssel.
 - **Ohne Bluetooth LE** (Emulator) startet die App automatisch im Simulator.

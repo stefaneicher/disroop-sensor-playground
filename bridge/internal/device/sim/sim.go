@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/device"
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/thingy"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/device"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/thingy"
 )
 
 // Options tune the simulation.

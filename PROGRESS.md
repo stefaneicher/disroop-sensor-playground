@@ -5,7 +5,7 @@ Stand: 2026-11-07 20:30. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 ## Meilensteine
 | # | Meilenstein | Status | Notiz |
 |---|---|---|---|
-| 0 | Projekt + GitHub-Repo (öffentlich) | ✅ | https://github.com/stefaneicher/disroop-thingy-arcade |
+| 0 | Projekt + GitHub-Repo (öffentlich) | ✅ | https://github.com/stefaneicher/disroop-sensor-playground |
 | 1 | Plan (Lavish) freigegeben | ✅ | `docs/plan.html`, Entscheide siehe RESUME.md |
 | 2 | Protokoll aus der Werksfirmware analysiert | ✅ | UUIDs, Q-Formate, NFC-Raw, Speaker-Freq-Mode |
 | 3 | `shared/chorus.json` (24 Noten) | ✅ | aus blinky `src/chorus.h` |
@@ -14,7 +14,7 @@ Stand: 2026-11-07 20:30. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 | 6 | `docs/protocol.md` + Telemetrie-JSON-Schema | ✅ | Vertrag für alle Agents |
 | 7 | Agent **bridge** (Go: BLE → Terminal + HTTP/SSE, Lied, NFC) | ✅ | TDD, Simulator-Modus für Smoke-Tests |
 | 8 | Agent **web** (Dashboard in `bridge/web/`) | ✅ | gegen Mock-SSE getestet |
-| 9 | Agent **android** (Kotlin, `ch.disroop.thingyarcade`) | ✅ | Decoder-Unit-Tests, NFC via AAR |
+| 9 | Agent **android** (Kotlin, `ch.disroop.sensorplayground`) | ✅ | Decoder-Unit-Tests, NFC via AAR |
 | 10 | Hardware-Smoke-Test (Terminal, Lied, Web live) | ✅ | `./t hw.smoke` |
 | 11 | NFC-Tag umschreiben → App öffnet | 🔄 | FW v2.2.0 per DFU, AAR geschrieben; Tap-Test durch User offen |
 | 12 | CI (Build + Tests im Devcontainer-Image) + Release exe/apk | ✅ | Pre-Release v0.1.0-preview |
@@ -25,7 +25,7 @@ Stand: 2026-11-07 20:30. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 | 17 | Copilot-Diktat-App (Konzept) | 🔄 | `../copilot-diktat/.lavish/diktat-konzept.html`, Entscheide offen |
 | 18 | Thingy Ski (Lauberhorn, Streif), Ton, FPS-Anzeige, Performance | ✅ | docs/SKI.md, 0c38ca9 |
 | 19 | Android-UI wie Web, Tennis + Ski in der App | ✅ | 0c38ca9 |
-| 20 | Umbenennung zu `disroop-thingy-arcade` | ✅ | NFC-Tag neu schreiben offen |
+| 20 | Umbenennung zu `disroop-sensor-playground` | ✅ | NFC-Tag neu schreiben offen |
 | 21 | Thingy-Ausrichtung im Dashboard (180°?) | 🔄 | wartet auf Kompass-Test des Users |
 
 ## Erkenntnisse

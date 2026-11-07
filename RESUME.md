@@ -11,10 +11,11 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 - Antworten an den User kurz und auf Deutsch.
 
 ## Entscheide (vom User freigegeben im Lavish-Plan)
+- **Zweck (intern, nicht in README/Texte übernehmen):** Showcase der Disroop AG. Das Repo ist ein Playground für Sensoren und Spiele; geplant ist später ein eigenes Spiel-Device.
 - **Datenquelle:** Thingy:52-**Werksfirmware per BLE**, kein Flashen. Es ist keine SWD-Probe vorhanden.
-- **Repo:** `stefaneicher/disroop-thingy-arcade`, öffentlich, Branch `main`.
-  - WSL-Pfad: `/mnt/c/Users/stefa/IdeaProjects/thingy52-live`
-- **Android-Paket:** `ch.disroop.thingyarcade`
+- **Repo:** `stefaneicher/disroop-sensor-playground`, öffentlich, Branch `main`.
+  - WSL-Pfad: `/mnt/c/Users/stefa/IdeaProjects/disroop-sensor-playground`
+- **Android-Paket:** `ch.disroop.sensorplayground`
 - **Architektur:**
   - `thingy.exe` (Go, Windows, cross-compiled) verbindet BLE mit Terminal-Ausgabe, Webserver `:8052` mit SSE `/api/stream`, Lied und NFC-Schreiben.
   - Web-GUI ist in die exe eingebettet (`bridge/web/`).
@@ -68,7 +69,7 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 **NFC:**
 - TCS `0109` (max. 247 B) = rohe NDEF-Message, landet in `nfc_t2t_payload_set` und wird persistent gespeichert.
 - Default-Inhalt = AAR `no.nordicsemi.android.nrfthingy` + Text + URI.
-- Neuer Inhalt: AAR `ch.disroop.thingyarcade`.
+- Neuer Inhalt: AAR `ch.disroop.sensorplayground`.
 
 **Lied:** `shared/chorus.json` mit `{on_ms, off_ms, hz}` × 24 und `pause_ms` 1500.
 
@@ -90,9 +91,9 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 Stand 2026-11-07 20:30. Alles gepusht. Apps im Repo: `bridge/` (thingy.exe + Dashboard), `android/`, `tennis/` (Tennis + Ski unter `tennis/src/ski/`).
 - Demo starten: exe nach `%TEMP%\thingy-demo\` kopieren und dort laufen lassen, sonst ist `build/thingy.exe` für Builds gesperrt. Dashboard: `thingy.exe -no-tui`, Tennis: `/tennis/`, Ski: `/ski`.
 - Im Spielmodus sind Euler/Heading pausiert, sonst bricht BLE bei 100 Hz ab (siehe docs/TENNIS.md).
-- Der lokale Ordner heisst weiterhin `thingy52-live`, das Repo `disroop-thingy-arcade`.
+- Lokaler Ordner und Repo heissen `disroop-sensor-playground`.
 1. Thingy-Ausrichtung im Dashboard: Ergebnis des Kompass-Tests abwarten (Heading 0° oder 180° bei USB zum User, ferne Kante nach Norden; Pitch-Vorzeichen beim Anheben), dann Würfel/LED-Position/3D-Modell korrigieren.
-2. NFC-Tag neu schreiben (`thingy.exe nfc`, neues Paket `ch.disroop.thingyarcade`), User bestätigen lassen, dass der Tap die App öffnet.
+2. NFC-Tag neu schreiben (`thingy.exe nfc`, neues Paket `ch.disroop.sensorplayground`), User bestätigen lassen, dass der Tap die App öffnet.
 3. Tennis und Ski live mit echten Bewegungen testen, Schwellen ggf. nachjustieren.
 4. Copilot-Diktat: Konzept `/mnt/c/Users/stefa/IdeaProjects/copilot-diktat/.lavish/diktat-konzept.html`.
 5. Optional: Release-Tag mit exe + apk.

@@ -15,7 +15,7 @@ def release_command(version: str) -> str:
         raise Exit(f"Version {version!r} ungültig – Format: 1.2.3 oder v1.2.3", code=2)
     tag = version if version.startswith("v") else f"v{version}"
     files = " ".join(str(p.relative_to(ROOT)) for p in ASSETS)
-    return f'gh release create {tag} {files} --title "disroop-thingy-arcade {tag}" --generate-notes'
+    return f'gh release create {tag} {files} --title "disroop-sensor-playground {tag}" --generate-notes'
 
 
 @task(help={"version": "z. B. 0.1.0", "dry_run": "nur zeigen, was passieren würde (Standard) – echt: --no-dry-run",

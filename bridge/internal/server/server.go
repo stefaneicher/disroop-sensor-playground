@@ -11,9 +11,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/device"
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/motion"
-	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/telemetry"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/device"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/motion"
+	"github.com/stefaneicher/disroop-sensor-playground/bridge/internal/telemetry"
 )
 
 // SongControl starts and stops the song.

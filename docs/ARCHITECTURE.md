@@ -24,7 +24,7 @@ flowchart LR
   end
 
   Browser[Browser<br/>Dashboard]
-  subgraph Phone["Android: ch.disroop.thingyarcade"]
+  subgraph Phone["Android: ch.disroop.sensorplayground"]
     APP[Compose-UI + ViewModel]
     PROTO[:protocol<br/>reines Kotlin]
   end
@@ -110,7 +110,7 @@ Details: [bridge/web/README.md](../bridge/web/README.md).
 
 ```mermaid
 flowchart TB
-  NFC[NFC-Intent<br/>AAR ch.disroop.thingyarcade] --> MA[MainActivity]
+  NFC[NFC-Intent<br/>AAR ch.disroop.sensorplayground] --> MA[MainActivity]
   MA --> VM[ThingyViewModel<br/>StateFlow UiState]
   VM --> CF{ConnectionFactory}
   CF --> BLE[BleThingyConnection<br/>Scan nächster Thingy, MTU 247, GattQueue]
@@ -144,7 +144,7 @@ WSL2 hat keinen Zugriff auf Bluetooth, und PowerShell kann keine WinRT-BLE-Event
 ### Warum ein Devcontainer?
 - Ein Image (`.devcontainer/Dockerfile`) enthält Go, staticcheck, Node, JDK 21, das Android SDK und Chromium.
 - `./project`, VS Code „Reopen in Container“ und die geplante CI nutzen dasselbe Image. Lokal wird nichts installiert, und alle bauen mit denselben Versionen.
-- Caches (Go-Module, Gradle) liegen im Docker-Volume `disroop-thingy-arcade-cache`.
+- Caches (Go-Module, Gradle) liegen im Docker-Volume `disroop-sensor-playground-cache`.
 
 ### Simulator first
 Jede Komponente hat eine Simulator-Quelle: Go `device/sim`, Web `dev/sim.js` + `dev/mock-server.js`, Android `SimulatedThingy`. Damit laufen Smoke-Tests ohne Hardware, offline und in der CI.

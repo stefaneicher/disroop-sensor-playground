@@ -1,4 +1,4 @@
-# android – Thingy Arcade (`ch.disroop.thingyarcade`)
+# android – Sensor Playground (`ch.disroop.sensorplayground`)
 
 Die Android-App verbindet sich **direkt per BLE** mit dem Thingy:52 und zeigt dieselben Werte wie Terminal und Dashboard. Hältst du das Handy an den Thingy, öffnet sie sich per NFC-Tap (Android Application Record).
 
@@ -8,19 +8,19 @@ Die Android-App verbindet sich **direkt per BLE** mit dem Thingy:52 und zeigt di
 
 ```bash
 ./project android test      # JUnit :protocol + :app (inkl. SimulatorSmokeTest) + Android-Lint
-./project android build     # → build/disroop-thingy-arcade-debug.apk
+./project android build     # → build/disroop-sensor-playground-debug.apk
 ./project android screenshots  # Roborazzi/Robolectric → docs/img/android-*.png (Simulator-Daten)
 ./project android badging   # Paket, SDK, Berechtigungen der APK
 ./project android clean
 ```
 
-Installation: `adb install -r build\disroop-thingy-arcade-debug.apk` (Windows) oder die APK per Sideload installieren. Siehe [README](../README.md#android-app-installieren).
+Installation: `adb install -r build\disroop-sensor-playground-debug.apk` (Windows) oder die APK per Sideload installieren. Siehe [README](../README.md#android-app-installieren).
 
 ## Eckdaten
 
 | | |
 |---|---|
-| Paket | `ch.disroop.thingyarcade`, App-Name „Thingy Arcade“ |
+| Paket | `ch.disroop.sensorplayground`, App-Name „Sensor Playground“ |
 | SDK | minSdk 26 (Android 8), target/compileSdk 36 |
 | UI | Jetpack Compose, Material 3, eine Activity (`MainActivity`, `singleTop`). Disroop-Look wie das Dashboard: fest dunkel (Grau/Lime), Logo in der Top-Bar und als App-Icon |
 | Sprache | Kotlin, JVM 17 (App) / Toolchain 21 (`:protocol`), Gradle-Wrapper, Versionskatalog `gradle/libs.versions.toml` |
