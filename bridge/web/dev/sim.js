@@ -32,6 +32,12 @@ function songState(song, chorus, now) {
   return { playing: true, note_index: -1 };
 }
 
+// Same demo cycle as the Go simulator: charges 60 → 70 % (1 %/min), then runs on battery back to 60 %.
+function battery(elapsedMs) {
+  const minute = Math.floor(elapsedMs / 60000) % 20;
+  return { battery_pct: minute <= 10 ? 60 + minute : 80 - minute, battery_trend: minute < 10 ? 'charging' : 'discharging' };
+}
+
 export function createSim({ chorus, startTs = Date.now() }) {
   let led = { r: 0, g: 0, b: 0 };
   let song = null;
@@ -90,7 +96,7 @@ export function createSim({ chorus, startTs = Date.now() }) {
         device: {
           name: 'Thingy', address: 'E3:58:08:1B:53:5F',
           rssi: Math.round(-50 + 6 * wave(e, 7000)),
-          battery_pct: Math.max(0, 87 - Math.floor(e / 600000)),
+          ...battery(e),
           source: 'sim',
         },
         motion: motion(t),

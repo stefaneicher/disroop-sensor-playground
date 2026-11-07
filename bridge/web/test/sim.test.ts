@@ -55,3 +55,9 @@ test('microphone is off by default and reports no level until enabled', () => {
   assert.equal(sim.snapshot(0).sound.mic_enabled, true);
   assert.equal(typeof sim.snapshot(0).sound.level_dbfs, 'number');
 });
+
+test('sim battery charges first, then runs on battery', () => {
+  const sim = createSim({ chorus, startTs: 0 });
+  assert.deepEqual([sim.snapshot(0).device.battery_trend, sim.snapshot(0).device.battery_pct], ['charging', 60]);
+  assert.deepEqual([sim.snapshot(12 * 60000).device.battery_trend, sim.snapshot(12 * 60000).device.battery_pct], ['discharging', 68]);
+});
