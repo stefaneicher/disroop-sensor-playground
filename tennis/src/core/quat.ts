@@ -41,6 +41,12 @@ export function rollDeg(q: Quat): number {
   return (Math.asin(Math.max(-1, Math.min(1, -x[2]))) * 180) / Math.PI;
 }
 
+/** Tilt of the device Y (forward) axis against the horizon in degrees (positive: nose up). */
+export function pitchDeg(q: Quat): number {
+  const y = rotate(normalize(q), [0, 1, 0]);
+  return (Math.asin(Math.max(-1, Math.min(1, y[2]))) * 180) / Math.PI;
+}
+
 /** Device frame (X right, Y forward, Z up) to three.js frame (X right, Y up, Z back). */
 export function toThree(q: Quat): Quat {
   return [q[0], q[1], q[3], -q[2]];

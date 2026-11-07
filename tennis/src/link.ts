@@ -15,7 +15,8 @@ declare global {
 }
 export const isNative = (): boolean => typeof window !== 'undefined' && window.ThingyNative !== undefined;
 
-const base = (): URL => new URL('..', location.href); // the game lives under /tennis/
+// the games live under /tennis/ and /tennis/ski/; the API sits at the bridge root
+const base = (): URL => new URL(location.pathname.includes('/ski/') ? '../..' : '..', location.href);
 
 export class MotionLink {
   status: LinkStatus = 'connecting';

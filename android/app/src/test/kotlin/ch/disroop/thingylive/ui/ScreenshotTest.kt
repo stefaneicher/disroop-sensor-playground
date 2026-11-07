@@ -7,8 +7,6 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performScrollToNode
-import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.swipeUp
 import androidx.test.core.app.ApplicationProvider
 import ch.disroop.thingylive.connection.ConnectionFactory
 import ch.disroop.thingylive.connection.LinkState
@@ -54,9 +52,9 @@ class ScreenshotTest {
     @Test fun `live screen with simulator`() {
         show(simulatedState())
         capture("live-top")
-        scrollTo("Kompass & Lage")
+        scrollTo("Kompass")
         capture("live-motion")
-        scrollToEnd()
+        scrollTo("Taster & LED")
         capture("live-sound")
     }
 
@@ -68,8 +66,6 @@ class ScreenshotTest {
     private fun show(state: UiState) = composeRule.setContent { ThingyTheme { ThingyScreen(state, NoActions) } }
 
     private fun scrollTo(text: String) = composeRule.onNode(hasScrollAction()).performScrollToNode(hasText(text))
-
-    private fun scrollToEnd() = composeRule.onNode(hasScrollAction()).performTouchInput { repeat(3) { swipeUp() } }
 
     private fun capture(name: String) = composeRule.onRoot().captureRoboImage("build/screenshots/android-$name.png")
 

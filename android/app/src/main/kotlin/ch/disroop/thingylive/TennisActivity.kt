@@ -50,7 +50,8 @@ class TennisActivity : ComponentActivity() {
             addJavascriptInterface(Native(), "ThingyNative")
         }
         setContentView(web)
-        web.loadUrl("https://$HOST/index.html")
+        val page = if (intent.getStringExtra(EXTRA_GAME) == GAME_SKI) "ski/index.html" else "index.html"
+        web.loadUrl("https://$HOST/$page")
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() = finish()
         })
@@ -130,7 +131,7 @@ class TennisActivity : ComponentActivity() {
         override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
             val url = request.url
             if (url.host != HOST) return null
-            val path = url.path.orEmpty().trimStart('/').ifEmpty { "index.html" }
+            val path = url.path.orEmpty().trimStart('/').let { if (it.isEmpty() || it.endsWith("/")) it + "index.html" else it }
             return try {
                 WebResourceResponse(mimeOf(path), "utf-8", assets.open(path))
             } catch (_: IOException) {
@@ -139,11 +140,15 @@ class TennisActivity : ComponentActivity() {
         }
     }
 
-    private companion object {
-        const val HOST = "tennis.local"
-        const val BEEP_VOLUME = 60
+    companion object {
+        const val EXTRA_GAME = "game"
+        const val GAME_SKI = "ski"
+        const val GAME_TENNIS = "tennis"
 
-        fun mimeOf(path: String): String = when (path.substringAfterLast('.', "").lowercase()) {
+        private const val HOST = "tennis.local"
+        private const val BEEP_VOLUME = 60
+
+        private fun mimeOf(path: String): String = when (path.substringAfterLast('.', "").lowercase()) {
             "html" -> "text/html"
             "js", "mjs" -> "text/javascript"
             "css" -> "text/css"

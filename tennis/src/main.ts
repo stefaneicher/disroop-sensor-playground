@@ -5,6 +5,7 @@ import { Autopilot, Game, type GameEvent, type GameSwing } from './core/game.ts'
 import type { MotionFrame } from './core/motion.ts';
 import { Sfx } from './audio.ts';
 import { Hud, type Badge } from './hud.ts';
+import { showFps } from './fps.ts';
 import { MotionLink } from './link.ts';
 import { Arena, CAMERAS, CAMERA_LABEL, type CameraMode } from './scene.ts';
 
@@ -54,6 +55,7 @@ function onFrame(f: MotionFrame): void {
 }
 
 const link = new MotionLink(onFrame);
+showFps();
 link.start();
 
 function live(): boolean {

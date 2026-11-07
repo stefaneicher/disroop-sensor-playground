@@ -11,7 +11,13 @@ import androidx.compose.ui.text.font.FontWeight
 object Palette {
     val background = Color(0xFF111827)
     val card = Color(0xFF1F2937)
+    val panel2 = Color(0xFF263142)
     val line = Color(0xFF374151)
+    val inset = Color(0x73020617)
+    val chartBg = Color(0x8C020617)
+    val cardHead = Color(0x59111827)
+    val track = Color(0xFF334155)
+    val bezel = Color(0xFF0B1220)
     val text = Color(0xFFF9FAFB)
     val muted = Color(0xFF9CA3AF)
     val accent = Color(0xFFA3E635)

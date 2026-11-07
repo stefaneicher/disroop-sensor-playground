@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thingy Ski · Disroop</title>
+  <link rel="icon" href="../disroop.png">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="ski.css">
+  <script type="importmap">{"imports":{"three":"../vendor/three/three.module.js","three/addons/":"../vendor/three/addons/"}}</script>
+  <script type="module" src="../js/ski/main.js"></script>
+</head>
+<body>
+  <main id="stage">
+    <div id="hud">
+      <header class="top">
+        <div class="brand"><img src="../disroop.png" alt="Disroop" width="28" height="28"><span>Thingy <b>Ski</b></span></div>
+        <a href="../" class="back-link" title="Zurück zum Tennis">← Tennis</a>
+        <a href="/" class="back-link" title="Zurück zum Live-Dashboard">← Dashboard</a>
+        <div class="score ski-score" aria-live="polite">
+          <div class="main"><span class="who">ZEIT</span><b class="points" id="h-time">0:00.00</b><span class="who" id="course-label">Lauberhorn</span></div>
+          <div class="sub">Abstand zum Rekord-Ghost <span id="h-delta">–</span> · Tore <span id="h-gates">0/0</span> · Strafe <span id="h-pen">–</span></div>
+        </div>
+        <div class="badges"><span class="badge" id="badge">…</span><span class="badge cam" id="cam-label">Verfolger</span></div>
+      </header>
+      <section class="swing speedo">
+        <div class="speed"><b id="h-speed">0</b><span class="muted"> km/h</span></div>
+        <div class="bar"><i id="h-tuck"></i></div>
+        <div class="row"><span class="muted">Hocke</span><span id="h-sec" class="secname">–</span></div>
+        <canvas id="profile" width="220" height="56"></canvas>
+      </section>
+      <div id="h-info-box" class="infobox"><b id="h-info-title"></b><span id="h-info"></span></div>
+      <div id="count" class="count"></div>
+      <div class="msg" id="msg"></div>
+      <div class="hint" id="hint">Thingy kippen = lenken · Nase nach unten oder Knopf halten = Hocke · kräftiger Ruck = Sprung</div>
+      <footer class="keys">←/→ lenken · ↓ Hocke · Leertaste Sprung · C Kamera · K Kalibrieren · M Ton · Esc Menü</footer>
+    </div>
+    <div id="menu" class="overlay">
+      <div class="card">
+        <img src="../disroop.png" alt="" width="56" height="56">
+        <h1>Thingy <b>Ski</b></h1>
+        <p class="muted">Abfahrt mit dem Thingy:52: kippen = lenken, Nase runter = Hocke, Ruck = Sprung.</p>
+        <button id="m-start" class="primary">Start</button>
+        <button id="m-course">Piste: <b id="m-course-v">Lauberhorn</b></button>
+        <ul id="m-facts" class="facts small muted"></ul>
+        <button id="m-cam">Kamera: <b id="m-cam-v">Verfolger</b></button>
+        <button id="m-cal">Kalibrieren</button>
+        <a href="../" class="back-link menu-back">← Tennis</a>
+        <a href="/" class="back-link menu-back">← Dashboard</a>
+      </div>
+    </div>
+    <div id="cal" class="overlay" hidden>
+      <div class="card">
+        <h2>Kalibrieren</h2>
+        <p>Halte den Thingy wie einen <b>Lenker</b>: waagrecht, Knopf nach oben, Nase zum Bildschirm.</p>
+        <p>Dann den <b>Knopf am Thingy</b> drücken (oder <b>Enter</b>).</p>
+        <button id="cal-ok" class="primary">Jetzt kalibrieren</button>
+        <button id="cal-back">Zurück</button>
+      </div>
+    </div>
+    <div id="done" class="overlay" hidden>
+      <div class="card">
+        <h2>Ziel!</h2>
+        <p class="big"><b id="d-time">0:00.00</b></p>
+        <p id="d-medal"></p>
+        <p class="small muted" id="d-detail"></p>
+        <button id="d-again" class="primary">Nochmal</button>
+        <button id="d-menu">Menü</button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

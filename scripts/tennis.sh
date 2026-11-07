@@ -18,7 +18,7 @@ BUILD="cd tennis && export npm_config_cache=/opt/cache/npm npm_config_update_not
   && find $EMBED -mindepth 1 ! -name .keep -exec rm -rf {} + && cp -r tennis/dist/. $EMBED/"
 TYPECHECK="cd tennis && npx --no-install tsc -p tsconfig.test.json && cd /workspace"
 UNIT="node --test tennis/test/*.test.ts"
-SMOKE="node tennis/dev/smoke.js"
+SMOKE="node tennis/dev/smoke.js && node tennis/dev/ski-smoke.js"
 
 usage() {
   cat <<U
@@ -29,7 +29,7 @@ Usage: ./project tennis <command>
   unit         node --test unit tests of the game core (.ts via type stripping)
   smoke        build + headless Chromium (software WebGL): scene renders, demo rally runs, no JS errors
   test         build + typecheck + unit + smoke
-  screenshot   docs/img/tennis.png (1280×720, demo rally, 3rd-person camera)
+  screenshot   docs/img/tennis.png and docs/img/ski-*.png (1280×720)
 U
 }
 
@@ -40,7 +40,7 @@ case "$cmd" in
   unit)       indev "$UNIT" ;;
   smoke)      indev "$BUILD && $SMOKE" ;;
   test)       indev "$BUILD && $TYPECHECK && $UNIT && $SMOKE" ;;
-  screenshot) indev "$BUILD && $SMOKE --screenshot docs/img/tennis.png" ;;
+  screenshot) indev "$BUILD && node tennis/dev/smoke.js --screenshot docs/img/tennis.png && node tennis/dev/ski-smoke.js --shots docs/img" ;;
   help|-h|--help) usage ;;
   *) usage; exit 1 ;;
 esac

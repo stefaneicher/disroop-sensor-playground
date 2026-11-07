@@ -82,7 +82,9 @@ class MainActivity : ComponentActivity(), ScreenActions {
     override fun onSongVolume(volume: Int) = viewModel.setSongVolume(volume)
     override fun onMicrophoneChange(enabled: Boolean) = viewModel.setMicrophone(enabled)
 
-    override fun onOpenTennis() = startActivity(Intent(this, TennisActivity::class.java))
+    override fun onOpenTennis() = startActivity(Intent(this, TennisActivity::class.java).putExtra(TennisActivity.EXTRA_GAME, TennisActivity.GAME_TENNIS))
+
+    override fun onOpenSki() = startActivity(Intent(this, TennisActivity::class.java).putExtra(TennisActivity.EXTRA_GAME, TennisActivity.GAME_SKI))
 
     override fun onFixLink(reason: LinkState.Reason) {
         when (reason) {

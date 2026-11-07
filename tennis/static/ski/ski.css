@@ -1,0 +1,16 @@
+.ski-score .points { min-width: 8ch; }
+.ski-score .sub span { color: var(--teal); }
+.ski-score .sub span.bad { color: var(--bad); }
+.ski-score .sub span.good { color: var(--lime); }
+.speedo { top: 64px; right: 12px; min-width: 240px; text-align: right; }
+.speedo .speed b { font-size: 2.4rem; }
+.speedo .secname { color: var(--text); text-align: right; }
+.speedo canvas { display: block; width: 100%; height: 56px; margin-top: 6px; }
+.infobox { position: absolute; left: 50%; top: 96px; transform: translateX(-50%); max-width: min(560px, 90vw); padding: 8px 16px; text-align: center; background: rgba(17, 24, 39, .82); border: 1px solid var(--lime6); border-radius: 12px; font-family: system-ui, sans-serif; display: flex; flex-direction: column; gap: 2px; opacity: 0; transition: opacity .5s; }
+.infobox span { font-size: .85rem; color: var(--text); }
+.count { position: absolute; left: 50%; top: 38%; transform: translate(-50%, -50%); font: 800 7rem system-ui, sans-serif; color: #fff; text-shadow: 0 4px 24px rgba(0, 0, 0, .6); }
+.facts { list-style: none; margin: 0; padding: 0; text-align: left; }
+.facts li { margin: 2px 0; }
+.big { font-size: 2rem; margin: 0; }
+@media (max-width: 760px) { .speedo { top: auto; bottom: 16px; min-width: 150px; } .speedo canvas { display: none; } .infobox { top: 72px; } }
+.msg:empty { display: none; }
