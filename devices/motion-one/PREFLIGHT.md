@@ -7,8 +7,8 @@ Das Skript prüft nur und installiert nichts. Aufruf aus dem Repo-Wurzelordner i
 devices/motion-one/preflight.sh
 ```
 
-Das Ergebnis liegt in [`preflight/PREFLIGHT_RESULT.md`](preflight/PREFLIGHT_RESULT.md). Die Prompts lesen diese Datei und
-gleichen den Stand mit dir in einer einzigen Frage ab.
+Das Ergebnis liegt lokal in `preflight/PREFLIGHT_RESULT.md`. Die Datei enthält Pfade und Rechnerdaten und wird deshalb nicht
+committet (`.gitignore` in diesem Ordner). Die Prompts lesen sie und gleichen den Stand mit dir in einer einzigen Frage ab.
 
 | Bereich | Was geprüft wird |
 |---|---|
