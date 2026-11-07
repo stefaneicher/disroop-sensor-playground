@@ -1,0 +1,9 @@
+* Spannungsteiler 5 V, R1=10k, R2=4.7k
+V1 in 0 DC 5
+R1 in out 10k
+R2 out 0 4.7k
+.control
+op
+print v(out)
+.endc
+.end

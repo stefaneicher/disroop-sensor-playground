@@ -1,0 +1,11 @@
+* RC-Tiefpass R=1k, C=100n -> fc = 1/(2 pi R C) = 1591.55 Hz, tau = 100 us
+V1 in 0 DC 0 AC 1 PULSE(0 1 0 1n 1n 10m 20m)
+R1 in out 1k
+C1 out 0 100n
+.control
+ac dec 1000 10 1e6
+meas ac fc WHEN vdb(out)=-3.0103
+tran 0.1u 1m
+meas tran t63 WHEN v(out)=0.632120559 RISE=1
+.endc
+.end
