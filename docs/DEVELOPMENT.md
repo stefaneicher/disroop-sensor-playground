@@ -16,6 +16,12 @@ So nutzt du das Image:
 
 Lokal brauchst du nur WSL2 und Docker. Installiere keine Toolchains lokal.
 
+## VS Code: Disroop-Farben
+
+`.vscode/settings.json` färbt VS Code für dieses Projekt in den Disroop-Farben des Dashboards (Grau-Blau `#111827`,
+Limette `#a3e635`, Petrol `#2aa5a1`). Grundlage ist das eingebaute Theme „Default Dark Modern“; die Farben gelten nur in
+diesem Ordner, auch im Devcontainer.
+
 ## Regeln (Kurzfassung von [ENGINEERING.md](ENGINEERING.md))
 
 - **TDD:** Zuerst ein fehlschlagender Test, dann die minimale Implementierung, dann refactoren. Decoder testest du mit den Bytes aus [protocol.md](protocol.md).
