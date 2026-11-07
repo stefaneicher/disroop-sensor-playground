@@ -64,6 +64,7 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           path: dist
+          pattern: "{bridge,android}"
           merge-multiple: true
       - name: GitHub Release erstellen/aktualisieren
         env:
