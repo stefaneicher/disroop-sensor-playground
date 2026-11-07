@@ -17,3 +17,5 @@ android/.idea/
 bridge/internal/tennisapp/dist/*
 !bridge/internal/tennisapp/dist/.keep
 devices/motion-one/logs/tools-smoke/
+devices/motion-one/firmware/build/
+devices/motion-one/logs/fw-smoke/
