@@ -98,9 +98,24 @@ Thingy ──BLE 100 Hz──▶ thingy.exe ──WebSocket /api/motion──▶
 `node tennis/dev/stats.ts` (im Devcontainer) spielt viele Autopilot-Rallys und zeigt
 Gewinnschläge/Fehler je Schwierigkeit – hilfreich beim Balancing.
 
+## Fehlerbehebung
+
+**Verbindung bricht im Spiel alle paar Sekunden ab** („BLE: Windows meldet Verbindungsabbruch“, dann Reconnect-Schleife):
+Bei 100 Hz schafft die BLE-Verbindung nicht alle Motion-Werte zugleich. Bis zur Bridge vom 07.11.2026 brach sie deshalb
+im Spiel nach 2–10 s ab. Die Bridge schaltet darum in den **Spielmodus**, sobald das Spiel `/api/motion` öffnet: Sie
+abonniert nur noch Quaternion und Raw Motion mit hoher Rate. Euler und Kompass pausieren, Euler und Kurs im Dashboard stehen
+während des Spiels still. Gemessen am echten Thingy (FW v2.2.0, Windows 11): 100 Frames/s, 5 min ohne Abbruch, mit
+Beeps. Bricht die Verbindung trotzdem ab (schwaches Funksignal, viele andere BLE-Geräte):
+
+- Bridge neu bauen bzw. aktuelle `thingy.exe` verwenden; im Log muss beim Spielstart „Spielmodus: Motion-Frequenz …“ stehen.
+- Rate senken: `thingy.exe tennis --motion-hz 50`. Das Spiel braucht mindestens 50 Hz.
+- Mikrofon aus lassen (Standard). Es streamt zusätzlich ≈ 32 kB/s.
+- Steht im Log „Verbindungsparameter „Durchsatz“ nicht übernommen“, nutzt Windows ein langes Verbindungsintervall
+  (Windows 10 kennt die Voreinstellung nicht). Dann hilft vor allem eine niedrigere Rate.
+
 ## Grenzen
 
-- Die Werks-Firmware liefert höchstens ~100–200 Hz; BLE-Latenz (≈ 30–60 ms) wird nicht ausgeglichen, das Schlagfenster ist
+- Die Werks-Firmware liefert höchstens ~100–200 Hz (Standard 100 Hz, `--motion-hz`); BLE-Latenz (≈ 30–60 ms) wird nicht ausgeglichen, das Schlagfenster ist
   deshalb großzügig (±0,25 s).
 - Vor-/Rückhand hängt an der Haltung bei der Kalibrierung; nach dem Umgreifen neu kalibrieren (Taster lang drücken).
 - Nur Einzel, ein Satz, eine Person gegen die CPU. Kein Mehrspieler.

@@ -112,8 +112,14 @@ als JSON-Textnachricht (ein Frame pro Raw-Motion-Notification `EF680406`, ohne R
 | `button` | Taster gedrückt (`EF680302`) |
 | `tap` | nur im Frame direkt nach einem Tippen (`EF680402`), sonst weggelassen |
 
-- Meldet sich der **erste** Client an, setzt die Bridge `motion_freq_hz` (`EF680401`) auf **100 Hz**; nach dem **letzten** Abmelden
-  wieder auf den Standard (10 Hz). Auch nach einem Reconnect gilt der aktuelle Wert.
+- **Spielmodus:** Meldet sich der **erste** Client an, beendet die Bridge zuerst die Abos von Euler (`EF680407`) und Kompass
+  (`EF680409`) und setzt danach `motion_freq_hz` (`EF680401`) auf **100 Hz** (`--motion-hz 5..200`). Nach dem **letzten**
+  Abmelden setzt sie zuerst wieder den Standard (10 Hz) und abonniert dann Euler und Kompass neu. Grund: Alle Werte, die
+  `motion_freq_hz` folgen (Quaternion, Raw Motion, Euler, Kompass), zusammen ergeben bei 100 Hz 400 Notifications/s. Daran
+  bricht die Windows-BLE-Verbindung nach 2–10 s ab. Mit nur Quaternion und Raw Motion (200/s) bleibt sie stabil.
+  Umwelt, Taster, Tippen, Orientierung und Schritte laufen weiter; Euler und Kurs im Dashboard stehen während des Spiels still.
+- Nach einem Reconnect im Spielmodus abonniert die Bridge Euler und Kompass gar nicht erst und schreibt die Spielfrequenz
+  erst, wenn alle Abos stehen.
 - Langsame Clients verlieren die ältesten Frames (Puffer 32), die Bridge blockiert nie.
 - Origin: nur `127.0.0.1`, `localhost`, `[::1]` (beliebiger Port).
 - Simulator: 100 Frames/s mit Vorhand- und Rückhand-Schwüngen (Gyro-Spitzen bis ~700 °/s um die Hochachse, passendes
@@ -121,7 +127,7 @@ als JSON-Textnachricht (ein Frame pro Raw-Motion-Notification `EF680406`, ohne R
   sonst nur, solange kein Client am Motion-Kanal hängt.
 
 ### `thingy tennis`
-`thingy.exe tennis [--sim] [--port N] [--no-browser]` startet die Bridge wie ohne Befehl und öffnet
+`thingy.exe tennis [--sim] [--port N] [--no-browser] [--motion-hz N]` startet die Bridge wie ohne Befehl und öffnet
 `http://127.0.0.1:<port>/tennis/` im Standardbrowser. Spielanleitung und Sensor-Mapping: [TENNIS.md](TENNIS.md).
 
 ### Snapshot

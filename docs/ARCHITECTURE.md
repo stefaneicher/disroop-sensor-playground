@@ -91,7 +91,7 @@ Die ganze Logik ist ohne Gerät testbar: Decoder, Store, Session, Player, Server
 | `internal/telemetry` | Snapshot-Typen, Store, LogBus |
 | `internal/song` | Lied parsen und abspielen, Farbe pro Tonhöhe |
 | `internal/server` | HTTP-API, SSE, WebSocket `/api/motion`, `/api/beep`, MIME-Typen, CORS |
-| `internal/motion` | schneller Motion-Kanal: Quaternion/Raw/Taster/Tippen → Frames, 100 Hz solange ein Client zuhört |
+| `internal/motion` | schneller Motion-Kanal: Quaternion/Raw/Taster/Tippen → Frames, 100 Hz solange ein Client zuhört (Spielmodus: nur Quaternion + Raw Motion schnell, Euler/Kompass pausiert) |
 | `internal/tui` | Terminal-Live-Ansicht (ANSI, auf Windows mit VT-Modus) |
 | `web` | `go:embed` des Dashboards |
 | `internal/tennisapp` | `go:embed` von Thingy Tennis (`tennis/` gebaut nach `dist/`), Details [TENNIS.md](TENNIS.md) |
