@@ -1,0 +1,58 @@
+:root {
+  --bg: #111827; --panel: #1f2937; --line: #374151; --lime: #a3e635; --lime6: #65a30d; --teal: #2aa5a1;
+  --muted: #9ca3af; --text: #f9fafb; --warn: #f59e0b; --bad: #f87171;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: system-ui, "Segoe UI", sans-serif; overflow: hidden; }
+#stage { position: fixed; inset: 0; background: #0b1220; }
+#stage canvas { display: block; width: 100%; height: 100%; }
+.muted { color: var(--muted); }
+.small { font-size: .8rem; }
+b { color: var(--lime); }
+
+#hud { position: absolute; inset: 0; pointer-events: none; font-family: ui-monospace, Consolas, monospace; }
+.top { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.brand, .score, .badges .badge, .swing, .msg, .hint, .keys { background: rgba(17, 24, 39, .82); border: 1px solid var(--line); border-radius: 10px; }
+.brand { display: flex; align-items: center; gap: 8px; padding: 6px 10px; font-family: system-ui, sans-serif; font-weight: 600; }
+.score { padding: 6px 14px; border-color: var(--lime6); text-align: center; }
+.score .main { display: flex; align-items: baseline; justify-content: center; gap: 12px; }
+.score .who { color: var(--muted); font-size: .8rem; }
+.score .points { font-size: 1.35rem; min-width: 7ch; }
+.score .sub { font-size: .72rem; color: var(--muted); }
+.score .sub span { color: var(--teal); }
+.badges { display: flex; gap: 6px; }
+.badge { padding: 4px 10px; font-weight: 700; font-size: .8rem; letter-spacing: .05em; }
+.badge.live { color: #111827; background: var(--lime); border-color: var(--lime); }
+.badge.sim { color: #111827; background: var(--teal); border-color: var(--teal); }
+.badge.off { color: var(--warn); }
+.badge.cam { color: var(--muted); font-weight: 400; }
+.swing { position: absolute; top: 64px; right: 12px; padding: 8px 12px; font-size: .8rem; min-width: 210px; }
+.swing .row { display: flex; justify-content: space-between; gap: 12px; line-height: 1.6; }
+.swing #sw-kmh { font-size: 1.1rem; }
+.bar { height: 6px; border-radius: 3px; background: var(--line); margin: 2px 0 4px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--lime6), var(--lime), var(--warn)); transition: width .15s; }
+.msg { position: absolute; left: 50%; bottom: 52px; transform: translateX(-50%); border-color: var(--lime6); color: var(--lime); font-weight: 700; padding: 6px 16px; border-radius: 999px; font-family: system-ui, sans-serif; white-space: nowrap; }
+.hint { position: absolute; left: 12px; top: 64px; padding: 6px 10px; font-size: .8rem; color: var(--muted); max-width: 300px; }
+.hint:empty { display: none; }
+.keys { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); font-size: .7rem; color: var(--muted); padding: 4px 10px; white-space: nowrap; }
+
+.overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(11, 18, 32, .55); backdrop-filter: blur(3px); }
+.overlay[hidden] { display: none; }
+.card { background: rgba(31, 41, 55, .95); border: 1px solid var(--lime6); border-radius: 18px; padding: 24px 28px; width: min(380px, 92vw); display: flex; flex-direction: column; gap: 10px; text-align: center; box-shadow: 0 20px 60px rgba(0, 0, 0, .5); }
+.card img { align-self: center; }
+.card h1, .card h2 { margin: 4px 0; }
+.card p { margin: 2px 0; }
+button { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; cursor: pointer; }
+button:hover, button:focus-visible { border-color: var(--lime); outline: none; }
+button.primary { background: var(--lime); color: #111827; border-color: var(--lime); font-weight: 700; }
+button.primary:hover { background: #bef264; }
+
+body.demo .keys, body.demo .hint { display: none; }
+@media (max-width: 760px) {
+  .swing { top: auto; bottom: 96px; right: 8px; min-width: 170px; font-size: .7rem; }
+  .keys { display: none; }
+  .brand span, .badge.cam { display: none; }
+  .top { left: 8px; right: 8px; gap: 6px; }
+  .msg { bottom: 16px; font-size: .85rem; }
+}
