@@ -75,8 +75,8 @@ class IndevTest(unittest.TestCase):
 class ReleaseTest(unittest.TestCase):
     def test_command(self):
         self.assertEqual(release_command("0.1.0"),
-                         'gh release create v0.1.0 build/thingy.exe build/thingylive-debug.apk '
-                         '--title "thingy52-live v0.1.0" --generate-notes')
+                         'gh release create v0.1.0 build/thingy.exe build/disroop-thingy-arcade-debug.apk '
+                         '--title "disroop-thingy-arcade v0.1.0" --generate-notes')
         self.assertIn(" v1.2.3-rc.1 ", release_command("v1.2.3-rc.1"))
 
     def test_rejects_bad_version(self):

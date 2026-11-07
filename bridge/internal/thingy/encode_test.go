@@ -62,12 +62,12 @@ func TestLEDEncoding(t *testing.T) {
 }
 
 func TestAndroidAppRecord(t *testing.T) {
-	got := AndroidAppRecord("ch.disroop.thingylive")
-	want := append([]byte{0xD4, 0x0F, 0x15}, []byte("android.com:pkgch.disroop.thingylive")...)
+	got := AndroidAppRecord("ch.disroop.thingyarcade")
+	want := append([]byte{0xD4, 0x0F, 0x17}, []byte("android.com:pkgch.disroop.thingyarcade")...)
 	if !bytes.Equal(got, want) {
 		t.Fatalf("got % X\nwant % X", got, want)
 	}
-	if len(got) != 39 {
-		t.Fatalf("len %d, want 39", len(got))
+	if len(got) != 41 {
+		t.Fatalf("len %d, want 41", len(got))
 	}
 }

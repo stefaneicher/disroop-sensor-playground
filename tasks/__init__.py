@@ -1,4 +1,4 @@
-"""thingy52-live project CLI (Invoke). Start with ./t – see tasks/README.md."""
+"""disroop-thingy-arcade project CLI (Invoke). Start with ./t – see tasks/README.md."""
 from invoke import Collection
 
 from . import android, bridge, checks, demo, dev, hw, info, release, tennis, thingy, web

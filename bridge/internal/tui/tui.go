@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/stefaneicher/thingy52-live/bridge/internal/telemetry"
+	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/telemetry"
 )
 
 const none = "–"
@@ -148,7 +148,7 @@ func Render(s telemetry.Snapshot, logs []string, opts Options, now time.Time) st
 	m, e := s.Motion, s.Environment
 	row := func(label, value string) string { return fmt.Sprintf("  %-15s %s", label, value) }
 	lines := []string{
-		fmt.Sprintf("Thingy:52 live   Quelle: %s   Verbunden: %s   Web: %s", s.Device.Source, yesNo(s.Connected), opts.URL),
+		fmt.Sprintf("Disroop Thingy Arcade   Quelle: %s   Verbunden: %s   Web: %s", s.Device.Source, yesNo(s.Connected), opts.URL),
 		"",
 		row("Gerät", fmt.Sprintf("%s  %s  RSSI %s", text(s.Device.Name), text(s.Device.Address), num(s.Device.RSSI, 0, "dBm"))),
 		row("Akku", batteryText(s.Device)),

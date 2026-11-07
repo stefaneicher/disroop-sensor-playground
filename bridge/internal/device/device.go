@@ -5,7 +5,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/stefaneicher/thingy52-live/bridge/internal/thingy"
+	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/thingy"
 )
 
 // ErrNotConnected is returned by operations that need a connection.

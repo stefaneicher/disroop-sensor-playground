@@ -1,9 +1,9 @@
 {
-  "name": "thingy52-live",
+  "name": "disroop-thingy-arcade",
   "build": { "dockerfile": "Dockerfile" },
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
-  "mounts": ["source=thingy52-live-cache,target=/opt/cache,type=volume"],
+  "mounts": ["source=disroop-thingy-arcade-cache,target=/opt/cache,type=volume"],
   "customizations": {
     "vscode": {
       "extensions": [

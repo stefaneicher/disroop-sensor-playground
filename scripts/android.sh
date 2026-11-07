@@ -13,7 +13,7 @@ fi
 
 GRADLE="cd /workspace/android && ./gradlew --no-daemon --console=plain"
 APK_SRC="/workspace/android/app/build/outputs/apk/debug/app-debug.apk"
-APK_DST="build/thingylive-debug.apk"
+APK_DST="build/disroop-thingy-arcade-debug.apk"
 
 usage() {
   cat <<U

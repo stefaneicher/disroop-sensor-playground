@@ -17,10 +17,10 @@ from invoke import Exit
 ROOT = Path(__file__).resolve().parent.parent
 BUILD = ROOT / "build"
 EXE = BUILD / "thingy.exe"
-APK = BUILD / "thingylive-debug.apk"
+APK = BUILD / "disroop-thingy-arcade-debug.apk"
 HW_LOCK = BUILD / "hw-lock"
-IMAGE = "thingy52-live-dev"
-REPO_URL = "https://github.com/stefaneicher/thingy52-live"
+IMAGE = "disroop-thingy-arcade-dev"
+REPO_URL = "https://github.com/stefaneicher/disroop-thingy-arcade"
 
 LIVE_PORT = 8052
 SIM_PORT = 8060

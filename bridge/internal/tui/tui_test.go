@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stefaneicher/thingy52-live/bridge/internal/telemetry"
+	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/telemetry"
 )
 
 func TestNum(t *testing.T) {

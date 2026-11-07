@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "ch.disroop.thingylive"
+    namespace = "ch.disroop.thingyarcade"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "ch.disroop.thingylive"
+        applicationId = "ch.disroop.thingyarcade"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

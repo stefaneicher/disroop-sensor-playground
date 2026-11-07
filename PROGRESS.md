@@ -1,11 +1,11 @@
 # Progress
 
-Stand: 2026-11-07 15:15. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
+Stand: 2026-11-07 20:30. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 
 ## Meilensteine
 | # | Meilenstein | Status | Notiz |
 |---|---|---|---|
-| 0 | Projekt + GitHub-Repo (öffentlich) | ✅ | https://github.com/stefaneicher/thingy52-live |
+| 0 | Projekt + GitHub-Repo (öffentlich) | ✅ | https://github.com/stefaneicher/disroop-thingy-arcade |
 | 1 | Plan (Lavish) freigegeben | ✅ | `docs/plan.html`, Entscheide siehe RESUME.md |
 | 2 | Protokoll aus der Werksfirmware analysiert | ✅ | UUIDs, Q-Formate, NFC-Raw, Speaker-Freq-Mode |
 | 3 | `shared/chorus.json` (24 Noten) | ✅ | aus blinky `src/chorus.h` |
@@ -14,7 +14,7 @@ Stand: 2026-11-07 15:15. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 | 6 | `docs/protocol.md` + Telemetrie-JSON-Schema | ✅ | Vertrag für alle Agents |
 | 7 | Agent **bridge** (Go: BLE → Terminal + HTTP/SSE, Lied, NFC) | ✅ | TDD, Simulator-Modus für Smoke-Tests |
 | 8 | Agent **web** (Dashboard in `bridge/web/`) | ✅ | gegen Mock-SSE getestet |
-| 9 | Agent **android** (Kotlin, `ch.disroop.thingylive`) | ✅ | Decoder-Unit-Tests, NFC via AAR |
+| 9 | Agent **android** (Kotlin, `ch.disroop.thingyarcade`) | ✅ | Decoder-Unit-Tests, NFC via AAR |
 | 10 | Hardware-Smoke-Test (Terminal, Lied, Web live) | ✅ | `./t hw.smoke` |
 | 11 | NFC-Tag umschreiben → App öffnet | 🔄 | FW v2.2.0 per DFU, AAR geschrieben; Tap-Test durch User offen |
 | 12 | CI (Build + Tests im Devcontainer-Image) + Release exe/apk | ✅ | Pre-Release v0.1.0-preview |
@@ -23,6 +23,10 @@ Stand: 2026-11-07 15:15. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 | 15 | Dashboard: Zeitachsen, Zoom, Kompass, ⓘ-Erklärungen | ✅ | 8ea2145, docs/MESSGROESSEN.md |
 | 16 | Thingy Tennis (eigene App `tennis/`, /api/motion 100 Hz) | ✅ | docs/TENNIS.md; BLE-Fix fcdde64; Live-Spieltest mit Schwüngen offen |
 | 17 | Copilot-Diktat-App (Konzept) | 🔄 | `../copilot-diktat/.lavish/diktat-konzept.html`, Entscheide offen |
+| 18 | Thingy Ski (Lauberhorn, Streif), Ton, FPS-Anzeige, Performance | ✅ | docs/SKI.md, 0c38ca9 |
+| 19 | Android-UI wie Web, Tennis + Ski in der App | ✅ | 0c38ca9 |
+| 20 | Umbenennung zu `disroop-thingy-arcade` | ✅ | NFC-Tag neu schreiben offen |
+| 21 | Thingy-Ausrichtung im Dashboard (180°?) | 🔄 | wartet auf Kompass-Test des Users |
 
 ## Erkenntnisse
 - Toolversionen (geprüft 2026-11-06): Go 1.27.3, Node 26.13.0 (LTS), Gradle 9.9.0, Android platform 36, build-tools 36.1.0, cmdline-tools 16111833 (android-37 nicht im alten Repo-Format verfügbar), Docker 29.9.3.

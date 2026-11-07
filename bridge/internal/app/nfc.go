@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/stefaneicher/thingy52-live/bridge/internal/device"
-	"github.com/stefaneicher/thingy52-live/bridge/internal/thingy"
+	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/device"
+	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/thingy"
 )
 
 // ProgramNFC backs up the current NDEF message (only if no backup exists yet), writes the

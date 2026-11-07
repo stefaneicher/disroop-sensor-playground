@@ -11,7 +11,7 @@ kotlin {
 // jar resources at build time instead of keeping a duplicate in this module.
 val copySharedSong by tasks.registering(Sync::class) {
     from(rootProject.layout.projectDirectory.file("../shared/chorus.json")) {
-        into("ch/disroop/thingylive/protocol")
+        into("ch/disroop/thingyarcade/protocol")
     }
     into(layout.buildDirectory.dir("generated/sharedResources"))
 }

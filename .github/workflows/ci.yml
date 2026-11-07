@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .devcontainer
-          tags: thingy52-live-dev
+          tags: disroop-thingy-arcade-dev
           load: true
           cache-from: type=gha,scope=devcontainer
           cache-to: type=gha,scope=devcontainer,mode=max
@@ -49,7 +49,7 @@ jobs:
           name: ${{ matrix.area }}
           path: |
             build/thingy.exe
-            build/thingylive-debug.apk
+            build/disroop-thingy-arcade-debug.apk
           if-no-files-found: error
 
   release:
@@ -72,8 +72,8 @@ jobs:
         run: |
           ls -la dist
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" dist/thingy.exe dist/thingylive-debug.apk --clobber
+            gh release upload "$TAG" dist/thingy.exe dist/disroop-thingy-arcade-debug.apk --clobber
           else
-            gh release create "$TAG" dist/thingy.exe dist/thingylive-debug.apk \
+            gh release create "$TAG" dist/thingy.exe dist/disroop-thingy-arcade-debug.apk \
               --title "$TAG" --generate-notes $([[ "$TAG" == *-* ]] && echo --prerelease)
           fi

@@ -11,7 +11,7 @@ Builds und Tests laufen **nur** im Image aus [.devcontainer/Dockerfile](../.devc
 
 So nutzt du das Image:
 - **CLI:** `./project …` startet für jeden Schritt einen Container (`docker run --rm`, Repo unter `/workspace`, eigene UID). Fehlt das Image, baut `./project` es automatisch. Neu bauen: `./project image`.
-- **Caches** liegen im Docker-Volume `thingy52-live-cache` (`/opt/cache`): Go-Build, Go-Module, Gradle. Leeren mit `docker volume rm thingy52-live-cache`.
+- **Caches** liegen im Docker-Volume `disroop-thingy-arcade-cache` (`/opt/cache`): Go-Build, Go-Module, Gradle. Leeren mit `docker volume rm disroop-thingy-arcade-cache`.
 - **VS Code:** „Reopen in Container“ ([devcontainer.json](../.devcontainer/devcontainer.json)) mit den Extensions Go, Kotlin, Gradle und ESLint.
 
 Lokal brauchst du nur WSL2 und Docker. Installiere keine Toolchains lokal.
@@ -39,8 +39,8 @@ Lokal brauchst du nur WSL2 und Docker. Installiere keine Toolchains lokal.
 Einzelne Go-Tests im Container:
 
 ```bash
-docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/workspace -v thingy52-live-cache:/opt/cache \
-  -e GOMODCACHE=/opt/cache/gomod -e GOFLAGS=-buildvcs=false -w /workspace/bridge thingy52-live-dev \
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/workspace -v disroop-thingy-arcade-cache:/opt/cache \
+  -e GOMODCACHE=/opt/cache/gomod -e GOFLAGS=-buildvcs=false -w /workspace/bridge disroop-thingy-arcade-dev \
   bash -c 'cp ../shared/chorus.json internal/song/ && go test ./internal/thingy -run Decode -v'
 ```
 

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stefaneicher/thingy52-live/bridge/internal/thingy"
+	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/thingy"
 )
 
 // record subscribes to c and collects every payload (Step runs synchronously, no locking needed).

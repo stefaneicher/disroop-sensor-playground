@@ -12,9 +12,9 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 
 ## Entscheide (vom User freigegeben im Lavish-Plan)
 - **Datenquelle:** Thingy:52-**Werksfirmware per BLE**, kein Flashen. Es ist keine SWD-Probe vorhanden.
-- **Repo:** `stefaneicher/thingy52-live`, öffentlich, Branch `main`.
+- **Repo:** `stefaneicher/disroop-thingy-arcade`, öffentlich, Branch `main`.
   - WSL-Pfad: `/mnt/c/Users/stefa/IdeaProjects/thingy52-live`
-- **Android-Paket:** `ch.disroop.thingylive`
+- **Android-Paket:** `ch.disroop.thingyarcade`
 - **Architektur:**
   - `thingy.exe` (Go, Windows, cross-compiled) verbindet BLE mit Terminal-Ausgabe, Webserver `:8052` mit SSE `/api/stream`, Lied und NFC-Schreiben.
   - Web-GUI ist in die exe eingebettet (`bridge/web/`).
@@ -68,7 +68,7 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 **NFC:**
 - TCS `0109` (max. 247 B) = rohe NDEF-Message, landet in `nfc_t2t_payload_set` und wird persistent gespeichert.
 - Default-Inhalt = AAR `no.nordicsemi.android.nrfthingy` + Text + URI.
-- Neuer Inhalt: AAR `ch.disroop.thingylive`.
+- Neuer Inhalt: AAR `ch.disroop.thingyarcade`.
 
 **Lied:** `shared/chorus.json` mit `{on_ms, off_ms, hz}` × 24 und `pause_ms` 1500.
 
@@ -87,10 +87,12 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 - Machbarkeits-Scanner: `C:\Users\stefa\AppData\Local\Temp\blescan\` (Go, `tinygo.org/x/bluetooth`, im `golang:1.27`-Container gebaut).
 
 ## Nächste Schritte
-Stand 2026-11-07 15:15. Alles gepusht, CI grün. Apps im Repo: `bridge/` (thingy.exe + Dashboard), `android/`, `tennis/`.
-- Demo starten: exe nach `%TEMP%\thingy-demo\` kopieren und dort laufen lassen, sonst ist `build/thingy.exe` für Builds gesperrt. Dashboard: `thingy.exe -no-tui`, Tennis: `thingy.exe tennis` (oder `--sim`).
+Stand 2026-11-07 20:30. Alles gepusht. Apps im Repo: `bridge/` (thingy.exe + Dashboard), `android/`, `tennis/` (Tennis + Ski unter `tennis/src/ski/`).
+- Demo starten: exe nach `%TEMP%\thingy-demo\` kopieren und dort laufen lassen, sonst ist `build/thingy.exe` für Builds gesperrt. Dashboard: `thingy.exe -no-tui`, Tennis: `/tennis/`, Ski: `/ski`.
 - Im Spielmodus sind Euler/Heading pausiert, sonst bricht BLE bei 100 Hz ab (siehe docs/TENNIS.md).
-1. Tennis live mit echten Schwüngen testen (Thingy aufwecken: Knopf), Schwellen ggf. nachjustieren.
-2. User bestätigen lassen, dass NFC-Tap die App öffnet.
-3. Copilot-Diktat: Konzept `/mnt/c/Users/stefa/IdeaProjects/copilot-diktat/.lavish/diktat-konzept.html` (`lavish-axi … --reopen`), nach Entscheid neues Repo `copilot-diktat` anlegen (Whisper im Docker + Copilot SDK + Go-Tray-App).
-4. Optional: Release-Tag v0.1.0 mit exe + apk (APK nach Android-Änderungen neu bauen).
+- Der lokale Ordner heisst weiterhin `thingy52-live`, das Repo `disroop-thingy-arcade`.
+1. Thingy-Ausrichtung im Dashboard: Ergebnis des Kompass-Tests abwarten (Heading 0° oder 180° bei USB zum User, ferne Kante nach Norden; Pitch-Vorzeichen beim Anheben), dann Würfel/LED-Position/3D-Modell korrigieren.
+2. NFC-Tag neu schreiben (`thingy.exe nfc`, neues Paket `ch.disroop.thingyarcade`), User bestätigen lassen, dass der Tap die App öffnet.
+3. Tennis und Ski live mit echten Bewegungen testen, Schwellen ggf. nachjustieren.
+4. Copilot-Diktat: Konzept `/mnt/c/Users/stefa/IdeaProjects/copilot-diktat/.lavish/diktat-konzept.html`.
+5. Optional: Release-Tag mit exe + apk.

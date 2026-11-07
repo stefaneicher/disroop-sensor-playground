@@ -1,4 +1,4 @@
-module github.com/stefaneicher/thingy52-live/bridge
+module github.com/stefaneicher/disroop-thingy-arcade/bridge
 
 go 1.27.3
 

@@ -35,7 +35,7 @@ def test(c, area=None):
 
 @task
 def build(c):
-    """Baut alles im Devcontainer: build/thingy.exe, build/thingy-linux, build/thingylive-debug.apk."""
+    """Baut alles im Devcontainer: build/thingy.exe, build/thingy-linux, build/disroop-thingy-arcade-debug.apk."""
     project(c, "build")
 
 

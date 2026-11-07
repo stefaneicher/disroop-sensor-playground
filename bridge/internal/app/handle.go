@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/stefaneicher/thingy52-live/bridge/internal/telemetry"
-	"github.com/stefaneicher/thingy52-live/bridge/internal/thingy"
+	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/telemetry"
+	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/thingy"
 )
 
 // Handle decodes one notification and applies it to the store.

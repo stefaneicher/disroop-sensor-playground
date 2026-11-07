@@ -76,8 +76,8 @@ Parallel die LED setzen: Note an = Farbe je Tonhöhe, Note aus = LED aus.
 Ein Tastendruck am Thingy startet oder stoppt das Lied.
 
 ### NFC → eigene App
-NDEF-Message mit einem Record: TNF=4 (External), Type `android.com:pkg`, Payload `ch.disroop.thingylive`.
-Bytes: `D4 0F 15` + ASCII `android.com:pkg` + ASCII `ch.disroop.thingylive` (39 B gesamt).
+NDEF-Message mit einem Record: TNF=4 (External), Type `android.com:pkg`, Payload `ch.disroop.thingyarcade`.
+Bytes: `D4 0F 17` + ASCII `android.com:pkg` + ASCII `ch.disroop.thingyarcade` (41 B gesamt).
 `D4` = MB|ME|SR|TNF 4, `0F` = Type-Länge 15, `15` = Payload-Länge 21.
 
 ## 2. Bridge-API (HTTP auf `127.0.0.1:8052`, Web-GUI und Smoke-Tests)

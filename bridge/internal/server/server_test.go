@@ -14,8 +14,8 @@ import (
 	"testing/fstest"
 	"time"
 
-	"github.com/stefaneicher/thingy52-live/bridge/internal/device"
-	"github.com/stefaneicher/thingy52-live/bridge/internal/telemetry"
+	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/device"
+	"github.com/stefaneicher/disroop-thingy-arcade/bridge/internal/telemetry"
 )
 
 type fakeSong struct {

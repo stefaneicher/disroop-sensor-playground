@@ -1,8 +1,8 @@
 {
-  "name": "thingy52-live-web",
+  "name": "disroop-thingy-arcade-web",
   "private": true,
   "type": "module",
-  "description": "Thingy:52 live dashboard (TypeScript, no bundler). Build: ./project web build",
+  "description": "Disroop Thingy Arcade dashboard (TypeScript, no bundler). Build: ./project web build",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json"

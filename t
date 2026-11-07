@@ -19,7 +19,7 @@ export PYTHONPATH="$TOOLS:$ROOT${PYTHONPATH:+:$PYTHONPATH}" PYTHONUTF8=1 PYTHOND
 cd "$ROOT"
 if (($# == 0)); then
   cat <<H
-🛰  thingy52-live – Projekt-CLI
+🛰  disroop-thingy-arcade – Projekt-CLI
    Schnellstart:  ./t doctor   ·   ./t demo   ·   ./t sim   ·   ./t live
    Hilfe zu einem Befehl:  ./t <befehl> --help
 

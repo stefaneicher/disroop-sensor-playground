@@ -2,10 +2,10 @@
 # Thingy Tennis (tennis/). Called via ./project tennis <cmd>. Everything runs inside the devcontainer image.
 set -euo pipefail
 ROOT="${ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
-IMAGE="${IMAGE:-thingy52-live-dev}"
+IMAGE="${IMAGE:-disroop-thingy-arcade-dev}"
 if ! declare -F indev >/dev/null; then
   indev() {
-    docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$ROOT":/workspace -v thingy52-live-cache:/opt/cache \
+    docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$ROOT":/workspace -v disroop-thingy-arcade-cache:/opt/cache \
       -w /workspace "$IMAGE" bash -c "$*"
   }
 fi
