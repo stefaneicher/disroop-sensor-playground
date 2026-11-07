@@ -51,7 +51,9 @@ type Device struct {
 	Address    *string  `json:"address"`
 	RSSI       *float64 `json:"rssi"`
 	BatteryPct *float64 `json:"battery_pct"`
-	Source     string   `json:"source"`
+	// BatteryTrend is "charging", "discharging" or "unknown", estimated from BatteryPct (package battery).
+	BatteryTrend string `json:"battery_trend"`
+	Source       string `json:"source"`
 }
 
 // Motion values.
@@ -109,7 +111,7 @@ type Snapshot struct {
 
 // New returns an empty snapshot for the given source ("ble" or "sim").
 func New(source string) Snapshot {
-	return Snapshot{Device: Device{Source: source}, Sound: Sound{Song: Song{NoteIndex: -1}}}
+	return Snapshot{Device: Device{Source: source, BatteryTrend: "unknown"}, Sound: Sound{Song: Song{NoteIndex: -1}}}
 }
 
 // F returns a pointer to v.

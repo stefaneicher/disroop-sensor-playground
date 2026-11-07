@@ -89,7 +89,7 @@ Direkt unter Windows (PowerShell, im Repo-Ordner): `.\build\thingy.exe --sim`
 Thingy:52 live   Quelle: sim   Verbunden: ja   Web: http://localhost:8052
 
   Gerät           Thingy (Simulator)  SIM:00:00:00:00:52  RSSI -43 dBm
-  Akku            87 %
+  Akku            62 %  ↑ lädt
 
   Beschleunigung  x  +0.01  y  +0.03  z  +1.01 g   |a| 1.01 g
   Drehrate        x   +1.0  y   +0.4  z   +0.3 °/s
@@ -179,7 +179,7 @@ curl.exe -s -X POST -H "Content-Type: application/json" -d '{"r":255,"g":0,"b":0
 - **Verbinden:** Die App scannt und verbindet sich mit dem **nächsten** Thingy, also dem mit dem stärksten Signal. Bei Abbruch verbindet sie sich automatisch neu.
 - **Hintergrund:** Geht die App in den Hintergrund, trennt sie die Verbindung. Der Thingy ist dann wieder frei für `thingy.exe`.
 - **Karten:**
-  - Verbindung mit Signal und Akku, Schalter **Simulator**
+  - Verbindung mit Signal und Akku, darunter „lädt ↑“, „Akkubetrieb ↓“ oder „Ladezustand unbekannt“ (geschätzt), Schalter **Simulator**
   - Lied & LED
   - Umgebung mit Luftqualität
   - Bewegung (Verläufe)

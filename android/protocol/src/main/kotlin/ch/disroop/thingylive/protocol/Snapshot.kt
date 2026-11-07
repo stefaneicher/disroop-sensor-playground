@@ -17,6 +17,8 @@ data class Snapshot(
         val address: String? = null,
         val rssi: Int? = null,
         val batteryPct: Int? = null,
+        /** Heuristic from the level trend (no firmware flag), kept up to date by [BatteryTrendTracker]. */
+        val batteryTrend: BatteryTrend = BatteryTrend.UNKNOWN,
         val source: Source = Source.BLE,
     )
 

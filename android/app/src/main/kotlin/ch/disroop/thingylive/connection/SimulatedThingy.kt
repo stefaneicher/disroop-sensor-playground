@@ -54,7 +54,7 @@ class SimulatedThingy : ThingyConnection {
                 every(MIC_PERIOD_MS) { tick -> if (microphone) emitMicrophone(tick * MIC_PERIOD_MS / 1000.0) }
                 every(STATUS_PERIOD_MS) { tick ->
                     _events.emit(ConnectionEvent.Rssi(-45 - (tick % 7).toInt()))
-                    emit(ThingyUuids.BATTERY_LEVEL, NotificationEncoder.battery(87 - (tick / 30).toInt()))
+                    emit(ThingyUuids.BATTERY_LEVEL, NotificationEncoder.battery(chargeCycle(tick * STATUS_PERIOD_MS)))
                 }
                 every(TAP_PERIOD_MS) { tick ->
                     emit(ThingyUuids.TAP, NotificationEncoder.tap(Tap(TapDirection.entries[(tick % 6).toInt()], 1)))
@@ -115,16 +115,22 @@ class SimulatedThingy : ThingyConnection {
 
     private fun Double.rad() = this * PI / 180
 
-    private companion object {
-        const val NAME = "Thingy (Simulator)"
-        const val ADDRESS = "SIM"
-        const val G = 9.81
-        const val CONNECT_DELAY_MS = 300L
-        const val MOTION_PERIOD_MS = 100L
-        const val ENV_PERIOD_MS = 1_000L
-        const val MIC_PERIOD_MS = 100L
-        const val STATUS_PERIOD_MS = 2_000L
-        const val TAP_PERIOD_MS = 7_000L
-        const val MIC_SAMPLES = 256
+    companion object {
+        /** Simulated battery: charges 60 → 70 % (1 % per minute), then runs on battery back to 60 %. */
+        fun chargeCycle(elapsedMs: Long): Int {
+            val minute = (elapsedMs / 60_000 % 20).toInt()
+            return if (minute <= 10) 60 + minute else 80 - minute
+        }
+
+        private const val NAME = "Thingy (Simulator)"
+        private const val ADDRESS = "SIM"
+        private const val G = 9.81
+        private const val CONNECT_DELAY_MS = 300L
+        private const val MOTION_PERIOD_MS = 100L
+        private const val ENV_PERIOD_MS = 1_000L
+        private const val MIC_PERIOD_MS = 100L
+        private const val STATUS_PERIOD_MS = 2_000L
+        private const val TAP_PERIOD_MS = 7_000L
+        private const val MIC_SAMPLES = 256
     }
 }

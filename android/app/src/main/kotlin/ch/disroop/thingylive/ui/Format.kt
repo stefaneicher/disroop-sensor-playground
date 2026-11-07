@@ -1,6 +1,7 @@
 package ch.disroop.thingylive.ui
 
 import ch.disroop.thingylive.connection.LinkState
+import ch.disroop.thingylive.protocol.BatteryTrend
 import ch.disroop.thingylive.protocol.Orientation
 import java.util.Locale
 
@@ -32,4 +33,10 @@ fun LinkState.label(): String = when (this) {
         LinkState.Reason.BLUETOOTH_OFF -> "Bluetooth ist ausgeschaltet"
         LinkState.Reason.SCAN_FAILED -> "Suche fehlgeschlagen, neuer Versuch …"
     }
+}
+
+fun BatteryTrend.label(): String = when (this) {
+    BatteryTrend.CHARGING -> "lädt ↑"
+    BatteryTrend.DISCHARGING -> "Akkubetrieb ↓"
+    BatteryTrend.UNKNOWN -> "Ladezustand unbekannt"
 }

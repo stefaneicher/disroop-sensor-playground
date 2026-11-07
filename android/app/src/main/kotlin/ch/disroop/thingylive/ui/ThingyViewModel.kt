@@ -9,6 +9,8 @@ import ch.disroop.thingylive.connection.ConnectionEvent
 import ch.disroop.thingylive.connection.ConnectionFactory
 import ch.disroop.thingylive.connection.LinkState
 import ch.disroop.thingylive.connection.ThingyConnection
+import ch.disroop.thingylive.protocol.BatteryTrend
+import ch.disroop.thingylive.protocol.BatteryTrendTracker
 import ch.disroop.thingylive.protocol.NotificationDecoder
 import ch.disroop.thingylive.protocol.Rgb
 import ch.disroop.thingylive.protocol.Snapshot
@@ -55,6 +57,8 @@ class ThingyViewModel(
     private var connectionJob: Job? = null
     private var songJob: Job? = null
     private var micEnabledAtMs = 0L
+    private val battery = BatteryTrendTracker()
+    private var batteryCheckedMs = 0L
 
     /** Connects (BLE, or the simulator when selected or Bluetooth is missing). No-op while running. */
     fun start() {
@@ -133,6 +137,7 @@ class ThingyViewModel(
     private fun connect(simulator: Boolean) {
         val next = if (simulator) connections.simulator() else connections.ble()
         connection = next
+        battery.reset()
         _state.value = UiState(
             snapshot = Snapshot(device = Snapshot.Device(source = next.source)),
             simulator = simulator,
@@ -153,6 +158,7 @@ class ThingyViewModel(
         if (wasConnected && !isConnected) {
             stopSong()
             onMicrophoneLinkLost()
+            battery.reset()
         }
         if (!wasConnected && isConnected && _state.value.micEnabled) {
             micEnabledAtMs = clock()
@@ -161,7 +167,8 @@ class ThingyViewModel(
         _state.update { state ->
             val device = state.snapshot.device
             val connectedDevice = if (link is LinkState.Connected) device.copy(name = link.name, address = link.address) else device
-            state.copy(link = link, snapshot = state.snapshot.copy(connected = link is LinkState.Connected, device = connectedDevice))
+            val trend = if (isConnected) connectedDevice.batteryTrend else BatteryTrend.UNKNOWN
+            state.copy(link = link, snapshot = state.snapshot.copy(connected = isConnected, device = connectedDevice.copy(batteryTrend = trend)))
         }
     }
 
@@ -190,8 +197,11 @@ class ThingyViewModel(
         } ?: return
         if (telemetry is TelemetryEvent.MicLevel && !_state.value.micEnabled) return
         val wasPressed = _state.value.snapshot.ui.buttonPressed == true
+        val now = clock()
+        val trend = batteryTrend(telemetry, now)
         _state.update { state ->
-            val next = state.copy(snapshot = state.snapshot.reduce(telemetry, clock()))
+            val reduced = state.snapshot.reduce(telemetry, now)
+            val next = state.copy(snapshot = if (trend == null) reduced else reduced.copy(device = reduced.device.copy(batteryTrend = trend)))
             if (telemetry is TelemetryEvent.Motion) {
                 next.copy(
                     accelHistory = (state.accelHistory + telemetry.raw.accelG).takeLast(HISTORY_SIZE),
@@ -203,6 +213,16 @@ class ThingyViewModel(
         }
         if (telemetry is TelemetryEvent.Button && telemetry.pressed && !wasPressed) toggleSong()
     }
+
+    /**
+     * Feeds battery levels into the trend heuristic. Between them (the firmware notifies on change only)
+     * the trend is re-evaluated at most every [BATTERY_CHECK_MS]. Returns null when nothing was evaluated.
+     */
+    private fun batteryTrend(event: TelemetryEvent, nowMs: Long): BatteryTrend? = when {
+        event is TelemetryEvent.Battery -> battery.add(nowMs, event.percent)
+        nowMs - batteryCheckedMs >= BATTERY_CHECK_MS -> battery.evaluate(nowMs)
+        else -> null
+    }?.also { batteryCheckedMs = nowMs }
 
     private fun updateSong(playing: Boolean, noteIndex: Int) = _state.update {
         it.withSnapshot { copy(sound = sound.copy(song = Snapshot.SongState(playing, noteIndex))) }
@@ -216,6 +236,8 @@ class ThingyViewModel(
 
         /** A disconnect within this time after enabling the microphone switches it off for good. */
         const val MIC_UNSTABLE_WINDOW_MS = 30_000L
+
+        const val BATTERY_CHECK_MS = 10_000L
 
         fun factory(connections: ConnectionFactory): ViewModelProvider.Factory = viewModelFactory {
             initializer { ThingyViewModel(connections) }

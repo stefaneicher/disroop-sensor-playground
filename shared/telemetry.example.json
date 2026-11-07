@@ -1,7 +1,7 @@
 {
   "ts": 1762460000000,
   "connected": true,
-  "device": { "name": "Thingy", "address": "E3:58:08:1B:53:5F", "rssi": -43, "battery_pct": 87, "source": "sim" },
+  "device": { "name": "Thingy", "address": "E3:58:08:1B:53:5F", "rssi": -43, "battery_pct": 87, "battery_trend": "unknown", "source": "sim" },
   "motion": {
     "accel_g": { "x": 0.02, "y": -0.01, "z": 1.0 },
     "gyro_dps": { "x": 1.3, "y": -0.4, "z": 0.2 },

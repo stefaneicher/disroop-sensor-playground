@@ -82,6 +82,35 @@ func TestSimulatorScheduleTapsAndButton(t *testing.T) {
 	}
 }
 
+func TestSimulatorBatteryNotifiesOnChangeOnly(t *testing.T) {
+	d := Start(Options{Manual: true, Tick: time.Second, Battery: func(e time.Duration) int { return 50 + int(e/time.Minute) }})
+	defer d.Close()
+	got := record(t, d, thingy.BatteryChar)
+	if v, _ := d.Read(thingy.BatteryChar); v[0] != 50 {
+		t.Fatalf("initial read %d, want 50", v[0])
+	}
+	for range 181 { // 0 … 3 min
+		d.Step()
+	}
+	if len(*got) != 3 || (*got)[0][0] != 51 || (*got)[2][0] != 53 {
+		t.Fatalf("notifications %v, want 51, 52, 53", *got)
+	}
+	if v, _ := d.Read(thingy.BatteryChar); v[0] != 53 {
+		t.Fatalf("read after 3 min %d, want 53", v[0])
+	}
+}
+
+func TestChargeCycleRisesThenFalls(t *testing.T) {
+	for _, c := range []struct {
+		min  int
+		want int
+	}{{0, 60}, {5, 65}, {10, 70}, {15, 65}, {19, 61}, {20, 60}} {
+		if got := ChargeCycle(time.Duration(c.min) * time.Minute); got != c.want {
+			t.Errorf("minute %d: %d %%, want %d", c.min, got, c.want)
+		}
+	}
+}
+
 func TestSimulatorStoresWritesAndClosed(t *testing.T) {
 	c := NewConnector(Options{})
 	dev, err := c.Connect(context.Background())

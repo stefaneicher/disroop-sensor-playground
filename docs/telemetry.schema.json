@@ -12,10 +12,12 @@
     "ts": { "type": "integer" },
     "connected": { "type": "boolean" },
     "device": {
-      "type": "object", "required": ["name", "address", "rssi", "battery_pct", "source"],
+      "type": "object", "required": ["name", "address", "rssi", "battery_pct", "battery_trend", "source"],
       "properties": {
         "name": { "type": ["string", "null"] }, "address": { "type": ["string", "null"] },
         "rssi": { "$ref": "#/$defs/num" }, "battery_pct": { "$ref": "#/$defs/num" },
+        "battery_trend": { "enum": ["charging", "discharging", "unknown"],
+                           "description": "Heuristik aus dem Verlauf von battery_pct (kein Firmware-Flag), siehe docs/protocol.md" },
         "source": { "enum": ["ble", "sim"] }
       }
     },

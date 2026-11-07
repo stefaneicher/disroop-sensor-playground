@@ -85,6 +85,9 @@ func TestEmptySnapshotHasAllKeysAndNulls(t *testing.T) {
 	if got["device"].(map[string]any)["source"] != "sim" {
 		t.Error("source must be sim")
 	}
+	if got["device"].(map[string]any)["battery_trend"] != "unknown" {
+		t.Error("battery_trend must start as unknown")
+	}
 	song := got["sound"].(map[string]any)["song"].(map[string]any)
 	if song["playing"] != false || song["note_index"] != float64(-1) {
 		t.Errorf("song = %v", song)

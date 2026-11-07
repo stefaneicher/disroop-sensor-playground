@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/stefaneicher/thingy52-live/bridge/internal/telemetry"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/thingy"
@@ -21,6 +22,7 @@ func (s *Session) Handle(c thingy.Char, b []byte) {
 			s.logf("%s: %v (% X)", c.Name, err, b)
 		}
 	}
+	s.refreshBatteryTrend()
 }
 
 func xyz(v thingy.XYZ) *telemetry.XYZ { return &telemetry.XYZ{X: v.X, Y: v.Y, Z: v.Z} }
@@ -79,8 +81,7 @@ func (s *Session) apply(c thingy.Char, b []byte) error {
 	case thingy.ButtonChar:
 		return s.button(b)
 	case thingy.BatteryChar:
-		v, err := thingy.DecodeBattery(b)
-		return s.set(err, func(t *telemetry.Snapshot) { t.Device.BatteryPct = telemetry.F(float64(v)) })
+		return s.batteryLevel(b)
 	case thingy.MicrophoneChar:
 		return s.microphone(b)
 	case thingy.SpeakerStatusChar:
@@ -144,4 +145,39 @@ func (s *Session) speaker(b []byte) error {
 		s.logf("Lautsprecher-Status: 0x%02X", b[0])
 	}
 	return nil
+}
+
+// batteryLevel stores the level and feeds the charging-trend heuristic.
+func (s *Session) batteryLevel(b []byte) error {
+	v, err := thingy.DecodeBattery(b)
+	if err != nil {
+		return err
+	}
+	now := s.now()
+	s.mu.Lock() // held during the store update, so concurrent notifications cannot publish a stale trend
+	defer s.mu.Unlock()
+	trend := s.battery.Add(now, float64(v))
+	s.batteryTrend, s.batteryChecked = trend, now
+	s.store.Update(func(t *telemetry.Snapshot) {
+		t.Device.BatteryPct, t.Device.BatteryTrend = telemetry.F(float64(v)), string(trend)
+	})
+	return nil
+}
+
+// batteryCheckEvery throttles re-evaluating the trend between battery notifications; the firmware
+// notifies on change only, so a steady level would otherwise never be looked at again.
+const batteryCheckEvery = 10 * time.Second
+
+func (s *Session) refreshBatteryTrend() {
+	now := s.now()
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if now.Sub(s.batteryChecked) < batteryCheckEvery {
+		return
+	}
+	s.batteryChecked = now
+	if trend := s.battery.Trend(now); trend != s.batteryTrend {
+		s.batteryTrend = trend
+		s.store.Update(func(t *telemetry.Snapshot) { t.Device.BatteryTrend = string(trend) })
+	}
 }

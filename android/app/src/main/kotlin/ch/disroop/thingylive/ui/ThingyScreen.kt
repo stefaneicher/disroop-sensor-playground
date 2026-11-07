@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import ch.disroop.thingylive.R
 import ch.disroop.thingylive.connection.LinkState
 import ch.disroop.thingylive.protocol.AirQuality
+import ch.disroop.thingylive.protocol.BatteryTrend
 import ch.disroop.thingylive.protocol.Rgb
 import ch.disroop.thingylive.protocol.Rgbc
 import ch.disroop.thingylive.protocol.Snapshot
@@ -109,6 +110,7 @@ private fun StatusCard(state: UiState, actions: ScreenActions) {
             ValueTile("Signal", s.device.rssi.format(" dBm"), Modifier.weight(1f))
             ValueTile("Akku", s.device.batteryPct.format(" %"), Modifier.weight(1f))
         }
+        if (s.device.batteryPct != null) BatteryTrendLine(s.device.batteryTrend)
         val link = state.link
         if (link is LinkState.Unavailable && link.reason != LinkState.Reason.SCAN_FAILED) {
             DisroopButton(onClick = { actions.onFixLink(link.reason) }) {
@@ -125,6 +127,20 @@ private fun StatusCard(state: UiState, actions: ScreenActions) {
         }
         if (!state.bleAvailable) Text("Kein Bluetooth LE auf diesem Gerät – Simulator aktiv.", color = Palette.muted)
     }
+}
+
+/** The firmware does not report USB power; the trend is estimated from the level (docs/protocol.md). */
+@Composable
+private fun BatteryTrendLine(trend: BatteryTrend) = Row(
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.spacedBy(6.dp),
+) {
+    Text(
+        trend.label(),
+        color = if (trend == BatteryTrend.CHARGING) Palette.accent else Palette.muted,
+        fontWeight = if (trend == BatteryTrend.CHARGING) FontWeight.SemiBold else FontWeight.Normal,
+    )
+    Text("(geschätzt)", style = MaterialTheme.typography.labelSmall, color = Palette.muted)
 }
 
 @Composable

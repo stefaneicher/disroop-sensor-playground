@@ -14,6 +14,7 @@ export interface Snapshot {
     address: string | null;
     rssi: Num;
     battery_pct: Num;
+    battery_trend: "charging" | "discharging" | "unknown";
     source: "ble" | "sim";
   };
   motion: {

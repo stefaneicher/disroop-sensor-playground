@@ -5,6 +5,7 @@ import ch.disroop.thingylive.connection.FakeConnection
 import ch.disroop.thingylive.connection.LinkState
 import ch.disroop.thingylive.connection.ThingyConnection
 import ch.disroop.thingylive.protocol.AudioLevel
+import ch.disroop.thingylive.protocol.BatteryTrend
 import ch.disroop.thingylive.protocol.ImaAdpcm
 import ch.disroop.thingylive.protocol.Note
 import ch.disroop.thingylive.protocol.NotificationEncoder
@@ -63,6 +64,41 @@ class ThingyViewModelTest {
         assertEquals("E3:58:08:1B:53:5F", s.snapshot.device.address)
         assertEquals(Snapshot.Source.BLE, s.snapshot.device.source)
         assertEquals(23.4, s.snapshot.environment.temperatureC!!, 1e-9)
+        vm.stop()
+    }
+
+    @Test fun `battery trend follows the level and resets after a lost link`() = runTest(dispatcher) {
+        val vm = viewModel()
+        vm.start()
+        runCurrent()
+        fun trend() = vm.state.value.snapshot.device.batteryTrend
+        listOf(60, 61, 62).forEach {
+            ble.emit(ThingyUuids.BATTERY_LEVEL, NotificationEncoder.battery(it))
+            runCurrent()
+            advanceTimeBy(60_000)
+        }
+        assertEquals(BatteryTrend.CHARGING, trend())
+
+        // Unplugged: the level drops, later only other notifications arrive (the firmware notifies on change).
+        listOf(61, 60).forEach {
+            ble.emit(ThingyUuids.BATTERY_LEVEL, NotificationEncoder.battery(it))
+            runCurrent()
+            advanceTimeBy(60_000)
+        }
+        repeat(12) {
+            ble.emit(ThingyUuids.BUTTON, NotificationEncoder.button(false))
+            runCurrent()
+            advanceTimeBy(10_000)
+        }
+        assertEquals(BatteryTrend.DISCHARGING, trend())
+
+        ble.link.value = LinkState.Scanning
+        runCurrent()
+        assertEquals(BatteryTrend.UNKNOWN, trend())
+        ble.link.value = LinkState.Connected("Thingy", "E3:58:08:1B:53:5F")
+        ble.emit(ThingyUuids.BATTERY_LEVEL, NotificationEncoder.battery(60))
+        runCurrent()
+        assertEquals(BatteryTrend.UNKNOWN, trend())
         vm.stop()
     }
 

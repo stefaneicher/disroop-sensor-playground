@@ -73,6 +73,17 @@ func TestSongText(t *testing.T) {
 	}
 }
 
+func TestBatteryTextShowsTheTrend(t *testing.T) {
+	for trend, want := range map[string]string{"charging": "66 %  ↑ lädt", "discharging": "66 %  ↓ Akkubetrieb", "unknown": "66 %  ?"} {
+		if got := batteryText(telemetry.Device{BatteryPct: telemetry.F(66), BatteryTrend: trend}); got != want {
+			t.Errorf("%s: got %q, want %q", trend, got, want)
+		}
+	}
+	if got := batteryText(telemetry.Device{BatteryTrend: "charging"}); got != none {
+		t.Errorf("no level: got %q", got)
+	}
+}
+
 func TestRenderContainsAllValues(t *testing.T) {
 	s := telemetry.New("ble")
 	s.Connected = true

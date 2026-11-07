@@ -72,6 +72,18 @@ func songText(s telemetry.Song, notes int) string {
 	return fmt.Sprintf("läuft – Note %d/%d", s.NoteIndex+1, notes)
 }
 
+// batteryText shows the level with the estimated trend (a heuristic, see package battery).
+func batteryText(d telemetry.Device) string {
+	if d.BatteryPct == nil {
+		return none
+	}
+	trend := map[string]string{"charging": "↑ lädt", "discharging": "↓ Akkubetrieb"}[d.BatteryTrend]
+	if trend == "" {
+		trend = "?"
+	}
+	return num(d.BatteryPct, 0, "%") + "  " + trend
+}
+
 func text(p *string) string {
 	if p == nil {
 		return none
@@ -139,7 +151,7 @@ func Render(s telemetry.Snapshot, logs []string, opts Options, now time.Time) st
 		fmt.Sprintf("Thingy:52 live   Quelle: %s   Verbunden: %s   Web: %s", s.Device.Source, yesNo(s.Connected), opts.URL),
 		"",
 		row("Gerät", fmt.Sprintf("%s  %s  RSSI %s", text(s.Device.Name), text(s.Device.Address), num(s.Device.RSSI, 0, "dBm"))),
-		row("Akku", num(s.Device.BatteryPct, 0, "%")),
+		row("Akku", batteryText(s.Device)),
 		"",
 		row("Beschleunigung", xyz(m.AccelG, 2, "g")+magnitude(m.AccelG)),
 		row("Drehrate", xyz(m.GyroDPS, 1, "°/s")),

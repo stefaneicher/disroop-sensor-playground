@@ -8,6 +8,15 @@
 - **Akku leer:** Thingy per USB laden. Der Akku-Wert steht im Terminal und im Dashboard.
 - **Prüfen:** `./project bridge scan --timeout 20s` listet alle Thingys mit RSSI. Hast du mehrere, wähle einen mit `--addr E3:58:08:1B:53:5F`.
 
+## Lädt der Thingy?
+
+Die Firmware meldet über Bluetooth nur den Akkustand in %, nicht ob ein USB-Kabel steckt.
+Terminal und App **schätzen** den Trend aus dem Verlauf: „↑ lädt“, „↓ Akkubetrieb“ oder „?“ bzw. „Ladezustand unbekannt“.
+
+- **Direkt nach dem Verbinden steht „?“:** Die Schätzung braucht mindestens 2 Minuten Daten und eine Änderung um 1 Prozentpunkt.
+- **Bei 100 % bleibt „lädt“ stehen:** „Voll“ ist nicht vom Laden zu unterscheiden. Die Anzeige behält den letzten Trend, bis der Wert sinkt.
+- Details zur Regel: [protocol.md, „Akku-Trend“](protocol.md#akku-trend-lädt--akkubetrieb--heuristik).
+
 ## Nur eine BLE-Verbindung
 
 Der Thingy akzeptiert **eine** Verbindung gleichzeitig. Ist schon etwas verbunden, sendet er kein Advertising mehr, und `thingy.exe` findet ihn nicht. Mögliche Verbindungen:

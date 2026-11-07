@@ -18,6 +18,28 @@ type Options struct {
 	Tick        time.Duration // motion/mic period, default 100 ms
 	ButtonEvery time.Duration // simulated button press period, 0 = never
 	Manual      bool          // no background ticker; advance with Step (deterministic tests)
+	// Battery returns the level in % after the simulated time since connecting, default ChargeCycle.
+	Battery func(elapsed time.Duration) int
+}
+
+// ChargeCycle is the default simulated battery: it charges from 60 to 70 % (1 % per minute),
+// then runs on battery back to 60 %, so both charging trends show up in a demo.
+func ChargeCycle(elapsed time.Duration) int {
+	minute := int(elapsed/time.Minute) % 20
+	if minute <= 10 {
+		return 60 + minute
+	}
+	return 80 - minute
+}
+
+func (o Options) withDefaults() Options {
+	if o.Tick == 0 {
+		o.Tick = 100 * time.Millisecond
+	}
+	if o.Battery == nil {
+		o.Battery = ChargeCycle
+	}
+	return o
 }
 
 // Connector creates simulated devices.
@@ -25,10 +47,7 @@ type Connector struct{ opts Options }
 
 // NewConnector returns a simulator connector.
 func NewConnector(opts Options) *Connector {
-	if opts.Tick == 0 {
-		opts.Tick = 100 * time.Millisecond
-	}
-	return &Connector{opts: opts}
+	return &Connector{opts: opts.withDefaults()}
 }
 
 // Source implements device.Connector.
@@ -64,13 +83,13 @@ type Device struct {
 	stepMu    sync.Mutex
 	tick      int
 	steps     uint32
+	battery   byte
 }
 
 // Start returns a connected simulated device that emits notifications until Close.
 func Start(opts Options) *Device {
-	if opts.Tick == 0 {
-		opts.Tick = 100 * time.Millisecond
-	}
+	opts = opts.withDefaults()
+	battery := byte(opts.Battery(0))
 	d := &Device{
 		opts: opts,
 		subs: map[string]func([]byte){},
@@ -78,10 +97,11 @@ func Start(opts Options) *Device {
 			thingy.EnvConfigChar.UUID:    thingy.EnvConfigValue{TempMS: 2000, PressureMS: 2000, HumidityMS: 2000, ColorMS: 1500, GasMode: 2, LED: [3]byte{103, 78, 29}}.Bytes(),
 			thingy.MotionConfigChar.UUID: thingy.MotionConfigValue{PedometerMS: 1000, TemperatureMS: 500, CompassMS: 500, MotionHz: 60}.Bytes(),
 			thingy.NFCChar.UUID:          DefaultNFC,
-			thingy.BatteryChar.UUID:      {87},
+			thingy.BatteryChar.UUID:      {battery},
 			thingy.LEDChar.UUID:          {2, 3, 20, 0x0D, 0x0D},
 		},
-		done: make(chan struct{}),
+		done:    make(chan struct{}),
+		battery: battery,
 	}
 	if !opts.Manual {
 		go d.run()
@@ -216,8 +236,8 @@ func (d *Device) Step() {
 	if d.every(elapsed, 15*time.Second) {
 		d.notify(thingy.OrientationChar, []byte{byte((tick / 150) % 2)})
 	}
-	if d.every(elapsed, time.Minute) {
-		d.notify(thingy.BatteryChar, []byte{87})
+	if d.every(elapsed, 10*time.Second) {
+		d.emitBattery(elapsed)
 	}
 	if d.every(elapsed, d.opts.ButtonEvery) && elapsed >= d.opts.ButtonEvery {
 		d.notify(thingy.ButtonChar, []byte{1})
@@ -227,6 +247,19 @@ func (d *Device) Step() {
 
 func (d *Device) every(elapsed, period time.Duration) bool {
 	return period > 0 && elapsed%period < d.opts.Tick
+}
+
+// emitBattery notifies only on change, like the firmware's Battery Service.
+func (d *Device) emitBattery(elapsed time.Duration) {
+	level := byte(max(0, min(100, d.opts.Battery(elapsed))))
+	if level == d.battery {
+		return
+	}
+	d.battery = level
+	d.mu.Lock()
+	d.values[thingy.BatteryChar.UUID] = []byte{level}
+	d.mu.Unlock()
+	d.notify(thingy.BatteryChar, []byte{level})
 }
 
 func (d *Device) emitEnvironment(t float64) {

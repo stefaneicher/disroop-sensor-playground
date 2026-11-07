@@ -32,7 +32,28 @@ Gefundenes Gerät: `E3:58:08:1B:53:5F`.
 | `EF680503` | Speaker-Status | notify | u8 |
 | `EF680504` | Mikrofon | notify | IMA/DVI-ADPCM-Frame: i16 predictor **big-endian** (htons in FW), u8 step_index, danach 4-Bit-Samples (**high nibble zuerst**), 16 kHz mono |
 | `EF680109` | NFC (**erst ab FW v2.2.0**, fehlt in v2.1.0) | read/write | rohe **NDEF-Message** (ohne TLV), max. 247 B, wird persistent gespeichert |
-| `2A19` (Service `180F`) | Akku | read/notify | u8 % |
+| `2A19` (Service `180F`) | Akku | read/notify | u8 % (aus der Akkuspannung; Notify nur bei Änderung) |
+
+### Akku-Trend (lädt / Akkubetrieb) – Heuristik
+Die Werksfirmware kennt USB-Versorgung und Ladezustand intern (`m_batt_meas`: Pins USB_DETECT und CSO des Ladereglers),
+veröffentlicht sie aber **nicht** über BLE. Über BLE kommt nur der Akkustand in % (Service `180F`), berechnet aus der Spannung.
+Ob der Thingy lädt, wird deshalb aus dem **Verlauf des Akkustands geschätzt**. Es ist kein Firmware-Flag.
+Bridge (`bridge/internal/battery`) und App (`BatteryTrendTracker`) verwenden dieselbe Regel:
+
+1. Jeder Akkuwert wird mit Zeitstempel gespeichert. Zwischen zwei Werten gilt der letzte Wert weiter, denn die Firmware meldet nur Änderungen.
+2. Über die letzten **5 Minuten** wird der Wert alle **15 s** abgetastet und mit einem **Median über 5 Werte** (≈ 1 min) geglättet.
+   Das filtert kurze Spannungseinbrüche unter Last (Lautsprecher, LED) und ±1-%-Rauschen.
+3. Eine Ausgleichsgerade (lineare Regression) liefert die Änderung über das Fenster.
+   **≥ +1 Prozentpunkt → `charging`**, **≤ −1 Prozentpunkt → `discharging`**.
+   Eine kleinere Änderung **behält die letzte Entscheidung** (Hysterese).
+4. **`unknown`**, solange seit dem Verbinden weniger als **2 Minuten** Daten vorliegen, und solange sich der Wert noch nie deutlich bewegt hat.
+   Bei jedem (Neu-)Verbinden beginnt die Schätzung von vorn.
+5. Ohne neue Akkuwerte wird die Regel höchstens alle 10 s neu bewertet, ausgelöst durch andere Notifications.
+
+Grenzen: **„Voll“ ist nicht erkennbar.** Bei 100 % am Kabel bleibt der Wert stehen, die Anzeige bleibt beim letzten Trend
+(meist `charging`). Wird das Kabel bei konstantem Wert gezogen, wechselt die Anzeige erst nach einem Abfall um ≥ 1 Prozentpunkt.
+Im Akkubetrieb sinkt der Stand nur langsam. `discharging` erscheint deshalb oft erst nach dem ersten Schritt nach unten.
+Lange Lastspitzen (Lied in Endlosschleife) können den Wert vorübergehend senken.
 
 ### Startsequenz (Client)
 1. Verbinden (keine Bonding-Pflicht).
@@ -74,3 +95,5 @@ Fehler: 400 ungültige Eingabe, 405 falsche Methode, 502 Schreibfehler am Gerät
 ### Snapshot
 Schema: `docs/telemetry.schema.json`, Beispiel: `shared/telemetry.example.json`.
 Noch nicht empfangene Werte sind `null`. `device.source` ist `"ble"` oder `"sim"` (Simulator).
+`device.battery_trend` ist immer vorhanden: `"charging"`, `"discharging"` oder `"unknown"`. Es ist eine Schätzung, siehe „Akku-Trend“ oben.
+Im Simulator lädt der Akku von 60 auf 70 % (1 % pro Minute) und entlädt dann wieder auf 60 %.

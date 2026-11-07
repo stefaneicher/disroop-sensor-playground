@@ -176,6 +176,65 @@ func TestNotificationsUpdateSnapshot(t *testing.T) {
 	}
 }
 
+func TestBatteryTrendFollowsTheLevelAndResetsOnReconnect(t *testing.T) {
+	s, store, clock := newTestSession("ble")
+	dev := newFakeDevice() // initial read: 77 %
+	_ = s.Attach(dev)
+	trend := func() string { return store.Snapshot().Device.BatteryTrend }
+	if got := trend(); got != "unknown" {
+		t.Fatalf("after connect: %q", got)
+	}
+	for _, level := range []byte{78, 79} {
+		clock.advance(time.Minute)
+		dev.notify(thingy.BatteryChar, []byte{level})
+	}
+	if got := trend(); got != "charging" {
+		t.Fatalf("77→79 %% in 2 min: %q, want charging", got)
+	}
+
+	// Unplugged: the level drops, then only other notifications arrive (the firmware notifies on change).
+	for _, level := range []byte{78, 77} {
+		clock.advance(time.Minute)
+		dev.notify(thingy.BatteryChar, []byte{level})
+	}
+	for range 18 {
+		clock.advance(10 * time.Second)
+		dev.notify(thingy.ButtonChar, []byte{0})
+	}
+	if got := trend(); got != "discharging" {
+		t.Fatalf("after the level dropped: %q, want discharging", got)
+	}
+
+	s.Detach()
+	_ = s.Attach(newFakeDevice())
+	if got := trend(); got != "unknown" {
+		t.Fatalf("after reconnect: %q, want unknown", got)
+	}
+}
+
+func TestSimulatorBatteryShowsChargingThenDischarging(t *testing.T) {
+	s, store, clock := newTestSession("sim")
+	dev := sim.Start(sim.Options{Manual: true, Tick: time.Second})
+	defer dev.Close()
+	_ = s.Attach(dev)
+	run := func(d time.Duration) string {
+		for range int(d / time.Second) {
+			clock.advance(time.Second)
+			dev.Step()
+		}
+		return store.Snapshot().Device.BatteryTrend
+	}
+	if got := run(time.Minute); got != "unknown" {
+		t.Fatalf("after 1 min: %q, want unknown", got)
+	}
+	if got := run(2 * time.Minute); got != "charging" {
+		t.Fatalf("after 3 min: %q, want charging", got)
+	}
+	if got := run(11 * time.Minute); got != "discharging" {
+		t.Fatalf("after 14 min: %q, want discharging", got)
+	}
+}
+
 func TestMicLevelIsSmoothedAndThrottled(t *testing.T) {
 	s, store, clock := newTestSession("ble")
 	s.SetMic(true)

@@ -3,6 +3,7 @@ package ch.disroop.thingylive.ui
 import ch.disroop.thingylive.connection.ConnectionFactory
 import ch.disroop.thingylive.connection.SimulatedThingy
 import ch.disroop.thingylive.connection.ThingyConnection
+import ch.disroop.thingylive.protocol.BatteryTrend
 import ch.disroop.thingylive.protocol.Snapshot
 import ch.disroop.thingylive.protocol.Song
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +60,11 @@ class SimulatorSmokeTest {
         assertTrue("level $level", level > -60 && level < 0)
         assertNotNull(s.ui.buttonPressed)
         assertTrue(vm.state.value.accelHistory.isNotEmpty())
+
+        assertEquals(BatteryTrend.UNKNOWN, s.device.batteryTrend)
+        advanceTimeBy(3 * 60_000L)
+        runCurrent()
+        assertEquals(BatteryTrend.CHARGING, vm.state.value.snapshot.device.batteryTrend)
 
         vm.playSong()
         advanceTimeBy(100)

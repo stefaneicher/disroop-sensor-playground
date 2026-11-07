@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/stefaneicher/thingy52-live/bridge/internal/battery"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/device"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/telemetry"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/thingy"
@@ -52,11 +53,14 @@ type Session struct {
 	micOn          bool      // mic notifications are subscribed on the current connection
 	micSince       time.Time // mic start on the current connection, zero if none
 	micDrops       int
+	battery        *battery.Tracker
+	batteryTrend   battery.Trend
+	batteryChecked time.Time // last re-evaluation of the trend
 }
 
 // NewSession returns a session that writes into store. The microphone is off.
 func NewSession(store *telemetry.Store, logf Logf, now func() time.Time) *Session {
-	return &Session{store: store, logf: logf, now: now, speakerStatus: -1}
+	return &Session{store: store, logf: logf, now: now, speakerStatus: -1, battery: battery.New(), batteryTrend: battery.Unknown}
 }
 
 // Run connects, attaches and reconnects after a lost connection until ctx ends.
@@ -231,6 +235,8 @@ func (s *Session) Attach(dev device.Device) error {
 	s.dev = dev
 	s.decodeFailures = map[string]bool{}
 	s.micReady, s.micOn, s.micSince = false, false, time.Time{}
+	s.battery.Reset()
+	s.batteryTrend, s.batteryChecked = battery.Unknown, time.Time{}
 	s.mu.Unlock()
 
 	for _, c := range thingy.NotifyChars {
@@ -241,6 +247,7 @@ func (s *Session) Attach(dev device.Device) error {
 	info := dev.Info()
 	s.store.Update(func(snap *telemetry.Snapshot) {
 		snap.Connected = true
+		snap.Device.BatteryTrend = string(battery.Unknown)
 		snap.Device.Name, snap.Device.Address = telemetry.S(info.Name), telemetry.S(info.Address)
 		if info.RSSI != 0 {
 			snap.Device.RSSI = telemetry.F(float64(info.RSSI))
