@@ -50,6 +50,9 @@ func (s *Session) apply(c thingy.Char, b []byte) error {
 		})
 	case thingy.RawMotionChar:
 		v, err := thingy.DecodeRawMotion(b)
+		if err == nil && s.Motion != nil {
+			s.Motion.Raw([3]float64{v.Accel.X, v.Accel.Y, v.Accel.Z}, [3]float64{v.Gyro.X, v.Gyro.Y, v.Gyro.Z})
+		}
 		return s.set(err, func(t *telemetry.Snapshot) {
 			t.Motion.AccelG, t.Motion.GyroDPS, t.Motion.CompassUT = xyz(v.Accel), xyz(v.Gyro), xyz(v.Compass)
 		})
@@ -63,6 +66,9 @@ func (s *Session) apply(c thingy.Char, b []byte) error {
 		return s.set(err, func(t *telemetry.Snapshot) { t.Motion.HeadingDeg = telemetry.F(v) })
 	case thingy.QuaternionChar:
 		v, err := thingy.DecodeQuaternion(b)
+		if err == nil && s.Motion != nil {
+			s.Motion.Quaternion([4]float64{v.W, v.X, v.Y, v.Z})
+		}
 		return s.set(err, func(t *telemetry.Snapshot) {
 			t.Motion.Quaternion = &telemetry.Quaternion{W: v.W, X: v.X, Y: v.Y, Z: v.Z}
 		})
@@ -74,6 +80,9 @@ func (s *Session) apply(c thingy.Char, b []byte) error {
 		return s.set(err, func(t *telemetry.Snapshot) { t.Motion.Steps = telemetry.F(float64(v.Steps)) })
 	case thingy.TapChar:
 		v, err := thingy.DecodeTap(b)
+		if err == nil && s.Motion != nil {
+			s.Motion.Tap(v.Direction, v.Count)
+		}
 		ts := s.now().UnixMilli()
 		return s.set(err, func(t *telemetry.Snapshot) {
 			t.Motion.Tap = &telemetry.Tap{Direction: v.Direction, Count: v.Count, TS: ts}
@@ -104,6 +113,9 @@ func (s *Session) button(b []byte) error {
 		return err
 	}
 	s.store.Update(func(t *telemetry.Snapshot) { t.UI.ButtonPressed = telemetry.B(pressed) })
+	if s.Motion != nil {
+		s.Motion.Button(pressed)
+	}
 	if s.OnButton != nil {
 		go s.OnButton(pressed)
 	}

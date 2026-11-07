@@ -12,3 +12,7 @@ android/.idea/
 
 # project CLI (./t): Invoke installed locally
 .tools/
+
+# tennis: build output embedded by the bridge (./project tennis build)
+bridge/internal/tennisapp/dist/*
+!bridge/internal/tennisapp/dist/.keep

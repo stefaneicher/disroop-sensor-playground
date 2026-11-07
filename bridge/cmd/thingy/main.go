@@ -1,5 +1,5 @@
 // Command thingy connects to a Nordic Thingy:52 (or the simulator) and shows the data live
-// in the terminal and on http://127.0.0.1:8052. Subcommands: scan, song, nfc.
+// in the terminal and on http://127.0.0.1:8052. Subcommands: tennis, scan, song, nfc.
 package main
 
 import (
@@ -11,7 +11,9 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"os/exec"
 	"os/signal"
+	"runtime"
 	"strings"
 	"syscall"
 	"time"
@@ -20,9 +22,11 @@ import (
 	"github.com/stefaneicher/thingy52-live/bridge/internal/device"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/device/ble"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/device/sim"
+	"github.com/stefaneicher/thingy52-live/bridge/internal/motion"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/server"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/song"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/telemetry"
+	"github.com/stefaneicher/thingy52-live/bridge/internal/tennisapp"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/tui"
 	"github.com/stefaneicher/thingy52-live/bridge/web"
 )
@@ -30,25 +34,28 @@ import (
 const (
 	reconnectAfter = 3 * time.Second
 	micDelay       = 5 * time.Second // BLE: let the link settle before the mic stream starts
+	gameMotionHz   = 100             // motion_freq_hz while a game listens on /api/motion
 )
 
 type options struct {
-	command string
-	sim     bool
-	addr    string
-	port    int
-	noTUI   bool
-	mic     bool
-	skip    string
-	volume  int
-	restore bool
-	backup  string
-	timeout time.Duration
+	command   string
+	sim       bool
+	noBrowser bool
+	addr      string
+	port      int
+	noTUI     bool
+	mic       bool
+	skip      string
+	volume    int
+	restore   bool
+	backup    string
+	timeout   time.Duration
 }
 
-const usageText = `Aufruf: thingy [scan|song|nfc] [Optionen]
+const usageText = `Aufruf: thingy [tennis|scan|song|nfc] [Optionen]
 
   (ohne Befehl)  verbinden, Live-Anzeige im Terminal und Web-GUI auf http://127.0.0.1:8052
+  tennis         wie ohne Befehl, öffnet zusätzlich Thingy Tennis (http://127.0.0.1:8052/tennis/) im Browser
   scan           Thingys in Reichweite auflisten
   song           verbinden und „Highway to Hell“ einmal abspielen
   nfc            NFC-Tag auf die Android-App umschreiben (Backup zuerst), --restore schreibt das Backup zurück
@@ -74,11 +81,12 @@ func parseArgs(args []string, stderr io.Writer) (options, error) {
 	fs.BoolVar(&o.restore, "restore", false, "nfc: Backup zurückschreiben")
 	fs.StringVar(&o.backup, "backup", "", "nfc: Backup-Datei (Standard build/nfc-backup.hex)")
 	fs.DurationVar(&o.timeout, "timeout", 10*time.Second, "scan: Suchdauer")
+	fs.BoolVar(&o.noBrowser, "no-browser", false, "tennis: Browser nicht öffnen")
 	if err := fs.Parse(args); err != nil {
 		return o, err
 	}
 	switch o.command {
-	case "live", "scan", "song", "nfc":
+	case "live", "tennis", "scan", "song", "nfc":
 	case "help":
 		fs.Usage()
 		return o, flag.ErrHelp
@@ -104,6 +112,12 @@ func parseArgs(args []string, stderr io.Writer) (options, error) {
 func main() { os.Exit(run(os.Args[1:], os.Stdout, os.Stderr)) }
 
 func run(args []string, stdout, stderr io.Writer) int {
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+	return runContext(ctx, args, stdout, stderr)
+}
+
+func runContext(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	o, err := parseArgs(args, stderr)
 	if errors.Is(err, flag.ErrHelp) {
 		return 0
@@ -112,8 +126,6 @@ func run(args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintln(stderr, "Fehler:", err)
 		return 2
 	}
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
 	logf := printLogf(stdout)
 	switch o.command {
 	case "scan":
@@ -194,10 +206,20 @@ func live(ctx context.Context, o options, stdout io.Writer) error {
 		session.MicDelay = micDelay
 	}
 	session.SetMic(o.mic)
+	hub := motion.NewHub(time.Now)
+	session.Motion = hub
+	hub.OnActive = func(active bool) {
+		if active {
+			session.SetMotionHz(gameMotionHz)
+		} else {
+			session.SetMotionHz(0)
+		}
+	}
 	chorus := song.Chorus()
 	player := song.NewPlayer(chorus, session, song.RealClock{}, songState(store))
 	session.OnButton = func(pressed bool) {
-		if pressed {
+		// in a game the button serves and calibrates, it must not start the song
+		if pressed && o.command != "tennis" && !hub.Active() {
 			logs.Logf("Taster gedrückt: Lied %s", map[bool]string{true: "stopp", false: "start"}[player.Playing()])
 			player.Toggle(o.volume)
 		}
@@ -211,6 +233,7 @@ func live(ctx context.Context, o options, stdout io.Writer) error {
 	srv := &http.Server{
 		Handler: server.New(server.Config{
 			Store: store, Logs: logs, Song: player, LED: session, Mic: session, Static: web.Static(), DefaultVolume: o.volume,
+			Motion: hub, Beep: session, Tennis: tennisapp.Static(),
 		}),
 		BaseContext:       func(net.Listener) context.Context { return ctx },
 		ReadHeaderTimeout: 5 * time.Second,
@@ -221,6 +244,15 @@ func live(ctx context.Context, o options, stdout io.Writer) error {
 		}
 	}()
 	logs.Logf("Web-GUI: %s", url)
+	if o.command == "tennis" {
+		game := fmt.Sprintf("http://127.0.0.1:%d/tennis/", o.port)
+		logs.Logf("Thingy Tennis: %s", game)
+		if !o.noBrowser {
+			if err := openBrowser(game); err != nil {
+				logs.Logf("Browser öffnen fehlgeschlagen (%v) – bitte %s selbst öffnen", err, game)
+			}
+		}
+	}
 
 	sessionCtx, stopSession := context.WithCancel(context.Background())
 	sessionDone := make(chan struct{})
@@ -297,4 +329,16 @@ func programNFC(ctx context.Context, o options, logf app.Logf) error {
 		return app.RestoreNFC(dev, o.backup, logf)
 	}
 	return app.ProgramNFC(dev, o.backup, logf)
+}
+
+// openBrowser opens url in the default browser (replaced in tests).
+var openBrowser = func(url string) error {
+	switch runtime.GOOS {
+	case "windows":
+		return exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	case "darwin":
+		return exec.Command("open", url).Start()
+	default:
+		return exec.Command("xdg-open", url).Start()
+	}
 }

@@ -8,9 +8,11 @@ import (
 	"io/fs"
 	"net/http"
 	"path"
+	"sync"
 	"time"
 
 	"github.com/stefaneicher/thingy52-live/bridge/internal/device"
+	"github.com/stefaneicher/thingy52-live/bridge/internal/motion"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/telemetry"
 )
 
@@ -41,9 +43,17 @@ type Config struct {
 	DefaultVolume int
 	MinInterval   time.Duration // minimum time between telemetry events per client (default 100 ms)
 	KeepAlive     time.Duration // SSE comment interval (default 15 s)
+	Motion        *motion.Hub   // fast motion channel GET /api/motion (nil = 404)
+	Beep          BeepControl   // POST /api/beep (nil = 404)
+	BeepInterval  time.Duration // minimum time between beeps (default 100 ms), faster requests get 429
+	Tennis        fs.FS         // the Thingy Tennis app under /tennis/ (nil = not served)
 }
 
-type server struct{ Config }
+type server struct {
+	Config
+	beepMu   sync.Mutex
+	lastBeep time.Time
+}
 
 // New returns the HTTP handler.
 func New(cfg Config) http.Handler {
@@ -53,7 +63,10 @@ func New(cfg Config) http.Handler {
 	if cfg.KeepAlive == 0 {
 		cfg.KeepAlive = 15 * time.Second
 	}
-	s := &server{cfg}
+	if cfg.BeepInterval == 0 {
+		cfg.BeepInterval = 100 * time.Millisecond
+	}
+	s := &server{Config: cfg}
 	mux := http.NewServeMux()
 	mux.Handle("GET /", staticTypes(http.FileServerFS(cfg.Static)))
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) { fmt.Fprintln(w, "ok") })
@@ -68,6 +81,15 @@ func New(cfg Config) http.Handler {
 	mux.HandleFunc("GET /api/song", notAllowed)
 	mux.HandleFunc("GET /api/led", notAllowed)
 	mux.HandleFunc("GET /api/mic", notAllowed)
+	mux.HandleFunc("GET /api/motion", s.motionStream)
+	if cfg.Beep != nil {
+		mux.HandleFunc("POST /api/beep", s.beep)
+		mux.HandleFunc("GET /api/beep", notAllowed)
+	}
+	if cfg.Tennis != nil {
+		mux.Handle("GET /tennis", http.RedirectHandler("/tennis/", http.StatusMovedPermanently))
+		mux.Handle("GET /tennis/", tennisHandler(cfg.Tennis))
+	}
 	mux.HandleFunc("OPTIONS /api/", func(w http.ResponseWriter, _ *http.Request) { w.WriteHeader(http.StatusNoContent) })
 	return cors(mux)
 }

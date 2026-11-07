@@ -5,11 +5,13 @@ package app
 import (
 	"context"
 	"errors"
+	"fmt"
 	"sync"
 	"time"
 
 	"github.com/stefaneicher/thingy52-live/bridge/internal/battery"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/device"
+	"github.com/stefaneicher/thingy52-live/bridge/internal/motion"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/telemetry"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/thingy"
 )
@@ -40,6 +42,8 @@ type Session struct {
 	Skip map[string]bool
 	// MicDelay is the wait after connecting before the mic is subscribed, so the link settles first.
 	MicDelay time.Duration
+	// Motion, if set, receives quaternion, raw motion, button and tap notifications (GET /api/motion).
+	Motion *motion.Hub
 
 	micMu          sync.Mutex // serializes mic (un)subscriptions
 	mu             sync.Mutex
@@ -56,6 +60,7 @@ type Session struct {
 	battery        *battery.Tracker
 	batteryTrend   battery.Trend
 	batteryChecked time.Time // last re-evaluation of the trend
+	motionHz       uint16    // motion_freq_hz override, 0 = thingy.DefaultMotionConfig
 }
 
 // NewSession returns a session that writes into store. The microphone is off.
@@ -232,6 +237,14 @@ func (s *Session) Attach(dev device.Device) error {
 		return err
 	}
 	s.mu.Lock()
+	hz := s.motionHz
+	s.mu.Unlock()
+	if hz != 0 {
+		if err := dev.Write(thingy.MotionConfigChar, motionConfig(hz).Bytes()); err != nil {
+			s.logf("Motion-Frequenz %d Hz setzen fehlgeschlagen: %v", hz, err)
+		}
+	}
+	s.mu.Lock()
 	s.dev = dev
 	s.decodeFailures = map[string]bool{}
 	s.micReady, s.micOn, s.micSince = false, false, time.Time{}
@@ -347,4 +360,51 @@ func (s *Session) LEDOff() error {
 	}
 	s.store.Update(func(snap *telemetry.Snapshot) { snap.UI.LED = &telemetry.RGB{} })
 	return nil
+}
+
+func motionConfig(hz uint16) thingy.MotionConfigValue {
+	cfg := thingy.DefaultMotionConfig()
+	if hz != 0 {
+		cfg.MotionHz = hz
+	}
+	return cfg
+}
+
+// SetMotionHz sets motion_freq_hz (quaternion, raw motion, euler …) now and after reconnects;
+// 0 restores the default of thingy.DefaultMotionConfig.
+func (s *Session) SetMotionHz(hz uint16) {
+	s.mu.Lock()
+	s.motionHz = hz
+	dev := s.dev
+	s.mu.Unlock()
+	cfg := motionConfig(hz)
+	s.logf("Motion-Frequenz %d Hz", cfg.MotionHz)
+	if dev == nil {
+		return
+	}
+	if err := dev.Write(thingy.MotionConfigChar, cfg.Bytes()); err != nil {
+		s.logf("Motion-Frequenz setzen fehlgeschlagen: %v", err)
+	}
+}
+
+// beepSounds is the device feedback of POST /api/beep: a short tone plus an LED color.
+var beepSounds = map[string]struct {
+	hz, ms  int
+	r, g, b uint8
+}{
+	"hit":   {1320, 40, 0, 255, 0},
+	"point": {1760, 90, 163, 230, 53},
+	"miss":  {330, 140, 255, 0, 0},
+}
+
+// Beep gives short feedback on the Thingy (tone + LED): kind is "hit", "point" or "miss".
+func (s *Session) Beep(kind string) error {
+	b, ok := beepSounds[kind]
+	if !ok {
+		return fmt.Errorf("unbekannte Art %q", kind)
+	}
+	if err := s.Tone(b.hz, b.ms, 60); err != nil {
+		return err
+	}
+	return s.LED(b.r, b.g, b.b)
 }

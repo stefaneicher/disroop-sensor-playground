@@ -15,7 +15,9 @@ import (
 
 // Options tune the simulation.
 type Options struct {
-	Tick        time.Duration // motion/mic period, default 100 ms
+	// Tick is the motion/mic period. Zero follows motion_freq_hz of the motion config (default 10 Hz = 100 ms),
+	// like the firmware; a non-zero Tick is fixed.
+	Tick        time.Duration
 	ButtonEvery time.Duration // simulated button press period, 0 = never
 	Manual      bool          // no background ticker; advance with Step (deterministic tests)
 	// Battery returns the level in % after the simulated time since connecting, default ChargeCycle.
@@ -45,9 +47,15 @@ func (o Options) withDefaults() Options {
 // Connector creates simulated devices.
 type Connector struct{ opts Options }
 
+// Motion frequency limits of the firmware (motion_freq_hz).
+const (
+	minMotionHz = 5
+	maxMotionHz = 200
+)
+
 // NewConnector returns a simulator connector.
 func NewConnector(opts Options) *Connector {
-	return &Connector{opts: opts.withDefaults()}
+	return &Connector{opts: opts} // Start applies the defaults; a zero Tick must stay "follow motion_freq_hz"
 }
 
 // Source implements device.Connector.
@@ -81,13 +89,16 @@ type Device struct {
 	done      chan struct{}
 	closeOnce sync.Once
 	stepMu    sync.Mutex
-	tick      int
+	elapsed   time.Duration // simulated time, advanced by Step
+	period    time.Duration // current tick, guarded by mu
+	fixedTick bool
 	steps     uint32
 	battery   byte
 }
 
 // Start returns a connected simulated device that emits notifications until Close.
 func Start(opts Options) *Device {
+	fixed := opts.Tick != 0
 	opts = opts.withDefaults()
 	battery := byte(opts.Battery(0))
 	d := &Device{
@@ -100,8 +111,10 @@ func Start(opts Options) *Device {
 			thingy.BatteryChar.UUID:      {battery},
 			thingy.LEDChar.UUID:          {2, 3, 20, 0x0D, 0x0D},
 		},
-		done:    make(chan struct{}),
-		battery: battery,
+		done:      make(chan struct{}),
+		battery:   battery,
+		period:    opts.Tick,
+		fixedTick: fixed,
 	}
 	if !opts.Manual {
 		go d.run()
@@ -150,6 +163,10 @@ func (d *Device) Write(c thingy.Char, data []byte) error {
 	}
 	d.mu.Lock()
 	d.values[c.UUID] = append([]byte(nil), data...)
+	if c == thingy.MotionConfigChar && len(data) >= 8 && !d.fixedTick {
+		hz := max(minMotionHz, min(maxMotionHz, int(binary.LittleEndian.Uint16(data[6:]))))
+		d.period = time.Second / time.Duration(hz)
+	}
 	d.mu.Unlock()
 	if c == thingy.SpeakerChar && len(data) >= 4 {
 		duration := time.Duration(binary.LittleEndian.Uint16(data[2:])) * time.Millisecond
@@ -195,8 +212,16 @@ func (d *Device) notify(c thingy.Char, payload []byte) {
 	}
 }
 
+// Period is the current notification period (1 / motion_freq_hz unless Options.Tick is set).
+func (d *Device) Period() time.Duration {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	return d.period
+}
+
 func (d *Device) run() {
-	ticker := time.NewTicker(d.opts.Tick)
+	period := d.Period()
+	ticker := time.NewTicker(period)
 	defer ticker.Stop()
 	for {
 		d.Step()
@@ -205,48 +230,52 @@ func (d *Device) run() {
 			return
 		case <-ticker.C:
 		}
+		if p := d.Period(); p != period {
+			period = p
+			ticker.Reset(p)
+		}
 	}
 }
 
-// Step emits one tick of notifications. Simulated time is tick count × Tick, so the schedule
-// (environment every second starting at tick 0, taps every 7 s, …) never depends on wall-clock jitter.
+// Step emits one tick of notifications and advances the simulated time by the current period.
+// The schedule (environment every second starting at 0, taps every 7 s, a swing every SwingPeriod, …)
+// depends on simulated time only, never on wall-clock jitter.
 func (d *Device) Step() {
 	d.stepMu.Lock()
 	defer d.stepMu.Unlock()
-	tick := d.tick
-	d.tick++
-	elapsed := time.Duration(tick) * d.opts.Tick
+	tick := d.Period()
+	elapsed := d.elapsed
+	d.elapsed += tick
 	t := elapsed.Seconds()
 
-	d.notify(thingy.RawMotionChar, rawMotion(t))
-	yaw := heading(t)
-	d.notify(thingy.EulerChar, euler(2*math.Sin(0.5*t), -2+1.5*math.Sin(0.4*t), yaw))
-	d.notify(thingy.HeadingChar, q16(yaw))
-	d.notify(thingy.QuaternionChar, quaternion(yaw))
+	sw := swingAt(t)
+	d.notify(thingy.RawMotionChar, rawMotion(t, sw))
+	yaw := math.Mod(heading(t)+sw.angle+360, 360)
+	roll := sw.roll + sway(t)
+	d.notify(thingy.EulerChar, euler(roll, -2+1.5*math.Sin(0.4*t), yaw))
+	d.notify(thingy.HeadingChar, q16(heading(t)))
+	d.notify(thingy.QuaternionChar, quaternion(yaw, roll))
 	d.notify(thingy.MicrophoneChar, micFrame(t))
 
-	if d.every(elapsed, time.Second) {
+	every := func(period time.Duration) bool { return period > 0 && elapsed%period < tick }
+	if every(time.Second) {
 		d.emitEnvironment(t)
-		d.steps += uint32(tick % 3)
+		d.steps += uint32(int(elapsed/time.Second) % 3)
 		d.notify(thingy.PedometerChar, u32s(d.steps, uint32(elapsed.Milliseconds())))
 	}
-	if d.every(elapsed, 7*time.Second) && tick > 0 {
-		d.notify(thingy.TapChar, []byte{byte(1 + (tick/70)%6), 1})
+	if every(7*time.Second) && elapsed > 0 {
+		d.notify(thingy.TapChar, []byte{byte(1 + (elapsed/(7*time.Second))%6), 1})
 	}
-	if d.every(elapsed, 15*time.Second) {
-		d.notify(thingy.OrientationChar, []byte{byte((tick / 150) % 2)})
+	if every(15 * time.Second) {
+		d.notify(thingy.OrientationChar, []byte{byte((elapsed / (15 * time.Second)) % 2)})
 	}
-	if d.every(elapsed, 10*time.Second) {
+	if every(10 * time.Second) {
 		d.emitBattery(elapsed)
 	}
-	if d.every(elapsed, d.opts.ButtonEvery) && elapsed >= d.opts.ButtonEvery {
+	if every(d.opts.ButtonEvery) && elapsed >= d.opts.ButtonEvery {
 		d.notify(thingy.ButtonChar, []byte{1})
 		time.AfterFunc(300*time.Millisecond, func() { d.notify(thingy.ButtonChar, []byte{0}) })
 	}
-}
-
-func (d *Device) every(elapsed, period time.Duration) bool {
-	return period > 0 && elapsed%period < d.opts.Tick
 }
 
 // emitBattery notifies only on change, like the firmware's Battery Service.
@@ -275,10 +304,12 @@ func (d *Device) emitEnvironment(t float64) {
 	d.notify(thingy.ColorChar, u16s(uint16(180+20*math.Sin(t/20)), 160, 120, 400))
 }
 
-func rawMotion(t float64) []byte {
+func rawMotion(t float64, sw swingState) []byte {
+	// centripetal acceleration along the racket axis (−Y) during the swing
+	spin := sw.rate / 800
 	return i16s(
-		1024*0.02*math.Sin(0.7*t), 1024*0.03*math.Sin(0.5*t+1), 1024*(1+0.01*math.Sin(1.3*t)),
-		32*1.5*math.Sin(0.9*t), 32*0.8*math.Sin(0.6*t), 32*0.4*math.Sin(1.1*t),
+		1024*0.02*math.Sin(0.7*t), 1024*(0.03*math.Sin(0.5*t+1)-2.5*spin*spin), 1024*(1+0.01*math.Sin(1.3*t)),
+		32*1.5*math.Sin(0.9*t), 32*(0.8*math.Sin(0.6*t)+sw.rollRate), 32*(0.4*math.Sin(1.1*t)+sw.rate),
 		16*(21+3*math.Sin(0.2*t)), 16*(-8+2*math.Cos(0.2*t)), 16*40.0,
 	)
 }
@@ -289,10 +320,12 @@ func euler(roll, pitch, yaw float64) []byte {
 	return append(append(q16(roll), q16(pitch)...), q16(yaw)...)
 }
 
-func quaternion(yawDeg float64) []byte {
-	half := yawDeg * math.Pi / 360
+// quaternion is a yaw rotation about Z (world up) followed by a roll about the racket axis Y.
+func quaternion(yawDeg, rollDeg float64) []byte {
+	hy, hr := yawDeg*math.Pi/360, rollDeg*math.Pi/360
+	cy, sy, cr, sr := math.Cos(hy), math.Sin(hy), math.Cos(hr), math.Sin(hr)
 	b := make([]byte, 0, 16)
-	for _, v := range []float64{math.Cos(half), 0, 0, math.Sin(half)} {
+	for _, v := range []float64{cy * cr, -sy * sr, cy * sr, sy * cr} {
 		b = binary.LittleEndian.AppendUint32(b, uint32(int32(v*(1<<30))))
 	}
 	return b

@@ -12,6 +12,7 @@ import (
 
 	"github.com/stefaneicher/thingy52-live/bridge/internal/device"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/device/sim"
+	"github.com/stefaneicher/thingy52-live/bridge/internal/motion"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/telemetry"
 	"github.com/stefaneicher/thingy52-live/bridge/internal/thingy"
 )
@@ -572,4 +573,84 @@ func TestRunKeepsMicWhenConnectionWasStable(t *testing.T) {
 	}
 	dev := <-conn.devices
 	waitFor(t, func() bool { return subscribed(dev, thingy.MicrophoneChar) })
+}
+
+func TestMotionNotificationsFeedTheMotionHub(t *testing.T) {
+	s, _, clock := newTestSession("ble")
+	s.Motion = motion.NewHub(clock.now)
+	frames, cancel := s.Motion.Subscribe(16)
+	defer cancel()
+	dev := newFakeDevice()
+	_ = s.Attach(dev)
+	dev.notify(thingy.QuaternionChar, []byte{0, 0, 0, 0x40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}) // w = 1
+	dev.notify(thingy.TapChar, []byte{5, 2})
+	dev.notify(thingy.ButtonChar, []byte{1})
+	// accel x = 0.5 g, gyro z = 400 °/s
+	dev.notify(thingy.RawMotionChar, []byte{0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x32, 0, 0, 0, 0, 0, 0})
+	var last motion.Frame
+	for len(frames) > 0 {
+		last = <-frames
+	}
+	if last.Q != [4]float64{1, 0, 0, 0} || last.Accel[0] != 0.5 || last.Gyro[2] != 400 || !last.Button {
+		t.Fatalf("frame %+v", last)
+	}
+}
+
+func TestTapReachesTheMotionHub(t *testing.T) {
+	s, _, clock := newTestSession("ble")
+	s.Motion = motion.NewHub(clock.now)
+	frames, cancel := s.Motion.Subscribe(16)
+	defer cancel()
+	dev := newFakeDevice()
+	_ = s.Attach(dev)
+	dev.notify(thingy.TapChar, []byte{5, 2})
+	dev.notify(thingy.RawMotionChar, make([]byte, 18))
+	f := <-frames
+	if f.Tap == nil || f.Tap.Count != 2 || f.Tap.Dir == "" {
+		t.Fatalf("frame %+v", f)
+	}
+}
+
+func TestSetMotionHzWritesTheConfigNowAndOnReconnect(t *testing.T) {
+	s, _, _ := newTestSession("ble")
+	dev := newFakeDevice()
+	_ = s.Attach(dev)
+	s.SetMotionHz(100)
+	if ops := dev.list(); ops[len(ops)-1] != "write motion_config E8 03 F4 01 64 00 64 00 01" {
+		t.Fatalf("last op %q", ops[len(ops)-1])
+	}
+	s.Detach()
+	next := newFakeDevice()
+	_ = s.Attach(next)
+	if !contains(next.list(), "write motion_config E8 03 F4 01 64 00 64 00 01") {
+		t.Fatalf("reconnect did not restore 100 Hz: %v", next.list())
+	}
+	s.SetMotionHz(0) // back to the default
+	if ops := next.list(); ops[len(ops)-1] != "write motion_config E8 03 F4 01 64 00 0A 00 01" {
+		t.Fatalf("last op %q", ops[len(ops)-1])
+	}
+}
+
+func TestBeepPlaysAToneAndSetsTheLED(t *testing.T) {
+	s, store, _ := newTestSession("ble")
+	if err := s.Beep("hit"); err != device.ErrNotConnected {
+		t.Fatalf("beep without device: %v", err)
+	}
+	dev := newFakeDevice()
+	_ = s.Attach(dev)
+	for _, kind := range []string{"hit", "point", "miss"} {
+		if err := s.Beep(kind); err != nil {
+			t.Fatal(err)
+		}
+	}
+	ops := strings.Join(dev.list(), "|")
+	if strings.Count(ops, "cmd speaker") != 3 || !strings.Contains(ops, "write led 01 00 FF 00") || !strings.Contains(ops, "write led 01 FF 00 00") {
+		t.Fatalf("ops %s", ops)
+	}
+	if led := store.Snapshot().UI.LED; led == nil || led.R != 255 {
+		t.Fatalf("led after miss %+v", led)
+	}
+	if err := s.Beep("boom"); err == nil {
+		t.Fatal("unknown kind accepted")
+	}
 }
