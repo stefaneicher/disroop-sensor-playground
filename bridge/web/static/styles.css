@@ -464,3 +464,6 @@ h1 span { color: var(--accent); }
 .foot a { color: var(--accent); text-decoration: none; font-weight: 600; }
 .foot a:hover { text-decoration: underline; }
 .foot img { height: 16px; vertical-align: -3px; margin-right: 4px; }
+
+.tennis-link { color: var(--accent); text-decoration: none; font-weight: 700; }
+.tennis-link:hover { border-color: var(--lime-600); background: var(--lime-800); color: #fff; }
