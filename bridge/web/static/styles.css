@@ -105,13 +105,14 @@ h1 span { color: var(--accent); }
   max-width: 1500px; margin: 0 auto;
 }
 .tiles { grid-column: 1 / -1; display: grid; gap: 12px; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.altimeter { grid-column: 1 / -1; }
 .charts { grid-column: span 7; grid-row: span 2; }
 .compass-card { grid-column: span 5; }
 .pose { grid-column: span 5; }
 .sound { grid-column: span 4; }
 .song { grid-column: span 5; }
 .ui { grid-column: span 3; }
-.log { grid-column: 1 / -1; }
+.log, .rawstream { grid-column: 1 / -1; }
 
 .card, .tile {
   background: linear-gradient(180deg, var(--panel-2), var(--panel));
@@ -415,6 +416,24 @@ h1 span { color: var(--accent); }
 .glossary-table .g-sensor, .glossary-table .g-typical { color: #d1d5db; }
 .glossary-table tbody tr:target { background: rgba(163, 230, 53, .08); }
 .glossary-table tbody tr:last-child > * { border-bottom: 0; }
+
+/* ---------- raw stream ---------- */
+.rawstream summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; }
+.rawstream summary h2 { display: inline; margin: 0; }
+.raw-pause { display: block; margin: 8px 0; font-size: .8rem; color: var(--muted); }
+.rawstream pre { margin: 0; max-height: 320px; overflow: auto; padding: 10px; border-radius: 8px; background: #0b1220; font-size: .78rem; white-space: pre-wrap; }
+
+/* ---------- altimeter ---------- */
+.alt-body { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; }
+.alt-reading { font-variant-numeric: tabular-nums; }
+.alt-value { font-size: clamp(2rem, 4vw, 3rem); font-weight: 650; }
+.alt-unit { color: var(--muted); margin-left: 6px; }
+.alt-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 8px; }
+.alt-controls label { display: flex; flex-direction: column; gap: 4px; font-size: .78rem; color: var(--muted); }
+.alt-controls input { width: 11rem; padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, .18); background: #111827; color: inherit; font: inherit; }
+.alt-controls button { padding: 7px 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, .18); background: #1f2937; color: inherit; font: inherit; cursor: pointer; }
+.alt-controls button:hover:not(:disabled) { border-color: var(--lime-600); }
+.alt-controls button:disabled { opacity: .45; cursor: default; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 1180px) {

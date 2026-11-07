@@ -72,6 +72,19 @@
       </article>
     </section>
 
+    <section class="card altimeter" aria-label="Höhenmesser">
+      <header class="card-head"><h2>Höhenmesser <button class="info" data-info="altitude"></button></h2><span class="hint" id="alt-cal">Standard-Atmosphäre (1013.25 hPa)</span></header>
+      <div class="alt-body">
+        <div class="alt-reading"><span class="alt-value" id="altitude">–</span><span class="alt-unit">m</span></div>
+        <div class="alt-controls">
+          <label>Bekannte Höhe (m ü. M.) <input id="alt-known" type="number" inputmode="decimal" step="1" min="-400" max="9000" placeholder="z. B. 550"></label>
+          <button id="alt-calibrate" type="button">Kalibrieren</button>
+          <button id="alt-zero" type="button">Hier = 0 m</button>
+          <button id="alt-reset" type="button">Zurücksetzen</button>
+        </div>
+      </div>
+    </section>
+
     <section class="card charts" id="charts" aria-label="Bewegungssensoren">
       <header class="card-head">
         <h2>Bewegung <span class="hint" data-span-label>30 s</span></h2>
@@ -233,6 +246,14 @@
     <section class="card log" aria-label="Protokoll">
       <header class="card-head"><h2>Protokoll</h2><span class="hint" id="log-count">0</span></header>
       <ol class="log-list mono" id="log" aria-live="off"></ol>
+    </section>
+
+    <section class="card rawstream" aria-label="Rohdaten">
+      <details>
+        <summary><h2>Rohdaten <code>/api/stream</code></h2><span class="hint" id="raw-count">0 Pakete</span></summary>
+        <label class="raw-pause"><input type="checkbox" id="raw-pause"> Anzeige einfrieren</label>
+        <pre class="mono" id="raw-stream" tabindex="0">warte auf Daten …</pre>
+      </details>
     </section>
 
     <section class="card glossary" id="glossary" aria-label="Messgrössen erklärt">

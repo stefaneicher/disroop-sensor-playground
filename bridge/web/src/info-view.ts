@@ -12,7 +12,8 @@ function el<K extends keyof HTMLElementTagNameMap>(doc: Document, tag: K, cls?: 
 
 function facts(doc: Document, entry: GlossaryEntry): HTMLDListElement {
   const dl = el(doc, 'dl', 'info-facts');
-  for (const [k, v] of [['Einheit', entry.unit], ['Sensor', entry.sensor], ['Typisch', entry.typical]]) {
+  const rows = [['Einheit', entry.unit], ['Sensor', entry.sensor], ...(entry.spec ? [['Messbereich', entry.spec]] : []), ['Typisch', entry.typical]];
+  for (const [k, v] of rows as [string, string][]) {
     const row = el(doc, 'div');
     row.append(el(doc, 'dt', undefined, k), el(doc, 'dd', undefined, v));
     dl.append(row);

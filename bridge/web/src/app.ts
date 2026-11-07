@@ -11,6 +11,8 @@ import { bindChartToolbar } from './chart-toolbar.ts';
 import { CompassInstrument } from './compass-view.ts';
 import { bindInfo } from './info-view.ts';
 import { bindDom, renderConnection, renderSnapshot, renderLog } from './view.ts';
+import { altitudeM, calibrateKnown, calibrateZero, parseCalibration, smoothPressure, STANDARD, type Calibration } from './altitude.ts';
+import { DASH, fmtSigned, isNum } from './format.ts';
 import type { Snapshot } from './telemetry.ts';
 
 const TICK_MS = 500;
@@ -74,10 +76,53 @@ function onTelemetry(snapshot: Snapshot): void {
   levelChart.push(now, { v: mic.level });
   compass.update(snapshot.motion, now);
   peak = mic.enabled ? updatePeak(peak, mic.level, now) : null;
+  updateAltitude(snapshot);
+  rawPackets += 1;
+  showRaw(snapshot);
   dispatch({ type: 'telemetry', snapshot });
 }
 
 const localLog = (msg: string): void => dispatch({ type: 'log', msg });
+
+let rawPackets = 0;
+const showRaw = throttle((snapshot: Snapshot) => {
+  if (dom.rawPause.checked) return;
+  dom.rawStream.textContent = JSON.stringify(snapshot, null, 2);
+  dom.rawCount.textContent = `${rawPackets} Pakete`;
+}, 500);
+
+const CAL_KEY = 'thingy.altimeter';
+let calibration: Calibration = parseCalibration(localStorage.getItem(CAL_KEY));
+let smoothedHpa: number | null = null;
+
+function renderAltitude(): void {
+  dom.altCal.textContent = calibration.label;
+  const ok = smoothedHpa !== null;
+  dom.altitude.textContent = smoothedHpa === null ? DASH : fmtSigned(altitudeM(smoothedHpa, calibration.refHpa), 1);
+  for (const b of [dom.altCalibrate, dom.altZero]) b.disabled = !ok;
+  dom.altReset.disabled = calibration.mode === 'standard';
+}
+
+function setCalibration(next: Calibration | null, what: string): void {
+  if (!next) { localLog(`Höhenmesser: ${what} nicht möglich (kein Druckwert oder ungültige Höhe)`); return; }
+  calibration = next;
+  if (next === STANDARD) localStorage.removeItem(CAL_KEY); else localStorage.setItem(CAL_KEY, JSON.stringify(next));
+  renderAltitude();
+}
+
+function updateAltitude(snapshot: Snapshot): void {
+  const p = snapshot.environment?.pressure_hpa;
+  if (isNum(p)) smoothedHpa = smoothPressure(smoothedHpa, p);
+  renderAltitude();
+}
+
+dom.altCalibrate.addEventListener('click', () => {
+  const known = dom.altKnown.value.trim() === '' ? NaN : Number(dom.altKnown.value);
+  setCalibration(calibrateKnown(smoothedHpa, known), 'Kalibrieren');
+});
+dom.altZero.addEventListener('click', () => setCalibration(calibrateZero(smoothedHpa), 'Nullpunkt'));
+dom.altReset.addEventListener('click', () => setCalibration(STANDARD, 'Zurücksetzen'));
+renderAltitude();
 
 connectStream('/api/stream', {
   onOpen: () => dispatch({ type: 'open' }),

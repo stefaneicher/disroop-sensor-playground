@@ -8,6 +8,8 @@ export interface GlossaryEntry {
   sensor: string;
   /** 2–4 sentences: what it is physically and what to watch out for. */
   text: string;
+  /** Measuring range, accuracy and bus address from the datasheet (optional). */
+  spec?: string;
   /** Typical values / ranges. */
   typical: string;
   /** Snapshot fields (dot paths, prefix match) this entry explains. */
@@ -17,54 +19,70 @@ export interface GlossaryEntry {
 export const GLOSSARY: readonly GlossaryEntry[] = [
   {
     id: 'temperature', title: 'Temperatur', unit: '°C', sensor: 'HTS221 (Temperatur/Feuchte)',
+    spec: '−40…+120 °C, ±0.5 °C (15–40 °C), 16 Bit · I²C 0x5F',
     text: 'Lufttemperatur am Sensor in Grad Celsius. Die Elektronik und das Laden wärmen das Thingy leicht auf. Der Wert liegt deshalb oft 1–3 °C über der Raumluft.',
     typical: 'Wohnraum 20–23 °C',
     fields: ['environment.temperature_c'],
   },
   {
     id: 'humidity', title: 'Feuchte', unit: '% rel.', sensor: 'HTS221 (Temperatur/Feuchte)',
+    spec: '0…100 % rH, ±3.5 % (20–80 %), 16 Bit · I²C 0x5F',
     text: 'Relative Luftfeuchte: wie viel Wasserdampf die Luft enthält, verglichen mit dem Maximum bei dieser Temperatur. Wird dieselbe Luft wärmer, sinkt die relative Feuchte.',
     typical: 'angenehm 40–60 %; unter 30 % trocken, über 70 % Schimmelgefahr',
     fields: ['environment.humidity_pct'],
   },
   {
     id: 'pressure', title: 'Luftdruck', unit: 'hPa', sensor: 'LPS22HB (Barometer)',
+    spec: '260…1260 hPa, ±1 hPa absolut, ±0.1 hPa relativ, 24 Bit · I²C 0x5C',
     text: 'Gewicht der Luftsäule über dem Sensor in Hektopascal (1 hPa = 100 Pa = 1 mbar). Er sinkt mit der Höhe um etwa 1 hPa pro 8 m und schwankt mit dem Wetter um einige hPa.',
     typical: 'Meereshöhe ~1013 hPa; auf ~550 m ü. M. ~950 hPa',
     fields: ['environment.pressure_hpa'],
   },
   {
+    id: 'altitude', title: 'Höhe', unit: 'm', sensor: 'LPS22HB (Barometer)',
+    spec: 'Auflösung ca. 0.1 m; absolute Genauigkeit nur mit Kalibrierung, sonst Wetterdrift · I²C 0x5C',
+    text: 'Aus dem Luftdruck mit der barometrischen Höhenformel berechnet (etwa 1 hPa je 8 m). Das Wetter verschiebt den Druck um einige hPa, deshalb driftet die absolute Höhe über Stunden. Kalibriere mit einer bekannten Höhe (m ü. M.) oder setze mit „Hier = 0 m“ einen Nullpunkt, dann zeigt sie nur Höhenunterschiede.',
+    typical: 'Treppenstufe ~0.2 m, Stockwerk ~3 m; Genauigkeit kurzfristig ca. ±1 m',
+    fields: [],
+  },
+  {
     id: 'eco2', title: 'eCO₂', unit: 'ppm', sensor: 'CCS811 (Gassensor)',
+    spec: '400…8192 ppm, Schätzwert · I²C 0x5A',
     text: 'Geschätzter CO₂-Gehalt in Teilen pro Million (equivalent CO₂). Der CCS811 misst kein CO₂ direkt. Er misst den Widerstand einer Metalloxid-Schicht, die auf flüchtige Gase reagiert, und rechnet daraus einen CO₂-Wert hoch. Nach dem Einschalten braucht er etwa 20 min Einlaufzeit.',
     typical: 'Aussenluft ~400 ppm; unter 800 gut, ab 1000 lüften, über 1500 schlecht',
     fields: ['environment.eco2_ppm'],
   },
   {
     id: 'tvoc', title: 'TVOC', unit: 'ppb', sensor: 'CCS811 (Gassensor)',
+    spec: '0…1187 ppb, Schätzwert · I²C 0x5A',
     text: 'Total Volatile Organic Compounds: die Summe flüchtiger organischer Stoffe in Teilen pro Milliarde. Solche Stoffe kommen z. B. aus Reinigungsmitteln, Farben, Parfum, Kochen oder dem Atem. Wie eCO₂ wird der Wert aus dem Gas-Widerstand geschätzt (~20 min Einlaufzeit). Er eignet sich für Trends, nicht als exakte Messung.',
     typical: 'unter 220 ppb gut, 220–660 mässig, über 660 lüften',
     fields: ['environment.tvoc_ppb'],
   },
   {
     id: 'color', title: 'Farbe (RGBC)', unit: 'Rohwerte (ohne Einheit)', sensor: 'BH1745 (Farb-/Lichtsensor)',
+    spec: '4 Kanäle × 16 Bit, Gain 1×/2×/16×, Messzeit 160–5120 ms · I²C 0x38',
     text: 'Der Lichtsensor hat vier Kanäle: Rot, Grün, Blau und Clear. Clear ist ungefiltert und entspricht ungefähr der Helligkeit. Die Zahlen sind Rohzählwerte. Das Farbfeld zeigt das daraus normierte RGB.',
     typical: 'dunkel: C nahe 0; Tageslicht: C mehrere Hundert bis Tausende',
     fields: ['environment.color'],
   },
   {
     id: 'accel', title: 'Beschleunigung', unit: 'g (1 g = 9.81 m/s²)', sensor: 'MPU-9250 (9-Achsen-Bewegungssensor)',
+    spec: '±2/4/8/16 g wählbar, 16 Bit · I²C 0x68',
     text: 'Beschleunigung entlang der x-, y- und z-Achse in Vielfachen der Erdbeschleunigung. Auch in Ruhe misst der Sensor die Schwerkraft. Flach liegend zeigt z deshalb etwa +1 g, x und y etwa 0 g.',
     typical: 'ruhig liegend z ≈ 1 g (Rauschen ±0.05 g); Schütteln bis einige g',
     fields: ['motion.accel_g'],
   },
   {
     id: 'gyro', title: 'Gyroskop (Drehrate)', unit: '°/s', sensor: 'MPU-9250 (9-Achsen-Bewegungssensor)',
+    spec: '±250/500/1000/2000 °/s wählbar, 16 Bit · I²C 0x68',
     text: 'Drehgeschwindigkeit um die x-, y- und z-Achse in Grad pro Sekunde. In Ruhe liegt sie nahe 0. Eine volle Umdrehung pro Sekunde entspricht 360 °/s.',
     typical: 'ruhig ±2 °/s; Handbewegung 50–300 °/s',
     fields: ['motion.gyro_dps'],
   },
   {
     id: 'magnet', title: 'Magnetfeld', unit: 'µT (Mikrotesla)', sensor: 'MPU-9250 (Magnetometer AK8963)',
+    spec: '±4912 µT, 16 Bit (0.15 µT/Bit) · AK8963 an I²C 0x0C',
     text: 'Magnetische Flussdichte entlang der drei Achsen. Der Kompass berechnet daraus den Kurs. Eisen, Magnete, Laptops und Stromkabel in der Nähe verfälschen den Wert stark. Der Betrag ist die Gesamtstärke des Felds.',
     typical: 'Erdmagnetfeld 25–65 µT (Schweiz ~48 µT); ausserhalb davon stört etwas',
     fields: ['motion.compass_ut'],
