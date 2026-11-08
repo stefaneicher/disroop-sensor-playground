@@ -62,3 +62,8 @@ Ski: kompakte Querformat-HUD, zweispaltiges Menü mit grossen Touch-Zielen, Test
 ## 2026-11-08 Tennis: Bewegungsgrenzen, Testmodus, Handy
 - `tennis/src/core/limits.ts` (Konstanten, `checkLimits`, `AlarmGate`) + `test/limits.test.ts`; `limitsui.ts` (roter Rand + Ton `Sfx.alarm`, Testmodus-Panel, Menüknopf «Testmodus»), Querformat-CSS, Touch-Steuerung.
 - Typecheck und 55 Unit-Tests grün. Nicht per Playwright/844x390 geprüft. Grafik/Spieler-Arm nicht angefasst. Ski nicht angefasst.
+
+## 2026-11-08 Android: Hub komplett, Header
+- ThingyViewModel/MainActivity nutzen ConnectionHub (Profil SIMULATOR neu); Tests angepasst.
+- tennis/static/header.js/.css (Status, Gerät, Akku) in index.html und ski/index.html eingebunden; TennisActivity sendet __thingyHeader.
+- NICHT gebaut/getestet (kein SDK). B (Sensorseite als HTML) offen, Compose bleibt.
