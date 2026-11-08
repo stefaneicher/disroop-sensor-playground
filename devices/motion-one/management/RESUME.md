@@ -1,6 +1,6 @@
 # Motion One – Resume
 
-Stand 2026-11-08 06:45 CET. This is the authoritative task resume for Motion One. Read the repo-wide rules and resume hierarchy in [`../../../RESUME.md`](../../../RESUME.md) as well; root RESUME preserves older Thingy:52 context.
+Stand 2026-11-08 06:45 CET. This is the authoritative task resume for Motion One. Read the repo-wide rules and resume hierarchy in [`../../../RESUME.md`](../../../RESUME.md) as well; root RESUME preserves older Thingy:52 context. Also check the repo-wide [`TODO.md`](../../../TODO.md) and [`IDEEN.md`](../../../IDEEN.md) and keep them current; run `git pull --rebase` at session start and push regularly.
 
 ## Current state
 - §1–§7: project structure, 5 Custom-Agent profiles, 9 Skills, toolchain setup, smoke tests, V1 requirements, architecture and calculated budgets are documented.
