@@ -1,0 +1,27 @@
+{
+ "name": "unterschale_glatt",
+ "tol": 0.02,
+ "valid_in": true,
+ "vol_in": 27767.0,
+ "n_faces": 458,
+ "n_solids": 1,
+ "n_shells": 1,
+ "raw": {
+  "open": 309,
+  "nonmanifold": 179,
+  "watertight": false,
+  "vol": null,
+  "tris": 40863,
+  "file": "devices/motion-one/logs/fix_unterschale_glatt_raw.stl"
+ },
+ "valid_fix": true,
+ "vol_fix": 27766.6,
+ "fix": {
+  "open": 311,
+  "nonmanifold": 181,
+  "watertight": false,
+  "vol": null,
+  "tris": 40865,
+  "file": "devices/motion-one/logs/fix_unterschale_glatt_fix.stl"
+ }
+}

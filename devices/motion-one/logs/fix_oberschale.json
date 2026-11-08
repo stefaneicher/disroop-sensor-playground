@@ -1,0 +1,27 @@
+{
+ "name": "oberschale",
+ "tol": 0.02,
+ "valid_in": true,
+ "vol_in": 19540.4,
+ "n_faces": 386,
+ "n_solids": 1,
+ "n_shells": 1,
+ "raw": {
+  "open": 195,
+  "nonmanifold": 398,
+  "watertight": false,
+  "vol": null,
+  "tris": 42846,
+  "file": "devices/motion-one/logs/fix_oberschale_raw.stl"
+ },
+ "valid_fix": true,
+ "vol_fix": 19539.9,
+ "fix": {
+  "open": 200,
+  "nonmanifold": 399,
+  "watertight": false,
+  "vol": null,
+  "tris": 42845,
+  "file": "devices/motion-one/logs/fix_oberschale_fix.stl"
+ }
+}
