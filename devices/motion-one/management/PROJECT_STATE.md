@@ -1,6 +1,6 @@
 # Projektstand Disroop Motion One
 
-Stand: 2026-11-08 06:35 CET. Phase: Integration der V1-Entwürfe (§8–§10). Release-Baseline noch nicht erstellt.
+Stand: 2026-11-08 06:40 CET. Phase: Integration der V1-Entwürfe (§8–§11). Release-Baseline noch nicht erstellt.
 
 | Bereich | Status | Nachweis / offener Punkt |
 |---|---|---|
@@ -10,6 +10,8 @@ Stand: 2026-11-08 06:35 CET. Phase: Integration der V1-Entwürfe (§8–§10). R
 | PCB V1 | PARTIAL | KiCad-Projekt 4-lagig geroutet, ERC 0, DRC 0 Fehler/0 unverbunden, Gerber/BOM/CPL exportiert. JLC-Versand/PCBA-Gesamtpreis nur geschätzt; CPL-Rotationen in Anbieter-Vorschau prüfen; keine Muster-Messungen |
 | Mechanik V1 | PARTIAL | Ergonomisches 170-mm-Gehäuse, STL/3MF und PETG-Slice vorhanden. FEM-Netzkonvergenz PARTIAL; Board-STEP/INTERFACES r2 noch nicht eingearbeitet und Kollisionsprüfung noch einmal nötig |
 | Firmware V1 | PARTIAL | Zephyr-App/UF2 gebaut; Host-Unit-Tests 32/32. `PINOUT_V1.json` ist jetzt vorhanden und muss in DTS integriert werden; Hardwaretests NOT RUN |
+| Leistungsbudget | PARTIAL | Systems-Rechnung 65 h; PCB-Gegenrechnung 49 h. Verschiedene ANNAHMEN, konservative Planungszahl 49 h; beides ungemessen. Abweichung dokumentiert in `requirements/BUDGETS.md` |
+| Montage-/Bedienungsanleitung | IN PROGRESS | docs-media engineer entwirft quellengebundene Drafts; finale Revisionen und PDF erst nach Schnittstellenintegration |
 | MCP / Agents | PARTIAL | Playwright erfolgreich aus PCB-Spezialisten genutzt. KiCad/FreeCAD/Blender-MCP nicht eingerichtet, CLI-Ersatz genutzt. Projekt-Custom-Agent-Dateien angelegt, aber Runtime-Aufruf erst nach CLI-Neustart nachweisbar |
 | Media, Anleitungen, Bericht | NOT RUN | Smoke-Tests bestanden; Produktionsdokumente und Renderings aus integrierter Baugruppe fehlen |
 | Hardware / Bestellung | NOT RUN | Nichts bestellt, bezahlt, gedruckt, geflasht oder unter Spannung gesetzt |
@@ -18,6 +20,7 @@ Stand: 2026-11-08 06:35 CET. Phase: Integration der V1-Entwürfe (§8–§10). R
 - PCB-Agent: Anpassungen nach mechanischen Änderungswünschen, neues Board/INTERFACES und Fertigungsexporte.
 - Mechanik-Agent: Integration des tatsächlichen Board-STEP, neue Kollisions- und Slice-Prüfung, FEM-Netzprüfung.
 - Firmware-Agent: `PINOUT_V1.json` in DTS übernehmen, Build und Hosttests wiederholen.
+- Docs-Agent: textuelle Montage-/Bedienungsanleitungen als DRAFT, bis Geometrie und Revisionen feststehen.
 - Manager: nach den Handoffs Artefakte stichprobenartig prüfen, Kennzahlen/Status aktualisieren und integrierten Stand committen.
 
 ## Release-Gate
