@@ -1,0 +1,4 @@
+[2026-11-08 02:59:37.853769] [0x00007cca3cc97600] [error]   [GCode.cpp:2033 do_export] [WARNING]: the parent path toleranzkoerper is not there, create it!
+error: XDG_RUNTIME_DIR is invalid or not set in the environment.
+[2026-11-08 02:59:38.890007] [0x00007cca3cc97600] [error]   [BambuStudio.cpp:681 glfw_callback] error_code 65544, description: Wayland: Failed to connect to display
+[2026-11-08 02:59:38.890708] [0x00007cca3cc97600] [error]   [BambuStudio.cpp:6667 operator()] glfwInit return error, code 65544

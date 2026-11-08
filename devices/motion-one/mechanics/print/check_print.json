@@ -1,0 +1,230 @@
+{
+ "overhang_limit_deg": 45.0,
+ "parts": {
+  "oberschale": {
+   "watertight": true,
+   "winding": true,
+   "volume_mm3": 19384.01564966164,
+   "extent_mm": [
+    170.0,
+    43.49,
+    13.6
+   ],
+   "fits_a1mini": true,
+   "overhang_area_mm2": 5171.5,
+   "bed_contact_mm2": 1053.1,
+   "mass_petg_g": 24.23001956207705
+  },
+  "unterschale_glatt": {
+   "watertight": true,
+   "winding": true,
+   "volume_mm3": 24966.73216834066,
+   "extent_mm": [
+    170.0,
+    43.55,
+    16.79
+   ],
+   "fits_a1mini": true,
+   "overhang_area_mm2": 5059.3,
+   "bed_contact_mm2": 1047.4,
+   "mass_petg_g": 31.208415210425823
+  },
+  "tastenkappe": {
+   "watertight": true,
+   "winding": true,
+   "volume_mm3": 530.7518040019122,
+   "extent_mm": [
+    13.0,
+    13.0,
+    7.3
+   ],
+   "fits_a1mini": true,
+   "overhang_area_mm2": 13.7,
+   "bed_contact_mm2": 54.0,
+   "mass_petg_g": 0.6634397550023903
+  },
+  "lichtleiter": {
+   "watertight": true,
+   "winding": true,
+   "volume_mm3": 85.77426655584964,
+   "extent_mm": [
+    5.0,
+    5.0,
+    9.9
+   ],
+   "fits_a1mini": true,
+   "overhang_area_mm2": 2.6,
+   "bed_contact_mm2": 7.1,
+   "mass_petg_g": 0.10721783319481204
+  }
+ },
+ "collisions": {
+  "board": {
+   "points": 31200,
+   "oberschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   },
+   "unterschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   }
+  },
+  "bauraum_oben": {
+   "points": 73755,
+   "oberschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   },
+   "unterschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   }
+  },
+  "usb_c": {
+   "points": 3496,
+   "oberschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   },
+   "unterschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   }
+  },
+  "taster": {
+   "points": 2025,
+   "oberschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   },
+   "unterschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   }
+  },
+  "led": {
+   "points": 16,
+   "oberschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   },
+   "unterschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   }
+  },
+  "summer": {
+   "points": 5290,
+   "oberschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   },
+   "unterschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   }
+  },
+  "ble": {
+   "points": 8910,
+   "oberschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   },
+   "unterschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   }
+  },
+  "akku": {
+   "points": 97500,
+   "oberschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   },
+   "unterschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   }
+  },
+  "motor": {
+   "points": 2268,
+   "oberschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   },
+   "unterschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   }
+  },
+  "kabelkanal": {
+   "points": 7000,
+   "oberschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   },
+   "unterschale": {
+    "points_inside": 0,
+    "volume_mm3": 0.0
+   }
+  }
+ },
+ "mass": {
+  "items": [
+   {
+    "name": "oberschale",
+    "g": 24.23,
+    "basis": "SIMULATION Volumen STL x rho PETG"
+   },
+   {
+    "name": "unterschale",
+    "g": 31.21,
+    "basis": "SIMULATION"
+   },
+   {
+    "name": "tastenkappe",
+    "g": 0.66,
+    "basis": "SIMULATION"
+   },
+   {
+    "name": "lichtleiter",
+    "g": 0.11,
+    "basis": "SIMULATION"
+   },
+   {
+    "name": "akku",
+    "g": 10.0,
+    "basis": "ANNAHME BUDGETS 503040-Klasse ~10 g"
+   },
+   {
+    "name": "board_bestueckt",
+    "g": 9.0,
+    "basis": "ANNAHME FR4 70x25x1 ~3.3 g + Bauteile ~5.7 g"
+   },
+   {
+    "name": "muenzmotor",
+    "g": 1.0,
+    "basis": "ANNAHME 10x2.7 Muenzmotor ~0.9 g"
+   },
+   {
+    "name": "schrauben_einsaetze",
+    "g": 2.6,
+    "basis": "ANNAHME M2x10 Stahl ~0.3 g, ruthex M2 ~0.35 g"
+   },
+   {
+    "name": "kabel_schaum_kleber",
+    "g": 2.0,
+    "basis": "ANNAHME"
+   }
+  ],
+  "total_g": 80.8,
+  "cg_mm": [
+   70.6,
+   0.0,
+   -1.9
+  ],
+  "req_max_g": 120,
+  "status": "PASS"
+ }
+}

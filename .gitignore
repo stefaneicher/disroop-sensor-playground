@@ -23,3 +23,8 @@ devices/motion-one/logs/media-smoke/
 devices/motion-one/logs/mech-smoke/
 devices/motion-one/logs/pcb-smoke/
 devices/motion-one/logs/fw-v1/
+# motion-one: regenerierbare Grossdateien (scripts/mechanics/build_enclosure.py) und Caches
+devices/motion-one/mechanics/cad/motion-one_baugruppe.step
+devices/motion-one/mechanics/cad/unterschale_*.step
+devices/motion-one/scripts/**/__pycache__/
+devices/motion-one/scripts/mechanics/_probe/
