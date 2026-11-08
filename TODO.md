@@ -15,6 +15,17 @@ Konkrete, offene Aufgaben für das ganze Repo. Ideen ohne Entscheid stehen in [`
 - [ ] (Tennis/Ski) Mit echten Bewegungen live testen, Schwellen nachjustieren.
 - [ ] (Release) Optional Release-Tag mit exe und apk.
 
+### Android-App: WebViews, Spiele, Verbindung (User, 2026-11-08)
+Status aller Punkte: **offen**.
+- [ ] (Android/Architektur) Die ganze App mit HTML-WebViews bauen, auch die Sensordatenansicht (heute nativ mit Compose). BLE bleibt nativ in Kotlin, das HTML bekommt die Daten wie bei Tennis und Ski per `evaluateJavascript` und `ThingyNative`.
+- [ ] (Android/UI) Einen konstanten Header über alle Ansichten, am besten der Header der Sensordatenansicht, auch bei Tennis und Ski.
+- [ ] (Ski) Auf dem Handy im Querformat verbessern: Anzeigen sind zu gross, man sieht nicht gut, wo der Skifahrer ist.
+- [ ] (Tennis) Grafik deutlich verbessern, vor allem den Spieler mit dem Arm. Auch das Spielen auf dem Handy ist schwierig.
+- [ ] (Tennis/Ski) Menü-Screens im Querformat auf dem Handy sind schlecht bedienbar, Auswahl verbessern.
+- [ ] (Tennis/Ski) Kalibriermodus und Testmodus: zeigt live, wie die Bewegung des Geräts auf den Spieler wirkt.
+- [ ] (Tennis/Ski) Bewegungsgrenzen: Dreht man das Gerät in einer Weise, die der Spieler (Mensch) nicht machen kann, gibt es Alarm oder Ton. So lernt man den möglichen Bewegungsradius.
+- [ ] (Verbindung) Klären, ob die Verbindung bei jedem Wechsel zwischen Ansichten abbrechen und neu aufgebaut werden muss (heute trennt `TennisActivity.onStop`). Alternative: eine dauerhafte Verbindung (z. B. Service oder gemeinsamer Halter), die alle Ansichten nutzen.
+
 ### Motion One (siehe `devices/motion-one/management/RESUME.md`)
 - [ ] (Elektronik/Mechanik/Firmware) Iteration abschliessen: Board an Mechanik-Handoff anpassen, CAD und Kollision neu prüfen, DTS-Pinmap aus `PINOUT_V1.json`.
 - [ ] (Docs/Media) §11 Montage- und Benutzeranleitung, Renderings.
