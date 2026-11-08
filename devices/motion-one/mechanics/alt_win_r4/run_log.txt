@@ -1,0 +1,17 @@
+16:55:47 ==== Start r4_win, GUI=1
+16:56:10 Ausrichtung {'board_r4_bbox': [4.6, -12.5, -1.0, 74.6, 13.0, 3.25], 'pcb_r3_bbox': [3.9, -12.5, -1.0, 74.6, 13.85, 3.5]} ; J5-Koerper [67.25, -2.75, 3.0, 68.13, -1.55, 3.0]
+16:56:16 STEP laden fertig: 22.67 s
+16:56:43 Schlitz: {'x': [57.6, 68.6], 'z': [-0.5, 3.5], 'durchgang_mm': [11.0, 4.0], 'entferntes_volumen_mm3': 171.73}
+16:56:49 STEP schlitz_j5 fertig: 33.51 s
+16:57:04 Dome: {'H1': {'x': 47.0, 'y': 0.1999999999999993, 'boden_oben_z': -14.7, 'hoehe_mm': 13.7}, 'H2': {'x': 63.1, 'y': 10.3, 'boden_oben_z': -11.59, 'hoehe_mm': 10.59}}
+16:57:10 STEP dome_m2 fertig: 20.30 s
+16:57:29 Motor: {'x': 38.0, 'y': 0.0, 'mulde_boden_z': -12.16, 'mulde_d': 8.6, 'mulde_t': 3.2, 'oberkante_ring_z': -8.96, 'akku_unterkante_z': -7.5}
+16:57:35 STEP motor_mulde fertig: 25.06 s
+17:00:42 Valid {'oberschale': True, 'unterschale': True, 'board': True, 'motor': True, 'akku': True}
+Volumen {'oberschale': 19526.7, 'unterschale': 27819.0, 'oberschale_r3': 19597.0, 'unterschale_r3': 27423.0}
+Kollision {'oberschale_vs_board': 0.0, 'oberschale_vs_motor': 0.0, 'oberschale_vs_akku': 0.0, 'unterschale_vs_board': 0.0, 'unterschale_vs_motor': 0.0, 'unterschale_vs_akku': 64.678, 'motor_vs_akku': 0.0, 'motor_vs_board': 0.0}
+Treffer []
+Keepout {'motor': 28.8, 'akku': 15.3, 'schraube_H1': 22.8, 'schraube_H2': 6.7}
+17:00:51 STEP pruefungen fertig: 196.65 s
+17:01:17 STEP export fertig: 24.18 s
+17:01:17 ==== FERTIG gesamt 330.3 s

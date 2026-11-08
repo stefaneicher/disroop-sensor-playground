@@ -1,0 +1,125 @@
+{
+ "ausrichtung": {
+  "board_r4_bbox": [
+   4.6,
+   -12.5,
+   -1.0,
+   74.6,
+   13.0,
+   3.25
+  ],
+  "pcb_r3_bbox": [
+   3.9,
+   -12.5,
+   -1.0,
+   74.6,
+   13.85,
+   3.5
+  ]
+ },
+ "j5_solid_bbox": [
+  67.25,
+  -2.75,
+  3.0,
+  68.13,
+  -1.55,
+  3.0
+ ],
+ "schlitz": {
+  "x": [
+   57.6,
+   68.6
+  ],
+  "z": [
+   -0.5,
+   3.5
+  ],
+  "durchgang_mm": [
+   11.0,
+   4.0
+  ],
+  "entferntes_volumen_mm3": 171.73
+ },
+ "dome": {
+  "H1": {
+   "x": 47.0,
+   "y": 0.1999999999999993,
+   "boden_oben_z": -14.7,
+   "hoehe_mm": 13.7
+  },
+  "H2": {
+   "x": 63.1,
+   "y": 10.3,
+   "boden_oben_z": -11.59,
+   "hoehe_mm": 10.59
+  }
+ },
+ "motor": {
+  "x": 38.0,
+  "y": 0.0,
+  "mulde_boden_z": -12.16,
+  "mulde_d": 8.6,
+  "mulde_t": 3.2,
+  "oberkante_ring_z": -8.96,
+  "akku_unterkante_z": -7.5
+ },
+ "valid": {
+  "oberschale": true,
+  "unterschale": true,
+  "board": true,
+  "motor": true,
+  "akku": true
+ },
+ "volumen_mm3": {
+  "oberschale": 19526.7,
+  "unterschale": 27819.0,
+  "oberschale_r3": 19597.0,
+  "unterschale_r3": 27423.0
+ },
+ "kollision_mm3": {
+  "oberschale_vs_board": 0.0,
+  "oberschale_vs_motor": 0.0,
+  "oberschale_vs_akku": 0.0,
+  "unterschale_vs_board": 0.0,
+  "unterschale_vs_motor": 0.0,
+  "unterschale_vs_akku": 64.678,
+  "motor_vs_akku": 0.0,
+  "motor_vs_board": 0.0
+ },
+ "kollision_treffer": [],
+ "keepout_abstand_mm": {
+  "motor": 28.8,
+  "akku": 15.3,
+  "schraube_H1": 22.8,
+  "schraube_H2": 6.7
+ },
+ "stl": {
+  "oberschale": {
+   "facets": 27596,
+   "solid": false,
+   "non_manifolds": true,
+   "volumen_mm3": 31423.2
+  },
+  "unterschale": {
+   "facets": 46552,
+   "solid": false,
+   "non_manifolds": true,
+   "volumen_mm3": 27742.6
+  }
+ },
+ "zeit_s": {
+  "laden": 22.67,
+  "schlitz_j5": 33.51,
+  "dome_m2": 20.3,
+  "motor_mulde": 25.06,
+  "pruefungen": 196.65,
+  "export": 24.18
+ },
+ "gesamt_s": 330.3,
+ "freecad": [
+  "1",
+  "1",
+  "4",
+  "20260928 (Git shallow)"
+ ]
+}

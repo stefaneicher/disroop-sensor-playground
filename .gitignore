@@ -30,3 +30,6 @@ devices/motion-one/scripts/**/__pycache__/
 devices/motion-one/scripts/mechanics/_probe/
 devices/motion-one/logs/fw-pinout/
 .playwright-mcp/
+devices/motion-one/mechanics/alt_win_r4/*.FCStd
+devices/motion-one/mechanics/alt_win_r4/*.step
+devices/motion-one/mechanics/alt_win_r4/*.stl

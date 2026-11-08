@@ -1,0 +1,199 @@
+# Disroop Motion One - r4-Anpassung der r3-Schalen, sichtbar in FreeCAD 1.1 (Windows GUI)
+# mechanical-engineer (alt_win_r4), 2026-11-08. Koordinaten: x laengs, y quer, z hoch, Trennebene z=0.
+import os, json, time, traceback
+import FreeCAD as App, Part, Mesh, MeshPart
+V = App.Vector
+try:
+    import FreeCADGui as Gui
+    from PySide import QtGui
+    GUI = App.GuiUp
+except Exception:
+    GUI = False
+
+ROOT = r"C:\Users\stefa\IdeaProjects\disroop-sensor-playground\devices\motion-one"
+OUT = os.path.join(ROOT, "mechanics", "alt_win_r4")
+os.makedirs(OUT, exist_ok=True)
+LOG = os.path.join(OUT, "run_log.txt")
+T = {}; RES = {}
+t_all = time.time()
+
+def log(s):
+    with open(LOG, "a", encoding="utf-8") as f:
+        f.write(time.strftime("%H:%M:%S ") + str(s) + "\n")
+    App.Console.PrintMessage(str(s) + "\n")
+
+def show(pause=1.5, iso=True):
+    if not GUI: return
+    Gui.updateGui()
+    v = Gui.activeDocument().activeView()
+    if iso: v.viewIsometric()
+    Gui.SendMsgToActiveView("ViewFit")
+    t = time.time()
+    while time.time() - t < pause:
+        QtGui.QApplication.processEvents(); time.sleep(0.02)
+
+def color(o, rgb, tr=0):
+    if GUI:
+        o.ViewObject.ShapeColor = rgb; o.ViewObject.Transparency = tr
+
+def add(name, shape, rgb=(0.7, 0.7, 0.7), tr=0):
+    o = doc.addObject("Part::Feature", name); o.Shape = shape; color(o, rgb, tr); doc.recompute(); return o
+
+def step(name):
+    T[name] = round(time.time() - T["_t"], 2); T["_t"] = time.time()
+    doc.saveCopy(os.path.join(OUT, "step_%02d_%s.FCStd" % (len([k for k in T if not k.startswith("_")]), name)))
+    log("STEP %s fertig: %.2f s" % (name, T[name]))
+
+# ---------------- Parameter (Herkunft in Klammern) ----------------
+BX0, BY0, BZ0 = 4.6, 12.5, -1.0     # Board-STEP -> Geraet: x+4.6 (params.BOARD_X0), y_step+12.5 (y_if-12.5), z-1 (Unterseite z=-1)
+def dev(xb, yb): return (xb + BX0, yb - BY0)          # INTERFACES-Boardkoord. -> Geraet
+J5 = dev(58.5, 3.35); H1 = dev(42.4, 12.7); H2 = dev(58.5, 22.8)
+ANT_X = 66.2 + BX0                                     # Antennenzone ab x=70.8 (Geraet)
+SLOT_W, SLOT_Z0, SLOT_Z1 = 11.0, -0.5, 3.5            # Durchbruch 11 x 4 (MASSBLATT_r4, ANNAHME inkl. Spiel)
+CH = 3.0                                               # 45-Grad-Fase-Werkzeug (Fase an Aussenflaeche ca. 0.6 mm)
+DOME_D, PILOT_D = 4.4, 1.7                             # Selbstschneider M2 in PA12: Kernloch 1.7 (ANNAHME), Dom = Keepout-Ring D4.4
+MOT_D, MOT_T, MOT_X, MOT_Y = 8.6, 3.2, 38.0, 0.0      # Mulde (INTERFACES motor.mount), Lage unter Akku (ANNAHME)
+RING_W = 1.2
+log("==== Start r4_win, GUI=%s" % GUI)
+try:
+    doc = App.newDocument("MotionOne_r4_win")
+    if GUI: Gui.activeDocument().activeView().viewIsometric()
+    T["_t"] = time.time()
+    # ---------- 1 Laden ----------
+    up = Part.Shape(); up.read(os.path.join(ROOT, "mechanics", "cad", "oberschale.brep"))
+    lo = Part.Shape(); lo.read(os.path.join(ROOT, "mechanics", "cad", "unterschale_glatt.brep"))
+    o_up = add("Oberschale_r3", up, (0.93, 0.93, 0.95), 65); show()
+    o_lo = add("Unterschale_r3", lo, (0.15, 0.17, 0.22)); show()
+    bstep = Part.read(os.path.join(ROOT, "electronics", "kicad", "motion-one", "export", "motion-one-board.step"))
+    board = bstep.copy(); board.translate(V(BX0, BY0, BZ0))
+    o_b = add("Board_r4", board, (0.1, 0.55, 0.25)); show()
+    am = Mesh.Mesh(os.path.join(ROOT, "mechanics", "assembly_stl", "akku.stl")); ab = am.BoundBox
+    akku = Part.makeBox(ab.XLength, ab.YLength, ab.ZLength, V(ab.XMin, ab.YMin, ab.ZMin))
+    o_a = add("Akku_Huelle", akku, (0.9, 0.6, 0.1), 40); show()
+    pm = Mesh.Mesh(os.path.join(ROOT, "mechanics", "assembly_stl", "pcb_r3.stl")).BoundBox
+    bb = board.BoundBox
+    RES["ausrichtung"] = {"board_r4_bbox": [round(bb.XMin, 2), round(bb.YMin, 2), round(bb.ZMin, 2), round(bb.XMax, 2), round(bb.YMax, 2), round(bb.ZMax, 2)],
+                          "pcb_r3_bbox": [round(pm.XMin, 2), round(pm.YMin, 2), round(pm.ZMin, 2), round(pm.XMax, 2), round(pm.YMax, 2), round(pm.ZMax, 2)]}
+    # Bauteil am naechsten zu J5 suchen (Plausibilitaet der Ausrichtung)
+    best = min(board.Solids, key=lambda s: (s.BoundBox.Center.x - J5[0]) ** 2 + (s.BoundBox.Center.y - J5[1]) ** 2 if s.BoundBox.ZMin > -0.5 else 1e9)
+    RES["j5_solid_bbox"] = [round(v, 2) for v in (best.BoundBox.XMin, best.BoundBox.YMin, best.BoundBox.ZMin, best.BoundBox.XMax, best.BoundBox.YMax, best.BoundBox.ZMax)]
+    log("Ausrichtung %s ; J5-Koerper %s" % (RES["ausrichtung"], RES["j5_solid_bbox"]))
+    step("laden")
+
+    # ---------- 2 Kabelschlitz J5 (Kante y=0 Board = Geraet y=-12.5, Wand -y) ----------
+    def rect(y, off):
+        x0, x1 = J5[0] - SLOT_W / 2 - off, J5[0] + SLOT_W / 2 + off
+        z0, z1 = SLOT_Z0 - off, SLOT_Z1 + off
+        return Part.makePolygon([V(x0, y, z0), V(x1, y, z0), V(x1, y, z1), V(x0, y, z1), V(x0, y, z0)])
+    core = Part.makeBox(SLOT_W, 9.0, SLOT_Z1 - SLOT_Z0, V(J5[0] - SLOT_W / 2, -22.5, SLOT_Z0))   # y -22.5..-13.5
+    cham_out = Part.makeLoft([rect(-21.6, CH), rect(-18.6, 0.0)], True, True)                   # 45 Grad aussen
+    cham_in = Part.makeLoft([rect(-16.2, 0.0), rect(-13.6, 2.6)], True, True)                   # 45 Grad innen
+    slot = core.fuse([cham_out, cham_in]).removeSplitter()
+    o_s = add("Werkzeug_Schlitz_J5", slot, (1.0, 0.1, 0.1), 30); show(2.0)
+    up2 = up.cut(slot); lo2 = lo.cut(slot)
+    o_up.Shape = up2; o_lo.Shape = lo2; o_s.Visibility = False; doc.recompute(); show(1.5)
+    sl = up.common(slot).Volume + lo.common(slot).Volume
+    RES["schlitz"] = {"x": [J5[0] - SLOT_W / 2, J5[0] + SLOT_W / 2], "z": [SLOT_Z0, SLOT_Z1], "durchgang_mm": [SLOT_W, SLOT_Z1 - SLOT_Z0],
+                      "entferntes_volumen_mm3": round(sl, 2)}
+    log("Schlitz: %s" % RES["schlitz"])
+    step("schlitz_j5")
+
+    # ---------- 3 M2-Dome (Selbstschneider) ----------
+    def floor_top(shape, x, y, zmax=-5.0):
+        e = Part.makeLine(V(x, y, -40), V(x, y, zmax)); c = shape.common(e)
+        return max(max(v.Point.z for v in ed.Vertexes) for ed in c.Edges)
+    domes = []; RES["dome"] = {}
+    for nm, (x, y) in (("H1", H1), ("H2", H2)):
+        ft = floor_top(lo2, x, y)
+        d = Part.makeCylinder(DOME_D / 2, (BZ0 - (ft - 1.0)), V(x, y, ft - 1.0))
+        domes.append((nm, x, y, ft, d))
+        RES["dome"][nm] = {"x": x, "y": y, "boden_oben_z": round(ft, 2), "hoehe_mm": round(BZ0 - ft, 2)}
+        add("Dom_" + nm, d, (0.2, 0.4, 0.9)); show(1.2)
+    lo3 = lo2
+    for nm, x, y, ft, d in domes:
+        lo3 = lo3.fuse(d)
+    for nm, x, y, ft, d in domes:
+        lo3 = lo3.cut(Part.makeCylinder(PILOT_D / 2, BZ0 - (ft + 0.6), V(x, y, ft + 0.6)))   # Sackloch, Boden bleibt 0.6+ dicht
+    lo3 = lo3.removeSplitter()
+    o_lo.Shape = lo3
+    for nm in ("H1", "H2"): doc.removeObject("Dom_" + nm)
+    doc.recompute(); show(1.5)
+    log("Dome: %s" % RES["dome"])
+    step("dome_m2")
+
+    # ---------- 4 Motor-Mulde + Litzenkanal ----------
+    ft = floor_top(lo3, MOT_X, MOT_Y)
+    ring = Part.makeCylinder(MOT_D / 2 + RING_W, MOT_T + 1.0, V(MOT_X, MOT_Y, ft - 1.0))
+    pocket = Part.makeCylinder(MOT_D / 2, MOT_T + 0.1, V(MOT_X, MOT_Y, ft))
+    # Litzenkanal 2.0 breit Richtung -y (Lotpads J3 bei Board (29.5; 2.7) -> Geraet (34.1; -9.8)), Fuehrungsrippen 1.2 breit
+    ch_w, ch_y0, ch_y1 = 2.0, MOT_Y - MOT_D / 2 - RING_W - 0.5, -10.0
+    ribs = None
+    for sx in (-1, 1):
+        xr = MOT_X + sx * (ch_w / 2 + 0.6) - 0.6
+        r = Part.makeBox(1.2, ch_y0 - ch_y1, MOT_T + 1.0, V(xr, ch_y1, ft - 1.0))
+        ribs = r if ribs is None else ribs.fuse(r)
+    gap = Part.makeBox(ch_w, 6.0, MOT_T + 0.2, V(MOT_X - ch_w / 2, MOT_Y - MOT_D / 2 - RING_W - 3.0, ft))
+    add("Werkzeug_Mulde", ring.fuse(ribs).cut(pocket).cut(gap), (0.9, 0.2, 0.7)); show(1.5)
+    lo4 = lo3.fuse([ring, ribs]).cut(pocket).cut(gap).removeSplitter()
+    # Seitenwand-Innenschnitt: Rippen nur innerhalb Schale behalten
+    o_lo.Shape = lo4; doc.removeObject("Werkzeug_Mulde"); doc.recompute()
+    motor = Part.makeCylinder(4.0, 2.7, V(MOT_X, MOT_Y, ft + 0.15))
+    o_m = add("Motor_LCM0827", motor, (0.75, 0.75, 0.8)); show(1.5)
+    RES["motor"] = {"x": MOT_X, "y": MOT_Y, "mulde_boden_z": round(ft, 2), "mulde_d": MOT_D, "mulde_t": MOT_T,
+                    "oberkante_ring_z": round(ft + MOT_T, 2), "akku_unterkante_z": round(ab.ZMin, 2)}
+    log("Motor: %s" % RES["motor"])
+    step("motor_mulde")
+
+    # ---------- 5 Pruefungen ----------
+    up_f, lo_f = o_up.Shape, o_lo.Shape
+    RES["valid"] = {"oberschale": up_f.isValid(), "unterschale": lo_f.isValid(), "board": board.isValid(), "motor": motor.isValid(), "akku": akku.isValid()}
+    RES["volumen_mm3"] = {"oberschale": round(up_f.Volume, 1), "unterschale": round(lo_f.Volume, 1),
+                          "oberschale_r3": round(up.Volume, 1), "unterschale_r3": round(lo.Volume, 1)}
+    coll = {}; hits = []
+    for pn, ps in (("oberschale", up_f), ("unterschale", lo_f)):
+        vb = 0.0
+        for i, s in enumerate(board.Solids):
+            c = ps.common(s).Volume
+            if c > 1e-4:
+                vb += c; hits.append((pn, i, round(c, 3), [round(s.BoundBox.Center.x, 1), round(s.BoundBox.Center.y, 1), round(s.BoundBox.Center.z, 1)]))
+                add("Kollision_%s_%d" % (pn, i), ps.common(s), (1, 0, 0))
+        coll[pn + "_vs_board"] = round(vb, 3)
+        coll[pn + "_vs_motor"] = round(ps.common(motor).Volume, 3)
+        ca = ps.common(akku); coll[pn + "_vs_akku"] = round(ca.Volume, 3)
+        if ca.Volume > 1e-4: add("Kollision_%s_akku" % pn, ca, (1, 0, 0))
+    coll["motor_vs_akku"] = round(motor.common(akku).Volume, 3)
+    coll["motor_vs_board"] = round(sum(motor.common(s).Volume for s in board.Solids), 3)
+    RES["kollision_mm3"] = coll; RES["kollision_treffer"] = hits
+    # Keepout Antenne: Metall (Motor, M2-Schrauben D2 ueber Domhoehe+Board, Akku) >= 5 mm von x>=70.8
+    ant = Part.makeBox(74.6 - ANT_X, 25.0, 30.0, V(ANT_X, -12.5, -20.0))
+    screws = [Part.makeCylinder(1.0, 6.0, V(x, y, -4.0)) for x, y in (H1, H2)]
+    ko = {"motor": round(motor.distToShape(ant)[0], 2), "akku": round(akku.distToShape(ant)[0], 2),
+          "schraube_H1": round(screws[0].distToShape(ant)[0], 2), "schraube_H2": round(screws[1].distToShape(ant)[0], 2)}
+    RES["keepout_abstand_mm"] = ko
+    add("Antennenzone", ant, (1.0, 0.9, 0.0), 80)
+    log("Valid %s\nVolumen %s\nKollision %s\nTreffer %s\nKeepout %s" % (RES["valid"], RES["volumen_mm3"], coll, hits, ko))
+    show(2.0)
+    step("pruefungen")
+
+    # ---------- 6 Export ----------
+    up_f.exportStep(os.path.join(OUT, "oberschale.step")); lo_f.exportStep(os.path.join(OUT, "unterschale.step"))
+    for nm, s in (("oberschale", up_f), ("unterschale", lo_f)):
+        m = MeshPart.meshFromShape(Shape=s, LinearDeflection=0.05, AngularDeflection=0.2)
+        m.write(os.path.join(OUT, nm + ".stl"))
+        RES.setdefault("stl", {})[nm] = {"facets": m.CountFacets, "solid": m.isSolid(), "non_manifolds": m.hasNonManifolds(), "volumen_mm3": round(m.Volume, 1)}
+    if GUI:
+        v = Gui.activeDocument().activeView()
+        v.viewIsometric(); Gui.SendMsgToActiveView("ViewFit"); show(0.5, False)
+        v.saveImage(os.path.join(OUT, "r4_win_iso.png"), 1600, 1000, "White")
+        v.viewTop(); Gui.SendMsgToActiveView("ViewFit"); show(0.5, False)
+        v.saveImage(os.path.join(OUT, "r4_win_top.png"), 1600, 1000, "White")
+        v.viewIsometric(); Gui.SendMsgToActiveView("ViewFit")
+    doc.saveAs(os.path.join(OUT, "motion-one_r4_win_baugruppe.FCStd"))
+    step("export")
+    T.pop("_t"); RES["zeit_s"] = T; RES["gesamt_s"] = round(time.time() - t_all, 1)
+    RES["freecad"] = App.Version()[:4]
+    with open(os.path.join(OUT, "r4_win_results.json"), "w", encoding="utf-8") as f:
+        json.dump(RES, f, indent=1)
+    log("==== FERTIG gesamt %.1f s" % RES["gesamt_s"])
+except Exception:
+    log("FEHLER:\n" + traceback.format_exc())
