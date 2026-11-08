@@ -26,6 +26,26 @@ const TRAIL = 40;
 const ME: Kit = { shirt: 0x84cc16, shorts: 0x1f2937, skin: 0xe0b48a, hair: 0x3b2a1e, shoes: 0xf9fafb, accent: 0x14532d, cap: true };
 const CPU: Kit = { shirt: 0x2aa5a1, shorts: 0xf9fafb, skin: 0xb98260, hair: 0x15110d, shoes: 0x111827, accent: 0xf9fafb };
 
+interface Quality { low: boolean; maxDpr: number; shadow: number }
+
+/** Weak desktop GPUs (Intel/AMD iGPU) get a cheaper profile; override with ?q=low or ?q=high. */
+function integratedGpu(): boolean {
+  try {
+    const gl = document.createElement('canvas').getContext('webgl');
+    const ext = gl?.getExtension('WEBGL_debug_renderer_info');
+    const name = ext && gl ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : '';
+    return /Intel|\(TM\) Graphics|SwiftShader|llvmpipe/i.test(name);
+  } catch {
+    return false;
+  }
+}
+
+function quality(): Quality {
+  const p = new URLSearchParams(location.search).get('q');
+  const low = p ? p === 'low' : integratedGpu();
+  return low ? { low, maxDpr: 1, shadow: 1024 } : { low, maxDpr: 2, shadow: 4096 };
+}
+
 export class Arena {
   readonly renderer: THREE.WebGLRenderer;
   private readonly scene = new THREE.Scene();
@@ -44,12 +64,15 @@ export class Arena {
   private readonly tmpV = new THREE.Vector3();
   private time = 0;
   camera_mode: CameraMode = 'third';
+  private readonly q: Quality;
 
   constructor(parent: HTMLElement) {
-    const r = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
-    r.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const q = quality();
+    this.q = q;
+    const r = new THREE.WebGLRenderer({ antialias: !q.low, powerPreference: 'high-performance' });
+    r.setPixelRatio(Math.min(window.devicePixelRatio, q.maxDpr));
     r.shadowMap.enabled = true;
-    r.shadowMap.type = THREE.PCFSoftShadowMap;
+    r.shadowMap.type = q.low ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
     r.toneMapping = THREE.ACESFilmicToneMapping;
     r.toneMappingExposure = 1.0;
     r.outputColorSpace = THREE.SRGBColorSpace;
@@ -114,7 +137,7 @@ export class Arena {
     const resize = () => {
       const w = parent.clientWidth || window.innerWidth;
       const h = parent.clientHeight || window.innerHeight;
-      r.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      r.setPixelRatio(Math.min(window.devicePixelRatio, q.maxDpr));
       r.setSize(w, h, false);
       this.camera.aspect = w / h;
       this.camera.fov = w / h < 1 ? 70 : 50;
@@ -130,13 +153,14 @@ export class Arena {
     const sun = new THREE.DirectionalLight(0xfff4e6, 1.3);
     sun.position.set(9, 24, 12);
     sun.castShadow = true;
-    sun.shadow.mapSize.set(4096, 4096);
+    sun.shadow.mapSize.set(this.q.shadow, this.q.shadow);
     sun.shadow.bias = -0.0004;
     sun.shadow.normalBias = 0.03;
     Object.assign(sun.shadow.camera, { left: -17, right: 17, top: 26, bottom: -26, near: 1, far: 70 });
     s.add(sun);
-    for (const [x, z] of [[-13, -19], [13, -19], [-13, 19], [13, 19]] as const) {
-      const sp = new THREE.SpotLight(0xf5f7ff, 260, 70, 0.7, 0.7, 1.6);
+    const masts = this.q.low ? ([[-13, -19], [13, 19]] as const) : ([[-13, -19], [13, -19], [-13, 19], [13, 19]] as const);
+    for (const [x, z] of masts) {
+      const sp = new THREE.SpotLight(0xf5f7ff, this.q.low ? 520 : 260, 70, 0.7, 0.7, 1.6);
       sp.position.set(x, 14, z);
       sp.target.position.set(0, 0, 0);
       s.add(sp, sp.target);

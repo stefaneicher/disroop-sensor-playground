@@ -132,7 +132,7 @@ export class World {
     sc.add(new THREE.HemisphereLight(0xbcd6ff, 0xf2f6fb, 1.5));
     this.sun.position.set(-60, 90, 40);
     this.sun.castShadow = true;
-    this.sun.shadow.mapSize.set(2048, 2048);
+    this.sun.shadow.mapSize.set(1024, 1024);
     this.sun.shadow.bias = -0.0005;
     this.sun.shadow.normalBias = 0.05;
     Object.assign(this.sun.shadow.camera, { left: -45, right: 45, top: 45, bottom: -45, near: 1, far: 260 });

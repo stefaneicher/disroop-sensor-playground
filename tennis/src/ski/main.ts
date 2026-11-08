@@ -26,7 +26,7 @@ const $ = (id: string): HTMLElement => document.getElementById(id)!;
 const stage = $('stage');
 
 // preserveDrawingBuffer only for the smoke test, which reads the canvas back; it costs a full-screen copy per frame
-const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance', preserveDrawingBuffer: params.has('preserve') });
+const renderer = new THREE.WebGLRenderer({ antialias: window.devicePixelRatio < 1.5 && !params.has('low'), powerPreference: 'high-performance', preserveDrawingBuffer: params.has('preserve') });
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -59,8 +59,8 @@ function adaptQuality(real: number): void {
   frameAvg += (real - frameAvg) * 0.1;
   slowFor = frameAvg > 1 / 50 ? slowFor + real : 0;
   fastFor = frameAvg < 1 / 75 || (frameAvg < 1 / 58 && scale < maxScale) ? fastFor + real : 0;
-  if (slowFor > 0.7 && scale > 0.6) {
-    scale = Math.max(0.6, +(scale - 0.15).toFixed(2));
+  if (slowFor > 0.7 && scale > 0.4) {
+    scale = Math.max(0.4, +(scale - 0.15).toFixed(2));
     slowFor = 0;
     resize();
   } else if (fastFor > 4 && scale < maxScale) {
