@@ -15,7 +15,7 @@ CAD, PRN = f"{OUT}/mechanics/cad", f"{OUT}/mechanics/print"
 V = cq.Vector
 FAST = "--fast" in sys.argv          # F-08: nur Vorschau (grobe Tessellierung, kein STEP); Release unveraendert
 BATCH = os.environ.get("MO_BATCH", "0") == "1"   # F-08: Booleans gesammelt (eine Operation, Fuzzy) statt Schleife
-FUZZY = 1e-4                          # mm, Fuzzy-Wert gesammelter Booleans
+FUZZY = float(os.environ.get("MO_FUZZY", "0"))   # mm, OCC-Fuzzy-Wert (0 = aus, Baseline)
 NPROC = int(os.environ.get("MO_NPROC", "1"))     # F-08: Prozesse fuer Teile (7 GB RAM -> max. 4)
 TIMES = []
 _T0 = time.perf_counter()
@@ -147,7 +147,7 @@ def fuse_all(base, parts):
     parts = [p for p in parts if p.Volume() >= 1e-6]
     if BATCH and len(parts) > 1:
         try:
-            r = base.fuse(*parts, tol=FUZZY)
+            r = base.fuse(*parts, tol=FUZZY or None)
             r = r if r.isValid() else r.fix()
             if r.isValid() and base.Volume() - 1e-3 <= r.Volume() <= base.Volume() + sum(p.Volume() for p in parts) + 1e-3 \
                     and len(r.Solids()) <= len(base.Solids()):
@@ -158,7 +158,7 @@ def fuse_all(base, parts):
     for p in parts:
         if p.Volume() < 1e-6:
             continue
-        r = base.fuse(p)
+        r = base.fuse(p, tol=FUZZY or None)
         if not r.isValid():
             r = r.fix()
         if r.isValid() and base.Volume() - 1e-3 <= r.Volume() <= base.Volume() + p.Volume() + 1e-3:
@@ -171,7 +171,7 @@ def fuse_all(base, parts):
 def cut_all(base, parts):
     if BATCH and len(parts) > 1:
         try:
-            r = base.cut(*parts, tol=FUZZY)
+            r = base.cut(*parts, tol=FUZZY or None)
             r = r if r.isValid() else r.fix()
             if r.isValid() and 1 < r.Volume() <= base.Volume() + 1e-3 and len(r.Solids()) <= len(base.Solids()):
                 return safe_clean(r)
@@ -180,7 +180,7 @@ def cut_all(base, parts):
         print("  Batch-Schnitt verworfen -> Schleife")
     for p in parts:
         try:
-            r = base.cut(p)
+            r = base.cut(p, tol=FUZZY or None)
             if not r.isValid():
                 r = r.fix()
         except ValueError as e:
@@ -536,6 +536,14 @@ def main():
     print(f"Oberschale V={top.Volume():.0f} valid={top.isValid()} ({time.time()-t0:.1f}s)")
     bots = {v: res_parts[v] for v in P.VARIANTS}
     tick("Teile fertig")
+    if os.environ.get("MO_NOEXPORT") == "1":   # F-08 Messlaeufe: nur Geometrie + Volumen, kein Export
+        vol = {"oberschale": top.Volume(), **{f"unterschale_{v}": b.Volume() for v, b in bots.items()}}
+        val = {"oberschale": top.isValid(), **{f"unterschale_{v}": b.isValid() for v, b in bots.items()}}
+        os.makedirs(OUT, exist_ok=True)
+        json.dump(dict(volumes=vol, valid=val, runtime_s=time.time() - t0, times=TIMES,
+                       cfg=dict(batch=BATCH, nproc=NPROC, fuzzy=FUZZY, occpar=os.environ.get("MO_OCCPAR", "0"))),
+                  open(f"{OUT}/f08_vol.json", "w"), indent=1)
+        return
     for v, b in bots.items():
         print(f"Unterschale {v}: V={b.Volume():.0f} valid={b.isValid()} ({time.time()-t0:.1f}s)")
     cap, capinfo = cap_geom()

@@ -63,4 +63,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends gmsh calculix-c
     && rm -rf /var/lib/apt/lists/* \
     && pip3 install --no-cache-dir --break-system-packages cadquery gmsh meshio lxml networkx
 
+# F-08: Mesh-Vorcheck Kollision (mechanical-engineer)
+RUN pip3 install --no-cache-dir --break-system-packages manifold3d
+
 WORKDIR /workspace

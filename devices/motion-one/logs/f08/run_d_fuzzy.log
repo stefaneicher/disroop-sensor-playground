@@ -1,0 +1,9 @@
+Loft aussen V=149873 mm3 valid=True, innen V=110422 (5.1s)
+Fuegeband V=7169 valid=True
+[t]    147.4s Schale+Fuegeband
+  Diagnose Schnitt Vector: (85.10174439783759, 0.041203059268655806, 0.23741485639863077): valid=True V=19612.7 base=19596.4
+WARNUNG Schnitt verworfen: Vector: (85.10174439783759, 0.041203059268655806, 0.23741485639863077)
+[t]    467.6s Teil top 320.3s
+  glatt: nach Fusion V=28549 valid=True
+[t]    812.7s Teil glatt 345.1s
+  verrippt: nach Fusion V=31069 valid=True

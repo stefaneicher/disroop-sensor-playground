@@ -1,0 +1,53 @@
+{
+ "volumes": {
+  "oberschale": 21398.146219964565,
+  "unterschale_glatt": 27422.812384076275,
+  "unterschale_verrippt": 29960.76053594032,
+  "unterschale_verrippt_ausgespart": 28460.72372363097
+ },
+ "valid": {
+  "oberschale": true,
+  "unterschale_glatt": true,
+  "unterschale_verrippt": true,
+  "unterschale_verrippt_ausgespart": true
+ },
+ "runtime_s": 1051.117817401886,
+ "times": [
+  [
+   "Schale+Fuegeband",
+   148.06,
+   133
+  ],
+  [
+   "Teil top 243.9s",
+   391.94,
+   133
+  ],
+  [
+   "Teil glatt 247.2s",
+   639.15,
+   133
+  ],
+  [
+   "Teil verrippt 212.3s",
+   851.41,
+   133
+  ],
+  [
+   "Teil verrippt_ausgespart 215.4s",
+   1066.81,
+   133
+  ],
+  [
+   "Teile fertig",
+   1067.35,
+   133
+  ]
+ ],
+ "cfg": {
+  "batch": true,
+  "nproc": 1,
+  "fuzzy": 0.0,
+  "occpar": "0"
+ }
+}

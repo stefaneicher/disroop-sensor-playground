@@ -1,0 +1,8 @@
+Loft aussen V=149873 mm3 valid=True, innen V=110422 (5.2s)
+Fuegeband V=7169 valid=True
+[t]    155.2s Schale+Fuegeband
+[t]    463.9s Teil top 308.7s
+  glatt: nach Fusion V=28542 valid=True
+[t]    813.5s Teil glatt 349.6s
+  verrippt: nach Fusion V=31057 valid=True
+[t]   1185.6s Teil verrippt 372.1s
