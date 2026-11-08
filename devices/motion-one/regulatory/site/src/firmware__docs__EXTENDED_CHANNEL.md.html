@@ -1,0 +1,23 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/docs/EXTENDED_CHANNEL.md</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/docs/EXTENDED_CHANNEL.md</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a># Erweiterter Kanal Raw-HR `EF680480` (REQ-025)
+</span><span class="l" id="L2"><a href="#L2">2</a>
+</span><span class="l" id="L3"><a href="#L3">3</a>Service Motion `EF680400`, Characteristic `EF680480-9B35-4933-9B10-52FFA9740042`, nur Notify.
+</span><span class="l" id="L4"><a href="#L4">4</a>Wird nur gesendet, wenn der Client die CCC abonniert hat. Die Rate entspricht `motion_freq_hz` aus `EF680401` (5..200 Hz).
+</span><span class="l" id="L5"><a href="#L5">5</a>Alle abonnierten Motion-Notifications zusammen werden auf ≤ 200/s dezimiert (BUDGETS, `ble_publish_motion`).
+</span><span class="l" id="L6"><a href="#L6">6</a>
+</span><span class="l" id="L7"><a href="#L7">7</a>| Byte | Typ | Inhalt | Skalierung |
+</span><span class="l" id="L8"><a href="#L8">8</a>|---|---|---|---|
+</span><span class="l" id="L9"><a href="#L9">9</a>| 0–5 | 3× i16 LE | accel x, y, z | /1024 → g (±32 g) |
+</span><span class="l" id="L10"><a href="#L10">10</a>| 6–11 | 3× i16 LE | gyro x, y, z (Bias korrigiert) | /8 → dps (±4096 dps) |
+</span><span class="l" id="L11"><a href="#L11">11</a>| 12–13 | u16 LE | sample_counter (IMU-Samples bei 400 Hz, läuft über) | – |
+</span><span class="l" id="L12"><a href="#L12">12</a>| 14–15 | u16 LE | flags | siehe unten |
+</span><span class="l" id="L13"><a href="#L13">13</a>
+</span><span class="l" id="L14"><a href="#L14">14</a>Flags: Bit 0..2 accel gesättigt x/y/z, Bit 3..5 gyro gesättigt x/y/z, Bit 6 fusion_ok (Gyro-Bias gültig). Die übrigen Bits sind 0.
+</span><span class="l" id="L15"><a href="#L15">15</a>Ein Sättigungs-Flag wird gesetzt, wenn der Sensor ±32767 liefert oder der Wert bei der Kodierung geklemmt wird.
+</span><span class="l" id="L16"><a href="#L16">16</a>
+</span><span class="l" id="L17"><a href="#L17">17</a>Länge 16 B ≤ 20 B, passt also ohne MTU-Erhöhung (BUDGETS).
+</span><span class="l" id="L18"><a href="#L18">18</a>Status: ANNAHME (Format von firmware-engineer festgelegt, mit INTERFACES.json abgleichen).
+</span><span class="l" id="L19"><a href="#L19">19</a>Kodierer: `thingy_encode_raw_hr()` in `codec/src/thingy_codec.c`, Test `test_raw_hr_layout_and_flags`.
+</span></pre></body></html>

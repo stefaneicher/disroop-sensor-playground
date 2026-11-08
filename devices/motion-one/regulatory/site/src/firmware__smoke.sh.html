@@ -1,0 +1,47 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/smoke.sh</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/smoke.sh</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>#!/usr/bin/env bash
+</span><span class="l" id="L2"><a href="#L2">2</a># Firmware-Smoke (PROMPT_1 §5.3/§9). Laeuft im Image disroop-motion-one-fw:
+</span><span class="l" id="L3"><a href="#L3">3</a>#   ./project hw fw &quot;bash devices/motion-one/firmware/smoke.sh [outdir]&quot;
+</span><span class="l" id="L4"><a href="#L4">4</a># 1. alle Host-Unit-Tests (gcc + Unity)  2. Zephyr-App fuer Board motion_one  3. Images + SHA-256
+</span><span class="l" id="L5"><a href="#L5">5</a>set -uo pipefail
+</span><span class="l" id="L6"><a href="#L6">6</a>cd &quot;$(dirname &quot;${BASH_SOURCE[0]}&quot;)&quot;
+</span><span class="l" id="L7"><a href="#L7">7</a>FW=&quot;$(pwd)&quot;
+</span><span class="l" id="L8"><a href="#L8">8</a>OUT=&quot;$(cd ../../.. &amp;&amp; pwd)/${1:-devices/motion-one/logs/fw-v1}&quot;
+</span><span class="l" id="L9"><a href="#L9">9</a>mkdir -p &quot;$OUT&quot;
+</span><span class="l" id="L10"><a href="#L10">10</a>rc=0
+</span><span class="l" id="L11"><a href="#L11">11</a>
+</span><span class="l" id="L12"><a href="#L12">12</a>{
+</span><span class="l" id="L13"><a href="#L13">13</a>  echo &quot;date: $(date -Iseconds)&quot;
+</span><span class="l" id="L14"><a href="#L14">14</a>  echo &quot;gcc: $(gcc --version | head -1)&quot;
+</span><span class="l" id="L15"><a href="#L15">15</a>  echo &quot;cmake: $(cmake --version | head -1)&quot;
+</span><span class="l" id="L16"><a href="#L16">16</a>  echo &quot;west: $(west --version)&quot;
+</span><span class="l" id="L17"><a href="#L17">17</a>  echo &quot;zephyr: $(tr &#x27;\n&#x27; &#x27; &#x27; &lt; &quot;$ZEPHYR_BASE/VERSION&quot;)&quot;
+</span><span class="l" id="L18"><a href="#L18">18</a>  echo &quot;sdk: $(cat &quot;$ZEPHYR_SDK_INSTALL_DIR/sdk_version&quot;)&quot;
+</span><span class="l" id="L19"><a href="#L19">19</a>  echo &quot;unity: $(grep -E &#x27;define UNITY_VERSION_(MAJOR|MINOR|BUILD)&#x27; &quot;$UNITY_DIR/src/unity.h&quot; | awk &#x27;{print $3}&#x27; | paste -sd.)&quot;
+</span><span class="l" id="L20"><a href="#L20">20</a>} &gt; &quot;$OUT/versions.txt&quot; 2&gt;&amp;1
+</span><span class="l" id="L21"><a href="#L21">21</a>
+</span><span class="l" id="L22"><a href="#L22">22</a>echo &quot;== Host-Unit-Tests&quot;
+</span><span class="l" id="L23"><a href="#L23">23</a>make -s clean &amp;&amp; make test &gt; &quot;$OUT/unit-tests.log&quot; 2&gt;&amp;1 || rc=1
+</span><span class="l" id="L24"><a href="#L24">24</a>grep -E &quot;^(==|[0-9]+ Tests)&quot; &quot;$OUT/unit-tests.log&quot;
+</span><span class="l" id="L25"><a href="#L25">25</a>grep -E &quot;^[0-9]+ Tests&quot; &quot;$OUT/unit-tests.log&quot; | grep -vq &quot; 0 Failures&quot; &amp;&amp; rc=1
+</span><span class="l" id="L26"><a href="#L26">26</a>echo &quot;Summe: $(grep -E &#x27;^[0-9]+ Tests&#x27; &quot;$OUT/unit-tests.log&quot; | awk &#x27;{t+=$1; f+=$3} END {print t&quot; Tests, &quot;f&quot; Failures&quot;}&#x27;)&quot;
+</span><span class="l" id="L27"><a href="#L27">27</a>
+</span><span class="l" id="L28"><a href="#L28">28</a>echo &quot;== Zephyr-App motion_one&quot;
+</span><span class="l" id="L29"><a href="#L29">29</a>bash &quot;$FW/build-app.sh&quot; &gt; &quot;$OUT/app-build.log&quot; 2&gt;&amp;1 || rc=1
+</span><span class="l" id="L30"><a href="#L30">30</a>grep -E &quot;warning|error:|FLASH:|RAM:&quot; &quot;$OUT/app-build.log&quot;
+</span><span class="l" id="L31"><a href="#L31">31</a>grep -q &quot;warning:&quot; &quot;$OUT/app-build.log&quot; &amp;&amp; { echo &quot;Warnungen im App-Build&quot;; rc=1; }
+</span><span class="l" id="L32"><a href="#L32">32</a>Z=&quot;$FW/build/app/zephyr&quot;
+</span><span class="l" id="L33"><a href="#L33">33</a>if [[ -f &quot;$Z/zephyr.uf2&quot; &amp;&amp; -f &quot;$Z/zephyr.hex&quot; ]]; then
+</span><span class="l" id="L34"><a href="#L34">34</a>  cp &quot;$Z/zephyr.uf2&quot; &quot;$Z/zephyr.hex&quot; &quot;$Z/zephyr.elf&quot; &quot;$Z/zephyr.bin&quot; &quot;$OUT/&quot;
+</span><span class="l" id="L35"><a href="#L35">35</a>  (cd &quot;$OUT&quot; &amp;&amp; sha256sum zephyr.uf2 zephyr.hex zephyr.bin zephyr.elf &gt; zephyr.sha256 &amp;&amp; ls -l zephyr.* &gt;&gt; zephyr.sha256)
+</span><span class="l" id="L36"><a href="#L36">36</a>  file &quot;$OUT/zephyr.elf&quot; &gt;&gt; &quot;$OUT/zephyr.sha256&quot;
+</span><span class="l" id="L37"><a href="#L37">37</a>  echo &quot;hex-start: $(head -2 &quot;$OUT/zephyr.hex&quot; | tr &#x27;\n&#x27; &#x27; &#x27;)&quot; &gt;&gt; &quot;$OUT/zephyr.sha256&quot;
+</span><span class="l" id="L38"><a href="#L38">38</a>  cat &quot;$OUT/zephyr.sha256&quot;
+</span><span class="l" id="L39"><a href="#L39">39</a>else
+</span><span class="l" id="L40"><a href="#L40">40</a>  echo &quot;zephyr.uf2/hex fehlt&quot;; rc=1
+</span><span class="l" id="L41"><a href="#L41">41</a>fi
+</span><span class="l" id="L42"><a href="#L42">42</a>echo &quot;smoke rc=$rc&quot;
+</span><span class="l" id="L43"><a href="#L43">43</a>exit $rc
+</span></pre></body></html>

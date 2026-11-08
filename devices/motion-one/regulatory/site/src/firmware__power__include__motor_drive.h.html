@@ -1,0 +1,32 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/power/include/motor_drive.h</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/power/include/motor_drive.h</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* F-12: Motor-PWM (MOT_EN P1.13) auf U_eff &lt;= 3.0 V und Arbitrierung Motor/Summer. Reines C, Host-getestet. */
+</span><span class="l" id="L2"><a href="#L2">2</a>#ifndef MOTOR_DRIVE_H
+</span><span class="l" id="L3"><a href="#L3">3</a>#define MOTOR_DRIVE_H
+</span><span class="l" id="L4"><a href="#L4">4</a>
+</span><span class="l" id="L5"><a href="#L5">5</a>#include &lt;stdbool.h&gt;
+</span><span class="l" id="L6"><a href="#L6">6</a>#include &lt;stdint.h&gt;
+</span><span class="l" id="L7"><a href="#L7">7</a>
+</span><span class="l" id="L8"><a href="#L8">8</a>#define MOTOR_TARGET_MV 3000u          /* QUELLE LCM0827A3038F-DB: Nenn 3.0 V, max 3.3 V */
+</span><span class="l" id="L9"><a href="#L9">9</a>#define MOTOR_SUPPLY_VBAT_MIN_MV 2500u /* ANNAHME Plausibilitaet VBAT-Messung */
+</span><span class="l" id="L10"><a href="#L10">10</a>#define MOTOR_SUPPLY_VBAT_MAX_MV 4200u /* QUELLE Li-Po Ladeschluss 4.2 V (ANALYSE_V1) */
+</span><span class="l" id="L11"><a href="#L11">11</a>#define MOTOR_SUPPLY_USB_MV 5250u      /* ANNAHME VBUS max USB 2.0 (5.25 V) &gt;= VSYS 4.87 V SIMULATION */
+</span><span class="l" id="L12"><a href="#L12">12</a>
+</span><span class="l" id="L13"><a href="#L13">13</a>/* Versorgung des Motorzweigs (VSW): an USB -&gt; VSYS-Worst-Case, sonst gemessene VBAT; 0/unplausibel -&gt; 4.2 V. */
+</span><span class="l" id="L14"><a href="#L14">14</a>uint16_t motor_supply_mv(uint16_t vbat_mv, bool usb);
+</span><span class="l" id="L15"><a href="#L15">15</a>/* Tastgrad in Promille = 3.0 V / supply (floor, max 1000); supply 0 -&gt; konservativ MOTOR_SUPPLY_USB_MV. */
+</span><span class="l" id="L16"><a href="#L16">16</a>uint16_t motor_duty_permille(uint16_t supply_mv);
+</span><span class="l" id="L17"><a href="#L17">17</a>
+</span><span class="l" id="L18"><a href="#L18">18</a>typedef struct {
+</span><span class="l" id="L19"><a href="#L19">19</a>	bool buzzer_on;
+</span><span class="l" id="L20"><a href="#L20">20</a>	bool motor_on;
+</span><span class="l" id="L21"><a href="#L21">21</a>} load_out_t;
+</span><span class="l" id="L22"><a href="#L22">22</a>/* Prioritaet: Summer vor Motor; Motor pausiert solange Summer laeuft. */
+</span><span class="l" id="L23"><a href="#L23">23</a>load_out_t load_arbitrate(bool buzzer_req, bool motor_req);
+</span><span class="l" id="L24"><a href="#L24">24</a>
+</span><span class="l" id="L25"><a href="#L25">25</a>/* VBUS-Spitzenstrom an USB (BERECHNUNG nach ANALYSE_V1 §1a), mA. */
+</span><span class="l" id="L26"><a href="#L26">26</a>uint32_t motor_vbus_peak_ma(bool buzzer_on, bool motor_on);
+</span><span class="l" id="L27"><a href="#L27">27</a>
+</span><span class="l" id="L28"><a href="#L28">28</a>#endif
+</span></pre></body></html>

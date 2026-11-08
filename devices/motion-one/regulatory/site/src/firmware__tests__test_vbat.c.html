@@ -1,0 +1,77 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/tests/test_vbat.c</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/tests/test_vbat.c</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* Host-Tests VBAT-Messsequenz (PCB-Hinweis: VBAT_EN &gt;= 25 ms vor ADC, Teiler 100k/100k -&gt; Faktor 2). */
+</span><span class="l" id="L2"><a href="#L2">2</a>#include &quot;unity.h&quot;
+</span><span class="l" id="L3"><a href="#L3">3</a>#include &quot;vbat.h&quot;
+</span><span class="l" id="L4"><a href="#L4">4</a>
+</span><span class="l" id="L5"><a href="#L5">5</a>typedef struct {
+</span><span class="l" id="L6"><a href="#L6">6</a>	char log[16];
+</span><span class="l" id="L7"><a href="#L7">7</a>	int n;
+</span><span class="l" id="L8"><a href="#L8">8</a>	uint32_t slept_ms;
+</span><span class="l" id="L9"><a href="#L9">9</a>	int adc_mv;
+</span><span class="l" id="L10"><a href="#L10">10</a>	int adc_rc;
+</span><span class="l" id="L11"><a href="#L11">11</a>	int en_level;
+</span><span class="l" id="L12"><a href="#L12">12</a>} fake_t;
+</span><span class="l" id="L13"><a href="#L13">13</a>
+</span><span class="l" id="L14"><a href="#L14">14</a>static fake_t fk;
+</span><span class="l" id="L15"><a href="#L15">15</a>
+</span><span class="l" id="L16"><a href="#L16">16</a>static int f_en(void *c, int on) { fake_t *f = c; f-&gt;log[f-&gt;n++] = on ? &#x27;E&#x27; : &#x27;D&#x27;; f-&gt;en_level = on; return 0; }
+</span><span class="l" id="L17"><a href="#L17">17</a>static void f_sleep(void *c, uint32_t ms) { fake_t *f = c; f-&gt;log[f-&gt;n++] = &#x27;S&#x27;; f-&gt;slept_ms += ms; }
+</span><span class="l" id="L18"><a href="#L18">18</a>static int f_adc(void *c, int32_t *mv)
+</span><span class="l" id="L19"><a href="#L19">19</a>{
+</span><span class="l" id="L20"><a href="#L20">20</a>	fake_t *f = c;
+</span><span class="l" id="L21"><a href="#L21">21</a>	f-&gt;log[f-&gt;n++] = &#x27;A&#x27;;
+</span><span class="l" id="L22"><a href="#L22">22</a>	TEST_ASSERT_EQUAL_INT_MESSAGE(1, f-&gt;en_level, &quot;ADC ohne VBAT_EN&quot;);
+</span><span class="l" id="L23"><a href="#L23">23</a>	TEST_ASSERT_TRUE_MESSAGE(f-&gt;slept_ms &gt;= VBAT_SETTLE_MS, &quot;Einschwingzeit &lt; 25 ms&quot;);
+</span><span class="l" id="L24"><a href="#L24">24</a>	*mv = f-&gt;adc_mv;
+</span><span class="l" id="L25"><a href="#L25">25</a>	return f-&gt;adc_rc;
+</span><span class="l" id="L26"><a href="#L26">26</a>}
+</span><span class="l" id="L27"><a href="#L27">27</a>
+</span><span class="l" id="L28"><a href="#L28">28</a>static const vbat_port_t port = {.ctx = &amp;fk, .set_enable = f_en, .sleep_ms = f_sleep, .read_adc_mv = f_adc};
+</span><span class="l" id="L29"><a href="#L29">29</a>
+</span><span class="l" id="L30"><a href="#L30">30</a>void setUp(void) { fk = (fake_t){.adc_mv = 1900}; }
+</span><span class="l" id="L31"><a href="#L31">31</a>void tearDown(void) {}
+</span><span class="l" id="L32"><a href="#L32">32</a>
+</span><span class="l" id="L33"><a href="#L33">33</a>static void test_settle_constant_at_least_25ms(void) { TEST_ASSERT_TRUE(VBAT_SETTLE_MS &gt;= 25u); }
+</span><span class="l" id="L34"><a href="#L34">34</a>
+</span><span class="l" id="L35"><a href="#L35">35</a>static void test_sequence_enable_wait_read_disable(void)
+</span><span class="l" id="L36"><a href="#L36">36</a>{
+</span><span class="l" id="L37"><a href="#L37">37</a>	uint16_t mv = 0;
+</span><span class="l" id="L38"><a href="#L38">38</a>	TEST_ASSERT_EQUAL_INT(0, vbat_measure(&amp;port, 2, 1, &amp;mv));
+</span><span class="l" id="L39"><a href="#L39">39</a>	TEST_ASSERT_EQUAL_STRING(&quot;ESAD&quot;, fk.log);
+</span><span class="l" id="L40"><a href="#L40">40</a>	TEST_ASSERT_EQUAL_INT(0, fk.en_level);
+</span><span class="l" id="L41"><a href="#L41">41</a>}
+</span><span class="l" id="L42"><a href="#L42">42</a>
+</span><span class="l" id="L43"><a href="#L43">43</a>static void test_divider_factor_two(void)
+</span><span class="l" id="L44"><a href="#L44">44</a>{
+</span><span class="l" id="L45"><a href="#L45">45</a>	uint16_t mv = 0;
+</span><span class="l" id="L46"><a href="#L46">46</a>	fk.adc_mv = 1850; /* 3.70 V Akku */
+</span><span class="l" id="L47"><a href="#L47">47</a>	TEST_ASSERT_EQUAL_INT(0, vbat_measure(&amp;port, 2, 1, &amp;mv));
+</span><span class="l" id="L48"><a href="#L48">48</a>	TEST_ASSERT_EQUAL_UINT16(3700, mv);
+</span><span class="l" id="L49"><a href="#L49">49</a>	TEST_ASSERT_EQUAL_UINT16(4200, vbat_scale_mv(2100, 2, 1));
+</span><span class="l" id="L50"><a href="#L50">50</a>	TEST_ASSERT_EQUAL_UINT16(0, vbat_scale_mv(-5, 2, 1));
+</span><span class="l" id="L51"><a href="#L51">51</a>	TEST_ASSERT_EQUAL_UINT16(UINT16_MAX, vbat_scale_mv(40000, 2, 1));
+</span><span class="l" id="L52"><a href="#L52">52</a>	TEST_ASSERT_EQUAL_UINT16(0, vbat_scale_mv(1000, 2, 0));
+</span><span class="l" id="L53"><a href="#L53">53</a>}
+</span><span class="l" id="L54"><a href="#L54">54</a>
+</span><span class="l" id="L55"><a href="#L55">55</a>static void test_adc_error_still_disables(void)
+</span><span class="l" id="L56"><a href="#L56">56</a>{
+</span><span class="l" id="L57"><a href="#L57">57</a>	uint16_t mv = 123;
+</span><span class="l" id="L58"><a href="#L58">58</a>	fk.adc_rc = -5;
+</span><span class="l" id="L59"><a href="#L59">59</a>	TEST_ASSERT_NOT_EQUAL(0, vbat_measure(&amp;port, 2, 1, &amp;mv));
+</span><span class="l" id="L60"><a href="#L60">60</a>	TEST_ASSERT_EQUAL_UINT16(0, mv);
+</span><span class="l" id="L61"><a href="#L61">61</a>	TEST_ASSERT_EQUAL_INT(0, fk.en_level);
+</span><span class="l" id="L62"><a href="#L62">62</a>	TEST_ASSERT_EQUAL_CHAR(&#x27;D&#x27;, fk.log[fk.n - 1]);
+</span><span class="l" id="L63"><a href="#L63">63</a>}
+</span><span class="l" id="L64"><a href="#L64">64</a>
+</span><span class="l" id="L65"><a href="#L65">65</a>int main(void)
+</span><span class="l" id="L66"><a href="#L66">66</a>{
+</span><span class="l" id="L67"><a href="#L67">67</a>	UNITY_BEGIN();
+</span><span class="l" id="L68"><a href="#L68">68</a>	RUN_TEST(test_settle_constant_at_least_25ms);
+</span><span class="l" id="L69"><a href="#L69">69</a>	RUN_TEST(test_sequence_enable_wait_read_disable);
+</span><span class="l" id="L70"><a href="#L70">70</a>	RUN_TEST(test_divider_factor_two);
+</span><span class="l" id="L71"><a href="#L71">71</a>	RUN_TEST(test_adc_error_still_disables);
+</span><span class="l" id="L72"><a href="#L72">72</a>	return UNITY_END();
+</span><span class="l" id="L73"><a href="#L73">73</a>}
+</span></pre></body></html>

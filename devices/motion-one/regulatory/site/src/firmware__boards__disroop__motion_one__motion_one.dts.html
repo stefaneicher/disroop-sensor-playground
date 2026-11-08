@@ -1,0 +1,44 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/boards/disroop/motion_one/motion_one.dts</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/boards/disroop/motion_one/motion_one.dts</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* Disroop Motion One V1: nRF52840 im Ebyte E73-2G4M08S1C, IMU ICM-45686 an SPI.
+</span><span class="l" id="L2"><a href="#L2">2</a> * ALLE Pins stehen in motion_one-pins.dtsi (aus electronics/PINOUT_V1.json r1). */
+</span><span class="l" id="L3"><a href="#L3">3</a>/dts-v1/;
+</span><span class="l" id="L4"><a href="#L4">4</a>#include &lt;nordic/nrf52840_qiaa.dtsi&gt;
+</span><span class="l" id="L5"><a href="#L5">5</a>#include &lt;nordic/nrf52840_partition_uf2_sdv6.dtsi&gt;
+</span><span class="l" id="L6"><a href="#L6">6</a>#include &lt;zephyr/dt-bindings/input/input-event-codes.h&gt;
+</span><span class="l" id="L7"><a href="#L7">7</a>#include &lt;zephyr/dt-bindings/pwm/pwm.h&gt;
+</span><span class="l" id="L8"><a href="#L8">8</a>#include &lt;zephyr/dt-bindings/adc/nrf-saadc.h&gt;
+</span><span class="l" id="L9"><a href="#L9">9</a>#include &lt;zephyr/dt-bindings/gpio/gpio.h&gt;
+</span><span class="l" id="L10"><a href="#L10">10</a>
+</span><span class="l" id="L11"><a href="#L11">11</a>/ {
+</span><span class="l" id="L12"><a href="#L12">12</a>	model = &quot;Disroop Motion One V1&quot;;
+</span><span class="l" id="L13"><a href="#L13">13</a>	compatible = &quot;disroop,motion-one&quot;;
+</span><span class="l" id="L14"><a href="#L14">14</a>
+</span><span class="l" id="L15"><a href="#L15">15</a>};
+</span><span class="l" id="L16"><a href="#L16">16</a>
+</span><span class="l" id="L17"><a href="#L17">17</a>/* PINOUT_V1: 32.768-kHz-Quarz an XL1/XL2 -&gt; LFXO. Genauigkeit ANNAHME 50 ppm (Quarz-Datenblatt offen).
+</span><span class="l" id="L18"><a href="#L18">18</a> * DCDC-Bauteile im E73 unbekannt -&gt; LDO (Default). */
+</span><span class="l" id="L19"><a href="#L19">19</a>&amp;lfclk {
+</span><span class="l" id="L20"><a href="#L20">20</a>	k32src = &quot;xtal&quot;;
+</span><span class="l" id="L21"><a href="#L21">21</a>	k32src-accuracy-ppm = &lt;50&gt;;
+</span><span class="l" id="L22"><a href="#L22">22</a>};
+</span><span class="l" id="L23"><a href="#L23">23</a>
+</span><span class="l" id="L24"><a href="#L24">24</a>&amp;uicr {
+</span><span class="l" id="L25"><a href="#L25">25</a>	gpio-as-nreset;
+</span><span class="l" id="L26"><a href="#L26">26</a>};
+</span><span class="l" id="L27"><a href="#L27">27</a>
+</span><span class="l" id="L28"><a href="#L28">28</a>&amp;gpiote {
+</span><span class="l" id="L29"><a href="#L29">29</a>	status = &quot;okay&quot;;
+</span><span class="l" id="L30"><a href="#L30">30</a>};
+</span><span class="l" id="L31"><a href="#L31">31</a>
+</span><span class="l" id="L32"><a href="#L32">32</a>&amp;gpio0 {
+</span><span class="l" id="L33"><a href="#L33">33</a>	status = &quot;okay&quot;;
+</span><span class="l" id="L34"><a href="#L34">34</a>};
+</span><span class="l" id="L35"><a href="#L35">35</a>
+</span><span class="l" id="L36"><a href="#L36">36</a>&amp;gpio1 {
+</span><span class="l" id="L37"><a href="#L37">37</a>	status = &quot;okay&quot;;
+</span><span class="l" id="L38"><a href="#L38">38</a>};
+</span><span class="l" id="L39"><a href="#L39">39</a>
+</span><span class="l" id="L40"><a href="#L40">40</a>#include &quot;motion_one-pins.dtsi&quot;
+</span></pre></body></html>

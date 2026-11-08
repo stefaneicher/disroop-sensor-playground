@@ -1,0 +1,187 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/codec/include/thingy_codec.h</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/codec/include/thingy_codec.h</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* Reine C-Codecs fuer das Thingy:52-kompatible BLE-Profil (docs/protocol.md) und den
+</span><span class="l" id="L2"><a href="#L2">2</a> * erweiterten Kanal EF680480 (firmware/docs/EXTENDED_CHANNEL.md). Ohne Hardwareabhaengigkeit.
+</span><span class="l" id="L3"><a href="#L3">3</a> * Alle Mehrbyte-Werte little-endian. Rueckgabe der Encoder: geschriebene Bytes oder 0 bei Fehler. */
+</span><span class="l" id="L4"><a href="#L4">4</a>#ifndef THINGY_CODEC_H
+</span><span class="l" id="L5"><a href="#L5">5</a>#define THINGY_CODEC_H
+</span><span class="l" id="L6"><a href="#L6">6</a>
+</span><span class="l" id="L7"><a href="#L7">7</a>#include &lt;stdbool.h&gt;
+</span><span class="l" id="L8"><a href="#L8">8</a>#include &lt;stddef.h&gt;
+</span><span class="l" id="L9"><a href="#L9">9</a>#include &lt;stdint.h&gt;
+</span><span class="l" id="L10"><a href="#L10">10</a>
+</span><span class="l" id="L11"><a href="#L11">11</a>#define THINGY_RAW_MOTION_LEN 18u
+</span><span class="l" id="L12"><a href="#L12">12</a>#define THINGY_QUATERNION_LEN 16u
+</span><span class="l" id="L13"><a href="#L13">13</a>#define THINGY_EULER_LEN 12u
+</span><span class="l" id="L14"><a href="#L14">14</a>#define THINGY_HEADING_LEN 4u
+</span><span class="l" id="L15"><a href="#L15">15</a>#define THINGY_BUTTON_LEN 1u
+</span><span class="l" id="L16"><a href="#L16">16</a>#define THINGY_MOTION_CONFIG_LEN 9u
+</span><span class="l" id="L17"><a href="#L17">17</a>#define THINGY_ENV_CONFIG_LEN 12u
+</span><span class="l" id="L18"><a href="#L18">18</a>#define THINGY_SOUND_CONFIG_LEN 2u
+</span><span class="l" id="L19"><a href="#L19">19</a>#define THINGY_SPEAKER_TONE_LEN 5u
+</span><span class="l" id="L20"><a href="#L20">20</a>#define THINGY_RAW_HR_LEN 16u
+</span><span class="l" id="L21"><a href="#L21">21</a>
+</span><span class="l" id="L22"><a href="#L22">22</a>#define THINGY_MOTION_HZ_MIN 5u
+</span><span class="l" id="L23"><a href="#L23">23</a>#define THINGY_MOTION_HZ_MAX 200u
+</span><span class="l" id="L24"><a href="#L24">24</a>
+</span><span class="l" id="L25"><a href="#L25">25</a>typedef enum {
+</span><span class="l" id="L26"><a href="#L26">26</a>	THINGY_OK = 0,
+</span><span class="l" id="L27"><a href="#L27">27</a>	THINGY_ERR_LEN = -1,   /* falsche Laenge -&gt; ATT &quot;Invalid Attribute Value Length&quot; */
+</span><span class="l" id="L28"><a href="#L28">28</a>	THINGY_ERR_RANGE = -2, /* Wert ausserhalb des Bereichs -&gt; ATT &quot;Value not allowed&quot; */
+</span><span class="l" id="L29"><a href="#L29">29</a>	THINGY_ERR_ARG = -3,
+</span><span class="l" id="L30"><a href="#L30">30</a>} thingy_status_t;
+</span><span class="l" id="L31"><a href="#L31">31</a>
+</span><span class="l" id="L32"><a href="#L32">32</a>typedef struct {
+</span><span class="l" id="L33"><a href="#L33">33</a>	float x, y, z;
+</span><span class="l" id="L34"><a href="#L34">34</a>} thingy_xyz_t;
+</span><span class="l" id="L35"><a href="#L35">35</a>
+</span><span class="l" id="L36"><a href="#L36">36</a>/* EF680406 Raw Motion: accel in g, gyro in dps, compass in uT */
+</span><span class="l" id="L37"><a href="#L37">37</a>typedef struct {
+</span><span class="l" id="L38"><a href="#L38">38</a>	thingy_xyz_t accel;
+</span><span class="l" id="L39"><a href="#L39">39</a>	thingy_xyz_t gyro;
+</span><span class="l" id="L40"><a href="#L40">40</a>	thingy_xyz_t compass;
+</span><span class="l" id="L41"><a href="#L41">41</a>} thingy_raw_motion_t;
+</span><span class="l" id="L42"><a href="#L42">42</a>
+</span><span class="l" id="L43"><a href="#L43">43</a>/* Kodiert 9x i16 (accel*1024, gyro*32, compass*16), gerundet und an i16-Grenzen gesaettigt. */
+</span><span class="l" id="L44"><a href="#L44">44</a>size_t thingy_encode_raw_motion(const thingy_raw_motion_t *in, uint8_t *out, size_t out_len);
+</span><span class="l" id="L45"><a href="#L45">45</a>
+</span><span class="l" id="L46"><a href="#L46">46</a>/* EF680404: 4x i32 Q2.30 (w, x, y, z), gesaettigt auf [-2, 2). */
+</span><span class="l" id="L47"><a href="#L47">47</a>size_t thingy_encode_quaternion(const float q[4], uint8_t *out, size_t out_len);
+</span><span class="l" id="L48"><a href="#L48">48</a>
+</span><span class="l" id="L49"><a href="#L49">49</a>/* EF680407: roll, pitch, yaw in Grad als 3x i32 *65536. */
+</span><span class="l" id="L50"><a href="#L50">50</a>size_t thingy_encode_euler(float roll_deg, float pitch_deg, float yaw_deg, uint8_t *out, size_t out_len);
+</span><span class="l" id="L51"><a href="#L51">51</a>
+</span><span class="l" id="L52"><a href="#L52">52</a>/* EF680409: Heading in Grad, auf [0, 360) normalisiert, i32 *65536. */
+</span><span class="l" id="L53"><a href="#L53">53</a>size_t thingy_encode_heading(float heading_deg, uint8_t *out, size_t out_len);
+</span><span class="l" id="L54"><a href="#L54">54</a>
+</span><span class="l" id="L55"><a href="#L55">55</a>/* EF680302: 0 = losgelassen, 1 = gedrueckt. */
+</span><span class="l" id="L56"><a href="#L56">56</a>size_t thingy_encode_button(bool pressed, uint8_t *out, size_t out_len);
+</span><span class="l" id="L57"><a href="#L57">57</a>
+</span><span class="l" id="L58"><a href="#L58">58</a>
+</span><span class="l" id="L59"><a href="#L59">59</a>/* EF680380 Bedienplatine (systems/ADR-0002): u8 version=1, u8 flags, i8 x, i8 y (-100..100), u16 seq LE, u16 reserved=0 */
+</span><span class="l" id="L60"><a href="#L60">60</a>#define THINGY_UI_EXT_LEN 8u
+</span><span class="l" id="L61"><a href="#L61">61</a>#define UI_EXT_VERSION 1u
+</span><span class="l" id="L62"><a href="#L62">62</a>#define UI_EXT_PRESENT 0x01u
+</span><span class="l" id="L63"><a href="#L63">63</a>#define UI_EXT_BTN 0x02u
+</span><span class="l" id="L64"><a href="#L64">64</a>#define UI_EXT_TOUCH 0x04u
+</span><span class="l" id="L65"><a href="#L65">65</a>#define UI_EXT_TOUCH_LOCKED 0x08u
+</span><span class="l" id="L66"><a href="#L66">66</a>#define UI_EXT_CENTER_OK 0x10u
+</span><span class="l" id="L67"><a href="#L67">67</a>typedef struct {
+</span><span class="l" id="L68"><a href="#L68">68</a>	uint8_t flags;
+</span><span class="l" id="L69"><a href="#L69">69</a>	int8_t x, y;
+</span><span class="l" id="L70"><a href="#L70">70</a>	uint16_t seq;
+</span><span class="l" id="L71"><a href="#L71">71</a>} ui_ext_state_t;
+</span><span class="l" id="L72"><a href="#L72">72</a>size_t thingy_encode_ui_ext(const ui_ext_state_t *s, uint8_t *out, size_t out_len);
+</span><span class="l" id="L73"><a href="#L73">73</a>void ui_ext_next_seq(ui_ext_state_t *s);
+</span><span class="l" id="L74"><a href="#L74">74</a>
+</span><span class="l" id="L75"><a href="#L75">75</a>/* Ratenbegrenzer: &lt;= 20/s, bei motion_freq_hz &gt; 50 &lt;= 10/s; ausstehende Aenderung spaetestens nach 100 ms. */
+</span><span class="l" id="L76"><a href="#L76">76</a>typedef struct {
+</span><span class="l" id="L77"><a href="#L77">77</a>	bool pending, sent_any;
+</span><span class="l" id="L78"><a href="#L78">78</a>	uint32_t last_tx_ms;
+</span><span class="l" id="L79"><a href="#L79">79</a>} ui_ext_rate_t;
+</span><span class="l" id="L80"><a href="#L80">80</a>void ui_ext_rate_init(ui_ext_rate_t *r);
+</span><span class="l" id="L81"><a href="#L81">81</a>void ui_ext_rate_mark(ui_ext_rate_t *r, bool changed);
+</span><span class="l" id="L82"><a href="#L82">82</a>/* true = jetzt senden; sonst *retry_ms (falls != NULL) = Wartezeit bis zur naechsten Pruefung, 0 = nichts offen. */
+</span><span class="l" id="L83"><a href="#L83">83</a>bool ui_ext_rate_poll(ui_ext_rate_t *r, uint16_t motion_freq_hz, uint32_t now_ms, uint32_t *retry_ms);
+</span><span class="l" id="L84"><a href="#L84">84</a>
+</span><span class="l" id="L85"><a href="#L85">85</a>/* EF680401 Motion-Config */
+</span><span class="l" id="L86"><a href="#L86">86</a>typedef struct {
+</span><span class="l" id="L87"><a href="#L87">87</a>	uint16_t step_interval_ms;
+</span><span class="l" id="L88"><a href="#L88">88</a>	uint16_t temp_comp_interval_ms;
+</span><span class="l" id="L89"><a href="#L89">89</a>	uint16_t mag_comp_interval_ms;
+</span><span class="l" id="L90"><a href="#L90">90</a>	uint16_t motion_freq_hz; /* 5..200 */
+</span><span class="l" id="L91"><a href="#L91">91</a>	uint8_t wake_on_motion;
+</span><span class="l" id="L92"><a href="#L92">92</a>} thingy_motion_config_t;
+</span><span class="l" id="L93"><a href="#L93">93</a>
+</span><span class="l" id="L94"><a href="#L94">94</a>void thingy_motion_config_default(thingy_motion_config_t *cfg);
+</span><span class="l" id="L95"><a href="#L95">95</a>thingy_status_t thingy_parse_motion_config(const uint8_t *in, size_t len, thingy_motion_config_t *out);
+</span><span class="l" id="L96"><a href="#L96">96</a>size_t thingy_encode_motion_config(const thingy_motion_config_t *cfg, uint8_t *out, size_t out_len);
+</span><span class="l" id="L97"><a href="#L97">97</a>
+</span><span class="l" id="L98"><a href="#L98">98</a>/* EF680206 Environment-Config: 12 B, nur gespeichert und zurueckgegeben (Dummy, kein Sensor). */
+</span><span class="l" id="L99"><a href="#L99">99</a>typedef struct {
+</span><span class="l" id="L100"><a href="#L100">100</a>	uint8_t raw[THINGY_ENV_CONFIG_LEN];
+</span><span class="l" id="L101"><a href="#L101">101</a>} thingy_env_config_t;
+</span><span class="l" id="L102"><a href="#L102">102</a>
+</span><span class="l" id="L103"><a href="#L103">103</a>void thingy_env_config_default(thingy_env_config_t *cfg);
+</span><span class="l" id="L104"><a href="#L104">104</a>thingy_status_t thingy_parse_env_config(const uint8_t *in, size_t len, thingy_env_config_t *out);
+</span><span class="l" id="L105"><a href="#L105">105</a>
+</span><span class="l" id="L106"><a href="#L106">106</a>/* EF680501 Sound-Config: speaker_mode 1..3 (1 = Frequenz), mic_mode 1..2. */
+</span><span class="l" id="L107"><a href="#L107">107</a>typedef struct {
+</span><span class="l" id="L108"><a href="#L108">108</a>	uint8_t speaker_mode;
+</span><span class="l" id="L109"><a href="#L109">109</a>	uint8_t mic_mode;
+</span><span class="l" id="L110"><a href="#L110">110</a>} thingy_sound_config_t;
+</span><span class="l" id="L111"><a href="#L111">111</a>
+</span><span class="l" id="L112"><a href="#L112">112</a>void thingy_sound_config_default(thingy_sound_config_t *cfg);
+</span><span class="l" id="L113"><a href="#L113">113</a>thingy_status_t thingy_parse_sound_config(const uint8_t *in, size_t len, thingy_sound_config_t *out);
+</span><span class="l" id="L114"><a href="#L114">114</a>
+</span><span class="l" id="L115"><a href="#L115">115</a>/* EF680502 Speaker-Ton im Frequenzmodus: u16 Hz, u16 ms, u8 Lautstaerke (auf 0..100 geklemmt). */
+</span><span class="l" id="L116"><a href="#L116">116</a>typedef struct {
+</span><span class="l" id="L117"><a href="#L117">117</a>	uint16_t freq_hz;
+</span><span class="l" id="L118"><a href="#L118">118</a>	uint16_t duration_ms;
+</span><span class="l" id="L119"><a href="#L119">119</a>	uint8_t volume_pct;
+</span><span class="l" id="L120"><a href="#L120">120</a>} thingy_speaker_tone_t;
+</span><span class="l" id="L121"><a href="#L121">121</a>
+</span><span class="l" id="L122"><a href="#L122">122</a>thingy_status_t thingy_parse_speaker_tone(const uint8_t *in, size_t len, thingy_speaker_tone_t *out);
+</span><span class="l" id="L123"><a href="#L123">123</a>
+</span><span class="l" id="L124"><a href="#L124">124</a>/* EF680301 LED */
+</span><span class="l" id="L125"><a href="#L125">125</a>typedef enum {
+</span><span class="l" id="L126"><a href="#L126">126</a>	THINGY_LED_OFF = 0,
+</span><span class="l" id="L127"><a href="#L127">127</a>	THINGY_LED_CONSTANT = 1,
+</span><span class="l" id="L128"><a href="#L128">128</a>	THINGY_LED_BREATHE = 2,
+</span><span class="l" id="L129"><a href="#L129">129</a>	THINGY_LED_ONE_SHOT = 3,
+</span><span class="l" id="L130"><a href="#L130">130</a>} thingy_led_mode_t;
+</span><span class="l" id="L131"><a href="#L131">131</a>
+</span><span class="l" id="L132"><a href="#L132">132</a>typedef struct {
+</span><span class="l" id="L133"><a href="#L133">133</a>	thingy_led_mode_t mode;
+</span><span class="l" id="L134"><a href="#L134">134</a>	uint8_t r, g, b;        /* CONSTANT */
+</span><span class="l" id="L135"><a href="#L135">135</a>	uint8_t color_mix;      /* BREATHE/ONE_SHOT: 1..7 (Bit0 rot, Bit1 gruen, Bit2 blau) */
+</span><span class="l" id="L136"><a href="#L136">136</a>	uint8_t intensity_pct;  /* BREATHE/ONE_SHOT: 1..100 */
+</span><span class="l" id="L137"><a href="#L137">137</a>	uint16_t delay_ms;      /* BREATHE: 50..10000 */
+</span><span class="l" id="L138"><a href="#L138">138</a>} thingy_led_cmd_t;
+</span><span class="l" id="L139"><a href="#L139">139</a>
+</span><span class="l" id="L140"><a href="#L140">140</a>thingy_status_t thingy_parse_led(const uint8_t *in, size_t len, thingy_led_cmd_t *out);
+</span><span class="l" id="L141"><a href="#L141">141</a>size_t thingy_encode_led(const thingy_led_cmd_t *cmd, uint8_t *out, size_t out_len);
+</span><span class="l" id="L142"><a href="#L142">142</a>
+</span><span class="l" id="L143"><a href="#L143">143</a>/* Batterie 2A19: Spannung (mV) -&gt; Prozent, stueckweise linear (LiPo-Kurve, ANNAHME). */
+</span><span class="l" id="L144"><a href="#L144">144</a>uint8_t thingy_battery_percent_from_mv(uint16_t mv);
+</span><span class="l" id="L145"><a href="#L145">145</a>
+</span><span class="l" id="L146"><a href="#L146">146</a>/* EF680480 Raw-HR (erweiterter Kanal), siehe docs/EXTENDED_CHANNEL.md */
+</span><span class="l" id="L147"><a href="#L147">147</a>#define THINGY_HR_FLAG_ACC_SAT_X (1u &lt;&lt; 0)
+</span><span class="l" id="L148"><a href="#L148">148</a>#define THINGY_HR_FLAG_ACC_SAT_Y (1u &lt;&lt; 1)
+</span><span class="l" id="L149"><a href="#L149">149</a>#define THINGY_HR_FLAG_ACC_SAT_Z (1u &lt;&lt; 2)
+</span><span class="l" id="L150"><a href="#L150">150</a>#define THINGY_HR_FLAG_GYR_SAT_X (1u &lt;&lt; 3)
+</span><span class="l" id="L151"><a href="#L151">151</a>#define THINGY_HR_FLAG_GYR_SAT_Y (1u &lt;&lt; 4)
+</span><span class="l" id="L152"><a href="#L152">152</a>#define THINGY_HR_FLAG_GYR_SAT_Z (1u &lt;&lt; 5)
+</span><span class="l" id="L153"><a href="#L153">153</a>#define THINGY_HR_FLAG_FUSION_OK (1u &lt;&lt; 6)
+</span><span class="l" id="L154"><a href="#L154">154</a>
+</span><span class="l" id="L155"><a href="#L155">155</a>typedef struct {
+</span><span class="l" id="L156"><a href="#L156">156</a>	thingy_xyz_t accel; /* g */
+</span><span class="l" id="L157"><a href="#L157">157</a>	thingy_xyz_t gyro;  /* dps */
+</span><span class="l" id="L158"><a href="#L158">158</a>	uint16_t sample_counter;
+</span><span class="l" id="L159"><a href="#L159">159</a>	uint16_t flags;     /* Sensor-Saettigung wird zusaetzlich zu Kodier-Saettigung gesetzt */
+</span><span class="l" id="L160"><a href="#L160">160</a>} thingy_raw_hr_t;
+</span><span class="l" id="L161"><a href="#L161">161</a>
+</span><span class="l" id="L162"><a href="#L162">162</a>/* accel*1024, gyro*8 als i16; Kodier-Saettigung setzt das passende Flag-Bit. */
+</span><span class="l" id="L163"><a href="#L163">163</a>size_t thingy_encode_raw_hr(const thingy_raw_hr_t *in, uint8_t *out, size_t out_len);
+</span><span class="l" id="L164"><a href="#L164">164</a>
+</span><span class="l" id="L165"><a href="#L165">165</a>/* Taster: kurz/lang (lang &gt;= 800 ms, BUDGETS). Reine Zustandsmaschine mit Zeitstempeln in ms. */
+</span><span class="l" id="L166"><a href="#L166">166</a>#define THINGY_BUTTON_LONG_MS 800u
+</span><span class="l" id="L167"><a href="#L167">167</a>
+</span><span class="l" id="L168"><a href="#L168">168</a>typedef enum {
+</span><span class="l" id="L169"><a href="#L169">169</a>	THINGY_BTN_EVT_NONE = 0,
+</span><span class="l" id="L170"><a href="#L170">170</a>	THINGY_BTN_EVT_SHORT,
+</span><span class="l" id="L171"><a href="#L171">171</a>	THINGY_BTN_EVT_LONG, /* einmal pro Druck, sobald 800 ms erreicht (auch vor dem Loslassen) */
+</span><span class="l" id="L172"><a href="#L172">172</a>} thingy_button_evt_t;
+</span><span class="l" id="L173"><a href="#L173">173</a>
+</span><span class="l" id="L174"><a href="#L174">174</a>typedef struct {
+</span><span class="l" id="L175"><a href="#L175">175</a>	bool pressed;
+</span><span class="l" id="L176"><a href="#L176">176</a>	bool long_reported;
+</span><span class="l" id="L177"><a href="#L177">177</a>	uint32_t t_down_ms;
+</span><span class="l" id="L178"><a href="#L178">178</a>} thingy_button_t;
+</span><span class="l" id="L179"><a href="#L179">179</a>
+</span><span class="l" id="L180"><a href="#L180">180</a>void thingy_button_init(thingy_button_t *b);
+</span><span class="l" id="L181"><a href="#L181">181</a>thingy_button_evt_t thingy_button_update(thingy_button_t *b, bool pressed, uint32_t now_ms);
+</span><span class="l" id="L182"><a href="#L182">182</a>
+</span><span class="l" id="L183"><a href="#L183">183</a>#endif
+</span></pre></body></html>

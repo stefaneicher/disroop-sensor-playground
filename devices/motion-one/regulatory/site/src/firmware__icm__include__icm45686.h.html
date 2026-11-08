@@ -1,0 +1,125 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/icm/include/icm45686.h</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/icm/include/icm45686.h</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* ICM-45686: Registerkonstanten, FIFO-Parser und Initialisierung ueber einen Bus-Port.
+</span><span class="l" id="L2"><a href="#L2">2</a> * QUELLE Registerwerte: TDK hal_tdk icm456xx/imu/inv_imu_regmap_le.h, inv_imu_defs.h,
+</span><span class="l" id="L3"><a href="#L3">3</a> * inv_imu_driver.c (BSD-3, Kopie in firmware/docs/ref/). Datenblatt DS-000577 war nicht abrufbar:
+</span><span class="l" id="L4"><a href="#L4">4</a> * Werte NICHT gegen das Datenblatt verifiziert (offener Punkt). */
+</span><span class="l" id="L5"><a href="#L5">5</a>#ifndef ICM45686_H
+</span><span class="l" id="L6"><a href="#L6">6</a>#define ICM45686_H
+</span><span class="l" id="L7"><a href="#L7">7</a>
+</span><span class="l" id="L8"><a href="#L8">8</a>#include &lt;stdbool.h&gt;
+</span><span class="l" id="L9"><a href="#L9">9</a>#include &lt;stddef.h&gt;
+</span><span class="l" id="L10"><a href="#L10">10</a>#include &lt;stdint.h&gt;
+</span><span class="l" id="L11"><a href="#L11">11</a>
+</span><span class="l" id="L12"><a href="#L12">12</a>#define ICM_REG_ACCEL_DATA_X1 0x00u
+</span><span class="l" id="L13"><a href="#L13">13</a>#define ICM_REG_PWR_MGMT0 0x10u
+</span><span class="l" id="L14"><a href="#L14">14</a>#define ICM_REG_FIFO_COUNT_0 0x12u
+</span><span class="l" id="L15"><a href="#L15">15</a>#define ICM_REG_FIFO_DATA 0x14u
+</span><span class="l" id="L16"><a href="#L16">16</a>#define ICM_REG_INT1_CONFIG0 0x16u
+</span><span class="l" id="L17"><a href="#L17">17</a>#define ICM_REG_INT1_CONFIG1 0x17u
+</span><span class="l" id="L18"><a href="#L18">18</a>#define ICM_REG_INT1_CONFIG2 0x18u
+</span><span class="l" id="L19"><a href="#L19">19</a>#define ICM_REG_INT1_STATUS0 0x19u
+</span><span class="l" id="L20"><a href="#L20">20</a>#define ICM_REG_INT1_STATUS1 0x1Au
+</span><span class="l" id="L21"><a href="#L21">21</a>#define ICM_REG_ACCEL_CONFIG0 0x1Bu
+</span><span class="l" id="L22"><a href="#L22">22</a>#define ICM_REG_GYRO_CONFIG0 0x1Cu
+</span><span class="l" id="L23"><a href="#L23">23</a>#define ICM_REG_FIFO_CONFIG0 0x1Du
+</span><span class="l" id="L24"><a href="#L24">24</a>#define ICM_REG_FIFO_CONFIG1_0 0x1Eu
+</span><span class="l" id="L25"><a href="#L25">25</a>#define ICM_REG_FIFO_CONFIG1_1 0x1Fu
+</span><span class="l" id="L26"><a href="#L26">26</a>#define ICM_REG_FIFO_CONFIG2 0x20u
+</span><span class="l" id="L27"><a href="#L27">27</a>#define ICM_REG_FIFO_CONFIG3 0x21u
+</span><span class="l" id="L28"><a href="#L28">28</a>#define ICM_REG_TMST_WOM_CONFIG 0x23u
+</span><span class="l" id="L29"><a href="#L29">29</a>#define ICM_REG_WHO_AM_I 0x72u
+</span><span class="l" id="L30"><a href="#L30">30</a>#define ICM_REG_IREG_ADDR_15_8 0x7Cu
+</span><span class="l" id="L31"><a href="#L31">31</a>#define ICM_REG_IREG_ADDR_7_0 0x7Du
+</span><span class="l" id="L32"><a href="#L32">32</a>#define ICM_REG_IREG_DATA 0x7Eu
+</span><span class="l" id="L33"><a href="#L33">33</a>#define ICM_REG_MISC2 0x7Fu
+</span><span class="l" id="L34"><a href="#L34">34</a>
+</span><span class="l" id="L35"><a href="#L35">35</a>#define ICM_WHO_AM_I_VALUE 0xE9u
+</span><span class="l" id="L36"><a href="#L36">36</a>#define ICM_SPI_READ_BIT 0x80u
+</span><span class="l" id="L37"><a href="#L37">37</a>#define ICM_MISC2_SOFT_RST 0x02u
+</span><span class="l" id="L38"><a href="#L38">38</a>
+</span><span class="l" id="L39"><a href="#L39">39</a>#define ICM_PWR_ACCEL_LN 0x03u
+</span><span class="l" id="L40"><a href="#L40">40</a>#define ICM_PWR_ACCEL_LP 0x02u
+</span><span class="l" id="L41"><a href="#L41">41</a>#define ICM_PWR_GYRO_LN (0x03u &lt;&lt; 2)
+</span><span class="l" id="L42"><a href="#L42">42</a>
+</span><span class="l" id="L43"><a href="#L43">43</a>#define ICM_ODR_400HZ 0x7u
+</span><span class="l" id="L44"><a href="#L44">44</a>#define ICM_ODR_200HZ 0x8u
+</span><span class="l" id="L45"><a href="#L45">45</a>#define ICM_ODR_100HZ 0x9u
+</span><span class="l" id="L46"><a href="#L46">46</a>#define ICM_ODR_25HZ 0xBu
+</span><span class="l" id="L47"><a href="#L47">47</a>#define ICM_ACCEL_FS_32G (0x0u &lt;&lt; 4)
+</span><span class="l" id="L48"><a href="#L48">48</a>#define ICM_GYRO_FS_4000DPS (0x0u &lt;&lt; 4)
+</span><span class="l" id="L49"><a href="#L49">49</a>
+</span><span class="l" id="L50"><a href="#L50">50</a>#define ICM_FIFO_DEPTH_MAX 0x1Eu /* Errata AN-000364 laut hal_tdk */
+</span><span class="l" id="L51"><a href="#L51">51</a>#define ICM_FIFO_MODE_STREAM (0x1u &lt;&lt; 6)
+</span><span class="l" id="L52"><a href="#L52">52</a>#define ICM_FIFO_FLUSH 0x80u
+</span><span class="l" id="L53"><a href="#L53">53</a>#define ICM_FIFO_WM_GT_TH 0x08u
+</span><span class="l" id="L54"><a href="#L54">54</a>#define ICM_FIFO_IF_EN 0x01u
+</span><span class="l" id="L55"><a href="#L55">55</a>#define ICM_FIFO_ACCEL_EN 0x02u
+</span><span class="l" id="L56"><a href="#L56">56</a>#define ICM_FIFO_GYRO_EN 0x04u
+</span><span class="l" id="L57"><a href="#L57">57</a>
+</span><span class="l" id="L58"><a href="#L58">58</a>#define ICM_INT1_FIFO_THS 0x02u
+</span><span class="l" id="L59"><a href="#L59">59</a>#define ICM_INT1_WOM_XYZ 0x0Eu
+</span><span class="l" id="L60"><a href="#L60">60</a>#define ICM_INT1_PUSH_PULL_PULSED_HIGH 0x01u
+</span><span class="l" id="L61"><a href="#L61">61</a>#define ICM_REG_INT2_CONFIG2 0x58u /* QUELLE hal_tdk inv_imu_regmap_le.h */
+</span><span class="l" id="L62"><a href="#L62">62</a>#define ICM_INTX_DRIVE_OD 0x04u   /* INTx_CONFIG2 Bit 2: 1 = open-drain, 0 = push-pull (hal_tdk) */
+</span><span class="l" id="L63"><a href="#L63">63</a>
+</span><span class="l" id="L64"><a href="#L64">64</a>#define ICM_WOM_EN 0x10u
+</span><span class="l" id="L65"><a href="#L65">65</a>#define ICM_WOM_MODE_PREV 0x08u
+</span><span class="l" id="L66"><a href="#L66">66</a>#define ICM_IREG_ACCEL_WOM_X_THR 0xA27Eu
+</span><span class="l" id="L67"><a href="#L67">67</a>
+</span><span class="l" id="L68"><a href="#L68">68</a>#define ICM_FIFO_FRAME_LEN 16u
+</span><span class="l" id="L69"><a href="#L69">69</a>#define ICM_FIFO_HDR_ACCEL 0x40u
+</span><span class="l" id="L70"><a href="#L70">70</a>#define ICM_FIFO_HDR_GYRO 0x20u
+</span><span class="l" id="L71"><a href="#L71">71</a>#define ICM_FIFO_HDR_20BIT 0x10u
+</span><span class="l" id="L72"><a href="#L72">72</a>#define ICM_FIFO_HDR_EXT 0x80u
+</span><span class="l" id="L73"><a href="#L73">73</a>#define ICM_INVALID_SAMPLE ((int16_t)-32768)
+</span><span class="l" id="L74"><a href="#L74">74</a>
+</span><span class="l" id="L75"><a href="#L75">75</a>/* Skalierung bei FS 32 g / 4000 dps (16 bit): 1024 LSB/g, 8.192 LSB/dps (BERECHNUNG 32768/FS) */
+</span><span class="l" id="L76"><a href="#L76">76</a>#define ICM_ACCEL_LSB_PER_G 1024.0f
+</span><span class="l" id="L77"><a href="#L77">77</a>#define ICM_GYRO_LSB_PER_DPS 8.192f
+</span><span class="l" id="L78"><a href="#L78">78</a>
+</span><span class="l" id="L79"><a href="#L79">79</a>typedef struct {
+</span><span class="l" id="L80"><a href="#L80">80</a>	float accel_g[3];
+</span><span class="l" id="L81"><a href="#L81">81</a>	float gyro_dps[3];
+</span><span class="l" id="L82"><a href="#L82">82</a>	uint16_t timestamp;
+</span><span class="l" id="L83"><a href="#L83">83</a>	bool accel_sat[3];
+</span><span class="l" id="L84"><a href="#L84">84</a>	bool gyro_sat[3];
+</span><span class="l" id="L85"><a href="#L85">85</a>} icm_sample_t;
+</span><span class="l" id="L86"><a href="#L86">86</a>
+</span><span class="l" id="L87"><a href="#L87">87</a>typedef enum {
+</span><span class="l" id="L88"><a href="#L88">88</a>	ICM_FRAME_OK = 0,
+</span><span class="l" id="L89"><a href="#L89">89</a>	ICM_FRAME_SHORT = -1,   /* weniger als 16 B */
+</span><span class="l" id="L90"><a href="#L90">90</a>	ICM_FRAME_INVALID = -2, /* leerer/unbekannter Header oder ungueltiger Wert (0x8000) */
+</span><span class="l" id="L91"><a href="#L91">91</a>} icm_frame_status_t;
+</span><span class="l" id="L92"><a href="#L92">92</a>
+</span><span class="l" id="L93"><a href="#L93">93</a>/* Parst ein 16-B-Paket (Header, accel, gyro, temp, timestamp). Bei INVALID wurden 16 B konsumiert. */
+</span><span class="l" id="L94"><a href="#L94">94</a>icm_frame_status_t icm45686_parse_frame(const uint8_t *in, size_t len, icm_sample_t *out);
+</span><span class="l" id="L95"><a href="#L95">95</a>
+</span><span class="l" id="L96"><a href="#L96">96</a>/* Bus-Port (Adapter: Zephyr-SPI auf dem Geraet, Fake in den Host-Tests). */
+</span><span class="l" id="L97"><a href="#L97">97</a>typedef struct {
+</span><span class="l" id="L98"><a href="#L98">98</a>	int (*write)(void *ctx, uint8_t reg, const uint8_t *data, size_t len);
+</span><span class="l" id="L99"><a href="#L99">99</a>	int (*read)(void *ctx, uint8_t reg, uint8_t *data, size_t len);
+</span><span class="l" id="L100"><a href="#L100">100</a>	void (*delay_us)(void *ctx, uint32_t us);
+</span><span class="l" id="L101"><a href="#L101">101</a>	void *ctx;
+</span><span class="l" id="L102"><a href="#L102">102</a>} icm_bus_t;
+</span><span class="l" id="L103"><a href="#L103">103</a>
+</span><span class="l" id="L104"><a href="#L104">104</a>typedef enum {
+</span><span class="l" id="L105"><a href="#L105">105</a>	ICM_OK = 0,
+</span><span class="l" id="L106"><a href="#L106">106</a>	ICM_ERR_BUS = -1,
+</span><span class="l" id="L107"><a href="#L107">107</a>	ICM_ERR_WHOAMI = -2,
+</span><span class="l" id="L108"><a href="#L108">108</a>} icm_status_t;
+</span><span class="l" id="L109"><a href="#L109">109</a>
+</span><span class="l" id="L110"><a href="#L110">110</a>/* Reset, WHO_AM_I, ODR/FS, FIFO-Stream mit Watermark (Frames), INT1 FIFO-THS, LN-Modus. */
+</span><span class="l" id="L111"><a href="#L111">111</a>icm_status_t icm45686_init(const icm_bus_t *bus, uint8_t odr, uint16_t watermark_frames);
+</span><span class="l" id="L112"><a href="#L112">112</a>/* Liest FIFO_COUNT (Anzahl Frames). */
+</span><span class="l" id="L113"><a href="#L113">113</a>icm_status_t icm45686_fifo_count(const icm_bus_t *bus, uint16_t *frames);
+</span><span class="l" id="L114"><a href="#L114">114</a>/* Wake-on-Motion: accel LP 25 Hz, Gyro aus, Schwelle in mg (1 LSB = 1/256 g laut hal_tdk), INT1 WoM. */
+</span><span class="l" id="L115"><a href="#L115">115</a>icm_status_t icm45686_enter_wom(const icm_bus_t *bus, uint16_t threshold_mg);
+</span><span class="l" id="L116"><a href="#L116">116</a>/* Zurueck in den Messbetrieb nach WoM. */
+</span><span class="l" id="L117"><a href="#L117">117</a>icm_status_t icm45686_exit_wom(const icm_bus_t *bus, uint8_t odr);
+</span><span class="l" id="L118"><a href="#L118">118</a>/* Schreibt ein internes Register (IREG). */
+</span><span class="l" id="L119"><a href="#L119">119</a>icm_status_t icm45686_ireg_write(const icm_bus_t *bus, uint16_t addr, uint8_t value);
+</span><span class="l" id="L120"><a href="#L120">120</a>
+</span><span class="l" id="L121"><a href="#L121">121</a>#endif
+</span></pre></body></html>

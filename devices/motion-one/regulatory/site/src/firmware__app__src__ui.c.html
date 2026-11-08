@@ -1,0 +1,204 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/app/src/ui.c</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/app/src/ui.c</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* LED (PWM RGB), Summer (PWM Frequenzmodus), Vibrationsmotor, Taster. Adapter: Zephyr. */
+</span><span class="l" id="L2"><a href="#L2">2</a>#include &lt;zephyr/kernel.h&gt;
+</span><span class="l" id="L3"><a href="#L3">3</a>#include &lt;zephyr/logging/log.h&gt;
+</span><span class="l" id="L4"><a href="#L4">4</a>#include &lt;zephyr/drivers/pwm.h&gt;
+</span><span class="l" id="L5"><a href="#L5">5</a>#include &lt;zephyr/drivers/gpio.h&gt;
+</span><span class="l" id="L6"><a href="#L6">6</a>#include &lt;hal/nrf_power.h&gt;
+</span><span class="l" id="L7"><a href="#L7">7</a>#include &quot;app.h&quot;
+</span><span class="l" id="L8"><a href="#L8">8</a>#include &quot;motor_drive.h&quot;
+</span><span class="l" id="L9"><a href="#L9">9</a>
+</span><span class="l" id="L10"><a href="#L10">10</a>LOG_MODULE_REGISTER(ui, LOG_LEVEL_INF);
+</span><span class="l" id="L11"><a href="#L11">11</a>
+</span><span class="l" id="L12"><a href="#L12">12</a>static const struct pwm_dt_spec led[3] = {PWM_DT_SPEC_GET(DT_ALIAS(led_red)), PWM_DT_SPEC_GET(DT_ALIAS(led_green)),
+</span><span class="l" id="L13"><a href="#L13">13</a>					  PWM_DT_SPEC_GET(DT_ALIAS(led_blue))};
+</span><span class="l" id="L14"><a href="#L14">14</a>static const struct pwm_dt_spec buzzer = PWM_DT_SPEC_GET(DT_ALIAS(buzzer));
+</span><span class="l" id="L15"><a href="#L15">15</a>static const struct gpio_dt_spec btn = GPIO_DT_SPEC_GET(DT_ALIAS(sw0), gpios);
+</span><span class="l" id="L16"><a href="#L16">16</a>static const struct pwm_dt_spec motor = PWM_DT_SPEC_GET(DT_ALIAS(motor0));
+</span><span class="l" id="L17"><a href="#L17">17</a>static struct gpio_callback btn_cb;
+</span><span class="l" id="L18"><a href="#L18">18</a>static thingy_button_t btn_sm;
+</span><span class="l" id="L19"><a href="#L19">19</a>static thingy_led_cmd_t led_cur;
+</span><span class="l" id="L20"><a href="#L20">20</a>static uint32_t breathe_step;
+</span><span class="l" id="L21"><a href="#L21">21</a>
+</span><span class="l" id="L22"><a href="#L22">22</a>#define BTN_POLL_MS 20u
+</span><span class="l" id="L23"><a href="#L23">23</a>#define BREATHE_STEPS 50u
+</span><span class="l" id="L24"><a href="#L24">24</a>
+</span><span class="l" id="L25"><a href="#L25">25</a>static void led_rgb(uint8_t r, uint8_t g, uint8_t b)
+</span><span class="l" id="L26"><a href="#L26">26</a>{
+</span><span class="l" id="L27"><a href="#L27">27</a>	const uint8_t v[3] = {r, g, b};
+</span><span class="l" id="L28"><a href="#L28">28</a>	for (int i = 0; i &lt; 3; i++) {
+</span><span class="l" id="L29"><a href="#L29">29</a>		(void)pwm_set_pulse_dt(&amp;led[i], (uint32_t)((uint64_t)led[i].period * v[i] / 255u));
+</span><span class="l" id="L30"><a href="#L30">30</a>	}
+</span><span class="l" id="L31"><a href="#L31">31</a>}
+</span><span class="l" id="L32"><a href="#L32">32</a>
+</span><span class="l" id="L33"><a href="#L33">33</a>static void led_mix(uint8_t mix, uint32_t level255)
+</span><span class="l" id="L34"><a href="#L34">34</a>{
+</span><span class="l" id="L35"><a href="#L35">35</a>	led_rgb((mix &amp; 1) ? level255 : 0, (mix &amp; 2) ? level255 : 0, (mix &amp; 4) ? level255 : 0);
+</span><span class="l" id="L36"><a href="#L36">36</a>}
+</span><span class="l" id="L37"><a href="#L37">37</a>
+</span><span class="l" id="L38"><a href="#L38">38</a>static void led_anim(struct k_work *w);
+</span><span class="l" id="L39"><a href="#L39">39</a>static K_WORK_DELAYABLE_DEFINE(led_work, led_anim);
+</span><span class="l" id="L40"><a href="#L40">40</a>
+</span><span class="l" id="L41"><a href="#L41">41</a>static void led_anim(struct k_work *w)
+</span><span class="l" id="L42"><a href="#L42">42</a>{
+</span><span class="l" id="L43"><a href="#L43">43</a>	ARG_UNUSED(w);
+</span><span class="l" id="L44"><a href="#L44">44</a>	const uint32_t max = led_cur.intensity_pct * 255u / 100u;
+</span><span class="l" id="L45"><a href="#L45">45</a>	if (led_cur.mode == THINGY_LED_ONE_SHOT) {
+</span><span class="l" id="L46"><a href="#L46">46</a>		led_mix(led_cur.color_mix, 0);
+</span><span class="l" id="L47"><a href="#L47">47</a>		return;
+</span><span class="l" id="L48"><a href="#L48">48</a>	}
+</span><span class="l" id="L49"><a href="#L49">49</a>	/* Dreieck auf/ab, Periode delay_ms */
+</span><span class="l" id="L50"><a href="#L50">50</a>	const uint32_t s = breathe_step++ % (2 * BREATHE_STEPS);
+</span><span class="l" id="L51"><a href="#L51">51</a>	const uint32_t lvl = (s &lt; BREATHE_STEPS ? s : 2 * BREATHE_STEPS - s) * max / BREATHE_STEPS;
+</span><span class="l" id="L52"><a href="#L52">52</a>	led_mix(led_cur.color_mix, lvl);
+</span><span class="l" id="L53"><a href="#L53">53</a>	k_work_schedule(&amp;led_work, K_MSEC(MAX(led_cur.delay_ms / (2 * BREATHE_STEPS), 1u)));
+</span><span class="l" id="L54"><a href="#L54">54</a>}
+</span><span class="l" id="L55"><a href="#L55">55</a>
+</span><span class="l" id="L56"><a href="#L56">56</a>void ui_led_apply(const thingy_led_cmd_t *cmd)
+</span><span class="l" id="L57"><a href="#L57">57</a>{
+</span><span class="l" id="L58"><a href="#L58">58</a>	(void)k_work_cancel_delayable(&amp;led_work);
+</span><span class="l" id="L59"><a href="#L59">59</a>	led_cur = *cmd;
+</span><span class="l" id="L60"><a href="#L60">60</a>	switch (cmd-&gt;mode) {
+</span><span class="l" id="L61"><a href="#L61">61</a>	case THINGY_LED_CONSTANT:
+</span><span class="l" id="L62"><a href="#L62">62</a>		led_rgb(cmd-&gt;r, cmd-&gt;g, cmd-&gt;b);
+</span><span class="l" id="L63"><a href="#L63">63</a>		break;
+</span><span class="l" id="L64"><a href="#L64">64</a>	case THINGY_LED_BREATHE:
+</span><span class="l" id="L65"><a href="#L65">65</a>		breathe_step = 0;
+</span><span class="l" id="L66"><a href="#L66">66</a>		k_work_schedule(&amp;led_work, K_NO_WAIT);
+</span><span class="l" id="L67"><a href="#L67">67</a>		break;
+</span><span class="l" id="L68"><a href="#L68">68</a>	case THINGY_LED_ONE_SHOT:
+</span><span class="l" id="L69"><a href="#L69">69</a>		led_mix(cmd-&gt;color_mix, cmd-&gt;intensity_pct * 255u / 100u);
+</span><span class="l" id="L70"><a href="#L70">70</a>		k_work_schedule(&amp;led_work, K_MSEC(1000)); /* ANNAHME 1 s Blitz */
+</span><span class="l" id="L71"><a href="#L71">71</a>		break;
+</span><span class="l" id="L72"><a href="#L72">72</a>	default:
+</span><span class="l" id="L73"><a href="#L73">73</a>		led_rgb(0, 0, 0);
+</span><span class="l" id="L74"><a href="#L74">74</a>		break;
+</span><span class="l" id="L75"><a href="#L75">75</a>	}
+</span><span class="l" id="L76"><a href="#L76">76</a>}
+</span><span class="l" id="L77"><a href="#L77">77</a>
+</span><span class="l" id="L78"><a href="#L78">78</a>/* F-12 Arbitrierung (power/motor_drive.c): Summer hat Vorrang, Motor pausiert waehrend Ton (VBUS &lt;= 500 mA). */
+</span><span class="l" id="L79"><a href="#L79">79</a>static K_MUTEX_DEFINE(load_lock);
+</span><span class="l" id="L80"><a href="#L80">80</a>static bool buz_req, mot_req;
+</span><span class="l" id="L81"><a href="#L81">81</a>
+</span><span class="l" id="L82"><a href="#L82">82</a>static void motor_output(bool on)
+</span><span class="l" id="L83"><a href="#L83">83</a>{
+</span><span class="l" id="L84"><a href="#L84">84</a>	uint32_t pulse = 0;
+</span><span class="l" id="L85"><a href="#L85">85</a>	if (on) {
+</span><span class="l" id="L86"><a href="#L86">86</a>		const bool usb = nrf_power_usbregstatus_vbusdet_get(NRF_POWER);
+</span><span class="l" id="L87"><a href="#L87">87</a>		const uint16_t duty = motor_duty_permille(motor_supply_mv(battery_last_mv(), usb));
+</span><span class="l" id="L88"><a href="#L88">88</a>		pulse = (uint32_t)((uint64_t)motor.period * duty / 1000u);
+</span><span class="l" id="L89"><a href="#L89">89</a>	}
+</span><span class="l" id="L90"><a href="#L90">90</a>	(void)pwm_set_pulse_dt(&amp;motor, pulse);
+</span><span class="l" id="L91"><a href="#L91">91</a>}
+</span><span class="l" id="L92"><a href="#L92">92</a>
+</span><span class="l" id="L93"><a href="#L93">93</a>static void loads_apply(void)
+</span><span class="l" id="L94"><a href="#L94">94</a>{
+</span><span class="l" id="L95"><a href="#L95">95</a>	const load_out_t o = load_arbitrate(buz_req, mot_req);
+</span><span class="l" id="L96"><a href="#L96">96</a>	motor_output(o.motor_on);
+</span><span class="l" id="L97"><a href="#L97">97</a>}
+</span><span class="l" id="L98"><a href="#L98">98</a>
+</span><span class="l" id="L99"><a href="#L99">99</a>static void buzzer_off(struct k_work *w)
+</span><span class="l" id="L100"><a href="#L100">100</a>{
+</span><span class="l" id="L101"><a href="#L101">101</a>	ARG_UNUSED(w);
+</span><span class="l" id="L102"><a href="#L102">102</a>	k_mutex_lock(&amp;load_lock, K_FOREVER);
+</span><span class="l" id="L103"><a href="#L103">103</a>	(void)pwm_set_dt(&amp;buzzer, buzzer.period, 0);
+</span><span class="l" id="L104"><a href="#L104">104</a>	buz_req = false;
+</span><span class="l" id="L105"><a href="#L105">105</a>	loads_apply(); /* pausierten Motor fortsetzen */
+</span><span class="l" id="L106"><a href="#L106">106</a>	k_mutex_unlock(&amp;load_lock);
+</span><span class="l" id="L107"><a href="#L107">107</a>	ble_publish_speaker_done();
+</span><span class="l" id="L108"><a href="#L108">108</a>}
+</span><span class="l" id="L109"><a href="#L109">109</a>static K_WORK_DELAYABLE_DEFINE(buzzer_work, buzzer_off);
+</span><span class="l" id="L110"><a href="#L110">110</a>
+</span><span class="l" id="L111"><a href="#L111">111</a>void ui_speaker_tone(const thingy_speaker_tone_t *t)
+</span><span class="l" id="L112"><a href="#L112">112</a>{
+</span><span class="l" id="L113"><a href="#L113">113</a>	if (t-&gt;freq_hz == 0 || t-&gt;volume_pct == 0 || t-&gt;duration_ms == 0) {
+</span><span class="l" id="L114"><a href="#L114">114</a>		k_work_reschedule(&amp;buzzer_work, K_NO_WAIT);
+</span><span class="l" id="L115"><a href="#L115">115</a>		return;
+</span><span class="l" id="L116"><a href="#L116">116</a>	}
+</span><span class="l" id="L117"><a href="#L117">117</a>	const uint32_t period = PWM_HZ(t-&gt;freq_hz);
+</span><span class="l" id="L118"><a href="#L118">118</a>	/* Lautstaerke ueber Tastgrad, max. 50 % (ANNAHME, Summer-Kennlinie unbekannt) */
+</span><span class="l" id="L119"><a href="#L119">119</a>	const uint32_t pulse = (uint32_t)((uint64_t)period * t-&gt;volume_pct / 200u);
+</span><span class="l" id="L120"><a href="#L120">120</a>	k_mutex_lock(&amp;load_lock, K_FOREVER);
+</span><span class="l" id="L121"><a href="#L121">121</a>	buz_req = true;
+</span><span class="l" id="L122"><a href="#L122">122</a>	loads_apply(); /* Motor zuerst aus, dann Summer an */
+</span><span class="l" id="L123"><a href="#L123">123</a>	(void)pwm_set_dt(&amp;buzzer, period, pulse);
+</span><span class="l" id="L124"><a href="#L124">124</a>	k_mutex_unlock(&amp;load_lock);
+</span><span class="l" id="L125"><a href="#L125">125</a>	k_work_reschedule(&amp;buzzer_work, K_MSEC(t-&gt;duration_ms));
+</span><span class="l" id="L126"><a href="#L126">126</a>}
+</span><span class="l" id="L127"><a href="#L127">127</a>
+</span><span class="l" id="L128"><a href="#L128">128</a>static void vib_off(struct k_work *w)
+</span><span class="l" id="L129"><a href="#L129">129</a>{
+</span><span class="l" id="L130"><a href="#L130">130</a>	ARG_UNUSED(w);
+</span><span class="l" id="L131"><a href="#L131">131</a>	k_mutex_lock(&amp;load_lock, K_FOREVER);
+</span><span class="l" id="L132"><a href="#L132">132</a>	mot_req = false;
+</span><span class="l" id="L133"><a href="#L133">133</a>	loads_apply();
+</span><span class="l" id="L134"><a href="#L134">134</a>	k_mutex_unlock(&amp;load_lock);
+</span><span class="l" id="L135"><a href="#L135">135</a>}
+</span><span class="l" id="L136"><a href="#L136">136</a>static K_WORK_DELAYABLE_DEFINE(vib_work, vib_off);
+</span><span class="l" id="L137"><a href="#L137">137</a>
+</span><span class="l" id="L138"><a href="#L138">138</a>void ui_vibrate_ms(uint32_t ms)
+</span><span class="l" id="L139"><a href="#L139">139</a>{
+</span><span class="l" id="L140"><a href="#L140">140</a>	k_mutex_lock(&amp;load_lock, K_FOREVER);
+</span><span class="l" id="L141"><a href="#L141">141</a>	mot_req = true;
+</span><span class="l" id="L142"><a href="#L142">142</a>	loads_apply();
+</span><span class="l" id="L143"><a href="#L143">143</a>	k_mutex_unlock(&amp;load_lock);
+</span><span class="l" id="L144"><a href="#L144">144</a>	k_work_reschedule(&amp;vib_work, K_MSEC(ms));
+</span><span class="l" id="L145"><a href="#L145">145</a>}
+</span><span class="l" id="L146"><a href="#L146">146</a>
+</span><span class="l" id="L147"><a href="#L147">147</a>static void btn_poll(struct k_work *w);
+</span><span class="l" id="L148"><a href="#L148">148</a>static K_WORK_DELAYABLE_DEFINE(btn_work, btn_poll);
+</span><span class="l" id="L149"><a href="#L149">149</a>
+</span><span class="l" id="L150"><a href="#L150">150</a>static void btn_poll(struct k_work *w)
+</span><span class="l" id="L151"><a href="#L151">151</a>{
+</span><span class="l" id="L152"><a href="#L152">152</a>	ARG_UNUSED(w);
+</span><span class="l" id="L153"><a href="#L153">153</a>	const bool pressed = gpio_pin_get_dt(&amp;btn) &gt; 0;
+</span><span class="l" id="L154"><a href="#L154">154</a>	static bool last;
+</span><span class="l" id="L155"><a href="#L155">155</a>	if (pressed != last) {
+</span><span class="l" id="L156"><a href="#L156">156</a>		last = pressed;
+</span><span class="l" id="L157"><a href="#L157">157</a>		ble_publish_button(pressed);
+</span><span class="l" id="L158"><a href="#L158">158</a>	}
+</span><span class="l" id="L159"><a href="#L159">159</a>	switch (thingy_button_update(&amp;btn_sm, pressed, k_uptime_get_32())) {
+</span><span class="l" id="L160"><a href="#L160">160</a>	case THINGY_BTN_EVT_LONG:
+</span><span class="l" id="L161"><a href="#L161">161</a>		imu_request_calibration();
+</span><span class="l" id="L162"><a href="#L162">162</a>		ui_vibrate_ms(150);
+</span><span class="l" id="L163"><a href="#L163">163</a>		break;
+</span><span class="l" id="L164"><a href="#L164">164</a>	default:
+</span><span class="l" id="L165"><a href="#L165">165</a>		break;
+</span><span class="l" id="L166"><a href="#L166">166</a>	}
+</span><span class="l" id="L167"><a href="#L167">167</a>	if (pressed) {
+</span><span class="l" id="L168"><a href="#L168">168</a>		k_work_schedule(&amp;btn_work, K_MSEC(BTN_POLL_MS));
+</span><span class="l" id="L169"><a href="#L169">169</a>	}
+</span><span class="l" id="L170"><a href="#L170">170</a>}
+</span><span class="l" id="L171"><a href="#L171">171</a>
+</span><span class="l" id="L172"><a href="#L172">172</a>static void btn_isr(const struct device *d, struct gpio_callback *cb, uint32_t pins)
+</span><span class="l" id="L173"><a href="#L173">173</a>{
+</span><span class="l" id="L174"><a href="#L174">174</a>	k_work_reschedule(&amp;btn_work, K_MSEC(5)); /* Entprellen */
+</span><span class="l" id="L175"><a href="#L175">175</a>}
+</span><span class="l" id="L176"><a href="#L176">176</a>
+</span><span class="l" id="L177"><a href="#L177">177</a>int ui_arm_button_wakeup(void)
+</span><span class="l" id="L178"><a href="#L178">178</a>{
+</span><span class="l" id="L179"><a href="#L179">179</a>	return gpio_pin_interrupt_configure_dt(&amp;btn, GPIO_INT_LEVEL_ACTIVE);
+</span><span class="l" id="L180"><a href="#L180">180</a>}
+</span><span class="l" id="L181"><a href="#L181">181</a>
+</span><span class="l" id="L182"><a href="#L182">182</a>int ui_init(void)
+</span><span class="l" id="L183"><a href="#L183">183</a>{
+</span><span class="l" id="L184"><a href="#L184">184</a>	thingy_button_init(&amp;btn_sm);
+</span><span class="l" id="L185"><a href="#L185">185</a>	for (int i = 0; i &lt; 3; i++) {
+</span><span class="l" id="L186"><a href="#L186">186</a>		if (!pwm_is_ready_dt(&amp;led[i])) {
+</span><span class="l" id="L187"><a href="#L187">187</a>			return -ENODEV;
+</span><span class="l" id="L188"><a href="#L188">188</a>		}
+</span><span class="l" id="L189"><a href="#L189">189</a>	}
+</span><span class="l" id="L190"><a href="#L190">190</a>	if (!pwm_is_ready_dt(&amp;buzzer) || !gpio_is_ready_dt(&amp;btn) || !pwm_is_ready_dt(&amp;motor)) {
+</span><span class="l" id="L191"><a href="#L191">191</a>		return -ENODEV;
+</span><span class="l" id="L192"><a href="#L192">192</a>	}
+</span><span class="l" id="L193"><a href="#L193">193</a>	(void)pwm_set_pulse_dt(&amp;motor, 0);
+</span><span class="l" id="L194"><a href="#L194">194</a>	(void)gpio_pin_configure_dt(&amp;btn, GPIO_INPUT);
+</span><span class="l" id="L195"><a href="#L195">195</a>	gpio_init_callback(&amp;btn_cb, btn_isr, BIT(btn.pin));
+</span><span class="l" id="L196"><a href="#L196">196</a>	(void)gpio_add_callback(btn.port, &amp;btn_cb);
+</span><span class="l" id="L197"><a href="#L197">197</a>	(void)gpio_pin_interrupt_configure_dt(&amp;btn, GPIO_INT_EDGE_BOTH);
+</span><span class="l" id="L198"><a href="#L198">198</a>	led_rgb(0, 0, 0);
+</span><span class="l" id="L199"><a href="#L199">199</a>	return 0;
+</span><span class="l" id="L200"><a href="#L200">200</a>}
+</span></pre></body></html>

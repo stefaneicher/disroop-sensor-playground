@@ -1,0 +1,12 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/build-app.sh</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/build-app.sh</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>#!/usr/bin/env bash
+</span><span class="l" id="L2"><a href="#L2">2</a># Baut die Zephyr-App fuer Board motion_one. Im Image disroop-motion-one-fw:
+</span><span class="l" id="L3"><a href="#L3">3</a>#   ./project hw fw &quot;bash devices/motion-one/firmware/build-app.sh&quot;
+</span><span class="l" id="L4"><a href="#L4">4</a>set -euo pipefail
+</span><span class="l" id="L5"><a href="#L5">5</a>cd &quot;$(dirname &quot;${BASH_SOURCE[0]}&quot;)&quot;
+</span><span class="l" id="L6"><a href="#L6">6</a>FW=&quot;$(pwd)&quot;
+</span><span class="l" id="L7"><a href="#L7">7</a>west build -p always -b motion_one -d &quot;$FW/build/app&quot; &quot;$FW/app&quot; -o=-j4 -- \
+</span><span class="l" id="L8"><a href="#L8">8</a>  -DBOARD_ROOT=&quot;$FW&quot; -DDTS_ROOT=&quot;$FW/app&quot; -DUSER_CACHE_DIR=&quot;$FW/build/zephyr-cache&quot;
+</span></pre></body></html>

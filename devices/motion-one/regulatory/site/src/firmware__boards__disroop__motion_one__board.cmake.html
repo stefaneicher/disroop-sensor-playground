@@ -1,0 +1,13 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/boards/disroop/motion_one/board.cmake</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/boards/disroop/motion_one/board.cmake</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a># SWD (einmalig Bootloader) und UF2 (Adafruit nRF52 Bootloader 0.11.0), siehe firmware/PROGRAMMING.md
+</span><span class="l" id="L2"><a href="#L2">2</a>board_runner_args(pyocd &quot;--target=nrf52840&quot; &quot;--frequency=4000000&quot;)
+</span><span class="l" id="L3"><a href="#L3">3</a>board_runner_args(jlink &quot;--device=nRF52840_xxAA&quot; &quot;--speed=4000&quot;)
+</span><span class="l" id="L4"><a href="#L4">4</a>if(CONFIG_BUILD_OUTPUT_UF2)
+</span><span class="l" id="L5"><a href="#L5">5</a>  include(${ZEPHYR_BASE}/boards/common/uf2.board.cmake)
+</span><span class="l" id="L6"><a href="#L6">6</a>endif()
+</span><span class="l" id="L7"><a href="#L7">7</a>include(${ZEPHYR_BASE}/boards/common/pyocd.board.cmake)
+</span><span class="l" id="L8"><a href="#L8">8</a>include(${ZEPHYR_BASE}/boards/common/openocd-nrf5.board.cmake)
+</span><span class="l" id="L9"><a href="#L9">9</a>include(${ZEPHYR_BASE}/boards/common/jlink.board.cmake)
+</span></pre></body></html>

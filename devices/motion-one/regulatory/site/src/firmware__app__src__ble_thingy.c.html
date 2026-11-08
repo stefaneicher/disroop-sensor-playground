@@ -1,0 +1,355 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/app/src/ble_thingy.c</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/app/src/ble_thingy.c</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* GATT-Profil wie Thingy:52 (docs/protocol.md, INTERFACES.json ble_profile). Adapter: Zephyr BT. */
+</span><span class="l" id="L2"><a href="#L2">2</a>#include &lt;string.h&gt;
+</span><span class="l" id="L3"><a href="#L3">3</a>#include &lt;zephyr/kernel.h&gt;
+</span><span class="l" id="L4"><a href="#L4">4</a>#include &lt;zephyr/logging/log.h&gt;
+</span><span class="l" id="L5"><a href="#L5">5</a>#include &lt;zephyr/bluetooth/bluetooth.h&gt;
+</span><span class="l" id="L6"><a href="#L6">6</a>#include &lt;zephyr/bluetooth/conn.h&gt;
+</span><span class="l" id="L7"><a href="#L7">7</a>#include &lt;zephyr/bluetooth/gatt.h&gt;
+</span><span class="l" id="L8"><a href="#L8">8</a>#include &lt;zephyr/bluetooth/uuid.h&gt;
+</span><span class="l" id="L9"><a href="#L9">9</a>#include &quot;app.h&quot;
+</span><span class="l" id="L10"><a href="#L10">10</a>
+</span><span class="l" id="L11"><a href="#L11">11</a>LOG_MODULE_REGISTER(ble, LOG_LEVEL_INF);
+</span><span class="l" id="L12"><a href="#L12">12</a>
+</span><span class="l" id="L13"><a href="#L13">13</a>#define TUUID(n) BT_UUID_DECLARE_128(BT_UUID_128_ENCODE(0xEF680000u + (n), 0x9B35, 0x4933, 0x9B10, 0x52FFA9740042))
+</span><span class="l" id="L14"><a href="#L14">14</a>#define RD BT_GATT_PERM_READ
+</span><span class="l" id="L15"><a href="#L15">15</a>#define WR BT_GATT_PERM_WRITE
+</span><span class="l" id="L16"><a href="#L16">16</a>
+</span><span class="l" id="L17"><a href="#L17">17</a>static struct bt_conn *conn_cur;
+</span><span class="l" id="L18"><a href="#L18">18</a>static K_MUTEX_DEFINE(cfg_lock);
+</span><span class="l" id="L19"><a href="#L19">19</a>static thingy_motion_config_t motion_cfg;
+</span><span class="l" id="L20"><a href="#L20">20</a>static thingy_env_config_t env_cfg;
+</span><span class="l" id="L21"><a href="#L21">21</a>static thingy_sound_config_t sound_cfg;
+</span><span class="l" id="L22"><a href="#L22">22</a>static thingy_led_cmd_t led_cmd = {.mode = THINGY_LED_OFF};
+</span><span class="l" id="L23"><a href="#L23">23</a>static uint8_t button_state;
+</span><span class="l" id="L24"><a href="#L24">24</a>static const char dev_name[] = &quot;Thingy&quot;;
+</span><span class="l" id="L25"><a href="#L25">25</a>
+</span><span class="l" id="L26"><a href="#L26">26</a>static ssize_t att_status(thingy_status_t s)
+</span><span class="l" id="L27"><a href="#L27">27</a>{
+</span><span class="l" id="L28"><a href="#L28">28</a>	return s == THINGY_ERR_LEN ? BT_GATT_ERR(BT_ATT_ERR_INVALID_ATTRIBUTE_LEN)
+</span><span class="l" id="L29"><a href="#L29">29</a>				   : BT_GATT_ERR(BT_ATT_ERR_VALUE_NOT_ALLOWED);
+</span><span class="l" id="L30"><a href="#L30">30</a>}
+</span><span class="l" id="L31"><a href="#L31">31</a>
+</span><span class="l" id="L32"><a href="#L32">32</a>static ssize_t rd_name(struct bt_conn *c, const struct bt_gatt_attr *a, void *buf, uint16_t len, uint16_t off)
+</span><span class="l" id="L33"><a href="#L33">33</a>{
+</span><span class="l" id="L34"><a href="#L34">34</a>	return bt_gatt_attr_read(c, a, buf, len, off, dev_name, sizeof dev_name - 1);
+</span><span class="l" id="L35"><a href="#L35">35</a>}
+</span><span class="l" id="L36"><a href="#L36">36</a>
+</span><span class="l" id="L37"><a href="#L37">37</a>static ssize_t rd_motion_cfg(struct bt_conn *c, const struct bt_gatt_attr *a, void *buf, uint16_t len, uint16_t off)
+</span><span class="l" id="L38"><a href="#L38">38</a>{
+</span><span class="l" id="L39"><a href="#L39">39</a>	uint8_t v[THINGY_MOTION_CONFIG_LEN];
+</span><span class="l" id="L40"><a href="#L40">40</a>	k_mutex_lock(&amp;cfg_lock, K_FOREVER);
+</span><span class="l" id="L41"><a href="#L41">41</a>	(void)thingy_encode_motion_config(&amp;motion_cfg, v, sizeof v);
+</span><span class="l" id="L42"><a href="#L42">42</a>	k_mutex_unlock(&amp;cfg_lock);
+</span><span class="l" id="L43"><a href="#L43">43</a>	return bt_gatt_attr_read(c, a, buf, len, off, v, sizeof v);
+</span><span class="l" id="L44"><a href="#L44">44</a>}
+</span><span class="l" id="L45"><a href="#L45">45</a>
+</span><span class="l" id="L46"><a href="#L46">46</a>static ssize_t wr_motion_cfg(struct bt_conn *c, const struct bt_gatt_attr *a, const void *buf, uint16_t len,
+</span><span class="l" id="L47"><a href="#L47">47</a>			     uint16_t off, uint8_t flags)
+</span><span class="l" id="L48"><a href="#L48">48</a>{
+</span><span class="l" id="L49"><a href="#L49">49</a>	thingy_motion_config_t n;
+</span><span class="l" id="L50"><a href="#L50">50</a>	const thingy_status_t s = off ? THINGY_ERR_LEN : thingy_parse_motion_config(buf, len, &amp;n);
+</span><span class="l" id="L51"><a href="#L51">51</a>	if (s != THINGY_OK) {
+</span><span class="l" id="L52"><a href="#L52">52</a>		return att_status(s);
+</span><span class="l" id="L53"><a href="#L53">53</a>	}
+</span><span class="l" id="L54"><a href="#L54">54</a>	k_mutex_lock(&amp;cfg_lock, K_FOREVER);
+</span><span class="l" id="L55"><a href="#L55">55</a>	motion_cfg = n;
+</span><span class="l" id="L56"><a href="#L56">56</a>	k_mutex_unlock(&amp;cfg_lock);
+</span><span class="l" id="L57"><a href="#L57">57</a>	LOG_INF(&quot;motion_freq_hz=%u&quot;, n.motion_freq_hz);
+</span><span class="l" id="L58"><a href="#L58">58</a>	return len;
+</span><span class="l" id="L59"><a href="#L59">59</a>}
+</span><span class="l" id="L60"><a href="#L60">60</a>
+</span><span class="l" id="L61"><a href="#L61">61</a>static ssize_t rd_env_cfg(struct bt_conn *c, const struct bt_gatt_attr *a, void *buf, uint16_t len, uint16_t off)
+</span><span class="l" id="L62"><a href="#L62">62</a>{
+</span><span class="l" id="L63"><a href="#L63">63</a>	return bt_gatt_attr_read(c, a, buf, len, off, env_cfg.raw, sizeof env_cfg.raw);
+</span><span class="l" id="L64"><a href="#L64">64</a>}
+</span><span class="l" id="L65"><a href="#L65">65</a>
+</span><span class="l" id="L66"><a href="#L66">66</a>static ssize_t wr_env_cfg(struct bt_conn *c, const struct bt_gatt_attr *a, const void *buf, uint16_t len,
+</span><span class="l" id="L67"><a href="#L67">67</a>			  uint16_t off, uint8_t flags)
+</span><span class="l" id="L68"><a href="#L68">68</a>{
+</span><span class="l" id="L69"><a href="#L69">69</a>	const thingy_status_t s = off ? THINGY_ERR_LEN : thingy_parse_env_config(buf, len, &amp;env_cfg);
+</span><span class="l" id="L70"><a href="#L70">70</a>	return s == THINGY_OK ? (ssize_t)len : att_status(s);
+</span><span class="l" id="L71"><a href="#L71">71</a>}
+</span><span class="l" id="L72"><a href="#L72">72</a>
+</span><span class="l" id="L73"><a href="#L73">73</a>static ssize_t rd_sound_cfg(struct bt_conn *c, const struct bt_gatt_attr *a, void *buf, uint16_t len, uint16_t off)
+</span><span class="l" id="L74"><a href="#L74">74</a>{
+</span><span class="l" id="L75"><a href="#L75">75</a>	const uint8_t v[2] = {sound_cfg.speaker_mode, sound_cfg.mic_mode};
+</span><span class="l" id="L76"><a href="#L76">76</a>	return bt_gatt_attr_read(c, a, buf, len, off, v, sizeof v);
+</span><span class="l" id="L77"><a href="#L77">77</a>}
+</span><span class="l" id="L78"><a href="#L78">78</a>
+</span><span class="l" id="L79"><a href="#L79">79</a>static ssize_t wr_sound_cfg(struct bt_conn *c, const struct bt_gatt_attr *a, const void *buf, uint16_t len,
+</span><span class="l" id="L80"><a href="#L80">80</a>			    uint16_t off, uint8_t flags)
+</span><span class="l" id="L81"><a href="#L81">81</a>{
+</span><span class="l" id="L82"><a href="#L82">82</a>	const thingy_status_t s = off ? THINGY_ERR_LEN : thingy_parse_sound_config(buf, len, &amp;sound_cfg);
+</span><span class="l" id="L83"><a href="#L83">83</a>	return s == THINGY_OK ? (ssize_t)len : att_status(s);
+</span><span class="l" id="L84"><a href="#L84">84</a>}
+</span><span class="l" id="L85"><a href="#L85">85</a>
+</span><span class="l" id="L86"><a href="#L86">86</a>static ssize_t wr_speaker(struct bt_conn *c, const struct bt_gatt_attr *a, const void *buf, uint16_t len,
+</span><span class="l" id="L87"><a href="#L87">87</a>			  uint16_t off, uint8_t flags)
+</span><span class="l" id="L88"><a href="#L88">88</a>{
+</span><span class="l" id="L89"><a href="#L89">89</a>	thingy_speaker_tone_t t;
+</span><span class="l" id="L90"><a href="#L90">90</a>	const thingy_status_t s = off ? THINGY_ERR_LEN : thingy_parse_speaker_tone(buf, len, &amp;t);
+</span><span class="l" id="L91"><a href="#L91">91</a>	if (s != THINGY_OK) {
+</span><span class="l" id="L92"><a href="#L92">92</a>		return att_status(s);
+</span><span class="l" id="L93"><a href="#L93">93</a>	}
+</span><span class="l" id="L94"><a href="#L94">94</a>	if (sound_cfg.speaker_mode != 1) {
+</span><span class="l" id="L95"><a href="#L95">95</a>		return BT_GATT_ERR(BT_ATT_ERR_VALUE_NOT_ALLOWED); /* nur Frequenzmodus implementiert */
+</span><span class="l" id="L96"><a href="#L96">96</a>	}
+</span><span class="l" id="L97"><a href="#L97">97</a>	ui_speaker_tone(&amp;t);
+</span><span class="l" id="L98"><a href="#L98">98</a>	return len;
+</span><span class="l" id="L99"><a href="#L99">99</a>}
+</span><span class="l" id="L100"><a href="#L100">100</a>
+</span><span class="l" id="L101"><a href="#L101">101</a>static ssize_t rd_led(struct bt_conn *c, const struct bt_gatt_attr *a, void *buf, uint16_t len, uint16_t off)
+</span><span class="l" id="L102"><a href="#L102">102</a>{
+</span><span class="l" id="L103"><a href="#L103">103</a>	uint8_t v[5];
+</span><span class="l" id="L104"><a href="#L104">104</a>	const size_t n = thingy_encode_led(&amp;led_cmd, v, sizeof v);
+</span><span class="l" id="L105"><a href="#L105">105</a>	return bt_gatt_attr_read(c, a, buf, len, off, v, n);
+</span><span class="l" id="L106"><a href="#L106">106</a>}
+</span><span class="l" id="L107"><a href="#L107">107</a>
+</span><span class="l" id="L108"><a href="#L108">108</a>static ssize_t wr_led(struct bt_conn *c, const struct bt_gatt_attr *a, const void *buf, uint16_t len,
+</span><span class="l" id="L109"><a href="#L109">109</a>		      uint16_t off, uint8_t flags)
+</span><span class="l" id="L110"><a href="#L110">110</a>{
+</span><span class="l" id="L111"><a href="#L111">111</a>	thingy_led_cmd_t n;
+</span><span class="l" id="L112"><a href="#L112">112</a>	const thingy_status_t s = off ? THINGY_ERR_LEN : thingy_parse_led(buf, len, &amp;n);
+</span><span class="l" id="L113"><a href="#L113">113</a>	if (s != THINGY_OK) {
+</span><span class="l" id="L114"><a href="#L114">114</a>		return att_status(s);
+</span><span class="l" id="L115"><a href="#L115">115</a>	}
+</span><span class="l" id="L116"><a href="#L116">116</a>	led_cmd = n;
+</span><span class="l" id="L117"><a href="#L117">117</a>	ui_led_apply(&amp;n);
+</span><span class="l" id="L118"><a href="#L118">118</a>	return len;
+</span><span class="l" id="L119"><a href="#L119">119</a>}
+</span><span class="l" id="L120"><a href="#L120">120</a>
+</span><span class="l" id="L121"><a href="#L121">121</a>static ssize_t rd_button(struct bt_conn *c, const struct bt_gatt_attr *a, void *buf, uint16_t len, uint16_t off)
+</span><span class="l" id="L122"><a href="#L122">122</a>{
+</span><span class="l" id="L123"><a href="#L123">123</a>	return bt_gatt_attr_read(c, a, buf, len, off, &amp;button_state, 1);
+</span><span class="l" id="L124"><a href="#L124">124</a>}
+</span><span class="l" id="L125"><a href="#L125">125</a>
+</span><span class="l" id="L126"><a href="#L126">126</a>/* EF680380 Bedienplatine (systems/ADR-0002) */
+</span><span class="l" id="L127"><a href="#L127">127</a>static uint8_t ui_ext_buf[THINGY_UI_EXT_LEN] = {UI_EXT_VERSION};
+</span><span class="l" id="L128"><a href="#L128">128</a>static ssize_t rd_ui_ext(struct bt_conn *c, const struct bt_gatt_attr *a, void *buf, uint16_t len, uint16_t off)
+</span><span class="l" id="L129"><a href="#L129">129</a>{
+</span><span class="l" id="L130"><a href="#L130">130</a>	return bt_gatt_attr_read(c, a, buf, len, off, ui_ext_buf, sizeof ui_ext_buf);
+</span><span class="l" id="L131"><a href="#L131">131</a>}
+</span><span class="l" id="L132"><a href="#L132">132</a>static void ui_ext_ccc_changed(const struct bt_gatt_attr *attr, uint16_t value)
+</span><span class="l" id="L133"><a href="#L133">133</a>{
+</span><span class="l" id="L134"><a href="#L134">134</a>	ARG_UNUSED(attr);
+</span><span class="l" id="L135"><a href="#L135">135</a>	if (value &amp; BT_GATT_CCC_NOTIFY) {
+</span><span class="l" id="L136"><a href="#L136">136</a>		ext_ui_subscribed(); /* aktuellen Zustand (auch present=0) genau einmal senden */
+</span><span class="l" id="L137"><a href="#L137">137</a>	}
+</span><span class="l" id="L138"><a href="#L138">138</a>}
+</span><span class="l" id="L139"><a href="#L139">139</a>
+</span><span class="l" id="L140"><a href="#L140">140</a>static void ccc_changed(const struct bt_gatt_attr *attr, uint16_t value)
+</span><span class="l" id="L141"><a href="#L141">141</a>{
+</span><span class="l" id="L142"><a href="#L142">142</a>	ARG_UNUSED(attr);
+</span><span class="l" id="L143"><a href="#L143">143</a>	LOG_DBG(&quot;CCC %u&quot;, value);
+</span><span class="l" id="L144"><a href="#L144">144</a>}
+</span><span class="l" id="L145"><a href="#L145">145</a>
+</span><span class="l" id="L146"><a href="#L146">146</a>#define NOTIFY_CHR(uuid) \
+</span><span class="l" id="L147"><a href="#L147">147</a>	BT_GATT_CHARACTERISTIC(uuid, BT_GATT_CHRC_NOTIFY, BT_GATT_PERM_NONE, NULL, NULL, NULL), \
+</span><span class="l" id="L148"><a href="#L148">148</a>	BT_GATT_CCC(ccc_changed, RD | WR)
+</span><span class="l" id="L149"><a href="#L149">149</a>
+</span><span class="l" id="L150"><a href="#L150">150</a>/* Konfiguration: advertised, Geraetename */
+</span><span class="l" id="L151"><a href="#L151">151</a>BT_GATT_SERVICE_DEFINE(cfg_svc, BT_GATT_PRIMARY_SERVICE(TUUID(0x0100)),
+</span><span class="l" id="L152"><a href="#L152">152</a>	BT_GATT_CHARACTERISTIC(TUUID(0x0101), BT_GATT_CHRC_READ, RD, rd_name, NULL, NULL));
+</span><span class="l" id="L153"><a href="#L153">153</a>
+</span><span class="l" id="L154"><a href="#L154">154</a>/* Environment minimal: nur EF680206 (Bridge liest/schreibt sie beim Konfigurieren) */
+</span><span class="l" id="L155"><a href="#L155">155</a>BT_GATT_SERVICE_DEFINE(env_svc, BT_GATT_PRIMARY_SERVICE(TUUID(0x0200)),
+</span><span class="l" id="L156"><a href="#L156">156</a>	BT_GATT_CHARACTERISTIC(TUUID(0x0206), BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE, RD | WR, rd_env_cfg,
+</span><span class="l" id="L157"><a href="#L157">157</a>			       wr_env_cfg, NULL));
+</span><span class="l" id="L158"><a href="#L158">158</a>
+</span><span class="l" id="L159"><a href="#L159">159</a>/* UI: [1] decl 0301, [2] LED, [3] decl 0302, [4] Button, [5] CCC, [6] decl 0380, [7] UI-Ext, [8] CCC */
+</span><span class="l" id="L160"><a href="#L160">160</a>BT_GATT_SERVICE_DEFINE(ui_svc, BT_GATT_PRIMARY_SERVICE(TUUID(0x0300)),
+</span><span class="l" id="L161"><a href="#L161">161</a>	BT_GATT_CHARACTERISTIC(TUUID(0x0301), BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE, RD | WR, rd_led, wr_led,
+</span><span class="l" id="L162"><a href="#L162">162</a>			       NULL),
+</span><span class="l" id="L163"><a href="#L163">163</a>	BT_GATT_CHARACTERISTIC(TUUID(0x0302), BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY, RD, rd_button, NULL,
+</span><span class="l" id="L164"><a href="#L164">164</a>			       NULL),
+</span><span class="l" id="L165"><a href="#L165">165</a>	BT_GATT_CCC(ccc_changed, RD | WR),
+</span><span class="l" id="L166"><a href="#L166">166</a>	BT_GATT_CHARACTERISTIC(TUUID(0x0380), BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY, RD, rd_ui_ext, NULL, NULL),
+</span><span class="l" id="L167"><a href="#L167">167</a>	BT_GATT_CCC(ui_ext_ccc_changed, RD | WR));
+</span><span class="l" id="L168"><a href="#L168">168</a>/* Regression: 0301/0302 bleiben [2]/[4], 0380 haengt hinten an; Motion/Sound-Indizes unveraendert */
+</span><span class="l" id="L169"><a href="#L169">169</a>BUILD_ASSERT(ARRAY_SIZE(attr_ui_svc) == 9, &quot;ui_svc Attributindizes geaendert&quot;);
+</span><span class="l" id="L170"><a href="#L170">170</a>
+</span><span class="l" id="L171"><a href="#L171">171</a>/* Motion: [2] 0401, [4] 0404, [7] 0406, [10] 0407, [13] 0409, [16] 0480 */
+</span><span class="l" id="L172"><a href="#L172">172</a>BT_GATT_SERVICE_DEFINE(motion_svc, BT_GATT_PRIMARY_SERVICE(TUUID(0x0400)),
+</span><span class="l" id="L173"><a href="#L173">173</a>	BT_GATT_CHARACTERISTIC(TUUID(0x0401), BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE, RD | WR, rd_motion_cfg,
+</span><span class="l" id="L174"><a href="#L174">174</a>			       wr_motion_cfg, NULL),
+</span><span class="l" id="L175"><a href="#L175">175</a>	NOTIFY_CHR(TUUID(0x0404)), NOTIFY_CHR(TUUID(0x0406)), NOTIFY_CHR(TUUID(0x0407)),
+</span><span class="l" id="L176"><a href="#L176">176</a>	NOTIFY_CHR(TUUID(0x0409)), NOTIFY_CHR(TUUID(0x0480)));
+</span><span class="l" id="L177"><a href="#L177">177</a>
+</span><span class="l" id="L178"><a href="#L178">178</a>/* Sound: [2] 0501, [4] 0502, [6] 0503 */
+</span><span class="l" id="L179"><a href="#L179">179</a>BT_GATT_SERVICE_DEFINE(sound_svc, BT_GATT_PRIMARY_SERVICE(TUUID(0x0500)),
+</span><span class="l" id="L180"><a href="#L180">180</a>	BT_GATT_CHARACTERISTIC(TUUID(0x0501), BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE, RD | WR, rd_sound_cfg,
+</span><span class="l" id="L181"><a href="#L181">181</a>			       wr_sound_cfg, NULL),
+</span><span class="l" id="L182"><a href="#L182">182</a>	BT_GATT_CHARACTERISTIC(TUUID(0x0502), BT_GATT_CHRC_WRITE_WITHOUT_RESP | BT_GATT_CHRC_WRITE, WR, NULL,
+</span><span class="l" id="L183"><a href="#L183">183</a>			       wr_speaker, NULL),
+</span><span class="l" id="L184"><a href="#L184">184</a>	NOTIFY_CHR(TUUID(0x0503)));
+</span><span class="l" id="L185"><a href="#L185">185</a>
+</span><span class="l" id="L186"><a href="#L186">186</a>BUILD_ASSERT(ARRAY_SIZE(attr_motion_svc) == 18, &quot;motion_svc Attributindizes geaendert&quot;);
+</span><span class="l" id="L187"><a href="#L187">187</a>BUILD_ASSERT(ARRAY_SIZE(attr_sound_svc) == 8, &quot;sound_svc Attributindizes geaendert&quot;);
+</span><span class="l" id="L188"><a href="#L188">188</a>
+</span><span class="l" id="L189"><a href="#L189">189</a>enum { M_QUAT, M_RAW, M_EULER, M_HEADING, M_HR, M_COUNT };
+</span><span class="l" id="L190"><a href="#L190">190</a>static const struct bt_gatt_attr *const motion_attr[M_COUNT] = {
+</span><span class="l" id="L191"><a href="#L191">191</a>	&amp;motion_svc.attrs[4], &amp;motion_svc.attrs[7], &amp;motion_svc.attrs[10], &amp;motion_svc.attrs[13],
+</span><span class="l" id="L192"><a href="#L192">192</a>	&amp;motion_svc.attrs[16]};
+</span><span class="l" id="L193"><a href="#L193">193</a>
+</span><span class="l" id="L194"><a href="#L194">194</a>static const struct bt_data ad[] = {
+</span><span class="l" id="L195"><a href="#L195">195</a>	BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
+</span><span class="l" id="L196"><a href="#L196">196</a>	BT_DATA_BYTES(BT_DATA_UUID128_ALL,
+</span><span class="l" id="L197"><a href="#L197">197</a>		      BT_UUID_128_ENCODE(0xEF680100, 0x9B35, 0x4933, 0x9B10, 0x52FFA9740042)),
+</span><span class="l" id="L198"><a href="#L198">198</a>};
+</span><span class="l" id="L199"><a href="#L199">199</a>static const struct bt_data sd[] = {
+</span><span class="l" id="L200"><a href="#L200">200</a>	BT_DATA(BT_DATA_NAME_COMPLETE, dev_name, sizeof dev_name - 1),
+</span><span class="l" id="L201"><a href="#L201">201</a>};
+</span><span class="l" id="L202"><a href="#L202">202</a>
+</span><span class="l" id="L203"><a href="#L203">203</a>static void adv_start(struct k_work *w)
+</span><span class="l" id="L204"><a href="#L204">204</a>{
+</span><span class="l" id="L205"><a href="#L205">205</a>	ARG_UNUSED(w);
+</span><span class="l" id="L206"><a href="#L206">206</a>	const int err = bt_le_adv_start(BT_LE_ADV_CONN_FAST_1, ad, ARRAY_SIZE(ad), sd, ARRAY_SIZE(sd));
+</span><span class="l" id="L207"><a href="#L207">207</a>	if (err &amp;&amp; err != -EALREADY) {
+</span><span class="l" id="L208"><a href="#L208">208</a>		LOG_ERR(&quot;adv %d&quot;, err);
+</span><span class="l" id="L209"><a href="#L209">209</a>	}
+</span><span class="l" id="L210"><a href="#L210">210</a>}
+</span><span class="l" id="L211"><a href="#L211">211</a>static K_WORK_DEFINE(adv_work, adv_start);
+</span><span class="l" id="L212"><a href="#L212">212</a>
+</span><span class="l" id="L213"><a href="#L213">213</a>static void connected(struct bt_conn *c, uint8_t err)
+</span><span class="l" id="L214"><a href="#L214">214</a>{
+</span><span class="l" id="L215"><a href="#L215">215</a>	if (err) {
+</span><span class="l" id="L216"><a href="#L216">216</a>		return;
+</span><span class="l" id="L217"><a href="#L217">217</a>	}
+</span><span class="l" id="L218"><a href="#L218">218</a>	conn_cur = bt_conn_ref(c);
+</span><span class="l" id="L219"><a href="#L219">219</a>	LOG_INF(&quot;verbunden&quot;);
+</span><span class="l" id="L220"><a href="#L220">220</a>}
+</span><span class="l" id="L221"><a href="#L221">221</a>
+</span><span class="l" id="L222"><a href="#L222">222</a>static void disconnected(struct bt_conn *c, uint8_t reason)
+</span><span class="l" id="L223"><a href="#L223">223</a>{
+</span><span class="l" id="L224"><a href="#L224">224</a>	if (conn_cur == c) {
+</span><span class="l" id="L225"><a href="#L225">225</a>		bt_conn_unref(conn_cur);
+</span><span class="l" id="L226"><a href="#L226">226</a>		conn_cur = NULL;
+</span><span class="l" id="L227"><a href="#L227">227</a>	}
+</span><span class="l" id="L228"><a href="#L228">228</a>	LOG_INF(&quot;getrennt 0x%02x&quot;, reason);
+</span><span class="l" id="L229"><a href="#L229">229</a>}
+</span><span class="l" id="L230"><a href="#L230">230</a>
+</span><span class="l" id="L231"><a href="#L231">231</a>static void recycled(void)
+</span><span class="l" id="L232"><a href="#L232">232</a>{
+</span><span class="l" id="L233"><a href="#L233">233</a>	k_work_submit(&amp;adv_work);
+</span><span class="l" id="L234"><a href="#L234">234</a>}
+</span><span class="l" id="L235"><a href="#L235">235</a>
+</span><span class="l" id="L236"><a href="#L236">236</a>static void le_param_updated(struct bt_conn *c, uint16_t interval, uint16_t latency, uint16_t timeout)
+</span><span class="l" id="L237"><a href="#L237">237</a>{
+</span><span class="l" id="L238"><a href="#L238">238</a>	LOG_INF(&quot;Intervall %u x 1.25 ms, Latenz %u, Timeout %u&quot;, interval, latency, timeout);
+</span><span class="l" id="L239"><a href="#L239">239</a>}
+</span><span class="l" id="L240"><a href="#L240">240</a>
+</span><span class="l" id="L241"><a href="#L241">241</a>BT_CONN_CB_DEFINE(conn_cb) = {
+</span><span class="l" id="L242"><a href="#L242">242</a>	.connected = connected,
+</span><span class="l" id="L243"><a href="#L243">243</a>	.disconnected = disconnected,
+</span><span class="l" id="L244"><a href="#L244">244</a>	.recycled = recycled,
+</span><span class="l" id="L245"><a href="#L245">245</a>	.le_param_updated = le_param_updated,
+</span><span class="l" id="L246"><a href="#L246">246</a>};
+</span><span class="l" id="L247"><a href="#L247">247</a>
+</span><span class="l" id="L248"><a href="#L248">248</a>int ble_thingy_init(void)
+</span><span class="l" id="L249"><a href="#L249">249</a>{
+</span><span class="l" id="L250"><a href="#L250">250</a>	thingy_motion_config_default(&amp;motion_cfg);
+</span><span class="l" id="L251"><a href="#L251">251</a>	thingy_env_config_default(&amp;env_cfg);
+</span><span class="l" id="L252"><a href="#L252">252</a>	thingy_sound_config_default(&amp;sound_cfg);
+</span><span class="l" id="L253"><a href="#L253">253</a>	const int err = bt_enable(NULL);
+</span><span class="l" id="L254"><a href="#L254">254</a>	if (err) {
+</span><span class="l" id="L255"><a href="#L255">255</a>		return err;
+</span><span class="l" id="L256"><a href="#L256">256</a>	}
+</span><span class="l" id="L257"><a href="#L257">257</a>	k_work_submit(&amp;adv_work);
+</span><span class="l" id="L258"><a href="#L258">258</a>	return 0;
+</span><span class="l" id="L259"><a href="#L259">259</a>}
+</span><span class="l" id="L260"><a href="#L260">260</a>
+</span><span class="l" id="L261"><a href="#L261">261</a>bool ble_is_connected(void)
+</span><span class="l" id="L262"><a href="#L262">262</a>{
+</span><span class="l" id="L263"><a href="#L263">263</a>	return conn_cur != NULL;
+</span><span class="l" id="L264"><a href="#L264">264</a>}
+</span><span class="l" id="L265"><a href="#L265">265</a>
+</span><span class="l" id="L266"><a href="#L266">266</a>void ble_get_motion_config(thingy_motion_config_t *cfg)
+</span><span class="l" id="L267"><a href="#L267">267</a>{
+</span><span class="l" id="L268"><a href="#L268">268</a>	k_mutex_lock(&amp;cfg_lock, K_FOREVER);
+</span><span class="l" id="L269"><a href="#L269">269</a>	*cfg = motion_cfg;
+</span><span class="l" id="L270"><a href="#L270">270</a>	k_mutex_unlock(&amp;cfg_lock);
+</span><span class="l" id="L271"><a href="#L271">271</a>}
+</span><span class="l" id="L272"><a href="#L272">272</a>
+</span><span class="l" id="L273"><a href="#L273">273</a>static bool subscribed(const struct bt_gatt_attr *attr)
+</span><span class="l" id="L274"><a href="#L274">274</a>{
+</span><span class="l" id="L275"><a href="#L275">275</a>	struct bt_conn *c = conn_cur;
+</span><span class="l" id="L276"><a href="#L276">276</a>	return c != NULL &amp;&amp; bt_gatt_is_subscribed(c, attr, BT_GATT_CCC_NOTIFY);
+</span><span class="l" id="L277"><a href="#L277">277</a>}
+</span><span class="l" id="L278"><a href="#L278">278</a>
+</span><span class="l" id="L279"><a href="#L279">279</a>bool ble_motion_wanted(void)
+</span><span class="l" id="L280"><a href="#L280">280</a>{
+</span><span class="l" id="L281"><a href="#L281">281</a>	for (int i = 0; i &lt; M_COUNT; i++) {
+</span><span class="l" id="L282"><a href="#L282">282</a>		if (subscribed(motion_attr[i])) {
+</span><span class="l" id="L283"><a href="#L283">283</a>			return true;
+</span><span class="l" id="L284"><a href="#L284">284</a>		}
+</span><span class="l" id="L285"><a href="#L285">285</a>	}
+</span><span class="l" id="L286"><a href="#L286">286</a>	return false;
+</span><span class="l" id="L287"><a href="#L287">287</a>}
+</span><span class="l" id="L288"><a href="#L288">288</a>
+</span><span class="l" id="L289"><a href="#L289">289</a>/* Wird mit motion_freq_hz aufgerufen; Dezimierung so, dass Summe der Notifications &lt;= 200/s bleibt. */
+</span><span class="l" id="L290"><a href="#L290">290</a>void ble_publish_motion(const float q[4], float roll, float pitch, float yaw, const thingy_raw_motion_t *raw,
+</span><span class="l" id="L291"><a href="#L291">291</a>			const thingy_raw_hr_t *hr)
+</span><span class="l" id="L292"><a href="#L292">292</a>{
+</span><span class="l" id="L293"><a href="#L293">293</a>	static uint32_t tick;
+</span><span class="l" id="L294"><a href="#L294">294</a>	bool sub[M_COUNT];
+</span><span class="l" id="L295"><a href="#L295">295</a>	uint32_t n = 0;
+</span><span class="l" id="L296"><a href="#L296">296</a>	for (int i = 0; i &lt; M_COUNT; i++) {
+</span><span class="l" id="L297"><a href="#L297">297</a>		sub[i] = subscribed(motion_attr[i]);
+</span><span class="l" id="L298"><a href="#L298">298</a>		n += sub[i];
+</span><span class="l" id="L299"><a href="#L299">299</a>	}
+</span><span class="l" id="L300"><a href="#L300">300</a>	if (n == 0) {
+</span><span class="l" id="L301"><a href="#L301">301</a>		return;
+</span><span class="l" id="L302"><a href="#L302">302</a>	}
+</span><span class="l" id="L303"><a href="#L303">303</a>	thingy_motion_config_t cfg;
+</span><span class="l" id="L304"><a href="#L304">304</a>	ble_get_motion_config(&amp;cfg);
+</span><span class="l" id="L305"><a href="#L305">305</a>	const uint32_t want = (uint32_t)cfg.motion_freq_hz * n;
+</span><span class="l" id="L306"><a href="#L306">306</a>	const uint32_t every = (want + NOTIFY_BUDGET_PER_S - 1) / NOTIFY_BUDGET_PER_S; /* BERECHNUNG ceil */
+</span><span class="l" id="L307"><a href="#L307">307</a>	if ((tick++ % (every ? every : 1)) != 0) {
+</span><span class="l" id="L308"><a href="#L308">308</a>		return;
+</span><span class="l" id="L309"><a href="#L309">309</a>	}
+</span><span class="l" id="L310"><a href="#L310">310</a>	uint8_t b[THINGY_RAW_MOTION_LEN];
+</span><span class="l" id="L311"><a href="#L311">311</a>	struct bt_conn *c = conn_cur;
+</span><span class="l" id="L312"><a href="#L312">312</a>	if (sub[M_QUAT] &amp;&amp; thingy_encode_quaternion(q, b, sizeof b)) {
+</span><span class="l" id="L313"><a href="#L313">313</a>		(void)bt_gatt_notify(c, motion_attr[M_QUAT], b, THINGY_QUATERNION_LEN);
+</span><span class="l" id="L314"><a href="#L314">314</a>	}
+</span><span class="l" id="L315"><a href="#L315">315</a>	if (sub[M_RAW] &amp;&amp; thingy_encode_raw_motion(raw, b, sizeof b)) {
+</span><span class="l" id="L316"><a href="#L316">316</a>		(void)bt_gatt_notify(c, motion_attr[M_RAW], b, THINGY_RAW_MOTION_LEN);
+</span><span class="l" id="L317"><a href="#L317">317</a>	}
+</span><span class="l" id="L318"><a href="#L318">318</a>	if (sub[M_EULER] &amp;&amp; thingy_encode_euler(roll, pitch, yaw, b, sizeof b)) {
+</span><span class="l" id="L319"><a href="#L319">319</a>		(void)bt_gatt_notify(c, motion_attr[M_EULER], b, THINGY_EULER_LEN);
+</span><span class="l" id="L320"><a href="#L320">320</a>	}
+</span><span class="l" id="L321"><a href="#L321">321</a>	if (sub[M_HEADING] &amp;&amp; thingy_encode_heading(yaw, b, sizeof b)) {
+</span><span class="l" id="L322"><a href="#L322">322</a>		(void)bt_gatt_notify(c, motion_attr[M_HEADING], b, THINGY_HEADING_LEN);
+</span><span class="l" id="L323"><a href="#L323">323</a>	}
+</span><span class="l" id="L324"><a href="#L324">324</a>	if (sub[M_HR] &amp;&amp; thingy_encode_raw_hr(hr, b, sizeof b)) {
+</span><span class="l" id="L325"><a href="#L325">325</a>		(void)bt_gatt_notify(c, motion_attr[M_HR], b, THINGY_RAW_HR_LEN);
+</span><span class="l" id="L326"><a href="#L326">326</a>	}
+</span><span class="l" id="L327"><a href="#L327">327</a>}
+</span><span class="l" id="L328"><a href="#L328">328</a>
+</span><span class="l" id="L329"><a href="#L329">329</a>void ble_publish_ui_ext(const ui_ext_state_t *s)
+</span><span class="l" id="L330"><a href="#L330">330</a>{
+</span><span class="l" id="L331"><a href="#L331">331</a>	(void)thingy_encode_ui_ext(s, ui_ext_buf, sizeof ui_ext_buf);
+</span><span class="l" id="L332"><a href="#L332">332</a>	if (subscribed(&amp;ui_svc.attrs[7])) {
+</span><span class="l" id="L333"><a href="#L333">333</a>		(void)bt_gatt_notify(conn_cur, &amp;ui_svc.attrs[7], ui_ext_buf, sizeof ui_ext_buf);
+</span><span class="l" id="L334"><a href="#L334">334</a>	}
+</span><span class="l" id="L335"><a href="#L335">335</a>}
+</span><span class="l" id="L336"><a href="#L336">336</a>
+</span><span class="l" id="L337"><a href="#L337">337</a>void ble_publish_button(bool pressed)
+</span><span class="l" id="L338"><a href="#L338">338</a>{
+</span><span class="l" id="L339"><a href="#L339">339</a>	(void)thingy_encode_button(pressed, &amp;button_state, 1);
+</span><span class="l" id="L340"><a href="#L340">340</a>	if (subscribed(&amp;ui_svc.attrs[4])) {
+</span><span class="l" id="L341"><a href="#L341">341</a>		(void)bt_gatt_notify(conn_cur, &amp;ui_svc.attrs[4], &amp;button_state, 1);
+</span><span class="l" id="L342"><a href="#L342">342</a>	}
+</span><span class="l" id="L343"><a href="#L343">343</a>}
+</span><span class="l" id="L344"><a href="#L344">344</a>
+</span><span class="l" id="L345"><a href="#L345">345</a>void ble_publish_speaker_done(void)
+</span><span class="l" id="L346"><a href="#L346">346</a>{
+</span><span class="l" id="L347"><a href="#L347">347</a>	const uint8_t finished = 0x00; /* ANNAHME Thingy-Status &quot;finished&quot; */
+</span><span class="l" id="L348"><a href="#L348">348</a>	if (subscribed(&amp;sound_svc.attrs[6])) {
+</span><span class="l" id="L349"><a href="#L349">349</a>		(void)bt_gatt_notify(conn_cur, &amp;sound_svc.attrs[6], &amp;finished, 1);
+</span><span class="l" id="L350"><a href="#L350">350</a>	}
+</span><span class="l" id="L351"><a href="#L351">351</a>}
+</span></pre></body></html>

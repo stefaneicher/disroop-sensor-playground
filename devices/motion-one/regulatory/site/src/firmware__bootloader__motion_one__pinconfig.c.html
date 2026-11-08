@@ -1,0 +1,23 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/bootloader/motion_one/pinconfig.c</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/bootloader/motion_one/pinconfig.c</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>#include &quot;boards.h&quot;
+</span><span class="l" id="L2"><a href="#L2">2</a>#include &quot;uf2/configkeys.h&quot;
+</span><span class="l" id="L3"><a href="#L3">3</a>
+</span><span class="l" id="L4"><a href="#L4">4</a>__attribute__((used, section(&quot;.bootloaderConfig&quot;)))
+</span><span class="l" id="L5"><a href="#L5">5</a>const uint32_t bootloaderConfig[] =
+</span><span class="l" id="L6"><a href="#L6">6</a>{
+</span><span class="l" id="L7"><a href="#L7">7</a>  /* CF2 START */
+</span><span class="l" id="L8"><a href="#L8">8</a>  CFG_MAGIC0, CFG_MAGIC1,                       // magic
+</span><span class="l" id="L9"><a href="#L9">9</a>  5, 100,                                       // used entries, total entries
+</span><span class="l" id="L10"><a href="#L10">10</a>
+</span><span class="l" id="L11"><a href="#L11">11</a>  204, 0x100000,                                // FLASH_BYTES = 0x100000
+</span><span class="l" id="L12"><a href="#L12">12</a>  205, 0x40000,                                 // RAM_BYTES = 0x40000
+</span><span class="l" id="L13"><a href="#L13">13</a>  208, (USB_DESC_VID &lt;&lt; 16) | USB_DESC_UF2_PID, // BOOTLOADER_BOARD_ID = USB VID+PID, used for verification when updating bootloader via uf2
+</span><span class="l" id="L14"><a href="#L14">14</a>  209, 0xada52840,                              // UF2_FAMILY = 0xada52840
+</span><span class="l" id="L15"><a href="#L15">15</a>  210, 0x20,                                    // PINS_PORT_SIZE = PA_32
+</span><span class="l" id="L16"><a href="#L16">16</a>
+</span><span class="l" id="L17"><a href="#L17">17</a>  0, 0, 0, 0, 0, 0, 0, 0
+</span><span class="l" id="L18"><a href="#L18">18</a>  /* CF2 END */
+</span><span class="l" id="L19"><a href="#L19">19</a>};
+</span></pre></body></html>

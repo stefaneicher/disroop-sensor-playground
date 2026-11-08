@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>SDD</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="top"><a href="index.html">Start</a> · <a href="01_Normen.html">Normen</a> · <a href="02_SRS.html">SRS</a> · <a href="03_SAD.html">SAD</a> · <a href="04_SDD.html">SDD</a> · <a href="05_SOUP.html">SOUP</a> · <a href="06_Risiko.html">Risiko</a> · <a href="07_Rueckverfolgbarkeit.html">Rückverfolgbarkeit</a> · <a href="08_Luecken.html">Lücken</a> · <a href="09_Skills.html">Skills</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#sdd-detailentwurf-je-software-einheit"
+id="toc-sdd-detailentwurf-je-software-einheit">SDD: Detailentwurf je
+Software-Einheit</a>
+<ul>
+<li><a href="#unit-01-encoder" id="toc-unit-01-encoder">UNIT-01
+Encoder</a></li>
+<li><a href="#unit-02-parser" id="toc-unit-02-parser">UNIT-02
+Parser</a></li>
+<li><a href="#unit-03-taster-zustandsmaschine"
+id="toc-unit-03-taster-zustandsmaschine">UNIT-03
+Taster-Zustandsmaschine</a></li>
+<li><a href="#unit-04-ratenbegrenzer-ef680380"
+id="toc-unit-04-ratenbegrenzer-ef680380">UNIT-04 Ratenbegrenzer
+<code>EF680380</code></a></li>
+<li><a href="#unit-05-akkuprozent" id="toc-unit-05-akkuprozent">UNIT-05
+Akkuprozent</a></li>
+<li><a href="#unit-06-madgwick-filter"
+id="toc-unit-06-madgwick-filter">UNIT-06 Madgwick-Filter</a></li>
+<li><a href="#unit-07-gyro-bias-kalibrierung"
+id="toc-unit-07-gyro-bias-kalibrierung">UNIT-07
+Gyro-Bias-Kalibrierung</a></li>
+<li><a href="#unit-08-icm-45686-treiber"
+id="toc-unit-08-icm-45686-treiber">UNIT-08 ICM-45686-Treiber</a></li>
+<li><a href="#unit-09-vbat-messung"
+id="toc-unit-09-vbat-messung">UNIT-09 VBAT-Messung</a></li>
+<li><a href="#unit-10-motor-und-arbitrierung"
+id="toc-unit-10-motor-und-arbitrierung">UNIT-10 Motor und
+Arbitrierung</a></li>
+<li><a href="#unit-11-stick-und-touch"
+id="toc-unit-11-stick-und-touch">UNIT-11 Stick und Touch</a></li>
+<li><a href="#unit-12-gatt-advertising-notifications"
+id="toc-unit-12-gatt-advertising-notifications">UNIT-12 GATT,
+Advertising, Notifications</a></li>
+<li><a href="#unit-13-imu-thread" id="toc-unit-13-imu-thread">UNIT-13
+IMU-Thread</a></li>
+<li><a href="#unit-14-ui" id="toc-unit-14-ui">UNIT-14 UI</a></li>
+<li><a href="#unit-15-j5-adapter" id="toc-unit-15-j5-adapter">UNIT-15
+J5-Adapter</a></li>
+<li><a href="#unit-16-akku-adapter"
+id="toc-unit-16-akku-adapter">UNIT-16 Akku-Adapter</a></li>
+<li><a href="#unit-17-main" id="toc-unit-17-main">UNIT-17 Main</a></li>
+<li><a href="#unit-18-frühe-pin-initialisierung"
+id="toc-unit-18-frühe-pin-initialisierung">UNIT-18 Frühe
+Pin-Initialisierung</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="sdd-detailentwurf-je-software-einheit">SDD: Detailentwurf je
+Software-Einheit</h1>
+<p>Für Klasse C verlangt IEC 62304 den Detailentwurf <strong>jeder
+Einheit</strong> (Abschnitt 5.4) mit Schnittstellen, Verhalten,
+Grenzwerten und Fehlerverhalten. Hier rückwärts aus dem Code. Die
+Abkürzung „SCD“ aus dem Auftrag habe ich als <em>Software Component
+Design</em> (Detailentwurf) gelesen. Falls ein anderes Dokument gemeint
+war (z. B. <em>Software Configuration Document</em>), bitte melden.</p>
+<p>Spalte „Test“: <code>Host</code> = hardwarefreier Unit-Test vorhanden
+· <code>keiner</code> = nur auf Hardware prüfbar.</p>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Einheit</th>
+<th>Baustein</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="UNIT-01"></a>UNIT-01</td>
+<td>Encoder (Raw, Quaternion, Euler, Heading, Button, Raw-HR)</td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a></td>
+<td>Host</td>
+</tr>
+<tr class="even">
+<td><a id="UNIT-02"></a>UNIT-02</td>
+<td>Parser (Motion-, Env-, Sound-Config, Ton, LED) und LED-Encoder</td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a></td>
+<td>Host</td>
+</tr>
+<tr class="odd">
+<td><a id="UNIT-03"></a>UNIT-03</td>
+<td>Taster-Zustandsmaschine</td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a></td>
+<td>Host</td>
+</tr>
+<tr class="even">
+<td><a id="UNIT-04"></a>UNIT-04</td>
+<td>Ratenbegrenzer und Encoder <code>EF680380</code></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a></td>
+<td>Host</td>
+</tr>
+<tr class="odd">
+<td><a id="UNIT-05"></a>UNIT-05</td>
+<td>Akkuprozent aus Spannung</td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a></td>
+<td>Host</td>
+</tr>
+<tr class="even">
+<td><a id="UNIT-06"></a>UNIT-06</td>
+<td>Madgwick-Filter, Euler, Heading</td>
+<td><a href="03_SAD.html#SAD-02">SAD-02</a></td>
+<td>Host</td>
+</tr>
+<tr class="odd">
+<td><a id="UNIT-07"></a>UNIT-07</td>
+<td>Gyro-Bias-Kalibrierung</td>
+<td><a href="03_SAD.html#SAD-02">SAD-02</a></td>
+<td>Host</td>
+</tr>
+<tr class="even">
+<td><a id="UNIT-08"></a>UNIT-08</td>
+<td>ICM-45686-Treiber</td>
+<td><a href="03_SAD.html#SAD-03">SAD-03</a></td>
+<td>Host (Fake-Bus)</td>
+</tr>
+<tr class="odd">
+<td><a id="UNIT-09"></a>UNIT-09</td>
+<td>VBAT-Messung</td>
+<td><a href="03_SAD.html#SAD-04">SAD-04</a></td>
+<td>Host</td>
+</tr>
+<tr class="even">
+<td><a id="UNIT-10"></a>UNIT-10</td>
+<td>Motor-Tastgrad und Arbitrierung</td>
+<td><a href="03_SAD.html#SAD-04">SAD-04</a></td>
+<td>Host</td>
+</tr>
+<tr class="odd">
+<td><a id="UNIT-11"></a>UNIT-11</td>
+<td>Stick und Touch</td>
+<td><a href="03_SAD.html#SAD-05">SAD-05</a></td>
+<td>Host</td>
+</tr>
+<tr class="even">
+<td><a id="UNIT-12"></a>UNIT-12</td>
+<td>GATT, Advertising, Notifications</td>
+<td><a href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td>keiner</td>
+</tr>
+<tr class="odd">
+<td><a id="UNIT-13"></a>UNIT-13</td>
+<td>IMU-Thread</td>
+<td><a href="03_SAD.html#SAD-07">SAD-07</a></td>
+<td>keiner</td>
+</tr>
+<tr class="even">
+<td><a id="UNIT-14"></a>UNIT-14</td>
+<td>UI (LED, Summer, Motor, Taster)</td>
+<td><a href="03_SAD.html#SAD-08">SAD-08</a></td>
+<td>keiner</td>
+</tr>
+<tr class="odd">
+<td><a id="UNIT-15"></a>UNIT-15</td>
+<td>J5-Adapter</td>
+<td><a href="03_SAD.html#SAD-09">SAD-09</a></td>
+<td>keiner</td>
+</tr>
+<tr class="even">
+<td><a id="UNIT-16"></a>UNIT-16</td>
+<td>Akku-Adapter</td>
+<td><a href="03_SAD.html#SAD-10">SAD-10</a></td>
+<td>keiner</td>
+</tr>
+<tr class="odd">
+<td><a id="UNIT-17"></a>UNIT-17</td>
+<td>Main, Energieverwaltung</td>
+<td><a href="03_SAD.html#SAD-11">SAD-11</a></td>
+<td>keiner</td>
+</tr>
+<tr class="even">
+<td><a id="UNIT-18"></a>UNIT-18</td>
+<td>Frühe Pin-Initialisierung</td>
+<td><a href="03_SAD.html#SAD-12">SAD-12</a></td>
+<td>keiner</td>
+</tr>
+</tbody>
+</table>
+<h2 id="unit-01-encoder">UNIT-01 Encoder</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__codec__src__thingy_codec.c.html#L33"><code>thingy_encode_raw_motion</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L77"><code>thingy_encode_quaternion</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L89"><code>thingy_encode_euler</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L100"><code>thingy_encode_heading</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L113"><code>thingy_encode_button</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L354"><code>thingy_encode_raw_hr</code></a></li>
+<li><strong>Eingang/Ausgang:</strong> physikalische Werte in
+<code>float</code> → little-endian Bytes. Rückgabe = Anzahl
+geschriebener Bytes oder 0.</li>
+<li><strong>Verhalten:</strong> Skalieren, auf nächsten ganzzahligen
+Wert runden, an den Grenzen des Zieltyps sättigen. Quaternion auf [−2,
+2). Heading auf [0, 360) normalisieren. Raw-HR setzt ein Flag, wenn der
+Wert beim Kodieren geklemmt wird.</li>
+<li><strong>Fehler:</strong> Null-Zeiger oder Puffer zu klein → 0,
+Puffer unverändert (<a href="02_SRS.html#SRS-036">SRS-036</a>).</li>
+<li><strong>Anforderungen:</strong> <a
+href="02_SRS.html#SRS-033">SRS-033</a>, <a
+href="02_SRS.html#SRS-034">SRS-034</a>, <a
+href="02_SRS.html#SRS-035">SRS-035</a>, <a
+href="02_SRS.html#SRS-036">SRS-036</a></li>
+<li><strong>Tests:</strong> <a
+href="src/firmware__tests__test_thingy_codec.c.html#L9"><code>test_bridge_vector_encodes_to_same_bytes</code></a>,
+<a
+href="src/firmware__tests__test_thingy_codec.c.html#L24"><code>test_saturates_at_i16_limits</code></a>,
+<a
+href="src/firmware__tests__test_thingy_codec.c.html#L38"><code>test_rounds_to_nearest</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L19"><code>test_quaternion_saturates</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L179"><code>test_raw_hr_layout_and_flags</code></a></li>
+</ul>
+<h2 id="unit-02-parser">UNIT-02 Parser</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__codec__src__thingy_codec.c.html#L132"><code>thingy_parse_motion_config</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L173"><code>thingy_parse_env_config</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L191"><code>thingy_parse_sound_config</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L207"><code>thingy_parse_speaker_tone</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L226"><code>thingy_parse_led</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L280"><code>thingy_encode_led</code></a></li>
+<li><strong>Eingang:</strong> Rohbytes vom Client.
+<strong>Ausgang:</strong> <code>thingy_status_t</code> (<code>OK</code>,
+<code>ERR_LEN</code>, <code>ERR_RANGE</code>,
+<code>ERR_ARG</code>).</li>
+<li><strong>Verhalten:</strong> Länge prüfen, dann Bereiche (Motion
+5…200 Hz; Sound 1…3/1…2; LED-Mix 1…7, Intensität 1…100, Verzögerung
+50…10000 ms). Lautstärke wird geklemmt statt abgelehnt. Bei Fehler
+bleibt der Ausgang unverändert.</li>
+<li><strong>Abbildung auf ATT:</strong> Länge → „Invalid Attribute Value
+Length“, sonst „Value not allowed“ (<a
+href="src/firmware__app__src__ble_thingy.c.html#L26"><code>att_status</code></a>).</li>
+<li><strong>Anforderungen:</strong> <a
+href="02_SRS.html#SRS-010">SRS-010</a>, <a
+href="02_SRS.html#SRS-012">SRS-012</a>, <a
+href="02_SRS.html#SRS-013">SRS-013</a>, <a
+href="02_SRS.html#SRS-014">SRS-014</a>, <a
+href="02_SRS.html#SRS-015">SRS-015</a></li>
+<li><strong>Tests:</strong> <a
+href="src/firmware__tests__test_thingy_profile.c.html#L71"><code>test_motion_config_rejects_freq_and_len</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L99"><code>test_sound_config</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L154"><code>test_led_rejects_bad_input</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L111"><code>test_speaker_tone_bridge_vector_and_volume_clamp</code></a></li>
+</ul>
+<h2 id="unit-03-taster-zustandsmaschine">UNIT-03
+Taster-Zustandsmaschine</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__codec__src__thingy_codec.c.html#L367"><code>thingy_button_init</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L372"><code>thingy_button_update</code></a></li>
+<li><strong>Zustand:</strong> gedrückt, Langdruck gemeldet, Zeitpunkt
+des Drückens (ms, <code>uint32_t</code>).</li>
+<li><strong>Verhalten:</strong> Beim Drücken Zeit merken. Erreicht die
+Haltezeit 800 ms, genau einmal <code>LONG</code>. Beim Loslassen vor 800
+ms <code>SHORT</code>, nach gemeldetem Langdruck nichts mehr.</li>
+<li><strong>Grenzfall:</strong> Die Zeit ist 32-Bit-Millisekunden und
+läuft nach rund 49,7 Tagen über. Differenzbildung ohne Vorzeichen ist
+umlaufsicher, ein Test dafür fehlt (<a
+href="08_Luecken.html#GAP-10">GAP-10</a>).</li>
+<li><strong>Anforderung:</strong> <a
+href="02_SRS.html#SRS-041">SRS-041</a>. <strong>Tests:</strong> <a
+href="src/firmware__tests__test_thingy_profile.c.html#L191"><code>test_button_short_and_long</code></a></li>
+</ul>
+<h2 id="unit-04-ratenbegrenzer-ef680380">UNIT-04 Ratenbegrenzer
+<code>EF680380</code></h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__codec__src__thingy_codec.c.html#L396"><code>thingy_encode_ui_ext</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L412"><code>ui_ext_next_seq</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L414"><code>ui_ext_rate_init</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L416"><code>ui_ext_rate_mark</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L423"><code>ui_ext_rate_poll</code></a></li>
+<li><strong>Verhalten:</strong> Layout 8 B (Version, Flags, x, y,
+Zähler, 0). x,y auf −100…100 geklemmt. ≤ 20/s, bei Spielmodus (&gt; 50
+Hz) ≤ 10/s. Eine ausstehende Änderung wird nach höchstens 100 ms
+gesendet, keine Flanke geht verloren.</li>
+<li><strong>Anforderung:</strong> <a
+href="02_SRS.html#SRS-065">SRS-065</a>. <strong>Tests:</strong> <a
+href="src/firmware__tests__test_ui_ext.c.html#L9"><code>test_layout_vector</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L41"><code>test_seq_wraps</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L64"><code>test_no_notify_without_change</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L30"><code>test_clamp_and_short_buffer</code></a></li>
+</ul>
+<h2 id="unit-05-akkuprozent">UNIT-05 Akkuprozent</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__codec__src__thingy_codec.c.html#L320"><code>thingy_battery_percent_from_mv</code></a>.
+Stückweise lineare Kurve, Stützpunkte sind ANNAHME (keine Messung am
+Akku).</li>
+<li><strong>Anforderung:</strong> <a
+href="02_SRS.html#SRS-051">SRS-051</a>. <strong>Test:</strong> <a
+href="src/firmware__tests__test_thingy_profile.c.html#L168"><code>test_battery_curve</code></a></li>
+</ul>
+<h2 id="unit-06-madgwick-filter">UNIT-06 Madgwick-Filter</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__fusion__src__motion_fusion.c.html#L11"><code>madgwick_init</code></a>,
+<a
+href="src/firmware__fusion__src__motion_fusion.c.html#L18"><code>madgwick_update</code></a>,
+<a
+href="src/firmware__fusion__src__motion_fusion.c.html#L63"><code>quat_to_euler_deg</code></a>,
+<a
+href="src/firmware__fusion__src__motion_fusion.c.html#L73"><code>heading_from_yaw_deg</code></a></li>
+<li><strong>Zustand:</strong> Einheitsquaternion, β = 0,1
+(ANNAHME).</li>
+<li><strong>Verhalten:</strong> Gyro (°/s → rad/s) integrieren,
+Gradientenkorrektur mit normalisierter Beschleunigung, Quaternion
+normalisieren. Ist die Beschleunigung null, wird nur der Gyro
+integriert. Die abschliessende Normalisierung hat keinen Schutz gegen
+die Norm 0 (<a href="08_Luecken.html#GAP-11">GAP-11</a>).</li>
+<li><strong>Anforderungen:</strong> <a
+href="02_SRS.html#SRS-024">SRS-024</a>, <a
+href="02_SRS.html#SRS-027">SRS-027</a>. <strong>Tests:</strong> <a
+href="src/firmware__tests__test_motion_fusion.c.html#L11"><code>test_static_tilt_converges</code></a>,
+<a
+href="src/firmware__tests__test_motion_fusion.c.html#L26"><code>test_rotation_about_z_integrates</code></a></li>
+<li><strong>Gleitkomma:</strong> <code>float</code> (FPU des nRF52840).
+Reproduzierbarkeit zwischen Compilern: siehe IDEEN.md,
+Compiler-Matrix.</li>
+</ul>
+<h2 id="unit-07-gyro-bias-kalibrierung">UNIT-07
+Gyro-Bias-Kalibrierung</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__fusion__src__motion_fusion.c.html#L79"><code>bias_cal_init</code></a>,
+<a
+href="src/firmware__fusion__src__motion_fusion.c.html#L87"><code>bias_cal_request</code></a>,
+<a
+href="src/firmware__fusion__src__motion_fusion.c.html#L105"><code>bias_cal_feed</code></a>,
+<a
+href="src/firmware__fusion__src__motion_fusion.c.html#L99"><code>bias_cal_is_at_rest</code></a>,
+<a
+href="src/firmware__fusion__src__motion_fusion.c.html#L130"><code>bias_cal_apply</code></a></li>
+<li><strong>Verhalten:</strong> Summiert Gyro-Samples, solange Ruhe
+herrscht (|ω| &lt; 3 °/s, ||a|−1 g| &lt; 0,05 g). Nach
+<code>window</code> (400) Samples gilt der Mittelwert als Bias. Bewegung
+setzt das Fenster zurück. <code>requested</code> ignoriert das
+Beschleunigungskriterium.</li>
+<li><strong>Anforderungen:</strong> <a
+href="02_SRS.html#SRS-025">SRS-025</a>, <a
+href="02_SRS.html#SRS-026">SRS-026</a>.</li>
+<li><strong>Tests:</strong> <a
+href="src/firmware__tests__test_motion_fusion.c.html#L45"><code>test_rest_detection_estimates_and_removes_bias</code></a>,
+<a
+href="src/firmware__tests__test_motion_fusion.c.html#L64"><code>test_motion_resets_window</code></a>,
+<a
+href="src/firmware__tests__test_motion_fusion.c.html#L83"><code>test_button_request_ignores_accel_criterion</code></a>,
+<a
+href="src/firmware__tests__test_motion_fusion.c.html#L102"><code>test_bias_corrected_static_has_no_yaw_drift</code></a></li>
+<li><strong>Risiko:</strong> Die Ruheschwelle von 3 °/s ist gross: Dreht
+das Gerät ein Sekunde lang gleichmässig mit knapp 3 °/s, wird dieser
+Wert als Bias übernommen und <code>fusion_ok</code> gesetzt. Das ergäbe
+rechnerisch bis zu 180° Yaw-Drift pro Minute (BERECHNUNG 3 °/s × 60 s).
+Beim erzwungenen Ablauf (Taster) entfällt zusätzlich das
+Beschleunigungskriterium. Siehe <a
+href="06_Risiko.html#HAZ-01">HAZ-01</a>.</li>
+</ul>
+<h2 id="unit-08-icm-45686-treiber">UNIT-08 ICM-45686-Treiber</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__icm__src__icm45686.c.html#L67"><code>icm45686_init</code></a>,
+<a
+href="src/firmware__icm__src__icm45686.c.html#L95"><code>icm45686_fifo_count</code></a>,
+<a
+href="src/firmware__icm__src__icm45686.c.html#L9"><code>icm45686_parse_frame</code></a>,
+<a
+href="src/firmware__icm__src__icm45686.c.html#L105"><code>icm45686_enter_wom</code></a>,
+<a
+href="src/firmware__icm__src__icm45686.c.html#L134"><code>icm45686_exit_wom</code></a>,
+<a
+href="src/firmware__icm__src__icm45686.c.html#L40"><code>icm45686_ireg_write</code></a></li>
+<li><strong>Port:</strong> <code>icm_bus_t</code> mit
+<code>write</code>, <code>read</code>, <code>delay_us</code>. Auf dem
+Gerät SPI (<a
+href="src/firmware__app__src__imu_task.c.html#L25"><code>bus_write</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L33"><code>bus_read</code></a>),
+im Test ein Fake.</li>
+<li><strong>Init-Ablauf:</strong> Soft-Reset, <code>WHO_AM_I</code>
+prüfen (0xE9), ODR 400 Hz, ±32 g / ±4000 °/s, FIFO-Stream mit Watermark,
+INT1 auf FIFO-Schwelle, Low-Noise-Modus.</li>
+<li><strong>Fehler:</strong> <code>ICM_ERR_BUS</code>,
+<code>ICM_ERR_WHOAMI</code>. Der Aufrufer (<a
+href="src/firmware__app__src__imu_task.c.html#L130"><code>imu_task_start</code></a>)
+loggt und gibt <code>-EIO</code> zurück.</li>
+<li><strong>Offen:</strong> Registerwerte stammen aus den
+TDK-Referenzquellen, <strong>nicht</strong> aus dem Datenblatt (<a
+href="08_Luecken.html#GAP-12">GAP-12</a>).</li>
+<li><strong>Anforderungen:</strong> <a
+href="02_SRS.html#SRS-020">SRS-020</a>, <a
+href="02_SRS.html#SRS-021">SRS-021</a>, <a
+href="02_SRS.html#SRS-022">SRS-022</a>, <a
+href="02_SRS.html#SRS-023">SRS-023</a>, <a
+href="02_SRS.html#SRS-053">SRS-053</a>.</li>
+<li><strong>Tests:</strong> <a
+href="src/firmware__tests__test_icm45686.c.html#L112"><code>test_init_sequence</code></a>,
+<a
+href="src/firmware__tests__test_icm45686.c.html#L137"><code>test_init_wrong_whoami_and_bus_error</code></a>,
+<a
+href="src/firmware__tests__test_icm45686.c.html#L146"><code>test_fifo_count</code></a>,
+<a
+href="src/firmware__tests__test_icm45686.c.html#L99"><code>test_parse_frame_rejects_invalid</code></a></li>
+</ul>
+<h2 id="unit-09-vbat-messung">UNIT-09 VBAT-Messung</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__power__src__vbat.c.html#L3"><code>vbat_scale_mv</code></a>,
+<a
+href="src/firmware__power__src__vbat.c.html#L12"><code>vbat_measure</code></a></li>
+<li><strong>Ablauf:</strong> Teiler an → ≥ 25 ms warten → ADC → Teiler
+<strong>immer</strong> aus → skalieren (num/den, auf 0…65535 begrenzt).
+Bei ADC-Fehler ist der Ausgabewert 0.</li>
+<li><strong>Anforderung:</strong> <a
+href="02_SRS.html#SRS-050">SRS-050</a>. <strong>Tests:</strong> siehe
+SRS-050.</li>
+</ul>
+<h2 id="unit-10-motor-und-arbitrierung">UNIT-10 Motor und
+Arbitrierung</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__power__src__motor_drive.c.html#L3"><code>motor_supply_mv</code></a>,
+<a
+href="src/firmware__power__src__motor_drive.c.html#L14"><code>motor_duty_permille</code></a>,
+<a
+href="src/firmware__power__src__motor_drive.c.html#L25"><code>load_arbitrate</code></a>,
+<a
+href="src/firmware__power__src__motor_drive.c.html#L33"><code>motor_vbus_peak_ma</code></a></li>
+<li><strong>Verhalten:</strong> Tastgrad = 3000 mV / Versorgung
+(abgerundet, höchstens 1000 ‰). Versorgung 0 → USB-Worst-Case. Summer
+vor Motor.</li>
+<li><strong>Anforderungen:</strong> <a
+href="02_SRS.html#SRS-043">SRS-043</a>, <a
+href="02_SRS.html#SRS-044">SRS-044</a>. <strong>Tests:</strong> <a
+href="src/firmware__tests__test_motor_drive.c.html#L11"><code>test_duty_is_target_over_supply</code></a>,
+<a
+href="src/firmware__tests__test_motor_drive.c.html#L78"><code>test_arbitration_none</code></a>,
+<a
+href="src/firmware__tests__test_motor_drive.c.html#L43"><code>test_supply_no_or_implausible_measurement_uses_vbat_max</code></a></li>
+</ul>
+<h2 id="unit-11-stick-und-touch">UNIT-11 Stick und Touch</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__input__src__ext_input.c.html#L4"><code>ext_board_present</code></a>,
+<a
+href="src/firmware__input__src__ext_input.c.html#L11"><code>stick_axis_cal_init</code></a>,
+<a
+href="src/firmware__input__src__ext_input.c.html#L18"><code>stick_axis_cal_center</code></a>,
+<a
+href="src/firmware__input__src__ext_input.c.html#L35"><code>stick_axis_scale</code></a>,
+<a
+href="src/firmware__input__src__ext_input.c.html#L59"><code>ext_btn_pressed</code></a>,
+<a
+href="src/firmware__input__src__ext_input.c.html#L61"><code>stick_next_poll_ms</code></a>,
+<a
+href="src/firmware__input__src__ext_input.c.html#L74"><code>touch_init</code></a>,
+<a
+href="src/firmware__input__src__ext_input.c.html#L76"><code>touch_update</code></a></li>
+<li><strong>Anforderungen:</strong> <a
+href="02_SRS.html#SRS-060">SRS-060</a>…<a
+href="02_SRS.html#SRS-064">SRS-064</a>. <strong>Tests:</strong> siehe
+SRS-060 bis 064.</li>
+</ul>
+<h2 id="unit-12-gatt-advertising-notifications">UNIT-12 GATT,
+Advertising, Notifications</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__app__src__ble_thingy.c.html#L248"><code>ble_thingy_init</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L290"><code>ble_publish_motion</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L337"><code>ble_publish_button</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L329"><code>ble_publish_ui_ext</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L279"><code>ble_motion_wanted</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L266"><code>ble_get_motion_config</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L273"><code>subscribed</code></a></li>
+<li><strong>Verhalten:</strong> Lese-/Schreib-Handler rufen die Parser
+aus UNIT-02. Notifications nur, wenn der Client abonniert hat.
+Rückgabewerte von <code>bt_gatt_notify</code> werden verworfen (<a
+href="06_Risiko.html#HAZ-09">HAZ-09</a>).</li>
+<li><strong>Nebenläufigkeit:</strong> <code>motion_cfg</code> ist durch
+<code>cfg_lock</code> geschützt, <code>led_cmd</code>,
+<code>env_cfg</code> und <code>sound_cfg</code> nicht (<a
+href="08_Luecken.html#GAP-09">GAP-09</a>).</li>
+<li><strong>Anforderungen:</strong> <a
+href="02_SRS.html#SRS-001">SRS-001</a>…<a
+href="02_SRS.html#SRS-005">SRS-005</a>, <a
+href="02_SRS.html#SRS-010">SRS-010</a>…<a
+href="02_SRS.html#SRS-016">SRS-016</a>, <a
+href="02_SRS.html#SRS-030">SRS-030</a>…<a
+href="02_SRS.html#SRS-032">SRS-032</a>. <strong>Tests:</strong>
+keine.</li>
+</ul>
+<h2 id="unit-13-imu-thread">UNIT-13 IMU-Thread</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__app__src__imu_task.c.html#L130"><code>imu_task_start</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L102"><code>imu_thread</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L76"><code>process</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L67"><code>imu_enter_wake_on_motion</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L62"><code>imu_at_rest_for_s</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L56"><code>imu_request_calibration</code></a></li>
+<li><strong>Ablauf je Schleife:</strong> auf INT1 oder 100 ms warten →
+Konfiguration holen → Dezimierung = 400 / <code>motion_freq_hz</code> →
+FIFO-Anzahl lesen → höchstens 16 Frames lesen → je Frame parsen und <a
+href="src/firmware__app__src__imu_task.c.html#L76"><code>process</code></a>
+aufrufen.</li>
+<li><strong>Fehlerverhalten:</strong> Lesefehler → Schleife fährt fort
+(<code>continue</code>), <strong>kein Zähler, keine Meldung</strong> (<a
+href="06_Risiko.html#HAZ-02">HAZ-02</a>). Mehr als 16 Frames im FIFO →
+Rest bleibt für die nächste Runde, ein Überlauf wird nicht erkannt.</li>
+<li><strong>Anforderungen:</strong> <a
+href="02_SRS.html#SRS-020">SRS-020</a>, <a
+href="02_SRS.html#SRS-024">SRS-024</a>…<a
+href="02_SRS.html#SRS-026">SRS-026</a>, <a
+href="02_SRS.html#SRS-031">SRS-031</a>, <a
+href="02_SRS.html#SRS-053">SRS-053</a>. <strong>Tests:</strong>
+keine.</li>
+</ul>
+<h2 id="unit-14-ui">UNIT-14 UI</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__app__src__ui.c.html#L182"><code>ui_init</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L56"><code>ui_led_apply</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L111"><code>ui_speaker_tone</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L138"><code>ui_vibrate_ms</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L177"><code>ui_arm_button_wakeup</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L150"><code>btn_poll</code></a></li>
+<li><strong>Nebenläufigkeit:</strong> <code>load_lock</code> schützt die
+Last-Zustände (Summer/Motor). Der Taster läuft über verzögerte Arbeit
+der System-Workqueue.</li>
+<li><strong>Anforderungen:</strong> <a
+href="02_SRS.html#SRS-014">SRS-014</a>, <a
+href="02_SRS.html#SRS-015">SRS-015</a>, <a
+href="02_SRS.html#SRS-040">SRS-040</a>…<a
+href="02_SRS.html#SRS-044">SRS-044</a>. <strong>Tests:</strong>
+keine.</li>
+</ul>
+<h2 id="unit-15-j5-adapter">UNIT-15 J5-Adapter</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__app__src__ext.c.html#L106"><code>ext_input_start</code></a>,
+<a
+href="src/firmware__app__src__ext.c.html#L144"><code>ext_input_suspend</code></a>,
+<a
+href="src/firmware__app__src__ext.c.html#L196"><code>ext_publish_stick</code></a>,
+<a
+href="src/firmware__app__src__ext.c.html#L201"><code>ext_publish_touch</code></a>,
+<a
+href="src/firmware__app__src__ext.c.html#L194"><code>ext_ui_subscribed</code></a>,
+<a
+href="src/firmware__app__src__ext.c.html#L60"><code>stick_poll</code></a>,
+<a
+href="src/firmware__app__src__ext.c.html#L85"><code>touch_eval</code></a></li>
+<li><strong>Anforderungen:</strong> <a
+href="02_SRS.html#SRS-060">SRS-060</a>…<a
+href="02_SRS.html#SRS-065">SRS-065</a>. <strong>Tests:</strong> keine
+(Logik in UNIT-11 und UNIT-04).</li>
+</ul>
+<h2 id="unit-16-akku-adapter">UNIT-16 Akku-Adapter</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__app__src__battery.c.html#L32"><code>battery_init</code></a>,
+<a
+href="src/firmware__app__src__battery.c.html#L43"><code>battery_read_mv</code></a>,
+<a
+href="src/firmware__app__src__battery.c.html#L51"><code>battery_last_mv</code></a>.
+Hält die letzte Messung atomar für die Motor-Versorgung.</li>
+<li><strong>Anforderung:</strong> <a
+href="02_SRS.html#SRS-050">SRS-050</a>. <strong>Tests:</strong>
+keine.</li>
+</ul>
+<h2 id="unit-17-main">UNIT-17 Main</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__app__src__main.c.html#L8"><code>main</code></a>, <a
+href="src/firmware__app__src__main.c.html#L24"><code>update_battery</code></a>,
+<a
+href="src/firmware__app__src__main.c.html#L13"><code>power_off</code></a></li>
+<li><strong>Ablauf:</strong> Init UI/Akku → Akku messen → BLE-Init
+(Fehler: <code>main</code> endet) → IMU-Start → J5-Start →
+Endlosschleife 1 s: alle 60 s Akku, bei Ruhe ohne Verbindung System
+OFF.</li>
+<li><strong>Fehlerverhalten:</strong> Fehler aus <code>ui_init</code>,
+<code>battery_init</code>, <code>imu_task_start</code>,
+<code>ext_input_start</code> werden nur geloggt (<a
+href="02_SRS.html#SRS-070">SRS-070</a>).</li>
+<li><strong>Anforderungen:</strong> <a
+href="02_SRS.html#SRS-050">SRS-050</a>…<a
+href="02_SRS.html#SRS-053">SRS-053</a>, <a
+href="02_SRS.html#SRS-070">SRS-070</a>. <strong>Tests:</strong>
+keine.</li>
+</ul>
+<h2 id="unit-18-frühe-pin-initialisierung">UNIT-18 Frühe
+Pin-Initialisierung</h2>
+<ul>
+<li><strong>Code:</strong> <a
+href="src/firmware__app__src__board_early.c.html#L12"><code>board_early_init</code></a>.
+Setzt den IMU-CS vor dem Treiberstart auf high.
+<strong>Anforderung:</strong> <a href="02_SRS.html#SRS-054">SRS-054</a>.
+<strong>Tests:</strong> keine.</li>
+</ul>
+</body>
+</html>

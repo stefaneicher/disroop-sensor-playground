@@ -1,0 +1,28 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/power/include/vbat.h</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/power/include/vbat.h</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* VBAT-Messung ueber schaltbaren Teiler (PINOUT_V1: VBAT_EN P0.05, VBAT_ADC AIN2, 100k/100k).
+</span><span class="l" id="L2"><a href="#L2">2</a> * Reines C ohne Zephyr; Hardware ueber Port. */
+</span><span class="l" id="L3"><a href="#L3">3</a>#ifndef VBAT_H
+</span><span class="l" id="L4"><a href="#L4">4</a>#define VBAT_H
+</span><span class="l" id="L5"><a href="#L5">5</a>
+</span><span class="l" id="L6"><a href="#L6">6</a>#include &lt;stdint.h&gt;
+</span><span class="l" id="L7"><a href="#L7">7</a>
+</span><span class="l" id="L8"><a href="#L8">8</a>/* QUELLE PINOUT_V1.json/PCB-Handoff 2026-11-07: Freigabe &gt;= 25 ms vor Messung (tau 5 ms, 5 tau -&gt; &lt; 1 %). */
+</span><span class="l" id="L9"><a href="#L9">9</a>#define VBAT_SETTLE_MS 25u
+</span><span class="l" id="L10"><a href="#L10">10</a>
+</span><span class="l" id="L11"><a href="#L11">11</a>typedef struct {
+</span><span class="l" id="L12"><a href="#L12">12</a>	void *ctx;
+</span><span class="l" id="L13"><a href="#L13">13</a>	int (*set_enable)(void *ctx, int on);
+</span><span class="l" id="L14"><a href="#L14">14</a>	void (*sleep_ms)(void *ctx, uint32_t ms);
+</span><span class="l" id="L15"><a href="#L15">15</a>	int (*read_adc_mv)(void *ctx, int32_t *mv);
+</span><span class="l" id="L16"><a href="#L16">16</a>} vbat_port_t;
+</span><span class="l" id="L17"><a href="#L17">17</a>
+</span><span class="l" id="L18"><a href="#L18">18</a>/* adc_mv * num / den, geklemmt auf 0..UINT16_MAX; den == 0 -&gt; 0. */
+</span><span class="l" id="L19"><a href="#L19">19</a>uint16_t vbat_scale_mv(int32_t adc_mv, uint32_t num, uint32_t den);
+</span><span class="l" id="L20"><a href="#L20">20</a>
+</span><span class="l" id="L21"><a href="#L21">21</a>/* EN an, &gt;= VBAT_SETTLE_MS warten, ADC lesen, EN immer aus. 0 = ok; Fehler -&gt; *mv_out = 0. */
+</span><span class="l" id="L22"><a href="#L22">22</a>int vbat_measure(const vbat_port_t *p, uint32_t num, uint32_t den, uint16_t *mv_out);
+</span><span class="l" id="L23"><a href="#L23">23</a>
+</span><span class="l" id="L24"><a href="#L24">24</a>#endif
+</span></pre></body></html>

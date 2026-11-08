@@ -1,0 +1,55 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/input/include/ext_input.h</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/input/include/ext_input.h</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* r4 Erweiterung J5: Daumenstick (EXT1 X/AIN5, EXT2 Y/AIN6), EXT3 AIN7 frei, EXT4 AIN1 Stick-Taste
+</span><span class="l" id="L2"><a href="#L2">2</a> * (aktiv low, Pull-up), EXT5 P1.11 Touch TTP233H (aktiv high). Reines C, Host-getestet. */
+</span><span class="l" id="L3"><a href="#L3">3</a>#ifndef EXT_INPUT_H
+</span><span class="l" id="L4"><a href="#L4">4</a>#define EXT_INPUT_H
+</span><span class="l" id="L5"><a href="#L5">5</a>
+</span><span class="l" id="L6"><a href="#L6">6</a>#include &lt;stdbool.h&gt;
+</span><span class="l" id="L7"><a href="#L7">7</a>#include &lt;stddef.h&gt;
+</span><span class="l" id="L8"><a href="#L8">8</a>#include &lt;stdint.h&gt;
+</span><span class="l" id="L9"><a href="#L9">9</a>
+</span><span class="l" id="L10"><a href="#L10">10</a>#define EXT_FULL_MV 3300u           /* QUELLE PINOUT r4: Stick 0..3V3 */
+</span><span class="l" id="L11"><a href="#L11">11</a>#define EXT_PROBE_FLOAT_MV 1500u    /* BERECHNUNG: Stick (&lt;=2.6 kOhm Quelle) verschiebt sich mit 13k-Pull um &lt;= 0.6 V, offen ~3.3 V */
+</span><span class="l" id="L12"><a href="#L12">12</a>#define EXT_BTN_PRESSED_MV 1000u    /* ANNAHME: Taste zieht AIN1 gegen GND */
+</span><span class="l" id="L13"><a href="#L13">13</a>#define EXT_DEADZONE_PCT 8u         /* ANNAHME */
+</span><span class="l" id="L14"><a href="#L14">14</a>#define EXT_POLL_IDLE_MS 500u       /* ANNAHME: Ruhe-Abtastung */
+</span><span class="l" id="L15"><a href="#L15">15</a>#define EXT_POLL_ACTIVE_MS 50u      /* 20 Hz bei Bewegung, ANNAHME */
+</span><span class="l" id="L16"><a href="#L16">16</a>#define EXT_ACTIVE_HOLD_MS 2000u
+</span><span class="l" id="L17"><a href="#L17">17</a>#define TOUCH_DEBOUNCE_MS 30u
+</span><span class="l" id="L18"><a href="#L18">18</a>#define TOUCH_SPAM_EDGES 10u        /* &gt; 10 Flanken pro 1 s -&gt; Eingang offen/gestoert */
+</span><span class="l" id="L19"><a href="#L19">19</a>#define TOUCH_LOCKOUT_MS 10000u
+</span><span class="l" id="L20"><a href="#L20">20</a>
+</span><span class="l" id="L21"><a href="#L21">21</a>/* Bedienplatine vorhanden? Wiper-Spannung mit internem Pull-up bzw. Pull-down gemessen. */
+</span><span class="l" id="L22"><a href="#L22">22</a>bool ext_board_present(uint16_t mv_pullup, uint16_t mv_pulldown);
+</span><span class="l" id="L23"><a href="#L23">23</a>
+</span><span class="l" id="L24"><a href="#L24">24</a>typedef struct {
+</span><span class="l" id="L25"><a href="#L25">25</a>	uint16_t center_mv, min_mv, max_mv;
+</span><span class="l" id="L26"><a href="#L26">26</a>} stick_axis_cal_t;
+</span><span class="l" id="L27"><a href="#L27">27</a>void stick_axis_cal_init(stick_axis_cal_t *c);
+</span><span class="l" id="L28"><a href="#L28">28</a>/* Mittelwert von n Ruhe-Samples als Mitte; nur 30..70 % des Bereichs gueltig, sonst unveraendert -&gt; false. */
+</span><span class="l" id="L29"><a href="#L29">29</a>bool stick_axis_cal_center(stick_axis_cal_t *c, const uint16_t *s, size_t n);
+</span><span class="l" id="L30"><a href="#L30">30</a>/* -100..100 %, Totzone um die Mitte, ausserhalb linear auf 0..100 nachskaliert. */
+</span><span class="l" id="L31"><a href="#L31">31</a>int8_t stick_axis_scale(const stick_axis_cal_t *c, uint16_t mv, uint8_t deadzone_pct);
+</span><span class="l" id="L32"><a href="#L32">32</a>bool ext_btn_pressed(uint16_t mv);
+</span><span class="l" id="L33"><a href="#L33">33</a>
+</span><span class="l" id="L34"><a href="#L34">34</a>typedef struct {
+</span><span class="l" id="L35"><a href="#L35">35</a>	uint32_t last_active_ms;
+</span><span class="l" id="L36"><a href="#L36">36</a>	bool ever_active;
+</span><span class="l" id="L37"><a href="#L37">37</a>} stick_poll_t;
+</span><span class="l" id="L38"><a href="#L38">38</a>/* Naechstes Abtastintervall: aktiv (Auslenkung/Taste/Touch) -&gt; 50 ms, bis 2 s danach, sonst 500 ms. */
+</span><span class="l" id="L39"><a href="#L39">39</a>uint32_t stick_next_poll_ms(stick_poll_t *p, int8_t x, int8_t y, bool active_input, uint32_t now_ms);
+</span><span class="l" id="L40"><a href="#L40">40</a>
+</span><span class="l" id="L41"><a href="#L41">41</a>typedef enum { TOUCH_EVT_NONE, TOUCH_EVT_DOWN, TOUCH_EVT_UP } touch_evt_t;
+</span><span class="l" id="L42"><a href="#L42">42</a>typedef struct {
+</span><span class="l" id="L43"><a href="#L43">43</a>	bool stable, raw, locked;
+</span><span class="l" id="L44"><a href="#L44">44</a>	uint32_t t_change, win_start, edges, lock_until;
+</span><span class="l" id="L45"><a href="#L45">45</a>} touch_t;
+</span><span class="l" id="L46"><a href="#L46">46</a>void touch_init(touch_t *t);
+</span><span class="l" id="L47"><a href="#L47">47</a>/* Bei jeder Flanke und nach TOUCH_DEBOUNCE_MS erneut aufrufen. Ereignis nur bei stabilem Wechsel;
+</span><span class="l" id="L48"><a href="#L48">48</a> * Flankenflut (offener Eingang) sperrt TOUCH_LOCKOUT_MS. */
+</span><span class="l" id="L49"><a href="#L49">49</a>touch_evt_t touch_update(touch_t *t, bool level, uint32_t now_ms);
+</span><span class="l" id="L50"><a href="#L50">50</a>
+</span><span class="l" id="L51"><a href="#L51">51</a>#endif
+</span></pre></body></html>

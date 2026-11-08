@@ -1,0 +1,216 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/boards/disroop/motion_one/motion_one-pins.dtsi</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/boards/disroop/motion_one/motion_one-pins.dtsi</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/*
+</span><span class="l" id="L2"><a href="#L2">2</a> * EINZIGE Datei mit Pinbelegung fuer Motion One V1.
+</span><span class="l" id="L3"><a href="#L3">3</a> * QUELLE: devices/motion-one/electronics/PINOUT_V1.json (revision r4,
+</span><span class="l" id="L4"><a href="#L4">4</a> *         sha256 132ac85436ab8b2bb6b5bffa5dbf85fc9524f2b3eff0b1ed6bde9a1ddc3e8e28).
+</span><span class="l" id="L5"><a href="#L5">5</a> * Jede Pinzeile traegt ein Tag &quot;PINOUT:&lt;signal&gt;&quot;; firmware/scripts/check_pinout.py
+</span><span class="l" id="L6"><a href="#L6">6</a> * gleicht Tag, Port/Pin und Polaritaet gegen PINOUT_V1.json ab (make pincheck).
+</span><span class="l" id="L7"><a href="#L7">7</a> * Nicht als GPIO genutzt: XL1/XL2 (32k-Quarz, lfclk), NRESET P0.18 (uicr gpio-as-nreset),
+</span><span class="l" id="L8"><a href="#L8">8</a> * VBUS/USB D+/D- (USBD), SWDIO/SWCLK. Kein UART-Pin herausgefuehrt -&gt; uart0 aus.
+</span><span class="l" id="L9"><a href="#L9">9</a> */
+</span><span class="l" id="L10"><a href="#L10">10</a>
+</span><span class="l" id="L11"><a href="#L11">11</a>&amp;pinctrl {
+</span><span class="l" id="L12"><a href="#L12">12</a>	spi3_default: spi3_default {
+</span><span class="l" id="L13"><a href="#L13">13</a>		group1 {
+</span><span class="l" id="L14"><a href="#L14">14</a>			psels = &lt;NRF_PSEL(SPIM_SCK, 0, 6)&gt;,  /* PINOUT:IMU_SCK */
+</span><span class="l" id="L15"><a href="#L15">15</a>				&lt;NRF_PSEL(SPIM_MOSI, 0, 8)&gt;, /* PINOUT:IMU_MOSI */
+</span><span class="l" id="L16"><a href="#L16">16</a>				&lt;NRF_PSEL(SPIM_MISO, 1, 9)&gt;; /* PINOUT:IMU_MISO */
+</span><span class="l" id="L17"><a href="#L17">17</a>		};
+</span><span class="l" id="L18"><a href="#L18">18</a>	};
+</span><span class="l" id="L19"><a href="#L19">19</a>	spi3_sleep: spi3_sleep {
+</span><span class="l" id="L20"><a href="#L20">20</a>		group1 {
+</span><span class="l" id="L21"><a href="#L21">21</a>			psels = &lt;NRF_PSEL(SPIM_SCK, 0, 6)&gt;, &lt;NRF_PSEL(SPIM_MOSI, 0, 8)&gt;,
+</span><span class="l" id="L22"><a href="#L22">22</a>				&lt;NRF_PSEL(SPIM_MISO, 1, 9)&gt;;
+</span><span class="l" id="L23"><a href="#L23">23</a>			low-power-enable;
+</span><span class="l" id="L24"><a href="#L24">24</a>		};
+</span><span class="l" id="L25"><a href="#L25">25</a>	};
+</span><span class="l" id="L26"><a href="#L26">26</a>	/* LEDs Common-Anode an 3V3, aktiv low: nordic,invert -&gt; Ruhepegel high (aus) */
+</span><span class="l" id="L27"><a href="#L27">27</a>	pwm0_default: pwm0_default {
+</span><span class="l" id="L28"><a href="#L28">28</a>		group1 {
+</span><span class="l" id="L29"><a href="#L29">29</a>			psels = &lt;NRF_PSEL(PWM_OUT0, 0, 15)&gt;, /* PINOUT:LED_R */
+</span><span class="l" id="L30"><a href="#L30">30</a>				&lt;NRF_PSEL(PWM_OUT1, 0, 17)&gt;, /* PINOUT:LED_G */
+</span><span class="l" id="L31"><a href="#L31">31</a>				&lt;NRF_PSEL(PWM_OUT2, 1, 10)&gt;; /* PINOUT:LED_B */
+</span><span class="l" id="L32"><a href="#L32">32</a>			nordic,invert;
+</span><span class="l" id="L33"><a href="#L33">33</a>		};
+</span><span class="l" id="L34"><a href="#L34">34</a>	};
+</span><span class="l" id="L35"><a href="#L35">35</a>	pwm0_sleep: pwm0_sleep {
+</span><span class="l" id="L36"><a href="#L36">36</a>		group1 {
+</span><span class="l" id="L37"><a href="#L37">37</a>			psels = &lt;NRF_PSEL(PWM_OUT0, 0, 15)&gt;, &lt;NRF_PSEL(PWM_OUT1, 0, 17)&gt;,
+</span><span class="l" id="L38"><a href="#L38">38</a>				&lt;NRF_PSEL(PWM_OUT2, 1, 10)&gt;;
+</span><span class="l" id="L39"><a href="#L39">39</a>			low-power-enable;
+</span><span class="l" id="L40"><a href="#L40">40</a>		};
+</span><span class="l" id="L41"><a href="#L41">41</a>	};
+</span><span class="l" id="L42"><a href="#L42">42</a>	pwm1_default: pwm1_default {
+</span><span class="l" id="L43"><a href="#L43">43</a>		group1 {
+</span><span class="l" id="L44"><a href="#L44">44</a>			psels = &lt;NRF_PSEL(PWM_OUT0, 0, 2)&gt;; /* PINOUT:BUZ_PWM */
+</span><span class="l" id="L45"><a href="#L45">45</a>		};
+</span><span class="l" id="L46"><a href="#L46">46</a>	};
+</span><span class="l" id="L47"><a href="#L47">47</a>	pwm1_sleep: pwm1_sleep {
+</span><span class="l" id="L48"><a href="#L48">48</a>		group1 {
+</span><span class="l" id="L49"><a href="#L49">49</a>			psels = &lt;NRF_PSEL(PWM_OUT0, 0, 2)&gt;;
+</span><span class="l" id="L50"><a href="#L50">50</a>			low-power-enable;
+</span><span class="l" id="L51"><a href="#L51">51</a>		};
+</span><span class="l" id="L52"><a href="#L52">52</a>	};
+</span><span class="l" id="L53"><a href="#L53">53</a>	/* F-12: Motor per PWM (eigene Instanz, da Summer die Periode von pwm1 aendert) */
+</span><span class="l" id="L54"><a href="#L54">54</a>	pwm2_default: pwm2_default {
+</span><span class="l" id="L55"><a href="#L55">55</a>		group1 {
+</span><span class="l" id="L56"><a href="#L56">56</a>			psels = &lt;NRF_PSEL(PWM_OUT0, 1, 13)&gt;; /* PINOUT:MOT_EN */
+</span><span class="l" id="L57"><a href="#L57">57</a>		};
+</span><span class="l" id="L58"><a href="#L58">58</a>	};
+</span><span class="l" id="L59"><a href="#L59">59</a>	pwm2_sleep: pwm2_sleep {
+</span><span class="l" id="L60"><a href="#L60">60</a>		group1 {
+</span><span class="l" id="L61"><a href="#L61">61</a>			psels = &lt;NRF_PSEL(PWM_OUT0, 1, 13)&gt;;
+</span><span class="l" id="L62"><a href="#L62">62</a>			low-power-enable;
+</span><span class="l" id="L63"><a href="#L63">63</a>		};
+</span><span class="l" id="L64"><a href="#L64">64</a>	};
+</span><span class="l" id="L65"><a href="#L65">65</a>};
+</span><span class="l" id="L66"><a href="#L66">66</a>
+</span><span class="l" id="L67"><a href="#L67">67</a>&amp;spi3 {
+</span><span class="l" id="L68"><a href="#L68">68</a>	compatible = &quot;nordic,nrf-spim&quot;;
+</span><span class="l" id="L69"><a href="#L69">69</a>	status = &quot;okay&quot;;
+</span><span class="l" id="L70"><a href="#L70">70</a>	pinctrl-0 = &lt;&amp;spi3_default&gt;;
+</span><span class="l" id="L71"><a href="#L71">71</a>	pinctrl-1 = &lt;&amp;spi3_sleep&gt;;
+</span><span class="l" id="L72"><a href="#L72">72</a>	pinctrl-names = &quot;default&quot;, &quot;sleep&quot;;
+</span><span class="l" id="L73"><a href="#L73">73</a>	cs-gpios = &lt;&amp;gpio0 12 GPIO_ACTIVE_LOW&gt;; /* PINOUT:IMU_CS (Boot: sofort high, app/src/board_early.c) */
+</span><span class="l" id="L74"><a href="#L74">74</a>
+</span><span class="l" id="L75"><a href="#L75">75</a>	imu: icm45686@0 {
+</span><span class="l" id="L76"><a href="#L76">76</a>		compatible = &quot;disroop,icm45686&quot;;
+</span><span class="l" id="L77"><a href="#L77">77</a>		reg = &lt;0&gt;;
+</span><span class="l" id="L78"><a href="#L78">78</a>		spi-max-frequency = &lt;8000000&gt;; /* PCB-Hinweis: 8 MHz (ICM max. 24 MHz, QUELLE hal_tdk) */
+</span><span class="l" id="L79"><a href="#L79">79</a>		int1-gpios = &lt;&amp;gpio0 7 GPIO_ACTIVE_HIGH&gt;; /* PINOUT:IMU_INT1 push-pull */
+</span><span class="l" id="L80"><a href="#L80">80</a>		int2-gpios = &lt;&amp;gpio0 26 GPIO_ACTIVE_HIGH&gt;; /* PINOUT:IMU_INT2 push-pull, derzeit ungenutzt */
+</span><span class="l" id="L81"><a href="#L81">81</a>	};
+</span><span class="l" id="L82"><a href="#L82">82</a>};
+</span><span class="l" id="L83"><a href="#L83">83</a>
+</span><span class="l" id="L84"><a href="#L84">84</a>&amp;pwm0 {
+</span><span class="l" id="L85"><a href="#L85">85</a>	status = &quot;okay&quot;;
+</span><span class="l" id="L86"><a href="#L86">86</a>	pinctrl-0 = &lt;&amp;pwm0_default&gt;;
+</span><span class="l" id="L87"><a href="#L87">87</a>	pinctrl-1 = &lt;&amp;pwm0_sleep&gt;;
+</span><span class="l" id="L88"><a href="#L88">88</a>	pinctrl-names = &quot;default&quot;, &quot;sleep&quot;;
+</span><span class="l" id="L89"><a href="#L89">89</a>};
+</span><span class="l" id="L90"><a href="#L90">90</a>
+</span><span class="l" id="L91"><a href="#L91">91</a>&amp;pwm1 {
+</span><span class="l" id="L92"><a href="#L92">92</a>	status = &quot;okay&quot;;
+</span><span class="l" id="L93"><a href="#L93">93</a>	pinctrl-0 = &lt;&amp;pwm1_default&gt;;
+</span><span class="l" id="L94"><a href="#L94">94</a>	pinctrl-1 = &lt;&amp;pwm1_sleep&gt;;
+</span><span class="l" id="L95"><a href="#L95">95</a>	pinctrl-names = &quot;default&quot;, &quot;sleep&quot;;
+</span><span class="l" id="L96"><a href="#L96">96</a>};
+</span><span class="l" id="L97"><a href="#L97">97</a>
+</span><span class="l" id="L98"><a href="#L98">98</a>&amp;pwm2 {
+</span><span class="l" id="L99"><a href="#L99">99</a>	status = &quot;okay&quot;;
+</span><span class="l" id="L100"><a href="#L100">100</a>	pinctrl-0 = &lt;&amp;pwm2_default&gt;;
+</span><span class="l" id="L101"><a href="#L101">101</a>	pinctrl-1 = &lt;&amp;pwm2_sleep&gt;;
+</span><span class="l" id="L102"><a href="#L102">102</a>	pinctrl-names = &quot;default&quot;, &quot;sleep&quot;;
+</span><span class="l" id="L103"><a href="#L103">103</a>};
+</span><span class="l" id="L104"><a href="#L104">104</a>
+</span><span class="l" id="L105"><a href="#L105">105</a>&amp;uart0 {
+</span><span class="l" id="L106"><a href="#L106">106</a>	status = &quot;disabled&quot;;
+</span><span class="l" id="L107"><a href="#L107">107</a>};
+</span><span class="l" id="L108"><a href="#L108">108</a>
+</span><span class="l" id="L109"><a href="#L109">109</a>&amp;adc {
+</span><span class="l" id="L110"><a href="#L110">110</a>	status = &quot;okay&quot;;
+</span><span class="l" id="L111"><a href="#L111">111</a>	#address-cells = &lt;1&gt;;
+</span><span class="l" id="L112"><a href="#L112">112</a>	#size-cells = &lt;0&gt;;
+</span><span class="l" id="L113"><a href="#L113">113</a>
+</span><span class="l" id="L114"><a href="#L114">114</a>	channel@0 {
+</span><span class="l" id="L115"><a href="#L115">115</a>		reg = &lt;0&gt;;
+</span><span class="l" id="L116"><a href="#L116">116</a>		zephyr,gain = &quot;ADC_GAIN_1_6&quot;;
+</span><span class="l" id="L117"><a href="#L117">117</a>		zephyr,reference = &quot;ADC_REF_INTERNAL&quot;;
+</span><span class="l" id="L118"><a href="#L118">118</a>		/* Quelle 100k||100k = 50 kOhm -&gt; 40 us (Nordic-Tabelle: 40 us bis 800 kOhm) */
+</span><span class="l" id="L119"><a href="#L119">119</a>		zephyr,acquisition-time = &lt;ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 40)&gt;;
+</span><span class="l" id="L120"><a href="#L120">120</a>		zephyr,input-positive = &lt;NRF_SAADC_AIN2&gt;; /* PINOUT:VBAT_ADC */
+</span><span class="l" id="L121"><a href="#L121">121</a>		zephyr,resolution = &lt;12&gt;;
+</span><span class="l" id="L122"><a href="#L122">122</a>		zephyr,oversampling = &lt;4&gt;;
+</span><span class="l" id="L123"><a href="#L123">123</a>	};
+</span><span class="l" id="L124"><a href="#L124">124</a>	/* J5 EXT1 Stick X (r4), Quelle &lt;= 2.5 kOhm + 100 Ohm -&gt; 10 us */
+</span><span class="l" id="L125"><a href="#L125">125</a>	channel@1 {
+</span><span class="l" id="L126"><a href="#L126">126</a>		reg = &lt;1&gt;;
+</span><span class="l" id="L127"><a href="#L127">127</a>		zephyr,gain = &quot;ADC_GAIN_1_6&quot;;
+</span><span class="l" id="L128"><a href="#L128">128</a>		zephyr,reference = &quot;ADC_REF_INTERNAL&quot;;
+</span><span class="l" id="L129"><a href="#L129">129</a>		zephyr,acquisition-time = &lt;ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 10)&gt;;
+</span><span class="l" id="L130"><a href="#L130">130</a>		zephyr,input-positive = &lt;NRF_SAADC_AIN5&gt;; /* PINOUT:EXT1 */
+</span><span class="l" id="L131"><a href="#L131">131</a>		zephyr,resolution = &lt;12&gt;;
+</span><span class="l" id="L132"><a href="#L132">132</a>	};
+</span><span class="l" id="L133"><a href="#L133">133</a>	/* J5 EXT2 Stick Y */
+</span><span class="l" id="L134"><a href="#L134">134</a>	channel@2 {
+</span><span class="l" id="L135"><a href="#L135">135</a>		reg = &lt;2&gt;;
+</span><span class="l" id="L136"><a href="#L136">136</a>		zephyr,gain = &quot;ADC_GAIN_1_6&quot;;
+</span><span class="l" id="L137"><a href="#L137">137</a>		zephyr,reference = &quot;ADC_REF_INTERNAL&quot;;
+</span><span class="l" id="L138"><a href="#L138">138</a>		zephyr,acquisition-time = &lt;ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 10)&gt;;
+</span><span class="l" id="L139"><a href="#L139">139</a>		zephyr,input-positive = &lt;NRF_SAADC_AIN6&gt;; /* PINOUT:EXT2 */
+</span><span class="l" id="L140"><a href="#L140">140</a>		zephyr,resolution = &lt;12&gt;;
+</span><span class="l" id="L141"><a href="#L141">141</a>	};
+</span><span class="l" id="L142"><a href="#L142">142</a>	/* J5 EXT3 frei/analog */
+</span><span class="l" id="L143"><a href="#L143">143</a>	channel@3 {
+</span><span class="l" id="L144"><a href="#L144">144</a>		reg = &lt;3&gt;;
+</span><span class="l" id="L145"><a href="#L145">145</a>		zephyr,gain = &quot;ADC_GAIN_1_6&quot;;
+</span><span class="l" id="L146"><a href="#L146">146</a>		zephyr,reference = &quot;ADC_REF_INTERNAL&quot;;
+</span><span class="l" id="L147"><a href="#L147">147</a>		zephyr,acquisition-time = &lt;ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 10)&gt;;
+</span><span class="l" id="L148"><a href="#L148">148</a>		zephyr,input-positive = &lt;NRF_SAADC_AIN7&gt;; /* PINOUT:EXT3 */
+</span><span class="l" id="L149"><a href="#L149">149</a>		zephyr,resolution = &lt;12&gt;;
+</span><span class="l" id="L150"><a href="#L150">150</a>	};
+</span><span class="l" id="L151"><a href="#L151">151</a>	/* J5 EXT4 Stick-Taste analog (AIN1), Tag-Pin siehe zephyr,user */
+</span><span class="l" id="L152"><a href="#L152">152</a>	channel@4 {
+</span><span class="l" id="L153"><a href="#L153">153</a>		reg = &lt;4&gt;;
+</span><span class="l" id="L154"><a href="#L154">154</a>		zephyr,gain = &quot;ADC_GAIN_1_6&quot;;
+</span><span class="l" id="L155"><a href="#L155">155</a>		zephyr,reference = &quot;ADC_REF_INTERNAL&quot;;
+</span><span class="l" id="L156"><a href="#L156">156</a>		zephyr,acquisition-time = &lt;ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 10)&gt;;
+</span><span class="l" id="L157"><a href="#L157">157</a>		zephyr,input-positive = &lt;NRF_SAADC_AIN1&gt;; /* EXT4 AIN1 */
+</span><span class="l" id="L158"><a href="#L158">158</a>		zephyr,resolution = &lt;12&gt;;
+</span><span class="l" id="L159"><a href="#L159">159</a>	};
+</span><span class="l" id="L160"><a href="#L160">160</a>};
+</span><span class="l" id="L161"><a href="#L161">161</a>
+</span><span class="l" id="L162"><a href="#L162">162</a>/ {
+</span><span class="l" id="L163"><a href="#L163">163</a>	pwmleds {
+</span><span class="l" id="L164"><a href="#L164">164</a>		compatible = &quot;pwm-leds&quot;;
+</span><span class="l" id="L165"><a href="#L165">165</a>		led_red: led_red {
+</span><span class="l" id="L166"><a href="#L166">166</a>			pwms = &lt;&amp;pwm0 0 PWM_MSEC(1) PWM_POLARITY_INVERTED&gt;; /* aktiv low */
+</span><span class="l" id="L167"><a href="#L167">167</a>		};
+</span><span class="l" id="L168"><a href="#L168">168</a>		led_green: led_green {
+</span><span class="l" id="L169"><a href="#L169">169</a>			pwms = &lt;&amp;pwm0 1 PWM_MSEC(1) PWM_POLARITY_INVERTED&gt;; /* aktiv low */
+</span><span class="l" id="L170"><a href="#L170">170</a>		};
+</span><span class="l" id="L171"><a href="#L171">171</a>		led_blue: led_blue {
+</span><span class="l" id="L172"><a href="#L172">172</a>			pwms = &lt;&amp;pwm0 2 PWM_MSEC(1) PWM_POLARITY_INVERTED&gt;; /* aktiv low */
+</span><span class="l" id="L173"><a href="#L173">173</a>		};
+</span><span class="l" id="L174"><a href="#L174">174</a>		buzzer: buzzer {
+</span><span class="l" id="L175"><a href="#L175">175</a>			pwms = &lt;&amp;pwm1 0 PWM_USEC(2273) PWM_POLARITY_NORMAL&gt;; /* FET-Gate, high = an */
+</span><span class="l" id="L176"><a href="#L176">176</a>		};
+</span><span class="l" id="L177"><a href="#L177">177</a>		motor: motor {
+</span><span class="l" id="L178"><a href="#L178">178</a>			/* MOT_EN FET-Gate high = an (100k Pull-down); 20 kHz ANNAHME (unhoerbar) */
+</span><span class="l" id="L179"><a href="#L179">179</a>			pwms = &lt;&amp;pwm2 0 PWM_USEC(50) PWM_POLARITY_NORMAL&gt;;
+</span><span class="l" id="L180"><a href="#L180">180</a>		};
+</span><span class="l" id="L181"><a href="#L181">181</a>	};
+</span><span class="l" id="L182"><a href="#L182">182</a>
+</span><span class="l" id="L183"><a href="#L183">183</a>	buttons {
+</span><span class="l" id="L184"><a href="#L184">184</a>		compatible = &quot;gpio-keys&quot;;
+</span><span class="l" id="L185"><a href="#L185">185</a>		button0: button_0 {
+</span><span class="l" id="L186"><a href="#L186">186</a>			gpios = &lt;&amp;gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)&gt;; /* PINOUT:BTN */
+</span><span class="l" id="L187"><a href="#L187">187</a>			zephyr,code = &lt;INPUT_KEY_0&gt;;
+</span><span class="l" id="L188"><a href="#L188">188</a>		};
+</span><span class="l" id="L189"><a href="#L189">189</a>	};
+</span><span class="l" id="L190"><a href="#L190">190</a>
+</span><span class="l" id="L191"><a href="#L191">191</a>	zephyr,user {
+</span><span class="l" id="L192"><a href="#L192">192</a>		io-channels = &lt;&amp;adc 0&gt;, &lt;&amp;adc 1&gt;, &lt;&amp;adc 2&gt;, &lt;&amp;adc 3&gt;, &lt;&amp;adc 4&gt;;
+</span><span class="l" id="L193"><a href="#L193">193</a>		/* r4 J5: EXT4 Stick-Taste aktiv low mit internem Pull-up; EXT5 Touch TTP233H aktiv high,
+</span><span class="l" id="L194"><a href="#L194">194</a>		 * Pull-down haelt den Eingang ohne Bedienplatine definiert low (kein Ereignisspam) */
+</span><span class="l" id="L195"><a href="#L195">195</a>		ext4-gpios = &lt;&amp;gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)&gt;; /* PINOUT:EXT4 */
+</span><span class="l" id="L196"><a href="#L196">196</a>		ext5-gpios = &lt;&amp;gpio1 11 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)&gt;; /* PINOUT:EXT5 */
+</span><span class="l" id="L197"><a href="#L197">197</a>		vbat-en-gpios = &lt;&amp;gpio0 5 GPIO_ACTIVE_HIGH&gt;; /* PINOUT:VBAT_EN */
+</span><span class="l" id="L198"><a href="#L198">198</a>		/* QUELLE PINOUT_V1 notes: VBAT_ADC = VBAT * 100k/(100k+100k) -&gt; Faktor 2 */
+</span><span class="l" id="L199"><a href="#L199">199</a>		vbat-divider-num = &lt;2&gt;;
+</span><span class="l" id="L200"><a href="#L200">200</a>		vbat-divider-den = &lt;1&gt;;
+</span><span class="l" id="L201"><a href="#L201">201</a>	};
+</span><span class="l" id="L202"><a href="#L202">202</a>
+</span><span class="l" id="L203"><a href="#L203">203</a>	aliases {
+</span><span class="l" id="L204"><a href="#L204">204</a>		led-red = &amp;led_red;
+</span><span class="l" id="L205"><a href="#L205">205</a>		led-green = &amp;led_green;
+</span><span class="l" id="L206"><a href="#L206">206</a>		led-blue = &amp;led_blue;
+</span><span class="l" id="L207"><a href="#L207">207</a>		buzzer = &amp;buzzer;
+</span><span class="l" id="L208"><a href="#L208">208</a>		sw0 = &amp;button0;
+</span><span class="l" id="L209"><a href="#L209">209</a>		motor0 = &amp;motor;
+</span><span class="l" id="L210"><a href="#L210">210</a>		imu0 = &amp;imu;
+</span><span class="l" id="L211"><a href="#L211">211</a>	};
+</span><span class="l" id="L212"><a href="#L212">212</a>};
+</span></pre></body></html>

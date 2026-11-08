@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>SOUP</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="top"><a href="index.html">Start</a> · <a href="01_Normen.html">Normen</a> · <a href="02_SRS.html">SRS</a> · <a href="03_SAD.html">SAD</a> · <a href="04_SDD.html">SDD</a> · <a href="05_SOUP.html">SOUP</a> · <a href="06_Risiko.html">Risiko</a> · <a href="07_Rueckverfolgbarkeit.html">Rückverfolgbarkeit</a> · <a href="08_Luecken.html">Lücken</a> · <a href="09_Skills.html">Skills</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#soup-software-of-unknown-provenance"
+id="toc-soup-software-of-unknown-provenance">SOUP: Software of Unknown
+Provenance</a>
+<ul>
+<li><a href="#1-in-der-firmware-enthalten"
+id="toc-1-in-der-firmware-enthalten">1. In der Firmware
+enthalten</a></li>
+<li><a href="#2-im-bootloader" id="toc-2-im-bootloader">2. Im
+Bootloader</a></li>
+<li><a href="#3-referenzcode-nicht-teil-der-gebauten-firmware"
+id="toc-3-referenzcode-nicht-teil-der-gebauten-firmware">3. Referenzcode
+(nicht Teil der gebauten Firmware)</a></li>
+<li><a href="#4-entwicklungs--und-prüfwerkzeuge"
+id="toc-4-entwicklungs--und-prüfwerkzeuge">4. Entwicklungs- und
+Prüfwerkzeuge</a></li>
+<li><a href="#5-befunde" id="toc-5-befunde">5. Befunde</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="soup-software-of-unknown-provenance">SOUP: Software of Unknown
+Provenance</h1>
+<p>Fremdsoftware, die in der Firmware läuft oder sie baut. IEC 62304
+verlangt für jede SOUP: Name, Hersteller, Version, Anforderungen an die
+SOUP (Funktion und Leistung), Prüfung bekannter Fehlerlisten und die
+Dokumentation der Bewertung (Abschnitte 5.3.3, 5.3.4, 7.1.3, 8.1.2). Die
+Versionen stammen aus
+<code>devices/motion-one/docker/firmware/Dockerfile</code> und den
+Quellen. Die Fehlerlisten (Anomalien) habe ich <strong>nicht</strong>
+geprüft (<a href="08_Luecken.html#GAP-17">GAP-17</a>).</p>
+<h2 id="1-in-der-firmware-enthalten">1. In der Firmware enthalten</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>SOUP</th>
+<th>Version</th>
+<th>Lizenz</th>
+<th>Verwendung</th>
+<th>Zugehörige Gefährdungen</th>
+<th>Anomalieliste geprüft</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SOUP-01"></a>SOUP-01</td>
+<td>Zephyr RTOS (Kernel, Treiber, Logging)</td>
+<td>v4.5.0</td>
+<td>Apache-2.0</td>
+<td>Scheduler, SPI/GPIO/PWM/ADC, Arbeitswarteschlange, Mutex</td>
+<td><a href="06_Risiko.html#HAZ-03">HAZ-03</a>, <a
+href="06_Risiko.html#HAZ-07">HAZ-07</a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a id="SOUP-02"></a>SOUP-02</td>
+<td>Zephyr Bluetooth (Host, Controller, GATT)</td>
+<td>in v4.5.0</td>
+<td>Apache-2.0</td>
+<td>BLE-Verbindung, Notifications, Advertising</td>
+<td><a href="06_Risiko.html#HAZ-04">HAZ-04</a>, <a
+href="06_Risiko.html#HAZ-09">HAZ-09</a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a id="SOUP-03"></a>SOUP-03</td>
+<td>hal_nordic (nrfx, MDK, Funk)</td>
+<td>von Zephyr v4.5.0 vorgegeben</td>
+<td>Apache-2.0 / BSD-3</td>
+<td>Hardwarezugriff nRF52840</td>
+<td><a href="06_Risiko.html#HAZ-03">HAZ-03</a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a id="SOUP-04"></a>SOUP-04</td>
+<td>CMSIS / CMSIS_6</td>
+<td>von Zephyr vorgegeben</td>
+<td>Apache-2.0</td>
+<td>Cortex-M-Kern</td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a id="SOUP-05"></a>SOUP-05</td>
+<td>mbedtls, tf-psa-crypto</td>
+<td>von Zephyr vorgegeben</td>
+<td>Apache-2.0</td>
+<td>Krypto der BLE-Schicht (mit <code>BT_SMP=n</code> kaum genutzt)</td>
+<td><a href="06_Risiko.html#HAZ-04">HAZ-04</a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a id="SOUP-06"></a>SOUP-06</td>
+<td>SEGGER RTT</td>
+<td>von Zephyr vorgegeben</td>
+<td>SEGGER-Lizenz (prüfen)</td>
+<td>Log über SWD</td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a id="SOUP-07"></a>SOUP-07</td>
+<td>Picolibc (C-Bibliothek des Zephyr-SDK)</td>
+<td>SDK 1.0.1</td>
+<td>je Bibliothek</td>
+<td><code>sqrtf</code>, <code>memcpy</code> u. a.</td>
+<td><a href="06_Risiko.html#HAZ-01">HAZ-01</a></td>
+<td>NOT RUN</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-im-bootloader">2. Im Bootloader</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>SOUP</th>
+<th>Version</th>
+<th>Lizenz</th>
+<th>Verwendung</th>
+<th>Gefährdungen</th>
+<th>Anomalieliste geprüft</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SOUP-10"></a>SOUP-10</td>
+<td>Adafruit nRF52 Bootloader (UF2)</td>
+<td>0.11.0</td>
+<td>MIT</td>
+<td>Update über USB-Laufwerk, <strong>ohne Signaturprüfung</strong></td>
+<td><a href="06_Risiko.html#HAZ-04">HAZ-04</a>, <a
+href="06_Risiko.html#HAZ-10">HAZ-10</a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a id="SOUP-11"></a>SOUP-11</td>
+<td>arm-none-eabi-gcc, newlib-nano (Debian)</td>
+<td>Version der Distribution</td>
+<td>GPL / BSD</td>
+<td>Bootloader-Build</td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-referenzcode-nicht-teil-der-gebauten-firmware">3. Referenzcode
+(nicht Teil der gebauten Firmware)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Quelle</th>
+<th>Verwendung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SOUP-20"></a>SOUP-20</td>
+<td>TDK <code>hal_tdk</code> ICM-456xx
+(<code>firmware/docs/ref/</code>), BSD-3</td>
+<td>Vorlage für Registerwerte und FIFO-Format im Treiber <a
+href="src/firmware__icm__src__icm45686.c.html"><code>firmware/icm/src/icm45686.c</code></a>.
+Der Code wird nicht kompiliert, aber seine <strong>Werte</strong> sind
+übernommen und nicht gegen das Datenblatt geprüft (<a
+href="08_Luecken.html#GAP-12">GAP-12</a>).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-entwicklungs--und-prüfwerkzeuge">4. Entwicklungs- und
+Prüfwerkzeuge</h2>
+<p>Sie sind nicht Teil des Produkts, beeinflussen aber das Ergebnis
+(Werkzeugvalidierung, <a href="08_Luecken.html#GAP-21">GAP-21</a>).</p>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Werkzeug</th>
+<th>Version</th>
+<th>Zweck</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SOUP-30"></a>SOUP-30</td>
+<td>Zephyr SDK (arm-zephyr-eabi, GCC)</td>
+<td>1.0.1</td>
+<td>Übersetzen der Firmware</td>
+</tr>
+<tr class="even">
+<td><a id="SOUP-31"></a>SOUP-31</td>
+<td>west, CMake, Ninja, Python</td>
+<td>west aus PyPI (nicht gepinnt), CMake/Ninja der Distribution</td>
+<td>Build</td>
+</tr>
+<tr class="odd">
+<td><a id="SOUP-32"></a>SOUP-32</td>
+<td>Unity</td>
+<td>v2.6.1</td>
+<td>Host-Unit-Tests</td>
+</tr>
+<tr class="even">
+<td><a id="SOUP-33"></a>SOUP-33</td>
+<td>gcc (Debian trixie)</td>
+<td>Version der Distribution</td>
+<td>Host-Unit-Tests mit <code>-Wall -Wextra -Werror</code></td>
+</tr>
+<tr class="odd">
+<td><a id="SOUP-34"></a>SOUP-34</td>
+<td>Basis-Image <code>debian:trixie-slim</code></td>
+<td>Tag, nicht per Digest gepinnt</td>
+<td>Reproduzierbarkeit</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-befunde">5. Befunde</h2>
+<ul>
+<li>Die Zephyr-Version ist gepinnt, die <strong>Modulversionen</strong>
+ergeben sich aus dem Zephyr-Manifest (indirekt gepinnt). Das ist für
+eine Einreichung zu prüfen und als Software-Stückliste (SBOM)
+festzuhalten.</li>
+<li><code>west</code> und das Basis-Image sind nicht auf eine
+unveränderliche Version festgelegt: Ein späterer Build kann abweichen
+(siehe IDEEN.md, Compiler-Matrix und Conan).</li>
+<li>Eine Software-Stückliste (SBOM) im Format SPDX oder CycloneDX fehlt
+(<a href="08_Luecken.html#GAP-13">GAP-13</a>).</li>
+</ul>
+</body>
+</html>

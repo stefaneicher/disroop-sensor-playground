@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Normen</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="top"><a href="index.html">Start</a> · <a href="01_Normen.html">Normen</a> · <a href="02_SRS.html">SRS</a> · <a href="03_SAD.html">SAD</a> · <a href="04_SDD.html">SDD</a> · <a href="05_SOUP.html">SOUP</a> · <a href="06_Risiko.html">Risiko</a> · <a href="07_Rueckverfolgbarkeit.html">Rückverfolgbarkeit</a> · <a href="08_Luecken.html">Lücken</a> · <a href="09_Skills.html">Skills</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#normen-und-leitfäden" id="toc-normen-und-leitfäden">Normen
+und Leitfäden</a>
+<ul>
+<li><a href="#kernnormen-für-die-firmware"
+id="toc-kernnormen-für-die-firmware">Kernnormen für die
+Firmware</a></li>
+<li><a href="#fda-usa" id="toc-fda-usa">FDA (USA)</a></li>
+<li><a href="#warum-keine-pdfs-im-repo-liegen"
+id="toc-warum-keine-pdfs-im-repo-liegen">Warum keine PDFs im Repo
+liegen</a></li>
+<li><a href="#sicherheitsklassen-nach-iec-62304-kurzfassung"
+id="toc-sicherheitsklassen-nach-iec-62304-kurzfassung">Sicherheitsklassen
+nach IEC 62304 (Kurzfassung)</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="normen-und-leitfäden">Normen und Leitfäden</h1>
+<p>Stand der Angaben: aus meinem Wissen (Stand Juni 2026), <strong>nicht
+gegen die Originaltexte geprüft</strong>. Ausgabejahre und
+Klauselnummern vor Verwendung in einer Einreichung mit dem gekauften
+Normtext abgleichen. Die Links konnte ich aus dieser Umgebung nicht
+abrufen.</p>
+<h2 id="kernnormen-für-die-firmware">Kernnormen für die Firmware</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Norm</th>
+<th>Titel (sinngemäss)</th>
+<th>Rolle für Motion One</th>
+<th>Bezugsquelle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>IEC 62304</strong> (Ed. 1.1, 2006 + A1:2015)</td>
+<td>Medizingeräte-Software: Software-Lebenszyklus-Prozesse</td>
+<td>Hauptnorm: Planung, SRS, Architektur, Detailentwurf, Test, Release,
+Wartung, Konfiguration, Problemlösung</td>
+<td><a href="https://webstore.iec.ch/en/search?q=62304">IEC
+Webstore</a></td>
+</tr>
+<tr class="even">
+<td><strong>ISO 14971:2019</strong></td>
+<td>Risikomanagement für Medizinprodukte</td>
+<td>Gefährdungen, Risikokontrollen, Restrisiko. 62304 verlangt es für
+die Klasseneinteilung</td>
+<td><a href="https://www.iso.org/standard/72704.html">ISO 14971</a></td>
+</tr>
+<tr class="odd">
+<td><strong>ISO 13485:2016</strong></td>
+<td>Qualitätsmanagementsystem</td>
+<td>Rahmen für alle Prozesse. In den USA wird er über die QMSR (21 CFR
+820) Teil der FDA-Anforderungen</td>
+<td><a href="https://www.iso.org/standard/59752.html">ISO 13485</a></td>
+</tr>
+<tr class="even">
+<td><strong>IEC 60601-1</strong> (+ 60601-1-2 EMV, ggf. 60601-1-11
+Heimanwendung)</td>
+<td>Elektrische Sicherheit, wesentliche Leistungsmerkmale</td>
+<td>Akku, Laden, Motor und Summer, programmierbare elektrische Systeme
+(Kap. 14)</td>
+<td><a href="https://webstore.iec.ch/en/search?q=60601-1">IEC
+Webstore</a></td>
+</tr>
+<tr class="odd">
+<td><strong>IEC 82304-1</strong></td>
+<td>Gesundheitssoftware: Produktanforderungen</td>
+<td>nur relevant, wenn die Software allein ein Produkt ist (hier:
+Auswerte-App, nicht die Firmware)</td>
+<td><a href="https://webstore.iec.ch/en/search?q=82304">IEC
+Webstore</a></td>
+</tr>
+<tr class="even">
+<td><strong>IEC 62366-1</strong></td>
+<td>Gebrauchstauglichkeit</td>
+<td>Taster, LED, Summer, Vibration als Benutzerschnittstelle</td>
+<td><a href="https://webstore.iec.ch/en/search?q=62366">IEC
+Webstore</a></td>
+</tr>
+<tr class="odd">
+<td><strong>IEC 81001-5-1</strong></td>
+<td>Cybersicherheit im Software-Lebenszyklus</td>
+<td>BLE ohne Kopplung ist hier der grösste Befund</td>
+<td><a href="https://webstore.iec.ch/en/search?q=81001-5-1">IEC
+Webstore</a></td>
+</tr>
+<tr class="even">
+<td><strong>IEC/TR 80002-1</strong></td>
+<td>Leitfaden zur Anwendung von ISO 14971 auf Software</td>
+<td>Hilfe für die Gefährdungsanalyse</td>
+<td><a href="https://webstore.iec.ch/en/search?q=80002-1">IEC
+Webstore</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="fda-usa">FDA (USA)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Dokument</th>
+<th>Zweck</th>
+<th>Quelle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Content of Premarket Submissions for Device Software
+Functions</em> (Leitfaden, 2023)</td>
+<td>Welche Software-Unterlagen eine Einreichung enthält;
+Dokumentationsstufe <em>Basic</em> oder <em>Enhanced</em>. Für diese
+Firmware wäre <em>Enhanced</em> zu erwarten</td>
+<td><a
+href="https://www.fda.gov/regulatory-information/search-fda-guidance-documents/content-premarket-submissions-device-software-functions">FDA-Leitfäden</a></td>
+</tr>
+<tr class="even">
+<td><em>Cybersecurity in Medical Devices: Quality System Considerations
+and Content of Premarket Submissions</em></td>
+<td>Bedrohungsmodell, SBOM, Updatefähigkeit, Sicherheitsarchitektur</td>
+<td><a
+href="https://www.fda.gov/regulatory-information/search-fda-guidance-documents/cybersecurity-medical-devices-quality-system-considerations-and-content-premarket-submissions">FDA-Leitfäden</a></td>
+</tr>
+<tr class="odd">
+<td>21 CFR Part 820 (QMSR, seit 2026 mit ISO 13485 abgestimmt)</td>
+<td>Qualitätssystem, Design Controls</td>
+<td><a
+href="https://www.ecfr.gov/current/title-21/chapter-I/subchapter-H/part-820">eCFR</a></td>
+</tr>
+<tr class="even">
+<td>Datenbank der anerkannten Konsensnormen</td>
+<td>Zeigt, welche Ausgabe von IEC 62304 usw. die FDA anerkennt</td>
+<td><a
+href="https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfStandards/search.cfm">FDA-Datenbank</a></td>
+</tr>
+</tbody>
+</table>
+<p>Hinweis: Die FDA verlangt kein Zertifikat „nach IEC 62304“. Sie
+erwartet die Unterlagen nach dem Software-Leitfaden. 62304 ist
+anerkannte Norm und der übliche Weg, die Erwartungen zu erfüllen.</p>
+<h2 id="warum-keine-pdfs-im-repo-liegen">Warum keine PDFs im Repo
+liegen</h2>
+<ul>
+<li><strong>IEC- und ISO-Normen</strong> sind urheberrechtlich geschützt
+und kostenpflichtig. Sie in ein öffentliches Repo zu legen wäre
+unzulässig.</li>
+<li><strong>FDA-Leitfäden</strong> sind frei, aber <code>fda.gov</code>
+war aus dieser Sitzung nicht erreichbar (Netzwerkregel, Antwort 403).
+Ich habe das nicht umgangen.</li>
+<li>Vorschlag: Die FDA-PDFs lokal von den Seiten oben laden und in einem
+<strong>nicht öffentlichen</strong> Ordner ablegen. Lizenzierte Normen
+nur intern halten. In der Doku verweisen wir auf Klauseln, nie auf
+kopierten Text.</li>
+</ul>
+<h2
+id="sicherheitsklassen-nach-iec-62304-kurzfassung">Sicherheitsklassen
+nach IEC 62304 (Kurzfassung)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Klasse</th>
+<th>Bedeutung</th>
+<th>Konsequenz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>Keine Verletzung oder Gesundheitsschädigung möglich</td>
+<td>wenig Pflichtdokumente</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>Verletzung möglich, aber nicht schwer</td>
+<td>Architektur und Detailentwurf auf Einheitenebene</td>
+</tr>
+<tr class="odd">
+<td><strong>C</strong></td>
+<td>Tod oder schwere Verletzung möglich</td>
+<td>alles aus B, plus Detailentwurf je Einheit, Abnahmekriterien,
+strengere Prüfungen</td>
+</tr>
+</tbody>
+</table>
+<p>Die Klasse folgt aus der Risikoanalyse, nicht aus dem Wunsch. Hier
+ist <strong>C</strong> gesetzt (konservativ), siehe <a
+href="06_Risiko.html">Risiko</a>.</p>
+</body>
+</html>

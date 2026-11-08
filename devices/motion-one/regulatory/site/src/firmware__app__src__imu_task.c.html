@@ -1,0 +1,154 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/app/src/imu_task.c</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/app/src/imu_task.c</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* IMU-Thread: INT1 (FIFO-Watermark) -&gt; FIFO lesen -&gt; Bias -&gt; Madgwick -&gt; BLE. Adapter: Zephyr-SPI. */
+</span><span class="l" id="L2"><a href="#L2">2</a>#include &lt;zephyr/kernel.h&gt;
+</span><span class="l" id="L3"><a href="#L3">3</a>#include &lt;zephyr/logging/log.h&gt;
+</span><span class="l" id="L4"><a href="#L4">4</a>#include &lt;zephyr/drivers/spi.h&gt;
+</span><span class="l" id="L5"><a href="#L5">5</a>#include &lt;zephyr/drivers/gpio.h&gt;
+</span><span class="l" id="L6"><a href="#L6">6</a>#include &quot;app.h&quot;
+</span><span class="l" id="L7"><a href="#L7">7</a>#include &quot;icm45686.h&quot;
+</span><span class="l" id="L8"><a href="#L8">8</a>#include &quot;motion_fusion.h&quot;
+</span><span class="l" id="L9"><a href="#L9">9</a>
+</span><span class="l" id="L10"><a href="#L10">10</a>LOG_MODULE_REGISTER(imu, LOG_LEVEL_INF);
+</span><span class="l" id="L11"><a href="#L11">11</a>
+</span><span class="l" id="L12"><a href="#L12">12</a>#define IMU_NODE DT_NODELABEL(imu)
+</span><span class="l" id="L13"><a href="#L13">13</a>#define WATERMARK_FRAMES 2u /* 2 / 400 Hz = 5 ms Puffer (Latenzbudget &lt; 10 ms), BERECHNUNG */
+</span><span class="l" id="L14"><a href="#L14">14</a>#define MAX_FRAMES 16u
+</span><span class="l" id="L15"><a href="#L15">15</a>
+</span><span class="l" id="L16"><a href="#L16">16</a>static const struct spi_dt_spec spi = SPI_DT_SPEC_GET(IMU_NODE, SPI_WORD_SET(8) | SPI_TRANSFER_MSB | SPI_OP_MODE_CONTROLLER);
+</span><span class="l" id="L17"><a href="#L17">17</a>static const struct gpio_dt_spec int1 = GPIO_DT_SPEC_GET(IMU_NODE, int1_gpios);
+</span><span class="l" id="L18"><a href="#L18">18</a>static struct gpio_callback int1_cb;
+</span><span class="l" id="L19"><a href="#L19">19</a>static K_SEM_DEFINE(data_sem, 0, 1);
+</span><span class="l" id="L20"><a href="#L20">20</a>static volatile uint32_t rest_samples;
+</span><span class="l" id="L21"><a href="#L21">21</a>static bias_cal_t cal;
+</span><span class="l" id="L22"><a href="#L22">22</a>static madgwick_t fus;
+</span><span class="l" id="L23"><a href="#L23">23</a>static uint16_t sample_counter;
+</span><span class="l" id="L24"><a href="#L24">24</a>
+</span><span class="l" id="L25"><a href="#L25">25</a>static int bus_write(void *ctx, uint8_t reg, const uint8_t *d, size_t len)
+</span><span class="l" id="L26"><a href="#L26">26</a>{
+</span><span class="l" id="L27"><a href="#L27">27</a>	ARG_UNUSED(ctx);
+</span><span class="l" id="L28"><a href="#L28">28</a>	const struct spi_buf b[2] = {{.buf = &amp;reg, .len = 1}, {.buf = (void *)d, .len = len}};
+</span><span class="l" id="L29"><a href="#L29">29</a>	const struct spi_buf_set tx = {b, 2};
+</span><span class="l" id="L30"><a href="#L30">30</a>	return spi_write_dt(&amp;spi, &amp;tx);
+</span><span class="l" id="L31"><a href="#L31">31</a>}
+</span><span class="l" id="L32"><a href="#L32">32</a>
+</span><span class="l" id="L33"><a href="#L33">33</a>static int bus_read(void *ctx, uint8_t reg, uint8_t *d, size_t len)
+</span><span class="l" id="L34"><a href="#L34">34</a>{
+</span><span class="l" id="L35"><a href="#L35">35</a>	ARG_UNUSED(ctx);
+</span><span class="l" id="L36"><a href="#L36">36</a>	uint8_t cmd = reg | ICM_SPI_READ_BIT;
+</span><span class="l" id="L37"><a href="#L37">37</a>	const struct spi_buf tb = {.buf = &amp;cmd, .len = 1};
+</span><span class="l" id="L38"><a href="#L38">38</a>	const struct spi_buf rb[2] = {{.buf = NULL, .len = 1}, {.buf = d, .len = len}};
+</span><span class="l" id="L39"><a href="#L39">39</a>	const struct spi_buf_set tx = {&amp;tb, 1}, rx = {rb, 2};
+</span><span class="l" id="L40"><a href="#L40">40</a>	return spi_transceive_dt(&amp;spi, &amp;tx, &amp;rx);
+</span><span class="l" id="L41"><a href="#L41">41</a>}
+</span><span class="l" id="L42"><a href="#L42">42</a>
+</span><span class="l" id="L43"><a href="#L43">43</a>static void bus_delay(void *ctx, uint32_t us)
+</span><span class="l" id="L44"><a href="#L44">44</a>{
+</span><span class="l" id="L45"><a href="#L45">45</a>	ARG_UNUSED(ctx);
+</span><span class="l" id="L46"><a href="#L46">46</a>	k_usleep(us);
+</span><span class="l" id="L47"><a href="#L47">47</a>}
+</span><span class="l" id="L48"><a href="#L48">48</a>
+</span><span class="l" id="L49"><a href="#L49">49</a>static const icm_bus_t bus = {bus_write, bus_read, bus_delay, NULL};
+</span><span class="l" id="L50"><a href="#L50">50</a>
+</span><span class="l" id="L51"><a href="#L51">51</a>static void int1_isr(const struct device *d, struct gpio_callback *cb, uint32_t pins)
+</span><span class="l" id="L52"><a href="#L52">52</a>{
+</span><span class="l" id="L53"><a href="#L53">53</a>	k_sem_give(&amp;data_sem);
+</span><span class="l" id="L54"><a href="#L54">54</a>}
+</span><span class="l" id="L55"><a href="#L55">55</a>
+</span><span class="l" id="L56"><a href="#L56">56</a>void imu_request_calibration(void)
+</span><span class="l" id="L57"><a href="#L57">57</a>{
+</span><span class="l" id="L58"><a href="#L58">58</a>	bias_cal_request(&amp;cal);
+</span><span class="l" id="L59"><a href="#L59">59</a>	LOG_INF(&quot;Bias-Kalibrierung angefordert (Taster lang)&quot;);
+</span><span class="l" id="L60"><a href="#L60">60</a>}
+</span><span class="l" id="L61"><a href="#L61">61</a>
+</span><span class="l" id="L62"><a href="#L62">62</a>bool imu_at_rest_for_s(uint32_t seconds)
+</span><span class="l" id="L63"><a href="#L63">63</a>{
+</span><span class="l" id="L64"><a href="#L64">64</a>	return rest_samples &gt;= seconds * IMU_ODR_HZ;
+</span><span class="l" id="L65"><a href="#L65">65</a>}
+</span><span class="l" id="L66"><a href="#L66">66</a>
+</span><span class="l" id="L67"><a href="#L67">67</a>int imu_enter_wake_on_motion(void)
+</span><span class="l" id="L68"><a href="#L68">68</a>{
+</span><span class="l" id="L69"><a href="#L69">69</a>	if (icm45686_enter_wom(&amp;bus, WOM_THRESHOLD_MG) != ICM_OK) {
+</span><span class="l" id="L70"><a href="#L70">70</a>		return -EIO;
+</span><span class="l" id="L71"><a href="#L71">71</a>	}
+</span><span class="l" id="L72"><a href="#L72">72</a>	/* nRF52 System OFF: GPIO-SENSE weckt bei aktivem Pegel */
+</span><span class="l" id="L73"><a href="#L73">73</a>	return gpio_pin_interrupt_configure_dt(&amp;int1, GPIO_INT_LEVEL_ACTIVE);
+</span><span class="l" id="L74"><a href="#L74">74</a>}
+</span><span class="l" id="L75"><a href="#L75">75</a>
+</span><span class="l" id="L76"><a href="#L76">76</a>static void process(const icm_sample_t *s, uint32_t decim)
+</span><span class="l" id="L77"><a href="#L77">77</a>{
+</span><span class="l" id="L78"><a href="#L78">78</a>	float g[3];
+</span><span class="l" id="L79"><a href="#L79">79</a>	const bool fresh = bias_cal_feed(&amp;cal, s-&gt;gyro_dps, s-&gt;accel_g);
+</span><span class="l" id="L80"><a href="#L80">80</a>	if (fresh) {
+</span><span class="l" id="L81"><a href="#L81">81</a>		LOG_INF(&quot;Gyro-Bias neu (%d)&quot;, (int)cal.calibrations);
+</span><span class="l" id="L82"><a href="#L82">82</a>	}
+</span><span class="l" id="L83"><a href="#L83">83</a>	rest_samples = bias_cal_is_at_rest(&amp;cal, s-&gt;gyro_dps, s-&gt;accel_g) ? rest_samples + 1 : 0;
+</span><span class="l" id="L84"><a href="#L84">84</a>	bias_cal_apply(&amp;cal, s-&gt;gyro_dps, g);
+</span><span class="l" id="L85"><a href="#L85">85</a>	madgwick_update(&amp;fus, g, s-&gt;accel_g, 1.0f / (float)IMU_ODR_HZ);
+</span><span class="l" id="L86"><a href="#L86">86</a>	sample_counter++;
+</span><span class="l" id="L87"><a href="#L87">87</a>	if (sample_counter % decim != 0 || !ble_motion_wanted()) {
+</span><span class="l" id="L88"><a href="#L88">88</a>		return;
+</span><span class="l" id="L89"><a href="#L89">89</a>	}
+</span><span class="l" id="L90"><a href="#L90">90</a>	float r, p, y;
+</span><span class="l" id="L91"><a href="#L91">91</a>	quat_to_euler_deg(fus.q, &amp;r, &amp;p, &amp;y);
+</span><span class="l" id="L92"><a href="#L92">92</a>	const thingy_raw_motion_t raw = {{s-&gt;accel_g[0], s-&gt;accel_g[1], s-&gt;accel_g[2]},
+</span><span class="l" id="L93"><a href="#L93">93</a>					 {g[0], g[1], g[2]}, {0, 0, 0}};
+</span><span class="l" id="L94"><a href="#L94">94</a>	thingy_raw_hr_t hr = {raw.accel, raw.gyro, sample_counter, cal.valid ? THINGY_HR_FLAG_FUSION_OK : 0};
+</span><span class="l" id="L95"><a href="#L95">95</a>	for (int i = 0; i &lt; 3; i++) {
+</span><span class="l" id="L96"><a href="#L96">96</a>		hr.flags |= (uint16_t)((s-&gt;accel_sat[i] ? THINGY_HR_FLAG_ACC_SAT_X &lt;&lt; i : 0) |
+</span><span class="l" id="L97"><a href="#L97">97</a>				       (s-&gt;gyro_sat[i] ? THINGY_HR_FLAG_GYR_SAT_X &lt;&lt; i : 0));
+</span><span class="l" id="L98"><a href="#L98">98</a>	}
+</span><span class="l" id="L99"><a href="#L99">99</a>	ble_publish_motion(fus.q, r, p, y, &amp;raw, &amp;hr);
+</span><span class="l" id="L100"><a href="#L100">100</a>}
+</span><span class="l" id="L101"><a href="#L101">101</a>
+</span><span class="l" id="L102"><a href="#L102">102</a>static void imu_thread(void *a, void *b, void *c)
+</span><span class="l" id="L103"><a href="#L103">103</a>{
+</span><span class="l" id="L104"><a href="#L104">104</a>	static uint8_t buf[MAX_FRAMES * ICM_FIFO_FRAME_LEN];
+</span><span class="l" id="L105"><a href="#L105">105</a>	for (;;) {
+</span><span class="l" id="L106"><a href="#L106">106</a>		(void)k_sem_take(&amp;data_sem, K_MSEC(100)); /* Timeout als Rueckfallebene, falls INT verpasst */
+</span><span class="l" id="L107"><a href="#L107">107</a>		thingy_motion_config_t cfg;
+</span><span class="l" id="L108"><a href="#L108">108</a>		ble_get_motion_config(&amp;cfg);
+</span><span class="l" id="L109"><a href="#L109">109</a>		const uint32_t decim = IMU_ODR_HZ / cfg.motion_freq_hz ? IMU_ODR_HZ / cfg.motion_freq_hz : 1;
+</span><span class="l" id="L110"><a href="#L110">110</a>		uint16_t n = 0;
+</span><span class="l" id="L111"><a href="#L111">111</a>		if (icm45686_fifo_count(&amp;bus, &amp;n) != ICM_OK || n == 0) {
+</span><span class="l" id="L112"><a href="#L112">112</a>			continue;
+</span><span class="l" id="L113"><a href="#L113">113</a>		}
+</span><span class="l" id="L114"><a href="#L114">114</a>		n = MIN(n, MAX_FRAMES);
+</span><span class="l" id="L115"><a href="#L115">115</a>		if (bus.read(NULL, ICM_REG_FIFO_DATA, buf, n * ICM_FIFO_FRAME_LEN)) {
+</span><span class="l" id="L116"><a href="#L116">116</a>			continue;
+</span><span class="l" id="L117"><a href="#L117">117</a>		}
+</span><span class="l" id="L118"><a href="#L118">118</a>		for (uint16_t i = 0; i &lt; n; i++) {
+</span><span class="l" id="L119"><a href="#L119">119</a>			icm_sample_t s;
+</span><span class="l" id="L120"><a href="#L120">120</a>			if (icm45686_parse_frame(&amp;buf[i * ICM_FIFO_FRAME_LEN], ICM_FIFO_FRAME_LEN, &amp;s) == ICM_FRAME_OK) {
+</span><span class="l" id="L121"><a href="#L121">121</a>				process(&amp;s, decim);
+</span><span class="l" id="L122"><a href="#L122">122</a>			}
+</span><span class="l" id="L123"><a href="#L123">123</a>		}
+</span><span class="l" id="L124"><a href="#L124">124</a>	}
+</span><span class="l" id="L125"><a href="#L125">125</a>}
+</span><span class="l" id="L126"><a href="#L126">126</a>
+</span><span class="l" id="L127"><a href="#L127">127</a>K_THREAD_STACK_DEFINE(imu_stack, 2048);
+</span><span class="l" id="L128"><a href="#L128">128</a>static struct k_thread imu_thr;
+</span><span class="l" id="L129"><a href="#L129">129</a>
+</span><span class="l" id="L130"><a href="#L130">130</a>int imu_task_start(void)
+</span><span class="l" id="L131"><a href="#L131">131</a>{
+</span><span class="l" id="L132"><a href="#L132">132</a>	bias_cal_init(&amp;cal, IMU_ODR_HZ); /* 1 s Ruhe */
+</span><span class="l" id="L133"><a href="#L133">133</a>	madgwick_init(&amp;fus, 0.1f);
+</span><span class="l" id="L134"><a href="#L134">134</a>	if (!spi_is_ready_dt(&amp;spi) || !gpio_is_ready_dt(&amp;int1)) {
+</span><span class="l" id="L135"><a href="#L135">135</a>		return -ENODEV;
+</span><span class="l" id="L136"><a href="#L136">136</a>	}
+</span><span class="l" id="L137"><a href="#L137">137</a>	const icm_status_t st = icm45686_init(&amp;bus, ICM_ODR_400HZ, WATERMARK_FRAMES);
+</span><span class="l" id="L138"><a href="#L138">138</a>	if (st != ICM_OK) {
+</span><span class="l" id="L139"><a href="#L139">139</a>		LOG_ERR(&quot;ICM-45686 init %d&quot;, st);
+</span><span class="l" id="L140"><a href="#L140">140</a>		return -EIO;
+</span><span class="l" id="L141"><a href="#L141">141</a>	}
+</span><span class="l" id="L142"><a href="#L142">142</a>	gpio_pin_configure_dt(&amp;int1, GPIO_INPUT);
+</span><span class="l" id="L143"><a href="#L143">143</a>	gpio_init_callback(&amp;int1_cb, int1_isr, BIT(int1.pin));
+</span><span class="l" id="L144"><a href="#L144">144</a>	gpio_add_callback(int1.port, &amp;int1_cb);
+</span><span class="l" id="L145"><a href="#L145">145</a>	gpio_pin_interrupt_configure_dt(&amp;int1, GPIO_INT_EDGE_TO_ACTIVE);
+</span><span class="l" id="L146"><a href="#L146">146</a>	k_thread_create(&amp;imu_thr, imu_stack, K_THREAD_STACK_SIZEOF(imu_stack), imu_thread, NULL, NULL, NULL,
+</span><span class="l" id="L147"><a href="#L147">147</a>			K_PRIO_PREEMPT(2), 0, K_NO_WAIT);
+</span><span class="l" id="L148"><a href="#L148">148</a>	k_thread_name_set(&amp;imu_thr, &quot;imu&quot;);
+</span><span class="l" id="L149"><a href="#L149">149</a>	return 0;
+</span><span class="l" id="L150"><a href="#L150">150</a>}
+</span></pre></body></html>

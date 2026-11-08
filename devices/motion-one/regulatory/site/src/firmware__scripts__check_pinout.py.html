@@ -1,0 +1,78 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/scripts/check_pinout.py</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/scripts/check_pinout.py</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>#!/usr/bin/env python3
+</span><span class="l" id="L2"><a href="#L2">2</a>&quot;&quot;&quot;Gleicht electronics/PINOUT_V1.json gegen boards/.../motion_one-pins.dtsi ab.
+</span><span class="l" id="L3"><a href="#L3">3</a>Jede DTS-Pinzeile traegt &#x27;/* PINOUT:&lt;SIGNAL&gt; */&#x27;. Exit 0 nur, wenn alle GPIO-Signale aus dem
+</span><span class="l" id="L4"><a href="#L4">4</a>PINOUT genau einmal getaggt sind, Port/Pin stimmen und Polaritaet/Pull passen.&quot;&quot;&quot;
+</span><span class="l" id="L5"><a href="#L5">5</a>import json, re, sys, pathlib
+</span><span class="l" id="L6"><a href="#L6">6</a>
+</span><span class="l" id="L7"><a href="#L7">7</a>FW = pathlib.Path(__file__).resolve().parents[1]
+</span><span class="l" id="L8"><a href="#L8">8</a>pinout = pathlib.Path(sys.argv[1]) if len(sys.argv) &gt; 1 else FW.parent / &quot;electronics/PINOUT_V1.json&quot;
+</span><span class="l" id="L9"><a href="#L9">9</a>dtsi = pathlib.Path(sys.argv[2]) if len(sys.argv) &gt; 2 else FW / &quot;boards/disroop/motion_one/motion_one-pins.dtsi&quot;
+</span><span class="l" id="L10"><a href="#L10">10</a># Signale ohne GPIO-Funktion in der App (Hardwarefunktion, siehe dtsi-Kopf)
+</span><span class="l" id="L11"><a href="#L11">11</a>NON_GPIO = {&quot;XL1&quot;, &quot;XL2&quot;, &quot;NRESET&quot;, &quot;VBUS&quot;, &quot;USB_DM&quot;, &quot;USB_DP&quot;, &quot;SWDIO&quot;, &quot;SWCLK&quot;}
+</span><span class="l" id="L12"><a href="#L12">12</a>
+</span><span class="l" id="L13"><a href="#L13">13</a>data = json.loads(pinout.read_text())
+</span><span class="l" id="L14"><a href="#L14">14</a>want, ain = {}, {}
+</span><span class="l" id="L15"><a href="#L15">15</a>for p in data[&quot;pins&quot;]:
+</span><span class="l" id="L16"><a href="#L16">16</a>    m = re.match(r&quot;P([01])\.(\d+)(?:/AIN(\d))?$&quot;, p[&quot;gpio&quot;])
+</span><span class="l" id="L17"><a href="#L17">17</a>    if p[&quot;signal&quot;] in NON_GPIO:
+</span><span class="l" id="L18"><a href="#L18">18</a>        continue
+</span><span class="l" id="L19"><a href="#L19">19</a>    if not m:
+</span><span class="l" id="L20"><a href="#L20">20</a>        sys.exit(f&quot;FAIL unbekanntes GPIO-Format {p[&#x27;signal&#x27;]}: {p[&#x27;gpio&#x27;]}&quot;)
+</span><span class="l" id="L21"><a href="#L21">21</a>    want[p[&quot;signal&quot;]] = (int(m[1]), int(m[2]))
+</span><span class="l" id="L22"><a href="#L22">22</a>    if m[3] is not None:
+</span><span class="l" id="L23"><a href="#L23">23</a>        ain[p[&quot;signal&quot;]] = int(m[3])
+</span><span class="l" id="L24"><a href="#L24">24</a>
+</span><span class="l" id="L25"><a href="#L25">25</a>errs, seen = [], {}
+</span><span class="l" id="L26"><a href="#L26">26</a>for no, line in enumerate(dtsi.read_text().splitlines(), 1):
+</span><span class="l" id="L27"><a href="#L27">27</a>    t = re.search(r&quot;PINOUT:(\w+)&quot;, line)
+</span><span class="l" id="L28"><a href="#L28">28</a>    if not t:
+</span><span class="l" id="L29"><a href="#L29">29</a>        continue
+</span><span class="l" id="L30"><a href="#L30">30</a>    sig = t[1]
+</span><span class="l" id="L31"><a href="#L31">31</a>    if sig in seen:
+</span><span class="l" id="L32"><a href="#L32">32</a>        errs.append(f&quot;{sig}: doppelt getaggt (Zeile {seen[sig]} und {no})&quot;)
+</span><span class="l" id="L33"><a href="#L33">33</a>    seen[sig] = no
+</span><span class="l" id="L34"><a href="#L34">34</a>    if sig not in want:
+</span><span class="l" id="L35"><a href="#L35">35</a>        errs.append(f&quot;{sig}: nicht in PINOUT (Zeile {no})&quot;); continue
+</span><span class="l" id="L36"><a href="#L36">36</a>    m = re.search(r&quot;NRF_PSEL\(\w+,\s*(\d+),\s*(\d+)\)&quot;, line) or re.search(r&quot;&amp;gpio(\d)\s+(\d+)&quot;, line)
+</span><span class="l" id="L37"><a href="#L37">37</a>    a = re.search(r&quot;NRF_SAADC_AIN(\d)&quot;, line)
+</span><span class="l" id="L38"><a href="#L38">38</a>    if m:
+</span><span class="l" id="L39"><a href="#L39">39</a>        got = (int(m[1]), int(m[2]))
+</span><span class="l" id="L40"><a href="#L40">40</a>        if got != want[sig]:
+</span><span class="l" id="L41"><a href="#L41">41</a>            errs.append(f&quot;{sig}: DTS P{got[0]}.{got[1]} != PINOUT P{want[sig][0]}.{want[sig][1]} (Zeile {no})&quot;)
+</span><span class="l" id="L42"><a href="#L42">42</a>    elif a:
+</span><span class="l" id="L43"><a href="#L43">43</a>        if ain.get(sig) != int(a[1]):
+</span><span class="l" id="L44"><a href="#L44">44</a>            errs.append(f&quot;{sig}: DTS AIN{a[1]} != PINOUT AIN{ain.get(sig)} (Zeile {no})&quot;)
+</span><span class="l" id="L45"><a href="#L45">45</a>    else:
+</span><span class="l" id="L46"><a href="#L46">46</a>        errs.append(f&quot;{sig}: kein Pin in Zeile {no}&quot;)
+</span><span class="l" id="L47"><a href="#L47">47</a>for sig in sorted(set(want) - set(seen)):
+</span><span class="l" id="L48"><a href="#L48">48</a>    errs.append(f&quot;{sig}: im PINOUT, aber nicht in DTS&quot;)
+</span><span class="l" id="L49"><a href="#L49">49</a>
+</span><span class="l" id="L50"><a href="#L50">50</a>text = dtsi.read_text()
+</span><span class="l" id="L51"><a href="#L51">51</a>func = {p[&quot;signal&quot;]: p[&quot;function&quot;].lower() for p in data[&quot;pins&quot;]}
+</span><span class="l" id="L52"><a href="#L52">52</a># Polaritaet/Pull aus PINOUT-Funktionstext
+</span><span class="l" id="L53"><a href="#L53">53</a>for led in (&quot;LED_R&quot;, &quot;LED_G&quot;, &quot;LED_B&quot;):
+</span><span class="l" id="L54"><a href="#L54">54</a>    if &quot;aktiv low&quot; in func.get(led, &quot;&quot;) or any(&quot;led aktiv low&quot; in n.lower() for n in data.get(&quot;notes&quot;, [])):
+</span><span class="l" id="L55"><a href="#L55">55</a>        if text.count(&quot;PWM_POLARITY_INVERTED&quot;) &lt; 3 or &quot;nordic,invert&quot; not in text:
+</span><span class="l" id="L56"><a href="#L56">56</a>            errs.append(f&quot;{led}: aktiv low, DTS nicht invertiert&quot;); break
+</span><span class="l" id="L57"><a href="#L57">57</a>if &quot;pull-up&quot; in func.get(&quot;BTN&quot;, &quot;&quot;) and not re.search(r&quot;GPIO_PULL_UP \| GPIO_ACTIVE_LOW\)&gt;;\s*/\* PINOUT:BTN&quot;, text):
+</span><span class="l" id="L58"><a href="#L58">58</a>    errs.append(&quot;BTN: interner Pull-up/aktiv low fehlt&quot;)
+</span><span class="l" id="L59"><a href="#L59">59</a>if &quot;aktiv low&quot; in func.get(&quot;IMU_CS&quot;, &quot;&quot;) and not re.search(r&quot;cs-gpios.*GPIO_ACTIVE_LOW.*PINOUT:IMU_CS&quot;, text):
+</span><span class="l" id="L60"><a href="#L60">60</a>    errs.append(&quot;IMU_CS: nicht aktiv low&quot;)
+</span><span class="l" id="L61"><a href="#L61">61</a>if &quot;spi-max-frequency = &lt;8000000&gt;&quot; not in text:
+</span><span class="l" id="L62"><a href="#L62">62</a>    errs.append(&quot;SPI nicht 8 MHz&quot;)
+</span><span class="l" id="L63"><a href="#L63">63</a>m = re.search(r&quot;VBAT\s*\*\s*(\d+)k/\((\d+)k\+(\d+)k\)&quot;, &quot; &quot;.join(data.get(&quot;notes&quot;, [])))
+</span><span class="l" id="L64"><a href="#L64">64</a>if m:
+</span><span class="l" id="L65"><a href="#L65">65</a>    num, den = int(m[2]) + int(m[3]), int(m[1])
+</span><span class="l" id="L66"><a href="#L66">66</a>    dn = re.search(r&quot;vbat-divider-num = &lt;(\d+)&gt;&quot;, text); dd = re.search(r&quot;vbat-divider-den = &lt;(\d+)&gt;&quot;, text)
+</span><span class="l" id="L67"><a href="#L67">67</a>    if not (dn and dd and int(dn[1]) * den == int(dd[1]) * num):
+</span><span class="l" id="L68"><a href="#L68">68</a>        errs.append(f&quot;VBAT-Teiler != {num}/{den}&quot;)
+</span><span class="l" id="L69"><a href="#L69">69</a>
+</span><span class="l" id="L70"><a href="#L70">70</a>print(f&quot;PINOUT {pinout.name} revision {data.get(&#x27;revision&#x27;)}: {len(want)} GPIO-Signale, {len(seen)} DTS-Tags&quot;)
+</span><span class="l" id="L71"><a href="#L71">71</a>for e in errs:
+</span><span class="l" id="L72"><a href="#L72">72</a>    print(&quot;FAIL&quot;, e)
+</span><span class="l" id="L73"><a href="#L73">73</a>print(&quot;pincheck&quot;, &quot;FAIL&quot; if errs else &quot;PASS&quot;)
+</span><span class="l" id="L74"><a href="#L74">74</a>sys.exit(1 if errs else 0)
+</span></pre></body></html>

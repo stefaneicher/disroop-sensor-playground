@@ -1,0 +1,21 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/app/CMakeLists.txt</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/app/CMakeLists.txt</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>cmake_minimum_required(VERSION 3.20.0)
+</span><span class="l" id="L2"><a href="#L2">2</a># Board motion_one liegt unter firmware/boards/disroop/motion_one
+</span><span class="l" id="L3"><a href="#L3">3</a>list(APPEND BOARD_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
+</span><span class="l" id="L4"><a href="#L4">4</a>find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
+</span><span class="l" id="L5"><a href="#L5">5</a>project(motion_one_fw)
+</span><span class="l" id="L6"><a href="#L6">6</a>
+</span><span class="l" id="L7"><a href="#L7">7</a>set(FW ${CMAKE_CURRENT_SOURCE_DIR}/..)
+</span><span class="l" id="L8"><a href="#L8">8</a>target_include_directories(app PRIVATE ${FW}/codec/include ${FW}/fusion/include ${FW}/icm/include ${FW}/power/include ${FW}/input/include src)
+</span><span class="l" id="L9"><a href="#L9">9</a>target_sources(app PRIVATE
+</span><span class="l" id="L10"><a href="#L10">10</a>  ${FW}/codec/src/thingy_codec.c
+</span><span class="l" id="L11"><a href="#L11">11</a>  ${FW}/fusion/src/motion_fusion.c
+</span><span class="l" id="L12"><a href="#L12">12</a>  ${FW}/icm/src/icm45686.c
+</span><span class="l" id="L13"><a href="#L13">13</a>  ${FW}/power/src/vbat.c
+</span><span class="l" id="L14"><a href="#L14">14</a>  ${FW}/power/src/motor_drive.c
+</span><span class="l" id="L15"><a href="#L15">15</a>  ${FW}/input/src/ext_input.c
+</span><span class="l" id="L16"><a href="#L16">16</a>  src/ext.c
+</span><span class="l" id="L17"><a href="#L17">17</a>  src/main.c src/ble_thingy.c src/imu_task.c src/ui.c src/battery.c src/board_early.c)
+</span></pre></body></html>

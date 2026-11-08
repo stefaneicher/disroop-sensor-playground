@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Rueckverfolgbarkeit</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="top"><a href="index.html">Start</a> · <a href="01_Normen.html">Normen</a> · <a href="02_SRS.html">SRS</a> · <a href="03_SAD.html">SAD</a> · <a href="04_SDD.html">SDD</a> · <a href="05_SOUP.html">SOUP</a> · <a href="06_Risiko.html">Risiko</a> · <a href="07_Rueckverfolgbarkeit.html">Rückverfolgbarkeit</a> · <a href="08_Luecken.html">Lücken</a> · <a href="09_Skills.html">Skills</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#rückverfolgbarkeitsmatrix"
+id="toc-rückverfolgbarkeitsmatrix">Rückverfolgbarkeitsmatrix</a>
+<ul>
+<li><a href="#umgekehrt-tests-ohne-anforderung"
+id="toc-umgekehrt-tests-ohne-anforderung">Umgekehrt: Tests ohne
+Anforderung</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="rückverfolgbarkeitsmatrix">Rückverfolgbarkeitsmatrix</h1>
+<p>Anforderung → Architekturbaustein → Detailentwurf-Einheit → Test.
+Erzeugt aus dem <a href="02_SRS.html">SRS</a> (Tests) und einer festen
+Zuordnung zu den Bausteinen. Die Spalte „Status“ sagt nur, ob ein Test
+<strong>existiert</strong>. Ausgeführt habe ich keinen.</p>
+<p>Zusammenfassung: 52 Anforderungen, davon <strong>31</strong> mit
+mindestens einem Host-Test, <strong>16</strong> nur auf Hardware prüfbar
+(<code>NOT RUN</code>), <strong>5</strong> im Code nicht umgesetzt
+(SRS-09x).</p>
+<table>
+<thead>
+<tr class="header">
+<th>Anforderung</th>
+<th>Architektur</th>
+<th>Einheit</th>
+<th>Tests</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-001">SRS-001</a></td>
+<td><a href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td><a href="04_SDD.html#UNIT-12">UNIT-12</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-002">SRS-002</a></td>
+<td><a href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td><a href="04_SDD.html#UNIT-12">UNIT-12</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-003">SRS-003</a></td>
+<td><a href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td><a href="04_SDD.html#UNIT-12">UNIT-12</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-004">SRS-004</a></td>
+<td><a href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td><a href="04_SDD.html#UNIT-12">UNIT-12</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-005">SRS-005</a></td>
+<td><a href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td><a href="04_SDD.html#UNIT-12">UNIT-12</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-010">SRS-010</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a>, <a
+href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td><a href="04_SDD.html#UNIT-02">UNIT-02</a>, <a
+href="04_SDD.html#UNIT-12">UNIT-12</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L71"><code>test_motion_config_rejects_freq_and_len</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L56"><code>test_motion_config_bridge_vector</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-011">SRS-011</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a>, <a
+href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td><a href="04_SDD.html#UNIT-02">UNIT-02</a>, <a
+href="04_SDD.html#UNIT-12">UNIT-12</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L56"><code>test_motion_config_bridge_vector</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-012">SRS-012</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a>, <a
+href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td><a href="04_SDD.html#UNIT-02">UNIT-02</a>, <a
+href="04_SDD.html#UNIT-12">UNIT-12</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L87"><code>test_env_config_read_default_then_echo_written</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-013">SRS-013</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a>, <a
+href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td><a href="04_SDD.html#UNIT-02">UNIT-02</a>, <a
+href="04_SDD.html#UNIT-12">UNIT-12</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L99"><code>test_sound_config</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-014">SRS-014</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a>, <a
+href="03_SAD.html#SAD-06">SAD-06</a>, <a
+href="03_SAD.html#SAD-08">SAD-08</a></td>
+<td><a href="04_SDD.html#UNIT-02">UNIT-02</a>, <a
+href="04_SDD.html#UNIT-12">UNIT-12</a>, <a
+href="04_SDD.html#UNIT-14">UNIT-14</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L111"><code>test_speaker_tone_bridge_vector_and_volume_clamp</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-015">SRS-015</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a>, <a
+href="03_SAD.html#SAD-06">SAD-06</a>, <a
+href="03_SAD.html#SAD-08">SAD-08</a></td>
+<td><a href="04_SDD.html#UNIT-02">UNIT-02</a>, <a
+href="04_SDD.html#UNIT-12">UNIT-12</a>, <a
+href="04_SDD.html#UNIT-14">UNIT-14</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L125"><code>test_led_modes</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L154"><code>test_led_rejects_bad_input</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-016">SRS-016</a></td>
+<td><a href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td><a href="04_SDD.html#UNIT-12">UNIT-12</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-020">SRS-020</a></td>
+<td><a href="03_SAD.html#SAD-03">SAD-03</a>, <a
+href="03_SAD.html#SAD-07">SAD-07</a></td>
+<td><a href="04_SDD.html#UNIT-08">UNIT-08</a>, <a
+href="04_SDD.html#UNIT-13">UNIT-13</a></td>
+<td><a
+href="src/firmware__tests__test_icm45686.c.html#L112"><code>test_init_sequence</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-021">SRS-021</a></td>
+<td><a href="03_SAD.html#SAD-03">SAD-03</a></td>
+<td><a href="04_SDD.html#UNIT-08">UNIT-08</a></td>
+<td><a
+href="src/firmware__tests__test_icm45686.c.html#L137"><code>test_init_wrong_whoami_and_bus_error</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-022">SRS-022</a></td>
+<td><a href="03_SAD.html#SAD-03">SAD-03</a></td>
+<td><a href="04_SDD.html#UNIT-08">UNIT-08</a></td>
+<td><a
+href="src/firmware__tests__test_icm45686.c.html#L72"><code>test_parse_frame_scales_and_timestamp</code></a>,
+<a
+href="src/firmware__tests__test_icm45686.c.html#L99"><code>test_parse_frame_rejects_invalid</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-023">SRS-023</a></td>
+<td><a href="03_SAD.html#SAD-03">SAD-03</a></td>
+<td><a href="04_SDD.html#UNIT-08">UNIT-08</a></td>
+<td><a
+href="src/firmware__tests__test_icm45686.c.html#L87"><code>test_parse_frame_flags_saturation</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-024">SRS-024</a></td>
+<td><a href="03_SAD.html#SAD-02">SAD-02</a>, <a
+href="03_SAD.html#SAD-07">SAD-07</a></td>
+<td><a href="04_SDD.html#UNIT-06">UNIT-06</a>, <a
+href="04_SDD.html#UNIT-13">UNIT-13</a></td>
+<td><a
+href="src/firmware__tests__test_motion_fusion.c.html#L11"><code>test_static_tilt_converges</code></a>,
+<a
+href="src/firmware__tests__test_motion_fusion.c.html#L26"><code>test_rotation_about_z_integrates</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-025">SRS-025</a></td>
+<td><a href="03_SAD.html#SAD-02">SAD-02</a></td>
+<td><a href="04_SDD.html#UNIT-07">UNIT-07</a></td>
+<td><a
+href="src/firmware__tests__test_motion_fusion.c.html#L45"><code>test_rest_detection_estimates_and_removes_bias</code></a>,
+<a
+href="src/firmware__tests__test_motion_fusion.c.html#L64"><code>test_motion_resets_window</code></a>,
+<a
+href="src/firmware__tests__test_motion_fusion.c.html#L102"><code>test_bias_corrected_static_has_no_yaw_drift</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-026">SRS-026</a></td>
+<td><a href="03_SAD.html#SAD-02">SAD-02</a>, <a
+href="03_SAD.html#SAD-08">SAD-08</a></td>
+<td><a href="04_SDD.html#UNIT-07">UNIT-07</a>, <a
+href="04_SDD.html#UNIT-14">UNIT-14</a></td>
+<td><a
+href="src/firmware__tests__test_motion_fusion.c.html#L83"><code>test_button_request_ignores_accel_criterion</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-027">SRS-027</a></td>
+<td><a href="03_SAD.html#SAD-02">SAD-02</a></td>
+<td><a href="04_SDD.html#UNIT-06">UNIT-06</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L37"><code>test_heading_bridge_vector_and_normalised</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L29"><code>test_euler_bridge_vector</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-030">SRS-030</a></td>
+<td><a href="03_SAD.html#SAD-06">SAD-06</a>, <a
+href="03_SAD.html#SAD-07">SAD-07</a></td>
+<td><a href="04_SDD.html#UNIT-12">UNIT-12</a>, <a
+href="04_SDD.html#UNIT-13">UNIT-13</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-031">SRS-031</a></td>
+<td><a href="03_SAD.html#SAD-07">SAD-07</a></td>
+<td><a href="04_SDD.html#UNIT-13">UNIT-13</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-032">SRS-032</a></td>
+<td><a href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td><a href="04_SDD.html#UNIT-12">UNIT-12</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-033">SRS-033</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a></td>
+<td><a href="04_SDD.html#UNIT-01">UNIT-01</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_codec.c.html#L9"><code>test_bridge_vector_encodes_to_same_bytes</code></a>,
+<a
+href="src/firmware__tests__test_thingy_codec.c.html#L24"><code>test_saturates_at_i16_limits</code></a>,
+<a
+href="src/firmware__tests__test_thingy_codec.c.html#L38"><code>test_rounds_to_nearest</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-034">SRS-034</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a></td>
+<td><a href="04_SDD.html#UNIT-01">UNIT-01</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L9"><code>test_quaternion_bridge_vector</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L19"><code>test_quaternion_saturates</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L29"><code>test_euler_bridge_vector</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-035">SRS-035</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a></td>
+<td><a href="04_SDD.html#UNIT-01">UNIT-01</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L179"><code>test_raw_hr_layout_and_flags</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-036">SRS-036</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a></td>
+<td><a href="04_SDD.html#UNIT-01">UNIT-01</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_codec.c.html#L48"><code>test_rejects_short_buffer_and_null</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-040">SRS-040</a></td>
+<td><a href="03_SAD.html#SAD-08">SAD-08</a>, <a
+href="03_SAD.html#SAD-06">SAD-06</a></td>
+<td><a href="04_SDD.html#UNIT-14">UNIT-14</a>, <a
+href="04_SDD.html#UNIT-12">UNIT-12</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L47"><code>test_button</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L100"><code>test_regression_ef680302_one_byte</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-041">SRS-041</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a>, <a
+href="03_SAD.html#SAD-08">SAD-08</a></td>
+<td><a href="04_SDD.html#UNIT-03">UNIT-03</a>, <a
+href="04_SDD.html#UNIT-14">UNIT-14</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L191"><code>test_button_short_and_long</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-042">SRS-042</a></td>
+<td><a href="03_SAD.html#SAD-08">SAD-08</a></td>
+<td><a href="04_SDD.html#UNIT-14">UNIT-14</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-043">SRS-043</a></td>
+<td><a href="03_SAD.html#SAD-04">SAD-04</a>, <a
+href="03_SAD.html#SAD-08">SAD-08</a></td>
+<td><a href="04_SDD.html#UNIT-10">UNIT-10</a>, <a
+href="04_SDD.html#UNIT-14">UNIT-14</a></td>
+<td><a
+href="src/firmware__tests__test_motor_drive.c.html#L24"><code>test_ueff_never_above_3v0_over_range</code></a>,
+<a
+href="src/firmware__tests__test_motor_drive.c.html#L50"><code>test_supply_usb_uses_vsys_worst_case</code></a>,
+<a
+href="src/firmware__tests__test_motor_drive.c.html#L33"><code>test_duty_zero_supply_uses_conservative_default</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-044">SRS-044</a></td>
+<td><a href="03_SAD.html#SAD-04">SAD-04</a>, <a
+href="03_SAD.html#SAD-08">SAD-08</a></td>
+<td><a href="04_SDD.html#UNIT-10">UNIT-10</a>, <a
+href="04_SDD.html#UNIT-14">UNIT-14</a></td>
+<td><a
+href="src/firmware__tests__test_motor_drive.c.html#L71"><code>test_arbitration_buzzer_pauses_motor</code></a>,
+<a
+href="src/firmware__tests__test_motor_drive.c.html#L84"><code>test_vbus_peak_within_usb_limit</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-050">SRS-050</a></td>
+<td><a href="03_SAD.html#SAD-04">SAD-04</a>, <a
+href="03_SAD.html#SAD-10">SAD-10</a>, <a
+href="03_SAD.html#SAD-11">SAD-11</a></td>
+<td><a href="04_SDD.html#UNIT-09">UNIT-09</a>, <a
+href="04_SDD.html#UNIT-16">UNIT-16</a>, <a
+href="04_SDD.html#UNIT-17">UNIT-17</a></td>
+<td><a
+href="src/firmware__tests__test_vbat.c.html#L35"><code>test_sequence_enable_wait_read_disable</code></a>,
+<a
+href="src/firmware__tests__test_vbat.c.html#L55"><code>test_adc_error_still_disables</code></a>,
+<a
+href="src/firmware__tests__test_vbat.c.html#L33"><code>test_settle_constant_at_least_25ms</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-051">SRS-051</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a>, <a
+href="03_SAD.html#SAD-11">SAD-11</a></td>
+<td><a href="04_SDD.html#UNIT-05">UNIT-05</a>, <a
+href="04_SDD.html#UNIT-17">UNIT-17</a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L168"><code>test_battery_curve</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-052">SRS-052</a></td>
+<td><a href="03_SAD.html#SAD-11">SAD-11</a></td>
+<td><a href="04_SDD.html#UNIT-17">UNIT-17</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-053">SRS-053</a></td>
+<td><a href="03_SAD.html#SAD-11">SAD-11</a>, <a
+href="03_SAD.html#SAD-07">SAD-07</a>, <a
+href="03_SAD.html#SAD-03">SAD-03</a></td>
+<td><a href="04_SDD.html#UNIT-17">UNIT-17</a>, <a
+href="04_SDD.html#UNIT-13">UNIT-13</a>, <a
+href="04_SDD.html#UNIT-08">UNIT-08</a></td>
+<td><a
+href="src/firmware__tests__test_icm45686.c.html#L155"><code>test_ireg_write_and_wom</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-054">SRS-054</a></td>
+<td><a href="03_SAD.html#SAD-12">SAD-12</a></td>
+<td><a href="04_SDD.html#UNIT-18">UNIT-18</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-060">SRS-060</a></td>
+<td><a href="03_SAD.html#SAD-05">SAD-05</a>, <a
+href="03_SAD.html#SAD-09">SAD-09</a></td>
+<td><a href="04_SDD.html#UNIT-11">UNIT-11</a>, <a
+href="04_SDD.html#UNIT-15">UNIT-15</a></td>
+<td><a
+href="src/firmware__tests__test_ext_input.c.html#L46"><code>test_presence</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-061">SRS-061</a></td>
+<td><a href="03_SAD.html#SAD-05">SAD-05</a>, <a
+href="03_SAD.html#SAD-09">SAD-09</a></td>
+<td><a href="04_SDD.html#UNIT-11">UNIT-11</a>, <a
+href="04_SDD.html#UNIT-15">UNIT-15</a></td>
+<td><a
+href="src/firmware__tests__test_ext_input.c.html#L27"><code>test_center_calibration_shifts_zero</code></a>,
+<a
+href="src/firmware__tests__test_ext_input.c.html#L38"><code>test_center_calibration_rejects_implausible</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-062">SRS-062</a></td>
+<td><a href="03_SAD.html#SAD-05">SAD-05</a></td>
+<td><a href="04_SDD.html#UNIT-11">UNIT-11</a></td>
+<td><a
+href="src/firmware__tests__test_ext_input.c.html#L9"><code>test_scale_default_center_and_ends</code></a>,
+<a
+href="src/firmware__tests__test_ext_input.c.html#L18"><code>test_deadzone</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-063">SRS-063</a></td>
+<td><a href="03_SAD.html#SAD-05">SAD-05</a></td>
+<td><a href="04_SDD.html#UNIT-11">UNIT-11</a></td>
+<td><a
+href="src/firmware__tests__test_ext_input.c.html#L59"><code>test_poll_on_demand</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-064">SRS-064</a></td>
+<td><a href="03_SAD.html#SAD-05">SAD-05</a>, <a
+href="03_SAD.html#SAD-09">SAD-09</a></td>
+<td><a href="04_SDD.html#UNIT-11">UNIT-11</a>, <a
+href="04_SDD.html#UNIT-15">UNIT-15</a></td>
+<td><a
+href="src/firmware__tests__test_ext_input.c.html#L69"><code>test_touch_debounced_events</code></a>,
+<a
+href="src/firmware__tests__test_ext_input.c.html#L81"><code>test_touch_glitch_no_event</code></a>,
+<a
+href="src/firmware__tests__test_ext_input.c.html#L90"><code>test_touch_floating_input_no_spam</code></a>,
+<a
+href="src/firmware__tests__test_ext_input.c.html#L103"><code>test_touch_recovers_after_lockout</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-065">SRS-065</a></td>
+<td><a href="03_SAD.html#SAD-01">SAD-01</a>, <a
+href="03_SAD.html#SAD-09">SAD-09</a></td>
+<td><a href="04_SDD.html#UNIT-04">UNIT-04</a>, <a
+href="04_SDD.html#UNIT-15">UNIT-15</a></td>
+<td><a
+href="src/firmware__tests__test_ui_ext.c.html#L9"><code>test_layout_vector</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L61"><code>test_rate_20_per_s</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L62"><code>test_rate_10_per_s_game_mode</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L75"><code>test_edge_never_lost_and_within_100ms</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L88"><code>test_absent_exactly_one_notify_after_subscribe</code></a></td>
+<td>Host-Test vorhanden, nicht ausgeführt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-070">SRS-070</a></td>
+<td><a href="03_SAD.html#SAD-11">SAD-11</a></td>
+<td><a href="04_SDD.html#UNIT-17">UNIT-17</a></td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-071">SRS-071</a></td>
+<td><a href="03_SAD.html#SAD-13">SAD-13</a></td>
+<td>–</td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-072">SRS-072</a></td>
+<td><a href="03_SAD.html#SAD-13">SAD-13</a>, <a
+href="03_SAD.html#SAD-14">SAD-14</a></td>
+<td>–</td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-073">SRS-073</a></td>
+<td><a href="03_SAD.html#SAD-13">SAD-13</a></td>
+<td>–</td>
+<td>–</td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-090">SRS-090</a></td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>nicht umgesetzt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-091">SRS-091</a></td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>nicht umgesetzt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-092">SRS-092</a></td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>nicht umgesetzt</td>
+</tr>
+<tr class="odd">
+<td><a href="02_SRS.html#SRS-093">SRS-093</a></td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>nicht umgesetzt</td>
+</tr>
+<tr class="even">
+<td><a href="02_SRS.html#SRS-094">SRS-094</a></td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>nicht umgesetzt</td>
+</tr>
+</tbody>
+</table>
+<h2 id="umgekehrt-tests-ohne-anforderung">Umgekehrt: Tests ohne
+Anforderung</h2>
+<p>Die Prüfung <code>build_site.py --check</code> erkennt nur fehlende
+SRS-Einträge in dieser Matrix. Tests, die auf keine Anforderung zeigen,
+sind nicht automatisch erkannt. Bei den 69 <code>RUN_TEST</code> in
+<code>firmware/tests/</code> habe ich das nicht vollständig abgeglichen
+(<a href="08_Luecken.html#GAP-20">GAP-20</a>).</p>
+</body>
+</html>

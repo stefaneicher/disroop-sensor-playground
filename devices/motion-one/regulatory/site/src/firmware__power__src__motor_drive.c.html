@@ -1,0 +1,47 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/power/src/motor_drive.c</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/power/src/motor_drive.c</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>#include &quot;motor_drive.h&quot;
+</span><span class="l" id="L2"><a href="#L2">2</a>
+</span><span class="l" id="L3"><a href="#L3">3</a>uint16_t motor_supply_mv(uint16_t vbat_mv, bool usb)
+</span><span class="l" id="L4"><a href="#L4">4</a>{
+</span><span class="l" id="L5"><a href="#L5">5</a>	if (usb) {
+</span><span class="l" id="L6"><a href="#L6">6</a>		return MOTOR_SUPPLY_USB_MV;
+</span><span class="l" id="L7"><a href="#L7">7</a>	}
+</span><span class="l" id="L8"><a href="#L8">8</a>	if (vbat_mv &lt; MOTOR_SUPPLY_VBAT_MIN_MV || vbat_mv &gt; MOTOR_SUPPLY_VBAT_MAX_MV + 300u) {
+</span><span class="l" id="L9"><a href="#L9">9</a>		return MOTOR_SUPPLY_VBAT_MAX_MV;
+</span><span class="l" id="L10"><a href="#L10">10</a>	}
+</span><span class="l" id="L11"><a href="#L11">11</a>	return vbat_mv;
+</span><span class="l" id="L12"><a href="#L12">12</a>}
+</span><span class="l" id="L13"><a href="#L13">13</a>
+</span><span class="l" id="L14"><a href="#L14">14</a>uint16_t motor_duty_permille(uint16_t supply_mv)
+</span><span class="l" id="L15"><a href="#L15">15</a>{
+</span><span class="l" id="L16"><a href="#L16">16</a>	if (supply_mv == 0) {
+</span><span class="l" id="L17"><a href="#L17">17</a>		supply_mv = MOTOR_SUPPLY_USB_MV;
+</span><span class="l" id="L18"><a href="#L18">18</a>	}
+</span><span class="l" id="L19"><a href="#L19">19</a>	if (supply_mv &lt;= MOTOR_TARGET_MV) {
+</span><span class="l" id="L20"><a href="#L20">20</a>		return 1000u;
+</span><span class="l" id="L21"><a href="#L21">21</a>	}
+</span><span class="l" id="L22"><a href="#L22">22</a>	return (uint16_t)(MOTOR_TARGET_MV * 1000u / supply_mv);
+</span><span class="l" id="L23"><a href="#L23">23</a>}
+</span><span class="l" id="L24"><a href="#L24">24</a>
+</span><span class="l" id="L25"><a href="#L25">25</a>load_out_t load_arbitrate(bool buzzer_req, bool motor_req)
+</span><span class="l" id="L26"><a href="#L26">26</a>{
+</span><span class="l" id="L27"><a href="#L27">27</a>	load_out_t o = {.buzzer_on = buzzer_req, .motor_on = motor_req &amp;&amp; !buzzer_req};
+</span><span class="l" id="L28"><a href="#L28">28</a>	return o;
+</span><span class="l" id="L29"><a href="#L29">29</a>}
+</span><span class="l" id="L30"><a href="#L30">30</a>
+</span><span class="l" id="L31"><a href="#L31">31</a>/* ANALYSE_V1 §1a (BERECHNUNG/SIMULATION): Lader 281 + CHRG-LED 3 + 3V3-Last ohne Summer 51.6 mA,
+</span><span class="l" id="L32"><a href="#L32">32</a> * Summer-Spitze 87 mA, Motor-Anlauf mit PWM 3.0 V &lt;= 120 mA (QUELLE DB). */
+</span><span class="l" id="L33"><a href="#L33">33</a>uint32_t motor_vbus_peak_ma(bool buzzer_on, bool motor_on)
+</span><span class="l" id="L34"><a href="#L34">34</a>{
+</span><span class="l" id="L35"><a href="#L35">35</a>	uint32_t ma = 281u + 3u + 52u;
+</span><span class="l" id="L36"><a href="#L36">36</a>	if (buzzer_on) {
+</span><span class="l" id="L37"><a href="#L37">37</a>		ma += 87u;
+</span><span class="l" id="L38"><a href="#L38">38</a>	}
+</span><span class="l" id="L39"><a href="#L39">39</a>	if (motor_on) {
+</span><span class="l" id="L40"><a href="#L40">40</a>		ma += 120u;
+</span><span class="l" id="L41"><a href="#L41">41</a>	}
+</span><span class="l" id="L42"><a href="#L42">42</a>	return ma;
+</span><span class="l" id="L43"><a href="#L43">43</a>}
+</span></pre></body></html>

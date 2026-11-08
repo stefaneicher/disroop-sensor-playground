@@ -1,0 +1,67 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/app/src/main.c</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/app/src/main.c</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* Disroop Motion One V1: Thingy:52-kompatible Firmware (nRF52840 + ICM-45686). */
+</span><span class="l" id="L2"><a href="#L2">2</a>#include &lt;zephyr/kernel.h&gt;
+</span><span class="l" id="L3"><a href="#L3">3</a>#include &lt;zephyr/logging/log.h&gt;
+</span><span class="l" id="L4"><a href="#L4">4</a>#include &lt;zephyr/sys/poweroff.h&gt;
+</span><span class="l" id="L5"><a href="#L5">5</a>#include &lt;zephyr/bluetooth/services/bas.h&gt;
+</span><span class="l" id="L6"><a href="#L6">6</a>#include &quot;app.h&quot;
+</span><span class="l" id="L7"><a href="#L7">7</a>
+</span><span class="l" id="L8"><a href="#L8">8</a>LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
+</span><span class="l" id="L9"><a href="#L9">9</a>
+</span><span class="l" id="L10"><a href="#L10">10</a>#define BATTERY_PERIOD_S 60u
+</span><span class="l" id="L11"><a href="#L11">11</a>#define UNDERVOLTAGE_MV 3300u /* BUDGETS, ANNAHME */
+</span><span class="l" id="L12"><a href="#L12">12</a>
+</span><span class="l" id="L13"><a href="#L13">13</a>static void power_off(const char *why)
+</span><span class="l" id="L14"><a href="#L14">14</a>{
+</span><span class="l" id="L15"><a href="#L15">15</a>	LOG_WRN(&quot;System OFF: %s&quot;, why);
+</span><span class="l" id="L16"><a href="#L16">16</a>	thingy_led_cmd_t off = {.mode = THINGY_LED_OFF};
+</span><span class="l" id="L17"><a href="#L17">17</a>	ui_led_apply(&amp;off);
+</span><span class="l" id="L18"><a href="#L18">18</a>	ext_input_suspend();
+</span><span class="l" id="L19"><a href="#L19">19</a>	(void)imu_enter_wake_on_motion();
+</span><span class="l" id="L20"><a href="#L20">20</a>	(void)ui_arm_button_wakeup();
+</span><span class="l" id="L21"><a href="#L21">21</a>	sys_poweroff();
+</span><span class="l" id="L22"><a href="#L22">22</a>}
+</span><span class="l" id="L23"><a href="#L23">23</a>
+</span><span class="l" id="L24"><a href="#L24">24</a>static void update_battery(void)
+</span><span class="l" id="L25"><a href="#L25">25</a>{
+</span><span class="l" id="L26"><a href="#L26">26</a>	const uint16_t mv = battery_read_mv();
+</span><span class="l" id="L27"><a href="#L27">27</a>	if (mv == 0) {
+</span><span class="l" id="L28"><a href="#L28">28</a>		return;
+</span><span class="l" id="L29"><a href="#L29">29</a>	}
+</span><span class="l" id="L30"><a href="#L30">30</a>	(void)bt_bas_set_battery_level(thingy_battery_percent_from_mv(mv)); /* notify nur bei Aenderung */
+</span><span class="l" id="L31"><a href="#L31">31</a>	if (mv &lt; UNDERVOLTAGE_MV) {
+</span><span class="l" id="L32"><a href="#L32">32</a>		power_off(&quot;Unterspannung&quot;);
+</span><span class="l" id="L33"><a href="#L33">33</a>	}
+</span><span class="l" id="L34"><a href="#L34">34</a>}
+</span><span class="l" id="L35"><a href="#L35">35</a>
+</span><span class="l" id="L36"><a href="#L36">36</a>int main(void)
+</span><span class="l" id="L37"><a href="#L37">37</a>{
+</span><span class="l" id="L38"><a href="#L38">38</a>	LOG_INF(&quot;Motion One V1 start&quot;);
+</span><span class="l" id="L39"><a href="#L39">39</a>	if (ui_init() || battery_init()) {
+</span><span class="l" id="L40"><a href="#L40">40</a>		LOG_ERR(&quot;UI/Batterie-Init fehlgeschlagen&quot;);
+</span><span class="l" id="L41"><a href="#L41">41</a>	}
+</span><span class="l" id="L42"><a href="#L42">42</a>	update_battery();
+</span><span class="l" id="L43"><a href="#L43">43</a>	if (ble_thingy_init()) {
+</span><span class="l" id="L44"><a href="#L44">44</a>		LOG_ERR(&quot;BLE-Init fehlgeschlagen&quot;);
+</span><span class="l" id="L45"><a href="#L45">45</a>		return 0;
+</span><span class="l" id="L46"><a href="#L46">46</a>	}
+</span><span class="l" id="L47"><a href="#L47">47</a>	if (imu_task_start()) {
+</span><span class="l" id="L48"><a href="#L48">48</a>		LOG_ERR(&quot;IMU-Init fehlgeschlagen&quot;);
+</span><span class="l" id="L49"><a href="#L49">49</a>	}
+</span><span class="l" id="L50"><a href="#L50">50</a>	if (ext_input_start()) {
+</span><span class="l" id="L51"><a href="#L51">51</a>		LOG_ERR(&quot;J5-Init fehlgeschlagen&quot;);
+</span><span class="l" id="L52"><a href="#L52">52</a>	}
+</span><span class="l" id="L53"><a href="#L53">53</a>	uint32_t t = 0;
+</span><span class="l" id="L54"><a href="#L54">54</a>	for (;;) {
+</span><span class="l" id="L55"><a href="#L55">55</a>		k_sleep(K_SECONDS(1));
+</span><span class="l" id="L56"><a href="#L56">56</a>		if (++t % BATTERY_PERIOD_S == 0) {
+</span><span class="l" id="L57"><a href="#L57">57</a>			update_battery();
+</span><span class="l" id="L58"><a href="#L58">58</a>		}
+</span><span class="l" id="L59"><a href="#L59">59</a>		if (!ble_is_connected() &amp;&amp; imu_at_rest_for_s(REST_SLEEP_S)) {
+</span><span class="l" id="L60"><a href="#L60">60</a>			power_off(&quot;Ruhe ohne Verbindung&quot;);
+</span><span class="l" id="L61"><a href="#L61">61</a>		}
+</span><span class="l" id="L62"><a href="#L62">62</a>	}
+</span><span class="l" id="L63"><a href="#L63">63</a>}
+</span></pre></body></html>

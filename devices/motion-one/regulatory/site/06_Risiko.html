@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Risiko</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="top"><a href="index.html">Start</a> · <a href="01_Normen.html">Normen</a> · <a href="02_SRS.html">SRS</a> · <a href="03_SAD.html">SAD</a> · <a href="04_SDD.html">SDD</a> · <a href="05_SOUP.html">SOUP</a> · <a href="06_Risiko.html">Risiko</a> · <a href="07_Rueckverfolgbarkeit.html">Rückverfolgbarkeit</a> · <a href="08_Luecken.html">Lücken</a> · <a href="09_Skills.html">Skills</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#sicherheitsklasse-und-gefährdungen-durch-software"
+id="toc-sicherheitsklasse-und-gefährdungen-durch-software">Sicherheitsklasse
+und Gefährdungen durch Software</a>
+<ul>
+<li><a href="#1-sicherheitsklasse" id="toc-1-sicherheitsklasse">1.
+Sicherheitsklasse</a></li>
+<li><a href="#2-gefährdungen" id="toc-2-gefährdungen">2.
+Gefährdungen</a></li>
+<li><a href="#3-wirkung-auf-die-entwicklung-klasse-c"
+id="toc-3-wirkung-auf-die-entwicklung-klasse-c">3. Wirkung auf die
+Entwicklung (Klasse C)</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1
+id="sicherheitsklasse-und-gefährdungen-durch-software">Sicherheitsklasse
+und Gefährdungen durch Software</h1>
+<p>Das ist <strong>keine Risikoanalyse nach ISO 14971</strong>, sondern
+die Vorarbeit dafür: Gefährdungen, die man beim Lesen des Codes sieht,
+mit der Kontrolle, die schon im Code steckt, und der Kontrolle, die
+fehlt. Schweregrade und Wahrscheinlichkeiten festzulegen ist Sache des
+Risikomanagement-Teams (<a href="08_Luecken.html#GAP-18">GAP-18</a>). Alle
+Folgen unten beruhen auf der <strong>angenommenen</strong>
+Zweckbestimmung (OPEN-01).</p>
+<h2 id="1-sicherheitsklasse">1. Sicherheitsklasse</h2>
+<p>IEC 62304 (Abschnitt 4.3) legt die Klasse nach der schlimmsten
+möglichen Folge fest, <strong>nachdem</strong> Risikokontrollen
+ausserhalb der Software berücksichtigt sind:</p>
+<ul>
+<li>A: keine Gesundheitsschädigung möglich</li>
+<li>B: Schädigung möglich, aber nicht schwer</li>
+<li>C: Tod oder schwere Schädigung möglich</li>
+</ul>
+<p><strong>Setzung:</strong> Klasse C für die gesamte Firmware (Auftrag
+des Users). Begründung für die Dokumentation: Das Gerät hat einen
+Li-Po-Akku mit Lade- und Entladesteuerung, treibt Motor und Summer, und
+liefert Messdaten, auf deren Basis eine Fachperson Übungen steuern
+könnte. Eine ehrliche Einstufung kann tiefer ausfallen (B), wenn die
+Risikoanalyse zeigt, dass Hardware (Zellschutz, Strombegrenzung) und
+Auswertesoftware die Folgen abfangen. Bis dahin gilt: lieber C
+dokumentieren als zu tief einstufen. Die Klasse einzelner Einheiten zu
+senken verlangt eine Trennung nach 5.3.5, siehe <a
+href="08_Luecken.html#GAP-06">GAP-06</a>.</p>
+<h2 id="2-gefährdungen">2. Gefährdungen</h2>
+<p>Spalten: <em>Kontrolle im Code</em> = was heute schon schützt (mit
+Link) · <em>Fehlt</em> = was ein Audit verlangen würde.</p>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Gefährdung (Ursache in der Software)</th>
+<th>Mögliche Folge (ANNAHME)</th>
+<th>Kontrolle im Code</th>
+<th>Fehlt</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="HAZ-01"></a><strong>HAZ-01</strong></td>
+<td><strong>Falsche Lage- oder Bewegungsdaten</strong>: Gyro-Bias falsch
+geschätzt (Ruheschwelle 3 °/s), Sättigung, Filterdrift</td>
+<td>Fachperson oder Software beurteilt Bewegung falsch, Übung wird
+falsch dosiert</td>
+<td>Sättigungs- und <code>fusion_ok</code>-Flags in Raw-HR (<a
+href="02_SRS.html#SRS-035">SRS-035</a>), Bias-Test (<a
+href="02_SRS.html#SRS-025">SRS-025</a>), Sättigungserkennung (<a
+href="02_SRS.html#SRS-023">SRS-023</a>)</td>
+<td>Plausibilitätsprüfung der Bias-Schätzung, Obergrenze für den Bias,
+Genauigkeitsnachweis am Gerät (NOT RUN)</td>
+</tr>
+<tr class="even">
+<td><a id="HAZ-02"></a><strong>HAZ-02</strong></td>
+<td><strong>Stiller Sensorausfall</strong>: IMU-Init oder SPI-Lesefehler
+werden nur geloggt, das Gerät sendet weiter Advertising, aber keine
+Daten</td>
+<td>Auswertung zeigt „keine Bewegung“ statt „Gerät defekt“</td>
+<td>Fehlercodes im Treiber (<a
+href="02_SRS.html#SRS-021">SRS-021</a>)</td>
+<td>Fehleranzeige (LED/BLE), Zähler für Lesefehler, Abschaltung (<a
+href="02_SRS.html#SRS-091">SRS-091</a>)</td>
+</tr>
+<tr class="odd">
+<td><a id="HAZ-03"></a><strong>HAZ-03</strong></td>
+<td><strong>Firmware hängt</strong> (Deadlock, Endlosschleife,
+Stapelüberlauf)</td>
+<td>Gerät reagiert nicht mehr, Motor oder Summer bleibt aktiv</td>
+<td>Stackschutz durch MPU, Timer beenden Summer und Motor (<a
+href="02_SRS.html#SRS-014">SRS-014</a>, <a
+href="02_SRS.html#SRS-043">SRS-043</a>)</td>
+<td>Watchdog, definierter sicherer Zustand (<a
+href="02_SRS.html#SRS-090">SRS-090</a>), Stapelnutzung gemessen</td>
+</tr>
+<tr class="even">
+<td><a id="HAZ-04"></a><strong>HAZ-04</strong></td>
+<td><strong>Unbefugter BLE-Zugriff</strong>: keine Kopplung, keine
+Verschlüsselung; jeder in Reichweite schreibt LED, Ton,
+Konfiguration</td>
+<td>Störung der Sitzung, Datenabgriff, im schlimmsten Fall Manipulation
+der Messkonfiguration</td>
+<td>Eine Verbindung gleichzeitig (<a
+href="02_SRS.html#SRS-002">SRS-002</a>), Wertebereiche geprüft (<a
+href="02_SRS.html#SRS-010">SRS-010</a>)</td>
+<td>Authentifizierung, Verschlüsselung, Bedrohungsmodell, signierte
+Updates (<a href="02_SRS.html#SRS-092">SRS-092</a>)</td>
+</tr>
+<tr class="odd">
+<td><a id="HAZ-05"></a><strong>HAZ-05</strong></td>
+<td><strong>Akku-Tiefentladung oder falsche Akkuanzeige</strong>:
+Messung fällt aus (Wert 0 wird ignoriert), Kurve ist eine Annahme</td>
+<td>Akku schädigt sich, falsche Restladung, Gerät schaltet unerwartet
+ab</td>
+<td>Messung mit sicherem Abschalten des Teilers (<a
+href="02_SRS.html#SRS-050">SRS-050</a>), Abschaltung unter 3300 mV (<a
+href="02_SRS.html#SRS-052">SRS-052</a>)</td>
+<td>Behandlung wiederholter Messfehler, Messung der Kurve am Akku,
+Nachweis des Zellschutzes (Hardware)</td>
+</tr>
+<tr class="even">
+<td><a id="HAZ-06"></a><strong>HAZ-06</strong></td>
+<td><strong>Überlast durch Motor und Summer</strong> an USB
+(Stromgrenze) oder Motorüberspannung</td>
+<td>Spannungseinbruch, Überhitzung, Schaden am USB-Host</td>
+<td>Tastgrad für ≤ 3,0 V, Arbitrierung, Spitzenstromprüfung (<a
+href="02_SRS.html#SRS-043">SRS-043</a>, <a
+href="02_SRS.html#SRS-044">SRS-044</a>)</td>
+<td>Messung am Gerät (NOT RUN)</td>
+</tr>
+<tr class="odd">
+<td><a id="HAZ-07"></a><strong>HAZ-07</strong></td>
+<td><strong>Gerät schaltet nicht ab oder wacht unerwartet
+auf</strong></td>
+<td>Akku läuft leer, Funk unbemerkt aktiv</td>
+<td>Ruheabschaltung 60 s, Wake-Quellen Taster und Bewegung (<a
+href="02_SRS.html#SRS-053">SRS-053</a>)</td>
+<td>Messung des Ruhestroms (NOT RUN)</td>
+</tr>
+<tr class="even">
+<td><a id="HAZ-08"></a><strong>HAZ-08</strong></td>
+<td><strong>Ungültige Konfiguration</strong> durch Client
+(Bereichsüberschreitung, falsche Länge)</td>
+<td>Unerwartetes Verhalten, falsche Rate</td>
+<td>Parser prüfen Länge und Bereich (<a
+href="02_SRS.html#SRS-010">SRS-010</a>, <a
+href="02_SRS.html#SRS-013">SRS-013</a>, <a
+href="02_SRS.html#SRS-015">SRS-015</a>)</td>
+<td>Fuzz- oder Grenzwerttests für die Adapter-Handler</td>
+</tr>
+<tr class="odd">
+<td><a id="HAZ-09"></a><strong>HAZ-09</strong></td>
+<td><strong>Verlorene Notifications</strong>: Rückgabewert von
+<code>bt_gatt_notify</code> wird ignoriert, Dezimierung bei
+Überlast</td>
+<td>Lücken im Datenstrom werden nicht bemerkt</td>
+<td>Sample-Zähler im Raw-HR-Kanal (<a
+href="02_SRS.html#SRS-035">SRS-035</a>), Budget ≤ 200/s (<a
+href="02_SRS.html#SRS-032">SRS-032</a>)</td>
+<td>Fehlerzähler im Gerät, Meldung an den Client (<a
+href="02_SRS.html#SRS-094">SRS-094</a>)</td>
+</tr>
+<tr class="even">
+<td><a id="HAZ-10"></a><strong>HAZ-10</strong></td>
+<td><strong>Keine Rückverfolgbarkeit der Firmware</strong>: Version und
+Geräte-ID nicht auslesbar</td>
+<td>Fehlerberichte nicht zuordenbar, Rückruf nicht eingrenzbar</td>
+<td>Git-Verlauf, SHA-256 der Images in <code>smoke.sh</code></td>
+<td>Version im Gerät, UDI, Release-Stand (<a
+href="02_SRS.html#SRS-093">SRS-093</a>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-wirkung-auf-die-entwicklung-klasse-c">3. Wirkung auf die
+Entwicklung (Klasse C)</h2>
+<ul>
+<li>Jede Risikokontrolle in der Software wird zur
+<strong>Anforderung</strong> und muss <strong>verifiziert</strong>
+werden (IEC 62304, Abschnitt 7.2 und 7.3).</li>
+<li>Jede Änderung braucht eine <strong>Auswirkungsanalyse</strong> auf
+Risiken (7.4).</li>
+<li>Die Analyse prüft auch, welche <strong>SOUP</strong> (siehe <a
+href="05_SOUP.html">SOUP</a>) zu einer Gefährdung beitragen kann.</li>
+</ul>
+</body>
+</html>

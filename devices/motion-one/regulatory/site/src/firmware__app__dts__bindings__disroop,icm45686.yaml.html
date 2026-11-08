@@ -1,0 +1,16 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/app/dts/bindings/disroop,icm45686.yaml</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/app/dts/bindings/disroop,icm45686.yaml</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>description: TDK ICM-45686 IMU an SPI (schlanker App-Treiber, ohne hal_tdk)
+</span><span class="l" id="L2"><a href="#L2">2</a>compatible: &quot;disroop,icm45686&quot;
+</span><span class="l" id="L3"><a href="#L3">3</a>include: spi-device.yaml
+</span><span class="l" id="L4"><a href="#L4">4</a>properties:
+</span><span class="l" id="L5"><a href="#L5">5</a>  int1-gpios:
+</span><span class="l" id="L6"><a href="#L6">6</a>    type: phandle-array
+</span><span class="l" id="L7"><a href="#L7">7</a>    required: true
+</span><span class="l" id="L8"><a href="#L8">8</a>    description: INT1 (Push-Pull, aktiv high), FIFO-Watermark und Wake-on-Motion
+</span><span class="l" id="L9"><a href="#L9">9</a>  int2-gpios:
+</span><span class="l" id="L10"><a href="#L10">10</a>    type: phandle-array
+</span><span class="l" id="L11"><a href="#L11">11</a>    required: false
+</span><span class="l" id="L12"><a href="#L12">12</a>    description: INT2 (Push-Pull, aktiv high), auf V1 verdrahtet, derzeit ungenutzt
+</span></pre></body></html>

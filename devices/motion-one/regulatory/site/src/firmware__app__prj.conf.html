@@ -1,0 +1,36 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/app/prj.conf</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/app/prj.conf</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>CONFIG_FPU=y
+</span><span class="l" id="L2"><a href="#L2">2</a>CONFIG_LOG=y
+</span><span class="l" id="L3"><a href="#L3">3</a>CONFIG_SPI=y
+</span><span class="l" id="L4"><a href="#L4">4</a>CONFIG_PWM=y
+</span><span class="l" id="L5"><a href="#L5">5</a>CONFIG_ADC=y
+</span><span class="l" id="L6"><a href="#L6">6</a>CONFIG_POWEROFF=y
+</span><span class="l" id="L7"><a href="#L7">7</a>CONFIG_MAIN_STACK_SIZE=2048
+</span><span class="l" id="L8"><a href="#L8">8</a>CONFIG_SYSTEM_WORKQUEUE_STACK_SIZE=2048
+</span><span class="l" id="L9"><a href="#L9">9</a>
+</span><span class="l" id="L10"><a href="#L10">10</a>CONFIG_BT=y
+</span><span class="l" id="L11"><a href="#L11">11</a>CONFIG_BT_PERIPHERAL=y
+</span><span class="l" id="L12"><a href="#L12">12</a>CONFIG_BT_DEVICE_NAME=&quot;Thingy&quot;
+</span><span class="l" id="L13"><a href="#L13">13</a>CONFIG_BT_MAX_CONN=1
+</span><span class="l" id="L14"><a href="#L14">14</a>CONFIG_BT_BAS=y
+</span><span class="l" id="L15"><a href="#L15">15</a># Verbindungsparameter laut BUDGETS: 7.5..15 ms, Latenz 0, Timeout 4 s
+</span><span class="l" id="L16"><a href="#L16">16</a>CONFIG_BT_PERIPHERAL_PREF_MIN_INT=6
+</span><span class="l" id="L17"><a href="#L17">17</a>CONFIG_BT_PERIPHERAL_PREF_MAX_INT=12
+</span><span class="l" id="L18"><a href="#L18">18</a>CONFIG_BT_PERIPHERAL_PREF_LATENCY=0
+</span><span class="l" id="L19"><a href="#L19">19</a>CONFIG_BT_PERIPHERAL_PREF_TIMEOUT=400
+</span><span class="l" id="L20"><a href="#L20">20</a>CONFIG_BT_GAP_AUTO_UPDATE_CONN_PARAMS=y
+</span><span class="l" id="L21"><a href="#L21">21</a># MTU 247 akzeptieren (Nutzlast bleibt &lt;= 20 B)
+</span><span class="l" id="L22"><a href="#L22">22</a>CONFIG_BT_L2CAP_TX_MTU=247
+</span><span class="l" id="L23"><a href="#L23">23</a>CONFIG_BT_BUF_ACL_RX_SIZE=251
+</span><span class="l" id="L24"><a href="#L24">24</a>CONFIG_BT_BUF_ACL_TX_SIZE=251
+</span><span class="l" id="L25"><a href="#L25">25</a>CONFIG_BT_CTLR_DATA_LENGTH_MAX=251
+</span><span class="l" id="L26"><a href="#L26">26</a># 0 dBm, kein Bonding/SMP
+</span><span class="l" id="L27"><a href="#L27">27</a>CONFIG_BT_CTLR_TX_PWR_0=y
+</span><span class="l" id="L28"><a href="#L28">28</a>CONFIG_BT_SMP=n
+</span><span class="l" id="L29"><a href="#L29">29</a># Q-02: kein UART, Log nur ueber SEGGER RTT (SWD)
+</span><span class="l" id="L30"><a href="#L30">30</a>CONFIG_USE_SEGGER_RTT=y
+</span><span class="l" id="L31"><a href="#L31">31</a>CONFIG_LOG_BACKEND_RTT=y
+</span><span class="l" id="L32"><a href="#L32">32</a>CONFIG_LOG_BACKEND_UART=n
+</span></pre></body></html>

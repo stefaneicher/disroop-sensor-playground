@@ -1,0 +1,127 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/tests/test_ui_ext.c</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/tests/test_ui_ext.c</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* Host-Tests EF680380 (systems/ADR-0002): Layout 8 B LE, Klemmung, seq, Ratenbegrenzer, Abwesenheit, Regression 0302. */
+</span><span class="l" id="L2"><a href="#L2">2</a>#include &lt;string.h&gt;
+</span><span class="l" id="L3"><a href="#L3">3</a>#include &quot;unity.h&quot;
+</span><span class="l" id="L4"><a href="#L4">4</a>#include &quot;thingy_codec.h&quot;
+</span><span class="l" id="L5"><a href="#L5">5</a>
+</span><span class="l" id="L6"><a href="#L6">6</a>void setUp(void) {}
+</span><span class="l" id="L7"><a href="#L7">7</a>void tearDown(void) {}
+</span><span class="l" id="L8"><a href="#L8">8</a>
+</span><span class="l" id="L9"><a href="#L9">9</a>void test_layout_vector(void)
+</span><span class="l" id="L10"><a href="#L10">10</a>{
+</span><span class="l" id="L11"><a href="#L11">11</a>	ui_ext_state_t s = {.flags = UI_EXT_PRESENT | UI_EXT_BTN | UI_EXT_CENTER_OK, .x = -100, .y = 100, .seq = 0xFFFF};
+</span><span class="l" id="L12"><a href="#L12">12</a>	uint8_t o[8];
+</span><span class="l" id="L13"><a href="#L13">13</a>	const uint8_t want[8] = {0x01, 0x13, 0x9c, 0x64, 0xff, 0xff, 0x00, 0x00};
+</span><span class="l" id="L14"><a href="#L14">14</a>	TEST_ASSERT_EQUAL(8, thingy_encode_ui_ext(&amp;s, o, sizeof o));
+</span><span class="l" id="L15"><a href="#L15">15</a>	TEST_ASSERT_EQUAL_HEX8_ARRAY(want, o, 8);
+</span><span class="l" id="L16"><a href="#L16">16</a>}
+</span><span class="l" id="L17"><a href="#L17">17</a>
+</span><span class="l" id="L18"><a href="#L18">18</a>void test_le_seq_and_reserved(void)
+</span><span class="l" id="L19"><a href="#L19">19</a>{
+</span><span class="l" id="L20"><a href="#L20">20</a>	ui_ext_state_t s = {.flags = UI_EXT_PRESENT, .seq = 0x1234};
+</span><span class="l" id="L21"><a href="#L21">21</a>	uint8_t o[8];
+</span><span class="l" id="L22"><a href="#L22">22</a>	memset(o, 0xAA, sizeof o);
+</span><span class="l" id="L23"><a href="#L23">23</a>	thingy_encode_ui_ext(&amp;s, o, 8);
+</span><span class="l" id="L24"><a href="#L24">24</a>	TEST_ASSERT_EQUAL_HEX8(0x34, o[4]);
+</span><span class="l" id="L25"><a href="#L25">25</a>	TEST_ASSERT_EQUAL_HEX8(0x12, o[5]);
+</span><span class="l" id="L26"><a href="#L26">26</a>	TEST_ASSERT_EQUAL_HEX8(0, o[6]);
+</span><span class="l" id="L27"><a href="#L27">27</a>	TEST_ASSERT_EQUAL_HEX8(0, o[7]);
+</span><span class="l" id="L28"><a href="#L28">28</a>}
+</span><span class="l" id="L29"><a href="#L29">29</a>
+</span><span class="l" id="L30"><a href="#L30">30</a>void test_clamp_and_short_buffer(void)
+</span><span class="l" id="L31"><a href="#L31">31</a>{
+</span><span class="l" id="L32"><a href="#L32">32</a>	ui_ext_state_t s = {.x = -128, .y = 127};
+</span><span class="l" id="L33"><a href="#L33">33</a>	uint8_t o[8];
+</span><span class="l" id="L34"><a href="#L34">34</a>	thingy_encode_ui_ext(&amp;s, o, 8);
+</span><span class="l" id="L35"><a href="#L35">35</a>	TEST_ASSERT_EQUAL_INT8(-100, (int8_t)o[2]);
+</span><span class="l" id="L36"><a href="#L36">36</a>	TEST_ASSERT_EQUAL_INT8(100, (int8_t)o[3]);
+</span><span class="l" id="L37"><a href="#L37">37</a>	TEST_ASSERT_EQUAL(0, thingy_encode_ui_ext(&amp;s, o, 7));
+</span><span class="l" id="L38"><a href="#L38">38</a>	TEST_ASSERT_EQUAL(0, thingy_encode_ui_ext(NULL, o, 8));
+</span><span class="l" id="L39"><a href="#L39">39</a>}
+</span><span class="l" id="L40"><a href="#L40">40</a>
+</span><span class="l" id="L41"><a href="#L41">41</a>void test_seq_wraps(void)
+</span><span class="l" id="L42"><a href="#L42">42</a>{
+</span><span class="l" id="L43"><a href="#L43">43</a>	ui_ext_state_t s = {.seq = 0xFFFF};
+</span><span class="l" id="L44"><a href="#L44">44</a>	ui_ext_next_seq(&amp;s);
+</span><span class="l" id="L45"><a href="#L45">45</a>	TEST_ASSERT_EQUAL_UINT16(0, s.seq);
+</span><span class="l" id="L46"><a href="#L46">46</a>}
+</span><span class="l" id="L47"><a href="#L47">47</a>
+</span><span class="l" id="L48"><a href="#L48">48</a>/* Simulation: Aenderung jede ms, zaehlt Sendungen in 1 s */
+</span><span class="l" id="L49"><a href="#L49">49</a>static int run_rate(uint16_t motion_hz)
+</span><span class="l" id="L50"><a href="#L50">50</a>{
+</span><span class="l" id="L51"><a href="#L51">51</a>	ui_ext_rate_t r;
+</span><span class="l" id="L52"><a href="#L52">52</a>	ui_ext_rate_init(&amp;r);
+</span><span class="l" id="L53"><a href="#L53">53</a>	int n = 0;
+</span><span class="l" id="L54"><a href="#L54">54</a>	for (uint32_t t = 0; t &lt; 1000; t++) {
+</span><span class="l" id="L55"><a href="#L55">55</a>		ui_ext_rate_mark(&amp;r, true);
+</span><span class="l" id="L56"><a href="#L56">56</a>		n += ui_ext_rate_poll(&amp;r, motion_hz, t, NULL);
+</span><span class="l" id="L57"><a href="#L57">57</a>	}
+</span><span class="l" id="L58"><a href="#L58">58</a>	return n;
+</span><span class="l" id="L59"><a href="#L59">59</a>}
+</span><span class="l" id="L60"><a href="#L60">60</a>
+</span><span class="l" id="L61"><a href="#L61">61</a>void test_rate_20_per_s(void) { TEST_ASSERT_EQUAL(20, run_rate(50)); }
+</span><span class="l" id="L62"><a href="#L62">62</a>void test_rate_10_per_s_game_mode(void) { TEST_ASSERT_EQUAL(10, run_rate(100)); }
+</span><span class="l" id="L63"><a href="#L63">63</a>
+</span><span class="l" id="L64"><a href="#L64">64</a>void test_no_notify_without_change(void)
+</span><span class="l" id="L65"><a href="#L65">65</a>{
+</span><span class="l" id="L66"><a href="#L66">66</a>	ui_ext_rate_t r;
+</span><span class="l" id="L67"><a href="#L67">67</a>	ui_ext_rate_init(&amp;r);
+</span><span class="l" id="L68"><a href="#L68">68</a>	int n = 0;
+</span><span class="l" id="L69"><a href="#L69">69</a>	for (uint32_t t = 0; t &lt; 2000; t++) {
+</span><span class="l" id="L70"><a href="#L70">70</a>		n += ui_ext_rate_poll(&amp;r, 50, t, NULL);
+</span><span class="l" id="L71"><a href="#L71">71</a>	}
+</span><span class="l" id="L72"><a href="#L72">72</a>	TEST_ASSERT_EQUAL(0, n);
+</span><span class="l" id="L73"><a href="#L73">73</a>}
+</span><span class="l" id="L74"><a href="#L74">74</a>
+</span><span class="l" id="L75"><a href="#L75">75</a>void test_edge_never_lost_and_within_100ms(void)
+</span><span class="l" id="L76"><a href="#L76">76</a>{
+</span><span class="l" id="L77"><a href="#L77">77</a>	ui_ext_rate_t r;
+</span><span class="l" id="L78"><a href="#L78">78</a>	ui_ext_rate_init(&amp;r);
+</span><span class="l" id="L79"><a href="#L79">79</a>	ui_ext_rate_mark(&amp;r, true);
+</span><span class="l" id="L80"><a href="#L80">80</a>	TEST_ASSERT_TRUE(ui_ext_rate_poll(&amp;r, 200, 0, NULL));
+</span><span class="l" id="L81"><a href="#L81">81</a>	ui_ext_rate_mark(&amp;r, true); /* Flanke 1 ms spaeter, im Sperrintervall */
+</span><span class="l" id="L82"><a href="#L82">82</a>	uint32_t retry = 0;
+</span><span class="l" id="L83"><a href="#L83">83</a>	TEST_ASSERT_FALSE(ui_ext_rate_poll(&amp;r, 200, 1, &amp;retry));
+</span><span class="l" id="L84"><a href="#L84">84</a>	TEST_ASSERT_TRUE(retry &gt; 0 &amp;&amp; 1 + retry &lt;= 101);
+</span><span class="l" id="L85"><a href="#L85">85</a>	TEST_ASSERT_TRUE(ui_ext_rate_poll(&amp;r, 200, 1 + retry, NULL));
+</span><span class="l" id="L86"><a href="#L86">86</a>}
+</span><span class="l" id="L87"><a href="#L87">87</a>
+</span><span class="l" id="L88"><a href="#L88">88</a>void test_absent_exactly_one_notify_after_subscribe(void)
+</span><span class="l" id="L89"><a href="#L89">89</a>{
+</span><span class="l" id="L90"><a href="#L90">90</a>	ui_ext_rate_t r;
+</span><span class="l" id="L91"><a href="#L91">91</a>	ui_ext_rate_init(&amp;r);
+</span><span class="l" id="L92"><a href="#L92">92</a>	ui_ext_rate_mark(&amp;r, true); /* Abo -&gt; Zustand present=0 einmal senden */
+</span><span class="l" id="L93"><a href="#L93">93</a>	int n = 0;
+</span><span class="l" id="L94"><a href="#L94">94</a>	for (uint32_t t = 0; t &lt; 5000; t++) {
+</span><span class="l" id="L95"><a href="#L95">95</a>		n += ui_ext_rate_poll(&amp;r, 50, t, NULL);
+</span><span class="l" id="L96"><a href="#L96">96</a>	}
+</span><span class="l" id="L97"><a href="#L97">97</a>	TEST_ASSERT_EQUAL(1, n);
+</span><span class="l" id="L98"><a href="#L98">98</a>}
+</span><span class="l" id="L99"><a href="#L99">99</a>
+</span><span class="l" id="L100"><a href="#L100">100</a>void test_regression_ef680302_one_byte(void)
+</span><span class="l" id="L101"><a href="#L101">101</a>{
+</span><span class="l" id="L102"><a href="#L102">102</a>	uint8_t o[4] = {0};
+</span><span class="l" id="L103"><a href="#L103">103</a>	TEST_ASSERT_EQUAL(1, THINGY_BUTTON_LEN);
+</span><span class="l" id="L104"><a href="#L104">104</a>	TEST_ASSERT_EQUAL(1, thingy_encode_button(true, o, sizeof o));
+</span><span class="l" id="L105"><a href="#L105">105</a>	TEST_ASSERT_EQUAL_HEX8(1, o[0]);
+</span><span class="l" id="L106"><a href="#L106">106</a>	TEST_ASSERT_EQUAL_HEX8(0, o[1]);
+</span><span class="l" id="L107"><a href="#L107">107</a>}
+</span><span class="l" id="L108"><a href="#L108">108</a>
+</span><span class="l" id="L109"><a href="#L109">109</a>int main(void)
+</span><span class="l" id="L110"><a href="#L110">110</a>{
+</span><span class="l" id="L111"><a href="#L111">111</a>	UNITY_BEGIN();
+</span><span class="l" id="L112"><a href="#L112">112</a>	RUN_TEST(test_layout_vector);
+</span><span class="l" id="L113"><a href="#L113">113</a>	RUN_TEST(test_le_seq_and_reserved);
+</span><span class="l" id="L114"><a href="#L114">114</a>	RUN_TEST(test_clamp_and_short_buffer);
+</span><span class="l" id="L115"><a href="#L115">115</a>	RUN_TEST(test_seq_wraps);
+</span><span class="l" id="L116"><a href="#L116">116</a>	RUN_TEST(test_rate_20_per_s);
+</span><span class="l" id="L117"><a href="#L117">117</a>	RUN_TEST(test_rate_10_per_s_game_mode);
+</span><span class="l" id="L118"><a href="#L118">118</a>	RUN_TEST(test_no_notify_without_change);
+</span><span class="l" id="L119"><a href="#L119">119</a>	RUN_TEST(test_edge_never_lost_and_within_100ms);
+</span><span class="l" id="L120"><a href="#L120">120</a>	RUN_TEST(test_absent_exactly_one_notify_after_subscribe);
+</span><span class="l" id="L121"><a href="#L121">121</a>	RUN_TEST(test_regression_ef680302_one_byte);
+</span><span class="l" id="L122"><a href="#L122">122</a>	return UNITY_END();
+</span><span class="l" id="L123"><a href="#L123">123</a>}
+</span></pre></body></html>

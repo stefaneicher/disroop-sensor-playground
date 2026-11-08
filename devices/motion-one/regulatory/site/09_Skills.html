@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Skills</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="top"><a href="index.html">Start</a> · <a href="01_Normen.html">Normen</a> · <a href="02_SRS.html">SRS</a> · <a href="03_SAD.html">SAD</a> · <a href="04_SDD.html">SDD</a> · <a href="05_SOUP.html">SOUP</a> · <a href="06_Risiko.html">Risiko</a> · <a href="07_Rueckverfolgbarkeit.html">Rückverfolgbarkeit</a> · <a href="08_Luecken.html">Lücken</a> · <a href="09_Skills.html">Skills</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#vorschlag-skills-für-einen-qa-regulatory-spezialisten"
+id="toc-vorschlag-skills-für-einen-qa-regulatory-spezialisten">Vorschlag:
+Skills für einen QA-/Regulatory-Spezialisten</a>
+<ul>
+<li><a href="#skills" id="toc-skills">Skills</a></li>
+<li><a href="#agent-profil" id="toc-agent-profil">Agent-Profil</a></li>
+<li><a href="#reihenfolge" id="toc-reihenfolge">Reihenfolge</a></li>
+<li><a href="#grenzen" id="toc-grenzen">Grenzen</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1
+id="vorschlag-skills-für-einen-qa-regulatory-spezialisten">Vorschlag:
+Skills für einen QA-/Regulatory-Spezialisten</h1>
+<p>Das Repo hat unter <code>.github/skills/</code> bereits Skills (z. B.
+<code>engineering-evidence</code>, <code>firmware-ble-workflow</code>)
+und unter <code>.github/agents/</code> Agent-Profile. Für
+Medizinprodukt-Software würde ich sie so ergänzen. <strong>Noch nichts
+angelegt</strong>, das ist ein Vorschlag zur Auswahl.</p>
+<h2 id="skills">Skills</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Skill (Name)</th>
+<th>Aufgabe</th>
+<th>Wichtigste Regeln</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>iec62304-documentation</code></td>
+<td>SRS, SAD, SDD, Matrix pflegen;
+<code>regulatory/build_site.py --check</code> laufen lassen</td>
+<td>Keine Anforderung ohne ID, Code-Link und Test oder
+<code>NOT RUN</code>. Reverse-engineerte Aussagen als solche
+kennzeichnen</td>
+</tr>
+<tr class="even">
+<td><code>risk-management-iso14971</code></td>
+<td>Gefährdungsliste, Risikokontrollen, Restrisiko, Verifikation der
+Kontrollen</td>
+<td>Schweregrad und Wahrscheinlichkeit nur mit Begründung; jede
+Kontrolle wird zur Anforderung und zum Test</td>
+</tr>
+<tr class="odd">
+<td><code>soup-management</code></td>
+<td>SOUP-Liste, Versionen, Fehlerlisten, Lizenzen, SBOM</td>
+<td>Jede SOUP mit Version und Prüfdatum; neue Version heisst neue
+Bewertung</td>
+</tr>
+<tr class="even">
+<td><code>software-verification-class-c</code></td>
+<td>Testplanung: Unit, Integration, System; Abdeckung; Grenzwerte;
+Hardware-in-the-Loop</td>
+<td>Statement- und Branch-Abdeckung messen, kritische Teile ggf. MC/DC;
+Testergebnisse als Bericht, nie als Behauptung</td>
+</tr>
+<tr class="odd">
+<td><code>cybersecurity-medical-ble</code></td>
+<td>Bedrohungsmodell, Kopplung, Updates, SBOM,
+Schwachstellenmanagement</td>
+<td>IEC 81001-5-1 und FDA-Cybersecurity-Leitfaden als Checkliste</td>
+</tr>
+<tr class="even">
+<td><code>fda-premarket-software</code></td>
+<td>Einreichungspaket zusammenstellen (Softwarebeschreibung,
+Architektur, V&amp;V, Anomalienliste)</td>
+<td>Dokumentationsstufe und Geräteklasse <strong>nicht</strong> selbst
+festlegen, sondern markieren</td>
+</tr>
+<tr class="odd">
+<td><code>change-impact-analysis</code></td>
+<td>Auswirkung jeder Änderung auf Anforderungen, Risiken, Tests (62304
+6.2, 7.4, 8.2)</td>
+<td>Kein Merge ohne Einschätzung „betrifft Risiko ja/nein“</td>
+</tr>
+<tr class="even">
+<td><code>toolchain-qualification</code></td>
+<td>Compiler-Matrix, Warnungen als Fehler, Werkzeugversionen,
+Reproduzierbarkeit</td>
+<td>Digests statt Tags, Versionen in <code>toolchain_matrix</code>
+festhalten</td>
+</tr>
+</tbody>
+</table>
+<h2 id="agent-profil">Agent-Profil</h2>
+<p>Ein Profil
+<code>.github/agents/regulatory-qa-engineer.agent.md</code> neben den
+bestehenden fünf (Systems, PCB, Firmware, Mechanik, Docs). Es besitzt
+die Dokumente unter <code>devices/motion-one/regulatory/</code>, prüft
+Änderungen der anderen Agenten gegen die Matrix und blockt Freigaben,
+solange ein P1-Befund aus der <a href="08_Luecken.html">Lückenanalyse</a>
+offen ist.</p>
+<h2 id="reihenfolge">Reihenfolge</h2>
+<ol type="1">
+<li><code>iec62304-documentation</code> und
+<code>software-verification-class-c</code> (direkt nutzbar, weil die
+Dokumente jetzt da sind).</li>
+<li><code>risk-management-iso14971</code> und
+<code>soup-management</code>.</li>
+<li>Rest, sobald die Zweckbestimmung (OPEN-01) feststeht.</li>
+</ol>
+<h2 id="grenzen">Grenzen</h2>
+<p>Ein KI-Skill ersetzt keine verantwortliche Person im Qualitätssystem.
+Freigaben, Risikoakzeptanz und die Einstufung gegenüber der FDA sind
+Entscheidungen von Menschen mit Befugnis. Die Skills bereiten vor und
+prüfen auf Vollständigkeit.</p>
+</body>
+</html>

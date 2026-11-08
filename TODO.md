@@ -33,6 +33,17 @@ Status aller Punkte: **offen**.
 - [ ] (CI) Eigene Pipelines für Elektronik (ERC/DRC), Mechanik (CAD, Kollision) und Doku mit dem Tools-Image `disroop-motion-one-tools` (7.5 GB, nachts oder manuell).
 - [ ] (CI) Entscheid: Pull-Request-Pflicht auf `main` statt direkter Pushes, und ob ein beratender KI-Review dazukommt.
 
+### IEC-62304-Gedankenspiel „Klasse C“ (User, 2026-11-08), siehe `devices/motion-one/regulatory/`
+- [x] (Doku) SRS, SAD, SDD, SOUP, Risiko, Rückverfolgbarkeit, Lückenanalyse, Skill-Vorschläge und HTML-Seite mit Code-Links aus dem Code erstellt, 2026-11-08. Entwurf, nicht freigegeben, Tests nicht ausgeführt.
+- [ ] (Doku) OPEN-01: Zweckbestimmung bestätigen oder ersetzen (heute angenommen).
+- [ ] (Doku) OPEN-02: Normen beschaffen (kostenpflichtig) und FDA-Leitfäden von Hand laden; `fda.gov` war aus der Sitzung nicht erreichbar.
+- [ ] (Doku) Bedeutung von „SCD“ klären (gelesen als Detailentwurf).
+- [ ] (CI) `python3 devices/motion-one/regulatory/build_site.py --check` in die CI aufnehmen (prüft Code-Links und Rückverfolgbarkeit).
+- [ ] (Firmware) P1-Befunde aus `08_Luecken.md`: Watchdog und Fehlerzustand (GAP-05), Version und UDI (GAP-14), BLE-Sicherheit (GAP-13), ICM-Datenblattabgleich (GAP-12).
+- [ ] (Firmware) Testbericht: README sagt 32/32, Code hat 69 Tests (GAP-20).
+- [ ] (Skills) Skills und Agent-Profil aus `09_Skills.md` anlegen, falls gewünscht.
+- [ ] (Toolchain) Compiler-Matrix mit Warnungen als Fehler, Conan 2 und modernem CMake, siehe `IDEEN.md`.
+
 ### Motion One (siehe `devices/motion-one/management/RESUME.md`)
 - [ ] (Elektronik/Mechanik/Firmware) Iteration abschliessen: Board an Mechanik-Handoff anpassen, CAD und Kollision neu prüfen, DTS-Pinmap aus `PINOUT_V1.json`.
 - [ ] (Docs/Media) §11 Montage- und Benutzeranleitung, Renderings.

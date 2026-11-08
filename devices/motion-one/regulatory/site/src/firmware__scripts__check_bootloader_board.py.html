@@ -1,0 +1,56 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/scripts/check_bootloader_board.py</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/scripts/check_bootloader_board.py</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>#!/usr/bin/env python3
+</span><span class="l" id="L2"><a href="#L2">2</a>&quot;&quot;&quot;Gleicht die Adafruit-Bootloader-Board-Definition (bootloader/motion_one/board.h) gegen
+</span><span class="l" id="L3"><a href="#L3">3</a>electronics/PINOUT_V1.json ab. Exit 0 nur wenn: RGB-Status-LED = LED_R/G/B, LED aktiv low,
+</span><span class="l" id="L4"><a href="#L4">4</a>DFU-Taster = BTN mit internem Pull-up, kein zweiter (OTA-)Taster auf fremdem Pin, keine UART-Pins (Q-02).&quot;&quot;&quot;
+</span><span class="l" id="L5"><a href="#L5">5</a>import json, re, sys, pathlib
+</span><span class="l" id="L6"><a href="#L6">6</a>
+</span><span class="l" id="L7"><a href="#L7">7</a>FW = pathlib.Path(__file__).resolve().parents[1]
+</span><span class="l" id="L8"><a href="#L8">8</a>pinout = pathlib.Path(sys.argv[1]) if len(sys.argv) &gt; 1 else FW.parent / &quot;electronics/PINOUT_V1.json&quot;
+</span><span class="l" id="L9"><a href="#L9">9</a>board = pathlib.Path(sys.argv[2]) if len(sys.argv) &gt; 2 else FW / &quot;bootloader/motion_one/board.h&quot;
+</span><span class="l" id="L10"><a href="#L10">10</a>errs = []
+</span><span class="l" id="L11"><a href="#L11">11</a>if not board.exists():
+</span><span class="l" id="L12"><a href="#L12">12</a>    print(f&quot;FAIL {board} fehlt&quot;); print(&quot;bootloader-pincheck FAIL&quot;); sys.exit(1)
+</span><span class="l" id="L13"><a href="#L13">13</a>data = json.loads(pinout.read_text())
+</span><span class="l" id="L14"><a href="#L14">14</a>pins = {}
+</span><span class="l" id="L15"><a href="#L15">15</a>for p in data[&quot;pins&quot;]:
+</span><span class="l" id="L16"><a href="#L16">16</a>    m = re.match(r&quot;P([01])\.(\d+)&quot;, p[&quot;gpio&quot;])
+</span><span class="l" id="L17"><a href="#L17">17</a>    if m:
+</span><span class="l" id="L18"><a href="#L18">18</a>        pins[p[&quot;signal&quot;]] = (int(m[1]), int(m[2]))
+</span><span class="l" id="L19"><a href="#L19">19</a>func = {p[&quot;signal&quot;]: p[&quot;function&quot;].lower() for p in data[&quot;pins&quot;]}
+</span><span class="l" id="L20"><a href="#L20">20</a>text = re.sub(r&quot;//.*|/\*.*?\*/&quot;, &quot;&quot;, board.read_text(), flags=re.S)
+</span><span class="l" id="L21"><a href="#L21">21</a>defs = {m[1]: m[2].strip() for m in re.finditer(r&quot;^[ \t]*#define[ \t]+(\w+)[ \t]+(.+?)[ \t]*$&quot;, text, re.M)}
+</span><span class="l" id="L22"><a href="#L22">22</a>
+</span><span class="l" id="L23"><a href="#L23">23</a>def pin(name):
+</span><span class="l" id="L24"><a href="#L24">24</a>    v = defs.get(name)
+</span><span class="l" id="L25"><a href="#L25">25</a>    m = v and re.fullmatch(r&quot;PINNUM\(\s*(\d)\s*,\s*(\d+)\s*\)&quot;, v)
+</span><span class="l" id="L26"><a href="#L26">26</a>    return (int(m[1]), int(m[2])) if m else None
+</span><span class="l" id="L27"><a href="#L27">27</a>
+</span><span class="l" id="L28"><a href="#L28">28</a>for macro, sig in ((&quot;LED_RGB_RED_PIN&quot;, &quot;LED_R&quot;), (&quot;LED_RGB_GREEN_PIN&quot;, &quot;LED_G&quot;),
+</span><span class="l" id="L29"><a href="#L29">29</a>                   (&quot;LED_RGB_BLUE_PIN&quot;, &quot;LED_B&quot;), (&quot;LED_PRIMARY_PIN&quot;, &quot;LED_R&quot;), (&quot;BUTTON_DFU&quot;, &quot;BTN&quot;)):
+</span><span class="l" id="L30"><a href="#L30">30</a>    got = pin(macro)
+</span><span class="l" id="L31"><a href="#L31">31</a>    if got != pins.get(sig):
+</span><span class="l" id="L32"><a href="#L32">32</a>        errs.append(f&quot;{macro}: board.h {got} != PINOUT {sig} {pins.get(sig)}&quot;)
+</span><span class="l" id="L33"><a href="#L33">33</a>if &quot;aktiv low&quot; in func.get(&quot;LED_R&quot;, &quot;&quot;) and defs.get(&quot;LED_STATE_ON&quot;) != &quot;0&quot;:
+</span><span class="l" id="L34"><a href="#L34">34</a>    errs.append(&quot;LED_STATE_ON muss 0 sein (aktiv low)&quot;)
+</span><span class="l" id="L35"><a href="#L35">35</a>if defs.get(&quot;LEDS_NUMBER&quot;) != &quot;1&quot; or &quot;LED_SECONDARY_PIN&quot; in defs:
+</span><span class="l" id="L36"><a href="#L36">36</a>    errs.append(&quot;genau eine Primaer-LED (RGB), keine Sekundaer-LED&quot;)
+</span><span class="l" id="L37"><a href="#L37">37</a>if &quot;pull-up&quot; in func.get(&quot;BTN&quot;, &quot;&quot;) and defs.get(&quot;BUTTON_PULL&quot;) != &quot;NRF_GPIO_PIN_PULLUP&quot;:
+</span><span class="l" id="L38"><a href="#L38">38</a>    errs.append(&quot;BUTTON_PULL muss NRF_GPIO_PIN_PULLUP sein&quot;)
+</span><span class="l" id="L39"><a href="#L39">39</a>if &quot;BUTTON_DFU_OTA&quot; in defs:
+</span><span class="l" id="L40"><a href="#L40">40</a>    errs.append(&quot;BUTTON_DFU_OTA definiert, V1 hat nur einen Taster&quot;)
+</span><span class="l" id="L41"><a href="#L41">41</a>if any(re.search(r&quot;UART|_TX_PIN|_RX_PIN&quot;, k) for k in defs):
+</span><span class="l" id="L42"><a href="#L42">42</a>    errs.append(&quot;UART-Definition vorhanden (Q-02: kein UART)&quot;)
+</span><span class="l" id="L43"><a href="#L43">43</a>used = {v for k in defs if (v := pin(k))}
+</span><span class="l" id="L44"><a href="#L44">44</a>own = set(pins.values())
+</span><span class="l" id="L45"><a href="#L45">45</a>for k in defs:
+</span><span class="l" id="L46"><a href="#L46">46</a>    if (v := pin(k)) and v not in own:
+</span><span class="l" id="L47"><a href="#L47">47</a>        errs.append(f&quot;{k}: Pin P{v[0]}.{v[1]} nicht im PINOUT&quot;)
+</span><span class="l" id="L48"><a href="#L48">48</a>print(f&quot;PINOUT {pinout.name} revision {data.get(&#x27;revision&#x27;)}: board.h {len(used)} Pins geprueft&quot;)
+</span><span class="l" id="L49"><a href="#L49">49</a>for e in errs:
+</span><span class="l" id="L50"><a href="#L50">50</a>    print(&quot;FAIL&quot;, e)
+</span><span class="l" id="L51"><a href="#L51">51</a>print(&quot;bootloader-pincheck&quot;, &quot;FAIL&quot; if errs else &quot;PASS&quot;)
+</span><span class="l" id="L52"><a href="#L52">52</a>sys.exit(1 if errs else 0)
+</span></pre></body></html>

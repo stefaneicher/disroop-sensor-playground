@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>SRS</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="top"><a href="index.html">Start</a> · <a href="01_Normen.html">Normen</a> · <a href="02_SRS.html">SRS</a> · <a href="03_SAD.html">SAD</a> · <a href="04_SDD.html">SDD</a> · <a href="05_SOUP.html">SOUP</a> · <a href="06_Risiko.html">Risiko</a> · <a href="07_Rueckverfolgbarkeit.html">Rückverfolgbarkeit</a> · <a href="08_Luecken.html">Lücken</a> · <a href="09_Skills.html">Skills</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#srs-software-requirements-specification"
+id="toc-srs-software-requirements-specification">SRS: Software
+Requirements Specification</a>
+<ul>
+<li><a href="#1-zweckbestimmung-angenommen-open-01"
+id="toc-1-zweckbestimmung-angenommen-open-01">1. Zweckbestimmung
+(ANGENOMMEN, OPEN-01)</a></li>
+<li><a href="#2-legende" id="toc-2-legende">2. Legende</a></li>
+<li><a href="#3-bluetooth-profil-und-verbindung"
+id="toc-3-bluetooth-profil-und-verbindung">3. Bluetooth-Profil und
+Verbindung</a></li>
+<li><a href="#4-konfiguration-und-ausgabe-über-ble"
+id="toc-4-konfiguration-und-ausgabe-über-ble">4. Konfiguration und
+Ausgabe über BLE</a></li>
+<li><a href="#5-bewegungsmessung-und-sensorfusion"
+id="toc-5-bewegungsmessung-und-sensorfusion">5. Bewegungsmessung und
+Sensorfusion</a></li>
+<li><a href="#6-datenausgabe" id="toc-6-datenausgabe">6.
+Datenausgabe</a></li>
+<li><a href="#7-bedienung-und-ausgabe-am-gerät"
+id="toc-7-bedienung-und-ausgabe-am-gerät">7. Bedienung und Ausgabe am
+Gerät</a></li>
+<li><a href="#8-energie" id="toc-8-energie">8. Energie</a></li>
+<li><a href="#9-bedienplatine-j5-erweiterung-r4"
+id="toc-9-bedienplatine-j5-erweiterung-r4">9. Bedienplatine J5
+(Erweiterung r4)</a></li>
+<li><a href="#10-robustheit-diagnose-bereitstellung"
+id="toc-10-robustheit-diagnose-bereitstellung">10. Robustheit, Diagnose,
+Bereitstellung</a></li>
+<li><a href="#11-nicht-vorhanden-anforderungen-die-ein-audit-erwartet"
+id="toc-11-nicht-vorhanden-anforderungen-die-ein-audit-erwartet">11.
+Nicht vorhanden (Anforderungen, die ein Audit erwartet)</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="srs-software-requirements-specification">SRS: Software
+Requirements Specification</h1>
+<p>Rückwärts aus dem Code abgeleitet (Reverse Engineering). „Soll“
+heisst hier: <strong>so verhält sich der Code heute</strong>. Wo das ein
+Risiko ist, steht der Befund in den <a href="08_Luecken.html">Lücken</a>.
+Die Systemanforderungen <code>REQ-nnn</code> stehen in
+<code>management/REQUIREMENTS.md</code>.</p>
+<h2 id="1-zweckbestimmung-angenommen-open-01">1. Zweckbestimmung
+(ANGENOMMEN, OPEN-01)</h2>
+<blockquote>
+<p>Das Gerät ist ein handgehaltener Bewegungssensor. Es misst Lage und
+Drehrate der Hand, berechnet daraus eine Orientierung und überträgt sie
+per Bluetooth LE an eine Auswertesoftware (Bridge oder App). Das Gerät
+stellt keine Diagnose und trifft keine Therapieentscheidung. Einsatz:
+Bewegungsübungen (Reha, Training) unter Aufsicht einer Fachperson.</p>
+</blockquote>
+<p>Sicherheitsklasse: <strong>C</strong> (gesetzt, siehe <a
+href="06_Risiko.html">Risiko</a>). Alle Anforderungen gelten deshalb als
+Klasse C.</p>
+<h2 id="2-legende">2. Legende</h2>
+<ul>
+<li><strong>Kennz.:</strong> <code>CODE</code> = aus dem Code abgeleitet
+· <code>ANNAHME</code> = der Code selbst nennt den Wert eine Annahme ·
+<code>ADR</code> = Entscheid in <code>adr/firmware/</code>.</li>
+<li><strong>Verifikation:</strong> Name des Host-Unit-Tests (Unity) oder
+<code>NOT RUN</code> (nur auf Hardware prüfbar, keine Unit-Tests für
+Zephyr-Adapter).</li>
+<li>Die Host-Tests habe ich in dieser Sitzung <strong>nicht
+ausgeführt</strong>. Das README der Firmware nennt 32/32 PASS; im Code
+stehen 69 <code>RUN_TEST</code>. Der Widerspruch ist offen (<a
+href="08_Luecken.html#GAP-20">GAP-20</a>).</li>
+</ul>
+<h2 id="3-bluetooth-profil-und-verbindung">3. Bluetooth-Profil und
+Verbindung</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Kennz.</th>
+<th>Code</th>
+<th>Verifikation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SRS-001"></a><strong>SRS-001</strong></td>
+<td>Das Gerät bewirbt sich als „Thingy“ mit dem 128-Bit-Service
+<code>EF680100-…</code> (allgemein auffindbar, kein BR/EDR).</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__app__src__ble_thingy.c.html#L203"><code>adv_start</code></a>,
+<a
+href="src/firmware__app__prj.conf.html"><code>firmware/app/prj.conf</code></a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a id="SRS-002"></a><strong>SRS-002</strong></td>
+<td>Es ist höchstens eine Verbindung aktiv. Nach dem Trennen beginnt das
+Advertising automatisch neu.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__app__src__ble_thingy.c.html#L231"><code>recycled</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L222"><code>disconnected</code></a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-003"></a><strong>SRS-003</strong></td>
+<td>Es gibt keine Kopplung und keine Verschlüsselung
+(<code>BT_SMP=n</code>). Jeder Client darf lesen und schreiben.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__app__prj.conf.html"><code>firmware/app/prj.conf</code></a></td>
+<td>NOT RUN, siehe <a href="06_Risiko.html#HAZ-04">HAZ-04</a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-004"></a><strong>SRS-004</strong></td>
+<td>Bevorzugte Verbindungsparameter 7,5–15 ms, Latenz 0, Timeout 4 s.
+MTU 247 wird akzeptiert.</td>
+<td>ADR</td>
+<td><a
+href="src/firmware__app__prj.conf.html"><code>firmware/app/prj.conf</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L236"><code>le_param_updated</code></a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-005"></a><strong>SRS-005</strong></td>
+<td>Die Attributindizes des UI-, Motion- und Sound-Services sind fest
+(9, 18, 8) und werden beim Übersetzen geprüft.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__app__src__ble_thingy.c.html#L160"><code>ui_svc</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L172"><code>motion_svc</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L179"><code>sound_svc</code></a></td>
+<td>Übersetzungszeit (BUILD_ASSERT)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-konfiguration-und-ausgabe-über-ble">4. Konfiguration und
+Ausgabe über BLE</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Kennz.</th>
+<th>Code</th>
+<th>Verifikation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SRS-010"></a><strong>SRS-010</strong></td>
+<td><code>EF680401</code> Motion-Config (9 B) wird gelesen und
+geschrieben. <code>motion_freq_hz</code> muss 5…200 sein, sonst Fehler
+„Wert nicht erlaubt“. Falsche Länge ergibt „ungültige Länge“.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L132"><code>thingy_parse_motion_config</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L46"><code>wr_motion_cfg</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L71"><code>test_motion_config_rejects_freq_and_len</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L56"><code>test_motion_config_bridge_vector</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-011"></a><strong>SRS-011</strong></td>
+<td>Beim Start gelten Standardwerte für Motion-, Env- und
+Sound-Config.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L122"><code>thingy_motion_config_default</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L248"><code>ble_thingy_init</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L56"><code>test_motion_config_bridge_vector</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-012"></a><strong>SRS-012</strong></td>
+<td><code>EF680206</code> Env-Config (12 B) wird gespeichert und
+unverändert zurückgegeben. Es gibt keinen Umweltsensor (Dummy).</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L173"><code>thingy_parse_env_config</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L66"><code>wr_env_cfg</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L87"><code>test_env_config_read_default_then_echo_written</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-013"></a><strong>SRS-013</strong></td>
+<td><code>EF680501</code> Sound-Config: Lautsprechermodus 1…3,
+Mikrofonmodus 1…2, sonst Fehler.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L191"><code>thingy_parse_sound_config</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L99"><code>test_sound_config</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-014"></a><strong>SRS-014</strong></td>
+<td><code>EF680502</code> Ton: nur im Frequenzmodus (Modus 1), sonst
+„nicht erlaubt“. Lautstärke wird auf 0…100 begrenzt, der Tastgrad auf
+höchstens 50 %. Nach Ablauf meldet das Gerät das Ende.</td>
+<td>CODE / ANNAHME</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L207"><code>thingy_parse_speaker_tone</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L86"><code>wr_speaker</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L111"><code>ui_speaker_tone</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L99"><code>buzzer_off</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L111"><code>test_speaker_tone_bridge_vector_and_volume_clamp</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-015"></a><strong>SRS-015</strong></td>
+<td><code>EF680301</code> LED: Modi 0 (aus), 1 (konstant RGB), 2
+(atmen), 3 (einmal). Mischung 1…7, Intensität 1…100 %, Verzögerung
+50…10000 ms, sonst Fehler. Der Befehl ist lesbar.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L226"><code>thingy_parse_led</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L108"><code>wr_led</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L56"><code>ui_led_apply</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L125"><code>test_led_modes</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L154"><code>test_led_rejects_bad_input</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-016"></a><strong>SRS-016</strong></td>
+<td>Ein Schreibzugriff mit Offset ≠ 0 wird abgelehnt.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__app__src__ble_thingy.c.html#L46"><code>wr_motion_cfg</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L108"><code>wr_led</code></a></td>
+<td>NOT RUN</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-bewegungsmessung-und-sensorfusion">5. Bewegungsmessung und
+Sensorfusion</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Kennz.</th>
+<th>Code</th>
+<th>Verifikation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SRS-020"></a><strong>SRS-020</strong></td>
+<td>Die IMU läuft mit 400 Hz, ±32 g und ±4000 °/s. Das FIFO arbeitet im
+Stream-Modus mit Watermark 2 Frames; INT1 meldet das Watermark.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__icm__src__icm45686.c.html#L67"><code>icm45686_init</code></a>,
+<a
+href="src/firmware__app__src__app.h.html#L9"><code>IMU_ODR_HZ</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L13"><code>WATERMARK_FRAMES</code></a></td>
+<td><a
+href="src/firmware__tests__test_icm45686.c.html#L112"><code>test_init_sequence</code></a>
+(Registerwerte nicht gegen Datenblatt geprüft, <a
+href="08_Luecken.html#GAP-12">GAP-12</a>)</td>
+</tr>
+<tr class="even">
+<td><a id="SRS-021"></a><strong>SRS-021</strong></td>
+<td>Beim Init wird die Chip-Kennung (<code>WHO_AM_I</code> = 0xE9)
+geprüft. Bei falscher Kennung oder Busfehler liefert der Treiber einen
+Fehlercode.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__icm__src__icm45686.c.html#L67"><code>icm45686_init</code></a></td>
+<td><a
+href="src/firmware__tests__test_icm45686.c.html#L137"><code>test_init_wrong_whoami_and_bus_error</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-022"></a><strong>SRS-022</strong></td>
+<td>Ein FIFO-Paket hat 16 B. Skalierung 1024 LSB/g und 8,192 LSB/°/s.
+Leere oder ungültige Pakete (Wert 0x8000) werden verworfen.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__icm__src__icm45686.c.html#L9"><code>icm45686_parse_frame</code></a></td>
+<td><a
+href="src/firmware__tests__test_icm45686.c.html#L72"><code>test_parse_frame_scales_and_timestamp</code></a>,
+<a
+href="src/firmware__tests__test_icm45686.c.html#L99"><code>test_parse_frame_rejects_invalid</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-023"></a><strong>SRS-023</strong></td>
+<td>Erreicht ein Sensorwert ±32767, wird die Achse als gesättigt
+markiert.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__icm__src__icm45686.c.html#L9"><code>icm45686_parse_frame</code></a></td>
+<td><a
+href="src/firmware__tests__test_icm45686.c.html#L87"><code>test_parse_frame_flags_saturation</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-024"></a><strong>SRS-024</strong></td>
+<td>Die Orientierung wird mit einem 6-Achsen-Madgwick-Filter (β = 0,1,
+ANNAHME) berechnet, Zeitschritt 1/400 s.</td>
+<td>CODE / ANNAHME</td>
+<td><a
+href="src/firmware__fusion__src__motion_fusion.c.html#L18"><code>madgwick_update</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L76"><code>process</code></a></td>
+<td><a
+href="src/firmware__tests__test_motion_fusion.c.html#L11"><code>test_static_tilt_converges</code></a>,
+<a
+href="src/firmware__tests__test_motion_fusion.c.html#L26"><code>test_rotation_about_z_integrates</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-025"></a><strong>SRS-025</strong></td>
+<td>Der Gyro-Bias wird automatisch geschätzt, wenn</td>
+<td>ω</td>
+<td>&lt; 3 °/s und</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-026"></a><strong>SRS-026</strong></td>
+<td>Ein langer Tastendruck erzwingt die Bias-Kalibrierung. Dann gilt nur
+das Gyro-Kriterium.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__fusion__src__motion_fusion.c.html#L87"><code>bias_cal_request</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L56"><code>imu_request_calibration</code></a></td>
+<td><a
+href="src/firmware__tests__test_motion_fusion.c.html#L83"><code>test_button_request_ignores_accel_criterion</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-027"></a><strong>SRS-027</strong></td>
+<td>Euler-Winkel (ZYX) und Heading werden aus dem Quaternion berechnet.
+Heading liegt in [0, 360).</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__fusion__src__motion_fusion.c.html#L63"><code>quat_to_euler_deg</code></a>,
+<a
+href="src/firmware__fusion__src__motion_fusion.c.html#L73"><code>heading_from_yaw_deg</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L37"><code>test_heading_bridge_vector_and_normalised</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L29"><code>test_euler_bridge_vector</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-datenausgabe">6. Datenausgabe</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Kennz.</th>
+<th>Code</th>
+<th>Verifikation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SRS-030"></a><strong>SRS-030</strong></td>
+<td>Nur abonnierte Kanäle werden gesendet: Quaternion (16 B), Raw Motion
+(18 B), Euler (12 B), Heading (4 B), Raw-HR (16 B). Ohne Abonnent wird
+nichts gesendet.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__app__src__ble_thingy.c.html#L290"><code>ble_publish_motion</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L279"><code>ble_motion_wanted</code></a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a id="SRS-031"></a><strong>SRS-031</strong></td>
+<td>Die Senderate entspricht <code>motion_freq_hz</code> durch
+Dezimierung der 400-Hz-Samples.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__app__src__imu_task.c.html#L102"><code>imu_thread</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L76"><code>process</code></a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-032"></a><strong>SRS-032</strong></td>
+<td>Die Summe aller Notifications bleibt ≤ 200/s. Der Dezimierungsfaktor
+ist ceil(Rate × Kanäle / 200).</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__app__src__ble_thingy.c.html#L290"><code>ble_publish_motion</code></a>,
+<a
+href="src/firmware__app__src__app.h.html#L12"><code>NOTIFY_BUDGET_PER_S</code></a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a id="SRS-033"></a><strong>SRS-033</strong></td>
+<td>Raw Motion kodiert Beschleunigung ×1024, Gyro ×32 (auf ±1023,97 °/s
+begrenzt), Kompass ×16 als 9× i16 little-endian, mit Sättigung und
+Rundung. Der Kompass ist 0 (kein Magnetometer).</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L33"><code>thingy_encode_raw_motion</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L76"><code>process</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_codec.c.html#L9"><code>test_bridge_vector_encodes_to_same_bytes</code></a>,
+<a
+href="src/firmware__tests__test_thingy_codec.c.html#L24"><code>test_saturates_at_i16_limits</code></a>,
+<a
+href="src/firmware__tests__test_thingy_codec.c.html#L38"><code>test_rounds_to_nearest</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-034"></a><strong>SRS-034</strong></td>
+<td>Quaternion als 4× i32 Q2.30, auf [−2, 2) gesättigt. Euler und
+Heading als i32 × 65536.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L77"><code>thingy_encode_quaternion</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L89"><code>thingy_encode_euler</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L100"><code>thingy_encode_heading</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L9"><code>test_quaternion_bridge_vector</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L19"><code>test_quaternion_saturates</code></a>,
+<a
+href="src/firmware__tests__test_thingy_profile.c.html#L29"><code>test_euler_bridge_vector</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-035"></a><strong>SRS-035</strong></td>
+<td>Raw-HR (16 B): Beschleunigung ×1024, Gyro ×8, 16-Bit-Zählerstand,
+Flags für Sättigung je Achse (Bit 0–5) und <code>fusion_ok</code> (Bit
+6, Bias gültig).</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L354"><code>thingy_encode_raw_hr</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L76"><code>process</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L179"><code>test_raw_hr_layout_and_flags</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-036"></a><strong>SRS-036</strong></td>
+<td>Alle Encoder liefern 0 bei Null-Zeiger oder zu kleinem Puffer und
+schreiben nichts.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L33"><code>thingy_encode_raw_motion</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_codec.c.html#L48"><code>test_rejects_short_buffer_and_null</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-bedienung-und-ausgabe-am-gerät">7. Bedienung und Ausgabe am
+Gerät</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Kennz.</th>
+<th>Code</th>
+<th>Verifikation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SRS-040"></a><strong>SRS-040</strong></td>
+<td>Jeder Wechsel des Tasterzustands wird als <code>EF680302</code> (1
+B) gemeldet. Der Taster wird nach 5 ms entprellt und alle 20 ms
+abgefragt, solange er gedrückt ist.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__app__src__ui.c.html#L150"><code>btn_poll</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L172"><code>btn_isr</code></a>,
+<a
+href="src/firmware__app__src__ble_thingy.c.html#L337"><code>ble_publish_button</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L47"><code>test_button</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L100"><code>test_regression_ef680302_one_byte</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-041"></a><strong>SRS-041</strong></td>
+<td>Ein Druck ≥ 800 ms löst genau ein Langdruck-Ereignis aus, schon vor
+dem Loslassen. Folge: Bias-Kalibrierung und 150 ms Vibration.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L372"><code>thingy_button_update</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L150"><code>btn_poll</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L191"><code>test_button_short_and_long</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-042"></a><strong>SRS-042</strong></td>
+<td>Die LED zeigt die Modi aus SRS-015. „Atmen“ ist ein Dreieck mit 50
+Schritten je Richtung.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__app__src__ui.c.html#L41"><code>led_anim</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L33"><code>led_mix</code></a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a id="SRS-043"></a><strong>SRS-043</strong></td>
+<td>Der Vibrationsmotor wird so getaktet, dass die effektive Spannung ≤
+3,0 V bleibt. Versorgung = gemessene Akkuspannung, an USB der Worst-Case
+5,25 V, bei fehlender oder unplausibler Messung konservativ.</td>
+<td>CODE / ADR</td>
+<td><a
+href="src/firmware__power__src__motor_drive.c.html#L3"><code>motor_supply_mv</code></a>,
+<a
+href="src/firmware__power__src__motor_drive.c.html#L14"><code>motor_duty_permille</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L82"><code>motor_output</code></a></td>
+<td><a
+href="src/firmware__tests__test_motor_drive.c.html#L24"><code>test_ueff_never_above_3v0_over_range</code></a>,
+<a
+href="src/firmware__tests__test_motor_drive.c.html#L50"><code>test_supply_usb_uses_vsys_worst_case</code></a>,
+<a
+href="src/firmware__tests__test_motor_drive.c.html#L33"><code>test_duty_zero_supply_uses_conservative_default</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-044"></a><strong>SRS-044</strong></td>
+<td>Summer hat Vorrang vor Motor. Der Motor pausiert, solange ein Ton
+läuft. Die USB-Spitzenlast bleibt ≤ 500 mA.</td>
+<td>CODE / ADR</td>
+<td><a
+href="src/firmware__power__src__motor_drive.c.html#L25"><code>load_arbitrate</code></a>,
+<a
+href="src/firmware__power__src__motor_drive.c.html#L33"><code>motor_vbus_peak_ma</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L93"><code>loads_apply</code></a></td>
+<td><a
+href="src/firmware__tests__test_motor_drive.c.html#L71"><code>test_arbitration_buzzer_pauses_motor</code></a>,
+<a
+href="src/firmware__tests__test_motor_drive.c.html#L84"><code>test_vbus_peak_within_usb_limit</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-energie">8. Energie</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Kennz.</th>
+<th>Code</th>
+<th>Verifikation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SRS-050"></a><strong>SRS-050</strong></td>
+<td>Die Akkuspannung wird beim Start und danach alle 60 s gemessen:
+Teiler freigeben, ≥ 25 ms warten, ADC lesen, Teiler
+<strong>immer</strong> wieder sperren (auch bei ADC-Fehler).</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__power__src__vbat.c.html#L12"><code>vbat_measure</code></a>,
+<a
+href="src/firmware__app__src__battery.c.html#L43"><code>battery_read_mv</code></a>,
+<a
+href="src/firmware__app__src__main.c.html#L24"><code>update_battery</code></a></td>
+<td><a
+href="src/firmware__tests__test_vbat.c.html#L35"><code>test_sequence_enable_wait_read_disable</code></a>,
+<a
+href="src/firmware__tests__test_vbat.c.html#L55"><code>test_adc_error_still_disables</code></a>,
+<a
+href="src/firmware__tests__test_vbat.c.html#L33"><code>test_settle_constant_at_least_25ms</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-051"></a><strong>SRS-051</strong></td>
+<td>Die Ladung in Prozent folgt einer stückweise linearen LiPo-Kurve
+(ANNAHME) und wird über den Battery-Service gemeldet, bei Änderung.</td>
+<td>ANNAHME</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L320"><code>thingy_battery_percent_from_mv</code></a>,
+<a
+href="src/firmware__app__src__main.c.html#L24"><code>update_battery</code></a></td>
+<td><a
+href="src/firmware__tests__test_thingy_profile.c.html#L168"><code>test_battery_curve</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-052"></a><strong>SRS-052</strong></td>
+<td>Unter 3300 mV schaltet das Gerät LED, Bedienplatine und IMU ab und
+geht in System OFF.</td>
+<td>CODE / ANNAHME</td>
+<td><a
+href="src/firmware__app__src__main.c.html#L24"><code>update_battery</code></a>,
+<a
+href="src/firmware__app__src__main.c.html#L13"><code>power_off</code></a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="even">
+<td><a id="SRS-053"></a><strong>SRS-053</strong></td>
+<td>Ohne BLE-Verbindung und nach 60 s Ruhe geht das Gerät in System OFF.
+Aufwachen durch Taster oder Bewegung (Wake-on-Motion, 100 mg,
+ANNAHME).</td>
+<td>CODE / ANNAHME</td>
+<td><a
+href="src/firmware__app__src__main.c.html#L8"><code>main</code></a>, <a
+href="src/firmware__app__src__imu_task.c.html#L62"><code>imu_at_rest_for_s</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L67"><code>imu_enter_wake_on_motion</code></a>,
+<a
+href="src/firmware__icm__src__icm45686.c.html#L105"><code>icm45686_enter_wom</code></a></td>
+<td><a
+href="src/firmware__tests__test_icm45686.c.html#L155"><code>test_ireg_write_and_wom</code></a>
+(nur Treiber)</td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-054"></a><strong>SRS-054</strong></td>
+<td>Der IMU-Chip-Select wird so früh wie möglich auf high gesetzt (kein
+Pull-up auf der Leiterplatte V1).</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__app__src__board_early.c.html#L12"><code>board_early_init</code></a></td>
+<td>NOT RUN</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-bedienplatine-j5-erweiterung-r4">9. Bedienplatine J5
+(Erweiterung r4)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Kennz.</th>
+<th>Code</th>
+<th>Verifikation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SRS-060"></a><strong>SRS-060</strong></td>
+<td>Die Bedienplatine wird erkannt, indem die Stickspannung mit Pull-up
+und Pull-down gemessen wird. Ohne Platine wird der Pull-up
+abgeschaltet.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__input__src__ext_input.c.html#L4"><code>ext_board_present</code></a>,
+<a
+href="src/firmware__app__src__ext.c.html#L43"><code>probe_board</code></a></td>
+<td><a
+href="src/firmware__tests__test_ext_input.c.html#L46"><code>test_presence</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-061"></a><strong>SRS-061</strong></td>
+<td>Die Stick-Mitte wird beim Start aus 8 Ruhe-Samples bestimmt. Nur
+Werte zwischen 30 und 70 % des Bereichs gelten. Sonst bleibt der
+Standard 1,65 V.</td>
+<td>CODE / ANNAHME</td>
+<td><a
+href="src/firmware__input__src__ext_input.c.html#L18"><code>stick_axis_cal_center</code></a>,
+<a
+href="src/firmware__app__src__ext.c.html#L106"><code>ext_input_start</code></a></td>
+<td><a
+href="src/firmware__tests__test_ext_input.c.html#L27"><code>test_center_calibration_shifts_zero</code></a>,
+<a
+href="src/firmware__tests__test_ext_input.c.html#L38"><code>test_center_calibration_rejects_implausible</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-062"></a><strong>SRS-062</strong></td>
+<td>Der Stick liefert −100…+100 %, mit 8 % Totzone (ANNAHME) und
+linearer Nachskalierung.</td>
+<td>CODE / ANNAHME</td>
+<td><a
+href="src/firmware__input__src__ext_input.c.html#L35"><code>stick_axis_scale</code></a></td>
+<td><a
+href="src/firmware__tests__test_ext_input.c.html#L9"><code>test_scale_default_center_and_ends</code></a>,
+<a
+href="src/firmware__tests__test_ext_input.c.html#L18"><code>test_deadzone</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-063"></a><strong>SRS-063</strong></td>
+<td>Abtastintervall 500 ms in Ruhe, 50 ms bei Eingabe und 2 s
+danach.</td>
+<td>CODE / ANNAHME</td>
+<td><a
+href="src/firmware__input__src__ext_input.c.html#L61"><code>stick_next_poll_ms</code></a></td>
+<td><a
+href="src/firmware__tests__test_ext_input.c.html#L59"><code>test_poll_on_demand</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-064"></a><strong>SRS-064</strong></td>
+<td>Der Touch-Eingang wird 30 ms entprellt. Mehr als 10 Flanken in 1 s
+sperren ihn 10 s lang (offener oder gestörter Eingang).</td>
+<td>CODE / ANNAHME</td>
+<td><a
+href="src/firmware__input__src__ext_input.c.html#L76"><code>touch_update</code></a></td>
+<td><a
+href="src/firmware__tests__test_ext_input.c.html#L69"><code>test_touch_debounced_events</code></a>,
+<a
+href="src/firmware__tests__test_ext_input.c.html#L81"><code>test_touch_glitch_no_event</code></a>,
+<a
+href="src/firmware__tests__test_ext_input.c.html#L90"><code>test_touch_floating_input_no_spam</code></a>,
+<a
+href="src/firmware__tests__test_ext_input.c.html#L103"><code>test_touch_recovers_after_lockout</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-065"></a><strong>SRS-065</strong></td>
+<td><code>EF680380</code> (8 B): Version 1, Flags, x, y, 16-Bit-Zähler.
+Senderate ≤ 20/s, bei <code>motion_freq_hz</code> &gt; 50 höchstens
+10/s. Eine Änderung geht spätestens nach 100 ms raus. Fehlt die Platine,
+wird genau einmal nach dem Abonnieren gemeldet.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L396"><code>thingy_encode_ui_ext</code></a>,
+<a
+href="src/firmware__codec__src__thingy_codec.c.html#L423"><code>ui_ext_rate_poll</code></a>,
+<a
+href="src/firmware__app__src__ext.c.html#L156"><code>ui_tx</code></a></td>
+<td><a
+href="src/firmware__tests__test_ui_ext.c.html#L9"><code>test_layout_vector</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L61"><code>test_rate_20_per_s</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L62"><code>test_rate_10_per_s_game_mode</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L75"><code>test_edge_never_lost_and_within_100ms</code></a>,
+<a
+href="src/firmware__tests__test_ui_ext.c.html#L88"><code>test_absent_exactly_one_notify_after_subscribe</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="10-robustheit-diagnose-bereitstellung">10. Robustheit, Diagnose,
+Bereitstellung</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Kennz.</th>
+<th>Code</th>
+<th>Verifikation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SRS-070"></a><strong>SRS-070</strong></td>
+<td>Initialisierungsfehler (UI, Akku, IMU, J5) werden geloggt. Das Gerät
+läuft weiter. Nur bei einem BLE-Fehler endet <code>main</code> (Gerät
+bleibt untätig).</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__app__src__main.c.html#L8"><code>main</code></a></td>
+<td>NOT RUN, siehe <a href="06_Risiko.html#HAZ-02">HAZ-02</a>, <a
+href="08_Luecken.html#GAP-05">GAP-05</a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-071"></a><strong>SRS-071</strong></td>
+<td>Das Log läuft nur über SEGGER RTT (SWD). Es gibt keine serielle
+Konsole.</td>
+<td>ADR</td>
+<td><a
+href="src/firmware__app__prj.conf.html"><code>firmware/app/prj.conf</code></a>,
+<a
+href="src/firmware__boards__disroop__motion_one__motion_one_defconfig.html"><code>firmware/boards/disroop/motion_one/motion_one_defconfig</code></a></td>
+<td>NOT RUN</td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-072"></a><strong>SRS-072</strong></td>
+<td>Die Firmware wird als UF2/HEX für den Adafruit-nRF52-Bootloader
+gebaut (App ab 0x26000).</td>
+<td>ADR</td>
+<td><a
+href="src/firmware__boards__disroop__motion_one__motion_one_defconfig.html"><code>firmware/boards/disroop/motion_one/motion_one_defconfig</code></a>,
+<a
+href="src/firmware__smoke.sh.html"><code>firmware/smoke.sh</code></a></td>
+<td>Build in <code>smoke.sh</code></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-073"></a><strong>SRS-073</strong></td>
+<td>Der Pinout in <code>electronics/PINOUT_V1.json</code> und in der
+Board-Definition muss übereinstimmen.</td>
+<td>CODE</td>
+<td><a
+href="src/firmware__scripts__check_pinout.py.html"><code>firmware/scripts/check_pinout.py</code></a>,
+<a
+href="src/firmware__Makefile.html"><code>firmware/Makefile</code></a></td>
+<td><code>make pincheck</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="11-nicht-vorhanden-anforderungen-die-ein-audit-erwartet">11.
+Nicht vorhanden (Anforderungen, die ein Audit erwartet)</h2>
+<p>Folgende Anforderungen <strong>existieren im Code nicht</strong>. Sie
+stehen hier, damit sie nicht vergessen werden. Details in den <a
+href="08_Luecken.html">Lücken</a>.</p>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Fehlt</th>
+<th>Bezug</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SRS-090"></a><strong>SRS-090</strong></td>
+<td>Watchdog und definierter sicherer Zustand bei Softwarefehlern</td>
+<td><a href="08_Luecken.html#GAP-05">GAP-05</a>, <a
+href="06_Risiko.html#HAZ-03">HAZ-03</a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-091"></a><strong>SRS-091</strong></td>
+<td>Sichtbare Fehleranzeige (LED/BLE-Status) bei IMU- oder
+Akkuausfall</td>
+<td><a href="08_Luecken.html#GAP-05">GAP-05</a>, <a
+href="06_Risiko.html#HAZ-02">HAZ-02</a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-092"></a><strong>SRS-092</strong></td>
+<td>Authentifizierte, verschlüsselte Verbindung und Schutz der
+Schreibzugriffe</td>
+<td><a href="08_Luecken.html#GAP-13">GAP-13</a>, <a
+href="06_Risiko.html#HAZ-04">HAZ-04</a></td>
+</tr>
+<tr class="even">
+<td><a id="SRS-093"></a><strong>SRS-093</strong></td>
+<td>Auslesbare Firmware-Version und Geräte-ID (UDI)</td>
+<td><a href="08_Luecken.html#GAP-14">GAP-14</a>, <a
+href="06_Risiko.html#HAZ-10">HAZ-10</a></td>
+</tr>
+<tr class="odd">
+<td><a id="SRS-094"></a><strong>SRS-094</strong></td>
+<td>Erkennung verlorener Notifications (Rückgabewert von
+<code>bt_gatt_notify</code> wird ignoriert)</td>
+<td><a href="06_Risiko.html#HAZ-09">HAZ-09</a></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

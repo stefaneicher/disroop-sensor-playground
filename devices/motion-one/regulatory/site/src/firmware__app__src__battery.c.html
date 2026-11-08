@@ -1,0 +1,58 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/app/src/battery.c</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/app/src/battery.c</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* Akkuspannung: VBAT_EN an, &gt;= 25 ms warten, SAADC lesen, VBAT_EN aus (Logik in power/vbat.c, Host-getestet). */
+</span><span class="l" id="L2"><a href="#L2">2</a>#include &lt;zephyr/kernel.h&gt;
+</span><span class="l" id="L3"><a href="#L3">3</a>#include &lt;zephyr/drivers/adc.h&gt;
+</span><span class="l" id="L4"><a href="#L4">4</a>#include &lt;zephyr/drivers/gpio.h&gt;
+</span><span class="l" id="L5"><a href="#L5">5</a>#include &quot;app.h&quot;
+</span><span class="l" id="L6"><a href="#L6">6</a>#include &quot;vbat.h&quot;
+</span><span class="l" id="L7"><a href="#L7">7</a>
+</span><span class="l" id="L8"><a href="#L8">8</a>#define USER DT_PATH(zephyr_user)
+</span><span class="l" id="L9"><a href="#L9">9</a>static const struct adc_dt_spec ch = ADC_DT_SPEC_GET(USER);
+</span><span class="l" id="L10"><a href="#L10">10</a>static const struct gpio_dt_spec en = GPIO_DT_SPEC_GET(USER, vbat_en_gpios);
+</span><span class="l" id="L11"><a href="#L11">11</a>
+</span><span class="l" id="L12"><a href="#L12">12</a>static int z_en(void *c, int on) { (void)c; return gpio_pin_set_dt(&amp;en, on); }
+</span><span class="l" id="L13"><a href="#L13">13</a>static void z_sleep(void *c, uint32_t ms) { (void)c; k_msleep((int32_t)ms); }
+</span><span class="l" id="L14"><a href="#L14">14</a>static int z_adc(void *c, int32_t *mv)
+</span><span class="l" id="L15"><a href="#L15">15</a>{
+</span><span class="l" id="L16"><a href="#L16">16</a>	(void)c;
+</span><span class="l" id="L17"><a href="#L17">17</a>	int16_t raw;
+</span><span class="l" id="L18"><a href="#L18">18</a>	struct adc_sequence seq = {.buffer = &amp;raw, .buffer_size = sizeof raw};
+</span><span class="l" id="L19"><a href="#L19">19</a>	int rc = adc_sequence_init_dt(&amp;ch, &amp;seq);
+</span><span class="l" id="L20"><a href="#L20">20</a>	if (rc == 0) {
+</span><span class="l" id="L21"><a href="#L21">21</a>		rc = adc_read_dt(&amp;ch, &amp;seq);
+</span><span class="l" id="L22"><a href="#L22">22</a>	}
+</span><span class="l" id="L23"><a href="#L23">23</a>	if (rc == 0) {
+</span><span class="l" id="L24"><a href="#L24">24</a>		*mv = raw;
+</span><span class="l" id="L25"><a href="#L25">25</a>		rc = adc_raw_to_millivolts_dt(&amp;ch, mv);
+</span><span class="l" id="L26"><a href="#L26">26</a>	}
+</span><span class="l" id="L27"><a href="#L27">27</a>	return rc;
+</span><span class="l" id="L28"><a href="#L28">28</a>}
+</span><span class="l" id="L29"><a href="#L29">29</a>
+</span><span class="l" id="L30"><a href="#L30">30</a>static const vbat_port_t port = {.ctx = NULL, .set_enable = z_en, .sleep_ms = z_sleep, .read_adc_mv = z_adc};
+</span><span class="l" id="L31"><a href="#L31">31</a>
+</span><span class="l" id="L32"><a href="#L32">32</a>int battery_init(void)
+</span><span class="l" id="L33"><a href="#L33">33</a>{
+</span><span class="l" id="L34"><a href="#L34">34</a>	if (!adc_is_ready_dt(&amp;ch) || !gpio_is_ready_dt(&amp;en)) {
+</span><span class="l" id="L35"><a href="#L35">35</a>		return -ENODEV;
+</span><span class="l" id="L36"><a href="#L36">36</a>	}
+</span><span class="l" id="L37"><a href="#L37">37</a>	int rc = gpio_pin_configure_dt(&amp;en, GPIO_OUTPUT_INACTIVE);
+</span><span class="l" id="L38"><a href="#L38">38</a>	return rc ? rc : adc_channel_setup_dt(&amp;ch);
+</span><span class="l" id="L39"><a href="#L39">39</a>}
+</span><span class="l" id="L40"><a href="#L40">40</a>
+</span><span class="l" id="L41"><a href="#L41">41</a>static atomic_t last_mv; /* 0 = noch keine gueltige Messung */
+</span><span class="l" id="L42"><a href="#L42">42</a>
+</span><span class="l" id="L43"><a href="#L43">43</a>uint16_t battery_read_mv(void)
+</span><span class="l" id="L44"><a href="#L44">44</a>{
+</span><span class="l" id="L45"><a href="#L45">45</a>	uint16_t mv = 0;
+</span><span class="l" id="L46"><a href="#L46">46</a>	(void)vbat_measure(&amp;port, DT_PROP(USER, vbat_divider_num), DT_PROP(USER, vbat_divider_den), &amp;mv);
+</span><span class="l" id="L47"><a href="#L47">47</a>	atomic_set(&amp;last_mv, mv);
+</span><span class="l" id="L48"><a href="#L48">48</a>	return mv;
+</span><span class="l" id="L49"><a href="#L49">49</a>}
+</span><span class="l" id="L50"><a href="#L50">50</a>
+</span><span class="l" id="L51"><a href="#L51">51</a>uint16_t battery_last_mv(void)
+</span><span class="l" id="L52"><a href="#L52">52</a>{
+</span><span class="l" id="L53"><a href="#L53">53</a>	return (uint16_t)atomic_get(&amp;last_mv);
+</span><span class="l" id="L54"><a href="#L54">54</a>}
+</span></pre></body></html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>SAD</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="top"><a href="index.html">Start</a> · <a href="01_Normen.html">Normen</a> · <a href="02_SRS.html">SRS</a> · <a href="03_SAD.html">SAD</a> · <a href="04_SDD.html">SDD</a> · <a href="05_SOUP.html">SOUP</a> · <a href="06_Risiko.html">Risiko</a> · <a href="07_Rueckverfolgbarkeit.html">Rückverfolgbarkeit</a> · <a href="08_Luecken.html">Lücken</a> · <a href="09_Skills.html">Skills</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#sad-software-architecture-document"
+id="toc-sad-software-architecture-document">SAD: Software Architecture
+Document</a>
+<ul>
+<li><a href="#1-überblick" id="toc-1-überblick">1. Überblick</a></li>
+<li><a href="#2-bausteine" id="toc-2-bausteine">2. Bausteine</a></li>
+<li><a href="#3-ausführungskontexte-threads"
+id="toc-3-ausführungskontexte-threads">3. Ausführungskontexte
+(Threads)</a></li>
+<li><a href="#4-datenfluss-bewegung" id="toc-4-datenfluss-bewegung">4.
+Datenfluss Bewegung</a></li>
+<li><a href="#5-zustände-des-geräts" id="toc-5-zustände-des-geräts">5.
+Zustände des Geräts</a></li>
+<li><a href="#6-schnittstellen" id="toc-6-schnittstellen">6.
+Schnittstellen</a></li>
+<li><a href="#7-trennung-nach-sicherheitsklasse-62304-abschnitt-535"
+id="toc-7-trennung-nach-sicherheitsklasse-62304-abschnitt-535">7.
+Trennung nach Sicherheitsklasse (62304 Abschnitt 5.3.5)</a></li>
+<li><a href="#8-wichtige-entwurfsentscheide"
+id="toc-8-wichtige-entwurfsentscheide">8. Wichtige
+Entwurfsentscheide</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="sad-software-architecture-document">SAD: Software Architecture
+Document</h1>
+<p>Rückwärts aus dem Code. Bezug: <a href="02_SRS.html">SRS</a>, <a
+href="04_SDD.html">SDD</a>, <a href="05_SOUP.html">SOUP</a>.
+Systemarchitektur (Hardware, Funkmodul-Wahl):
+<code>requirements/ARCHITECTURE.md</code>.</p>
+<h2 id="1-überblick">1. Überblick</h2>
+<p>Ziel: Thingy:52-kompatibles BLE-Profil auf einem nRF52840 mit
+ICM-45686-IMU (Zephyr RTOS). Die Software trennt zwei Schichten:</p>
+<ul>
+<li><strong>Reine C-Module</strong> (Kern): ohne Zephyr, ohne Hardware,
+auf dem Entwicklungsrechner mit gcc und Unity getestet.</li>
+<li><strong>Zephyr-Adapter</strong> (Rand): verbinden den Kern mit BLE,
+SPI, GPIO, PWM, ADC. Sie haben <strong>keine Unit-Tests</strong>.</li>
+</ul>
+<pre><code>                  ┌──────────────────────── Zephyr-Adapter (firmware/app/src) ───────────────────────┐
+ Thingy-App       │  ble_thingy ◄───────── Notifications ─────────── imu_task ◄── INT1/SPI ── ICM-45686│
+ (Bridge, Android)│     │ GATT-Schreibzugriffe                          │ Samples                    │
+   ◄──── BLE ────►│     ▼                                               ▼                            │
+                  │  ui  (LED, Summer, Motor, Taster)    main (Akku, Ruhe, System OFF)   ext (J5)     │
+                  │  battery   board_early                                                           │
+                  └──────┬───────────┬───────────────┬──────────────┬─────────────┬──────────────────┘
+                         ▼           ▼               ▼              ▼             ▼
+                    ┌────────┐  ┌─────────┐   ┌──────────┐   ┌───────────┐  ┌───────────┐
+                    │ codec  │  │ fusion  │   │ icm      │   │ power     │  │ input     │   reine C-Module,
+                    │ Thingy │  │ Madgwick│   │ ICM-45686│   │ vbat,     │  │ ext_input │   Host-getestet
+                    │ Profil │  │ + Bias  │   │ Treiber  │   │ motor_drv │  │ Stick,    │
+                    └────────┘  └─────────┘   └──────────┘   └───────────┘  │ Touch     │
+                                                                            └───────────┘
+ Zephyr RTOS (SOUP): Kernel, Bluetooth-Host/-Controller, GPIO/SPI/PWM/ADC-Treiber, Logging (RTT), hal_nordic</code></pre>
+<h2 id="2-bausteine">2. Bausteine</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Baustein</th>
+<th>Aufgabe</th>
+<th>Typ</th>
+<th>Dateien</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="SAD-01"></a><strong>SAD-01</strong></td>
+<td>codec</td>
+<td>Kodieren und Prüfen aller Profil-Nutzdaten, Tasten-Zustandsmaschine,
+Ratenbegrenzer für <code>EF680380</code></td>
+<td>rein</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html"><code>firmware/codec/src/thingy_codec.c</code></a>,
+<a
+href="src/firmware__codec__include__thingy_codec.h.html"><code>firmware/codec/include/thingy_codec.h</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SAD-02"></a><strong>SAD-02</strong></td>
+<td>fusion</td>
+<td>Madgwick-Filter, Euler/Heading, Gyro-Bias-Kalibrierung</td>
+<td>rein</td>
+<td><a
+href="src/firmware__fusion__src__motion_fusion.c.html"><code>firmware/fusion/src/motion_fusion.c</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SAD-03"></a><strong>SAD-03</strong></td>
+<td>icm</td>
+<td>Register, FIFO-Parser und Init des ICM-45686 über einen
+Bus-Port</td>
+<td>rein (Bus als Funktionszeiger)</td>
+<td><a
+href="src/firmware__icm__src__icm45686.c.html"><code>firmware/icm/src/icm45686.c</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SAD-04"></a><strong>SAD-04</strong></td>
+<td>power</td>
+<td>Akkumessung (<code>vbat</code>), Motor-PWM und Last-Arbitrierung
+(<code>motor_drive</code>)</td>
+<td>rein</td>
+<td><a
+href="src/firmware__power__src__vbat.c.html"><code>firmware/power/src/vbat.c</code></a>,
+<a
+href="src/firmware__power__src__motor_drive.c.html"><code>firmware/power/src/motor_drive.c</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SAD-05"></a><strong>SAD-05</strong></td>
+<td>input</td>
+<td>Stick-Skalierung, Platinenerkennung, Touch-Entprellung</td>
+<td>rein</td>
+<td><a
+href="src/firmware__input__src__ext_input.c.html"><code>firmware/input/src/ext_input.c</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SAD-06"></a><strong>SAD-06</strong></td>
+<td>ble_thingy</td>
+<td>GATT-Tabelle, Advertising, Lese-/Schreib-Handler, Notifications</td>
+<td>Adapter</td>
+<td><a
+href="src/firmware__app__src__ble_thingy.c.html"><code>firmware/app/src/ble_thingy.c</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SAD-07"></a><strong>SAD-07</strong></td>
+<td>imu_task</td>
+<td>IMU-Thread: FIFO lesen, Fusion, Dezimierung, Wake-on-Motion</td>
+<td>Adapter</td>
+<td><a
+href="src/firmware__app__src__imu_task.c.html"><code>firmware/app/src/imu_task.c</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SAD-08"></a><strong>SAD-08</strong></td>
+<td>ui</td>
+<td>LED (PWM), Summer, Motor, Taster</td>
+<td>Adapter</td>
+<td><a
+href="src/firmware__app__src__ui.c.html"><code>firmware/app/src/ui.c</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SAD-09"></a><strong>SAD-09</strong></td>
+<td>ext</td>
+<td>Bedienplatine J5 (ADC, Touch), Meldung <code>EF680380</code></td>
+<td>Adapter</td>
+<td><a
+href="src/firmware__app__src__ext.c.html"><code>firmware/app/src/ext.c</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SAD-10"></a><strong>SAD-10</strong></td>
+<td>battery</td>
+<td>ADC-Zugriff für die Akkumessung</td>
+<td>Adapter</td>
+<td><a
+href="src/firmware__app__src__battery.c.html"><code>firmware/app/src/battery.c</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SAD-11"></a><strong>SAD-11</strong></td>
+<td>main</td>
+<td>Start, Akku-Überwachung (60 s), Ruheabschaltung, System OFF</td>
+<td>Adapter</td>
+<td><a
+href="src/firmware__app__src__main.c.html"><code>firmware/app/src/main.c</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SAD-12"></a><strong>SAD-12</strong></td>
+<td>board_early</td>
+<td>Frühe Pin-Initialisierung (IMU-CS)</td>
+<td>Adapter</td>
+<td><a
+href="src/firmware__app__src__board_early.c.html"><code>firmware/app/src/board_early.c</code></a></td>
+</tr>
+<tr class="odd">
+<td><a id="SAD-13"></a><strong>SAD-13</strong></td>
+<td>Board-Definition</td>
+<td>Devicetree, Pinmux, Defconfig</td>
+<td>Konfiguration</td>
+<td><a
+href="src/firmware__boards__disroop__motion_one__motion_one.dts.html"><code>firmware/boards/disroop/motion_one/motion_one.dts</code></a>,
+<a
+href="src/firmware__boards__disroop__motion_one__motion_one-pins.dtsi.html"><code>firmware/boards/disroop/motion_one/motion_one-pins.dtsi</code></a></td>
+</tr>
+<tr class="even">
+<td><a id="SAD-14"></a><strong>SAD-14</strong></td>
+<td>Bootloader</td>
+<td>Adafruit nRF52 UF2 mit eigener Board-Definition</td>
+<td>SOUP + Konfiguration</td>
+<td><a
+href="src/firmware__bootloader__motion_one__board.h.html"><code>firmware/bootloader/motion_one/board.h</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Die Abhängigkeiten zeigen nur nach innen: Adapter rufen Kern-Module,
+nie umgekehrt. Der Kern kennt die Adapter nur über Funktionszeiger
+(<code>icm_bus_t</code>, <code>vbat_port_t</code>). Das ist die
+Grundlage für die Host-Tests.</p>
+<h2 id="3-ausführungskontexte-threads">3. Ausführungskontexte
+(Threads)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Kontext</th>
+<th>Priorität / Stack</th>
+<th>Aufgabe</th>
+<th>Gemeinsame Daten</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>main</code></td>
+<td>Standard, 2048 B</td>
+<td>Schleife im Sekundentakt: Akku (60 s), Ruheprüfung</td>
+<td><code>ble_is_connected</code>, <code>imu_at_rest_for_s</code></td>
+</tr>
+<tr class="even">
+<td><code>imu</code> (<a
+href="src/firmware__app__src__imu_task.c.html#L102"><code>imu_thread</code></a>)</td>
+<td>preemptiv, Priorität 2, 2048 B</td>
+<td>wartet auf INT1 (Timeout 100 ms), liest bis 16 Frames, Fusion,
+Senden</td>
+<td><code>cal</code>, <code>fus</code> (nur dieser Thread),
+<code>rest_samples</code> (auch <code>main</code> liest)</td>
+</tr>
+<tr class="odd">
+<td>System-Workqueue</td>
+<td>2048 B</td>
+<td>Taster-Polling, LED-Animation, Summer-/Motor-Timer, J5-Abfrage,
+<code>EF680380</code></td>
+<td><code>load_lock</code> (Mutex), Zustände in <code>ui.c</code> und
+<code>ext.c</code></td>
+</tr>
+<tr class="even">
+<td>Bluetooth-Threads (SOUP)</td>
+<td>Zephyr</td>
+<td>GATT-Handler (<code>rd_*</code>, <code>wr_*</code>),
+Verbindungsereignisse</td>
+<td><code>cfg_lock</code> (Mutex) für <code>motion_cfg</code>;
+<code>led_cmd</code>, <code>env_cfg</code>, <code>sound_cfg</code>
+<strong>ohne</strong> Sperre</td>
+</tr>
+<tr class="odd">
+<td>ISR</td>
+<td>–</td>
+<td>INT1 gibt Semaphor; Tasterflanke plant Arbeit ein; Touch-Flanke
+plant Arbeit ein</td>
+<td>Semaphor, Workqueue</td>
+</tr>
+</tbody>
+</table>
+<p>Befunde zur Nebenläufigkeit: <a
+href="08_Luecken.html#GAP-09">GAP-09</a>.</p>
+<h2 id="4-datenfluss-bewegung">4. Datenfluss Bewegung</h2>
+<ol type="1">
+<li>ICM-45686 füllt das FIFO mit 400 Hz und löst INT1 bei 2 Frames
+aus.</li>
+<li><a
+href="src/firmware__app__src__imu_task.c.html#L102"><code>imu_thread</code></a>
+liest <a
+href="src/firmware__icm__src__icm45686.c.html#L95"><code>icm45686_fifo_count</code></a>,
+dann die Frames, parst jedes mit <a
+href="src/firmware__icm__src__icm45686.c.html#L9"><code>icm45686_parse_frame</code></a>.</li>
+<li><a
+href="src/firmware__app__src__imu_task.c.html#L76"><code>process</code></a>:
+Bias-Schätzung (<a
+href="src/firmware__fusion__src__motion_fusion.c.html#L105"><code>bias_cal_feed</code></a>),
+Ruheerkennung, Bias abziehen, <a
+href="src/firmware__fusion__src__motion_fusion.c.html#L18"><code>madgwick_update</code></a>.</li>
+<li>Dezimierung auf <code>motion_freq_hz</code>, nur wenn <a
+href="src/firmware__app__src__ble_thingy.c.html#L279"><code>ble_motion_wanted</code></a>.
+Euler/Heading/Raw/Raw-HR kodieren.</li>
+<li><a
+href="src/firmware__app__src__ble_thingy.c.html#L290"><code>ble_publish_motion</code></a>
+begrenzt auf 200 Notifications/s und ruft <code>bt_gatt_notify</code> je
+abonniertem Kanal.</li>
+</ol>
+<p>Latenzbudget Gerät: &lt; 10 ms (REQ-032, rechnerisch 2,8 ms typisch,
+NOT RUN).</p>
+<h2 id="5-zustände-des-geräts">5. Zustände des Geräts</h2>
+<pre><code>          Reset / Wake
+              │
+              ▼
+   ┌────────────────────┐ BLE-Init-Fehler  ┌──────────────┐
+   │ Start (Init aller  ├─────────────────►│ main endet   │  (Gerät untätig, Befund GAP-05)
+   │ Module)            │                  └──────────────┘
+   └─────────┬──────────┘
+             ▼
+   ┌────────────────────┐ Verbindung  ┌───────────────┐ CCC abonniert ┌──────────────────┐
+   │ Advertising        ├────────────►│ Verbunden     ├──────────────►│ Streaming        │
+   └─────┬──────────────┘◄────────────┤               │◄──────────────┤ (Notifications)  │
+         │      Trennen                └───────────────┘  abbestellt   └──────────────────┘
+         │ Ruhe ≥ 60 s ohne Verbindung   oder   Akku &lt; 3300 mV
+         ▼
+   ┌────────────────────┐   Taster oder Bewegung (WoM)
+   │ System OFF         ├──────────────────────────────► Reset / Start
+   └────────────────────┘</code></pre>
+<h2 id="6-schnittstellen">6. Schnittstellen</h2>
+<h3
+id="61-extern-blegatt-basis-uuid-ef68xxxx-9b35-4933-9b10-52ffa9740042">6.1
+Extern (BLE/GATT), Basis-UUID
+<code>EF68xxxx-9B35-4933-9B10-52FFA9740042</code></h3>
+<table>
+<thead>
+<tr class="header">
+<th>Service</th>
+<th>Characteristic</th>
+<th>Richtung</th>
+<th>Inhalt</th>
+<th>SRS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0100 Config</td>
+<td>0101</td>
+<td>lesen</td>
+<td>Gerätename</td>
+<td><a href="02_SRS.html#SRS-001">SRS-001</a></td>
+</tr>
+<tr class="even">
+<td>0200 Environment</td>
+<td>0206</td>
+<td>lesen, schreiben</td>
+<td>Env-Config (Dummy)</td>
+<td><a href="02_SRS.html#SRS-012">SRS-012</a></td>
+</tr>
+<tr class="odd">
+<td>0300 UI</td>
+<td>0301</td>
+<td>lesen, schreiben</td>
+<td>LED-Befehl</td>
+<td><a href="02_SRS.html#SRS-015">SRS-015</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>0302</td>
+<td>lesen, Notify</td>
+<td>Taster</td>
+<td><a href="02_SRS.html#SRS-040">SRS-040</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>0380</td>
+<td>lesen, Notify</td>
+<td>Bedienplatine J5</td>
+<td><a href="02_SRS.html#SRS-065">SRS-065</a></td>
+</tr>
+<tr class="even">
+<td>0400 Motion</td>
+<td>0401</td>
+<td>lesen, schreiben</td>
+<td>Motion-Config</td>
+<td><a href="02_SRS.html#SRS-010">SRS-010</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>0404 / 0406 / 0407 / 0409 / 0480</td>
+<td>Notify</td>
+<td>Quaternion / Raw / Euler / Heading / Raw-HR</td>
+<td><a href="02_SRS.html#SRS-030">SRS-030</a></td>
+</tr>
+<tr class="even">
+<td>0500 Sound</td>
+<td>0501</td>
+<td>lesen, schreiben</td>
+<td>Sound-Config</td>
+<td><a href="02_SRS.html#SRS-013">SRS-013</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>0502</td>
+<td>schreiben</td>
+<td>Ton</td>
+<td><a href="02_SRS.html#SRS-014">SRS-014</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>0503</td>
+<td>Notify</td>
+<td>Ton beendet</td>
+<td><a href="02_SRS.html#SRS-014">SRS-014</a></td>
+</tr>
+<tr class="odd">
+<td>180F Battery</td>
+<td>2A19</td>
+<td>lesen, Notify</td>
+<td>Ladung in %</td>
+<td><a href="02_SRS.html#SRS-051">SRS-051</a></td>
+</tr>
+</tbody>
+</table>
+<p>Formate: <code>docs/protocol.md</code> im Repo und <a
+href="src/firmware__docs__EXTENDED_CHANNEL.md.html"><code>firmware/docs/EXTENDED_CHANNEL.md</code></a>.</p>
+<h3 id="62-intern">6.2 Intern</h3>
+<p>Die Adapter-Schnittstellen stehen in <a
+href="src/firmware__app__src__app.h.html"><code>firmware/app/src/app.h</code></a>
+(z. B. <a
+href="src/firmware__app__src__ble_thingy.c.html#L290"><code>ble_publish_motion</code></a>,
+<a
+href="src/firmware__app__src__ui.c.html#L56"><code>ui_led_apply</code></a>,
+<a
+href="src/firmware__app__src__battery.c.html#L43"><code>battery_read_mv</code></a>).
+Die Kern-Schnittstellen stehen in den Headern unter
+<code>codec/include</code>, <code>fusion/include</code>,
+<code>icm/include</code>, <code>power/include</code>,
+<code>input/include</code>.</p>
+<h2 id="7-trennung-nach-sicherheitsklasse-62304-abschnitt-535">7.
+Trennung nach Sicherheitsklasse (62304 Abschnitt 5.3.5)</h2>
+<p>Heute gibt es <strong>keine Trennung</strong>: Alle Bausteine laufen
+im selben Adressraum, Zephyr nutzt nur den MPU-Stackschutz
+(<code>CONFIG_ARM_MPU</code>, <code>CONFIG_HW_STACK_PROTECTION</code>).
+Darum gilt die ganze Software als Klasse C. Eine Trennung wäre denkbar
+für <code>ext</code>/<code>ui</code> (Komfortfunktionen), verlangt aber
+einen Nachweis der Unabhängigkeit. Siehe <a
+href="08_Luecken.html#GAP-06">GAP-06</a>.</p>
+<h2 id="8-wichtige-entwurfsentscheide">8. Wichtige
+Entwurfsentscheide</h2>
+<ul>
+<li>ADR-0001: USB-Bootloader schon in V1, damit ohne SWD-Probe
+aktualisiert werden kann
+(<code>adr/firmware/ADR-0001-bootloader-v1.md</code>).</li>
+<li>ADR-0002: kein UART, Log nur über RTT
+(<code>ADR-0002-nur-rtt.md</code>).</li>
+<li>ADR-0003: Motor-Tastgrad auf ≤ 3,0 V, Summer vor Motor
+(<code>ADR-0003-motor-leistungsbegrenzung.md</code>).</li>
+<li>ADR-0004: Erweiterungstreiber J5
+(<code>ADR-0004-erweiterung-treiber.md</code>).</li>
+<li>Thingy:52-Kompatibilität ist Pflicht (REQ-020…027), damit Bridge und
+Android-App unverändert laufen.</li>
+</ul>
+</body>
+</html>

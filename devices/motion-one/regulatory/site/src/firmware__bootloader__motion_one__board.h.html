@@ -1,0 +1,46 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/bootloader/motion_one/board.h</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/bootloader/motion_one/board.h</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* Adafruit nRF52 Bootloader 0.11.0 – Board-Definition Disroop Motion One V1.
+</span><span class="l" id="L2"><a href="#L2">2</a> * QUELLE Pins: devices/motion-one/electronics/PINOUT_V1.json (r4); gleiche Pins wie
+</span><span class="l" id="L3"><a href="#L3">3</a> * firmware/boards/disroop/motion_one/motion_one-pins.dtsi. Geprueft durch
+</span><span class="l" id="L4"><a href="#L4">4</a> * firmware/scripts/check_bootloader_board.py (make pincheck / make test).
+</span><span class="l" id="L5"><a href="#L5">5</a> * Q-02: kein UART, Debug nur SWD/RTT (DEBUG=1 -&gt; SEGGER RTT im Bootloader). */
+</span><span class="l" id="L6"><a href="#L6">6</a>#ifndef MOTION_ONE_H
+</span><span class="l" id="L7"><a href="#L7">7</a>#define MOTION_ONE_H
+</span><span class="l" id="L8"><a href="#L8">8</a>
+</span><span class="l" id="L9"><a href="#L9">9</a>/* LED: RGB D4, Common-Anode an 3V3, aktiv low */
+</span><span class="l" id="L10"><a href="#L10">10</a>#define LEDS_NUMBER          1
+</span><span class="l" id="L11"><a href="#L11">11</a>#define LED_PRIMARY_PIN      PINNUM(0, 15) /* LED_R */
+</span><span class="l" id="L12"><a href="#L12">12</a>#define LED_STATE_ON         0
+</span><span class="l" id="L13"><a href="#L13">13</a>#define LED_RGB_RED_PIN      PINNUM(0, 15) /* LED_R */
+</span><span class="l" id="L14"><a href="#L14">14</a>#define LED_RGB_GREEN_PIN    PINNUM(0, 17) /* LED_G */
+</span><span class="l" id="L15"><a href="#L15">15</a>#define LED_RGB_BLUE_PIN     PINNUM(1, 10) /* LED_B */
+</span><span class="l" id="L16"><a href="#L16">16</a>#define BOARD_RGB_BRIGHTNESS 0x202020
+</span><span class="l" id="L17"><a href="#L17">17</a>
+</span><span class="l" id="L18"><a href="#L18">18</a>/* BUTTON: SW2 an P0.28, aktiv low, interner Pull-up. Kein OTA-Taster (nur ein Taster). */
+</span><span class="l" id="L19"><a href="#L19">19</a>#define BUTTON_DFU           PINNUM(0, 28) /* BTN */
+</span><span class="l" id="L20"><a href="#L20">20</a>#define BUTTON_PULL          NRF_GPIO_PIN_PULLUP
+</span><span class="l" id="L21"><a href="#L21">21</a>
+</span><span class="l" id="L22"><a href="#L22">22</a>/* DC/DC: Bestueckung im E73 unbekannt -&gt; LDO (wie App) */
+</span><span class="l" id="L23"><a href="#L23">23</a>#define ENABLE_DCDC_0        0
+</span><span class="l" id="L24"><a href="#L24">24</a>#define ENABLE_DCDC_1        0
+</span><span class="l" id="L25"><a href="#L25">25</a>
+</span><span class="l" id="L26"><a href="#L26">26</a>/* BLE OTA (Device Information) */
+</span><span class="l" id="L27"><a href="#L27">27</a>#define BLEDIS_MANUFACTURER  &quot;Disroop&quot;
+</span><span class="l" id="L28"><a href="#L28">28</a>#define BLEDIS_MODEL         &quot;Motion One V1&quot;
+</span><span class="l" id="L29"><a href="#L29">29</a>
+</span><span class="l" id="L30"><a href="#L30">30</a>/* USB: ANNAHME eigene VID/PID fehlt noch -&gt; wie pca10056 (Adafruit-VID, PID 0x00DA).
+</span><span class="l" id="L31"><a href="#L31">31</a> * Offener Punkt: eigene PID (z. B. pid.codes) vor Serie. */
+</span><span class="l" id="L32"><a href="#L32">32</a>#define USB_DESC_VID          0x239A
+</span><span class="l" id="L33"><a href="#L33">33</a>#define USB_DESC_UF2_PID      0x00DA
+</span><span class="l" id="L34"><a href="#L34">34</a>#define USB_DESC_CDC_ONLY_PID 0x00DA
+</span><span class="l" id="L35"><a href="#L35">35</a>
+</span><span class="l" id="L36"><a href="#L36">36</a>/* UF2 */
+</span><span class="l" id="L37"><a href="#L37">37</a>#define UF2_PRODUCT_NAME     &quot;Disroop Motion One V1&quot;
+</span><span class="l" id="L38"><a href="#L38">38</a>#define UF2_VOLUME_LABEL     &quot;MOTION1BOOT&quot;
+</span><span class="l" id="L39"><a href="#L39">39</a>#define UF2_BOARD_ID         &quot;nRF52840-MotionOne-v1&quot;
+</span><span class="l" id="L40"><a href="#L40">40</a>#define UF2_INDEX_URL        &quot;https://github.com/stefaneicher/disroop-sensor-playground&quot;
+</span><span class="l" id="L41"><a href="#L41">41</a>
+</span><span class="l" id="L42"><a href="#L42">42</a>#endif /* MOTION_ONE_H */
+</span></pre></body></html>

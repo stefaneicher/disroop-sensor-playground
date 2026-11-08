@@ -1,0 +1,27 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/app/src/board_early.c</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/app/src/board_early.c</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* Frueheste Pin-Initialisierung (PCB-Hinweis 2026-11-07): IMU-CS sofort high (kein Pull-up auf V1),
+</span><span class="l" id="L2"><a href="#L2">2</a> * VBAT_EN low (Teiler aus). Laeuft in PRE_KERNEL_1 Prioritaet 0, vor GPIO- und SPI-Treiber. */
+</span><span class="l" id="L3"><a href="#L3">3</a>#include &lt;zephyr/init.h&gt;
+</span><span class="l" id="L4"><a href="#L4">4</a>#include &lt;zephyr/devicetree.h&gt;
+</span><span class="l" id="L5"><a href="#L5">5</a>#include &lt;hal/nrf_gpio.h&gt;
+</span><span class="l" id="L6"><a href="#L6">6</a>
+</span><span class="l" id="L7"><a href="#L7">7</a>#define CS_SPEC DT_GPIO_PIN_BY_IDX(DT_NODELABEL(spi3), cs_gpios, 0)
+</span><span class="l" id="L8"><a href="#L8">8</a>#define CS_PORT DT_PROP(DT_GPIO_CTLR_BY_IDX(DT_NODELABEL(spi3), cs_gpios, 0), port)
+</span><span class="l" id="L9"><a href="#L9">9</a>#define EN_PIN DT_GPIO_PIN(DT_PATH(zephyr_user), vbat_en_gpios)
+</span><span class="l" id="L10"><a href="#L10">10</a>#define EN_PORT DT_PROP(DT_GPIO_CTLR(DT_PATH(zephyr_user), vbat_en_gpios), port)
+</span><span class="l" id="L11"><a href="#L11">11</a>
+</span><span class="l" id="L12"><a href="#L12">12</a>static int board_early_init(void)
+</span><span class="l" id="L13"><a href="#L13">13</a>{
+</span><span class="l" id="L14"><a href="#L14">14</a>	const uint32_t cs = NRF_GPIO_PIN_MAP(CS_PORT, CS_SPEC);
+</span><span class="l" id="L15"><a href="#L15">15</a>	const uint32_t en = NRF_GPIO_PIN_MAP(EN_PORT, EN_PIN);
+</span><span class="l" id="L16"><a href="#L16">16</a>	nrf_gpio_pin_set(cs);
+</span><span class="l" id="L17"><a href="#L17">17</a>	nrf_gpio_cfg_output(cs);
+</span><span class="l" id="L18"><a href="#L18">18</a>	nrf_gpio_pin_clear(en);
+</span><span class="l" id="L19"><a href="#L19">19</a>	nrf_gpio_cfg_output(en);
+</span><span class="l" id="L20"><a href="#L20">20</a>	return 0;
+</span><span class="l" id="L21"><a href="#L21">21</a>}
+</span><span class="l" id="L22"><a href="#L22">22</a>
+</span><span class="l" id="L23"><a href="#L23">23</a>SYS_INIT(board_early_init, PRE_KERNEL_1, 0);
+</span></pre></body></html>

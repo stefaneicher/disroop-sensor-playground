@@ -1,0 +1,48 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/fusion/include/motion_fusion.h</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/fusion/include/motion_fusion.h</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* 6-Achsen-Sensorfusion (Madgwick, IMU-Variante ohne Magnetometer) und Gyro-Bias-Kalibrierung.
+</span><span class="l" id="L2"><a href="#L2">2</a> * Reines C, ohne Hardwareabhaengigkeit. Einheiten: accel in g, gyro in dps, dt in s. */
+</span><span class="l" id="L3"><a href="#L3">3</a>#ifndef MOTION_FUSION_H
+</span><span class="l" id="L4"><a href="#L4">4</a>#define MOTION_FUSION_H
+</span><span class="l" id="L5"><a href="#L5">5</a>
+</span><span class="l" id="L6"><a href="#L6">6</a>#include &lt;stdbool.h&gt;
+</span><span class="l" id="L7"><a href="#L7">7</a>#include &lt;stdint.h&gt;
+</span><span class="l" id="L8"><a href="#L8">8</a>
+</span><span class="l" id="L9"><a href="#L9">9</a>typedef struct {
+</span><span class="l" id="L10"><a href="#L10">10</a>	float q[4]; /* w, x, y, z; Einheitsquaternion, Sensor -&gt; Welt */
+</span><span class="l" id="L11"><a href="#L11">11</a>	float beta; /* Gradientenschritt, ANNAHME 0.1 */
+</span><span class="l" id="L12"><a href="#L12">12</a>} madgwick_t;
+</span><span class="l" id="L13"><a href="#L13">13</a>
+</span><span class="l" id="L14"><a href="#L14">14</a>void madgwick_init(madgwick_t *f, float beta);
+</span><span class="l" id="L15"><a href="#L15">15</a>void madgwick_update(madgwick_t *f, const float gyro_dps[3], const float accel_g[3], float dt_s);
+</span><span class="l" id="L16"><a href="#L16">16</a>
+</span><span class="l" id="L17"><a href="#L17">17</a>/* Euler in Grad (ZYX: roll um x, pitch um y, yaw um z); yaw in (-180, 180]. */
+</span><span class="l" id="L18"><a href="#L18">18</a>void quat_to_euler_deg(const float q[4], float *roll, float *pitch, float *yaw);
+</span><span class="l" id="L19"><a href="#L19">19</a>/* Heading in Grad [0, 360) aus yaw. */
+</span><span class="l" id="L20"><a href="#L20">20</a>float heading_from_yaw_deg(float yaw_deg);
+</span><span class="l" id="L21"><a href="#L21">21</a>
+</span><span class="l" id="L22"><a href="#L22">22</a>/* Bias-Kalibrierung: Ruheerkennung (|gyro| und ||a|-1g| unter Schwellen fuer window Samples)
+</span><span class="l" id="L23"><a href="#L23">23</a> * oder erzwungen per Taster lang (dann nur das Gyro-Kriterium, kein Beschleunigungs-Kriterium). */
+</span><span class="l" id="L24"><a href="#L24">24</a>typedef struct {
+</span><span class="l" id="L25"><a href="#L25">25</a>	float gyro_thr_dps;  /* ANNAHME 3 dps */
+</span><span class="l" id="L26"><a href="#L26">26</a>	float accel_thr_g;   /* ANNAHME 0.05 g */
+</span><span class="l" id="L27"><a href="#L27">27</a>	uint32_t window;     /* Samples, z. B. 1 s bei ODR */
+</span><span class="l" id="L28"><a href="#L28">28</a>	uint32_t count;
+</span><span class="l" id="L29"><a href="#L29">29</a>	float sum[3];
+</span><span class="l" id="L30"><a href="#L30">30</a>	float bias[3];
+</span><span class="l" id="L31"><a href="#L31">31</a>	bool requested;
+</span><span class="l" id="L32"><a href="#L32">32</a>	bool valid;
+</span><span class="l" id="L33"><a href="#L33">33</a>	uint32_t calibrations;
+</span><span class="l" id="L34"><a href="#L34">34</a>} bias_cal_t;
+</span><span class="l" id="L35"><a href="#L35">35</a>
+</span><span class="l" id="L36"><a href="#L36">36</a>void bias_cal_init(bias_cal_t *c, uint32_t window_samples);
+</span><span class="l" id="L37"><a href="#L37">37</a>void bias_cal_request(bias_cal_t *c);
+</span><span class="l" id="L38"><a href="#L38">38</a>/* Fuettert ein rohes Sample; gibt true zurueck, wenn gerade ein neuer Bias uebernommen wurde. */
+</span><span class="l" id="L39"><a href="#L39">39</a>bool bias_cal_feed(bias_cal_t *c, const float gyro_dps[3], const float accel_g[3]);
+</span><span class="l" id="L40"><a href="#L40">40</a>/* Ruhe im letzten Sample (fuer Energiesparen nutzbar). */
+</span><span class="l" id="L41"><a href="#L41">41</a>bool bias_cal_is_at_rest(const bias_cal_t *c, const float gyro_dps[3], const float accel_g[3]);
+</span><span class="l" id="L42"><a href="#L42">42</a>void bias_cal_apply(const bias_cal_t *c, const float gyro_in[3], float gyro_out[3]);
+</span><span class="l" id="L43"><a href="#L43">43</a>
+</span><span class="l" id="L44"><a href="#L44">44</a>#endif
+</span></pre></body></html>

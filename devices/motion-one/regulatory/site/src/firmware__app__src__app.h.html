@@ -1,0 +1,54 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/app/src/app.h</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/app/src/app.h</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* Ports zwischen den App-Modulen (Zephyr-Adapter). */
+</span><span class="l" id="L2"><a href="#L2">2</a>#ifndef APP_H
+</span><span class="l" id="L3"><a href="#L3">3</a>#define APP_H
+</span><span class="l" id="L4"><a href="#L4">4</a>
+</span><span class="l" id="L5"><a href="#L5">5</a>#include &lt;stdbool.h&gt;
+</span><span class="l" id="L6"><a href="#L6">6</a>#include &lt;stdint.h&gt;
+</span><span class="l" id="L7"><a href="#L7">7</a>#include &quot;thingy_codec.h&quot;
+</span><span class="l" id="L8"><a href="#L8">8</a>
+</span><span class="l" id="L9"><a href="#L9">9</a>#define IMU_ODR_HZ 400u
+</span><span class="l" id="L10"><a href="#L10">10</a>#define REST_SLEEP_S 60u          /* ANNAHME: Ruhe ohne Verbindung bis System-OFF */
+</span><span class="l" id="L11"><a href="#L11">11</a>#define WOM_THRESHOLD_MG 100u     /* ANNAHME */
+</span><span class="l" id="L12"><a href="#L12">12</a>#define NOTIFY_BUDGET_PER_S 200u  /* REQ/BUDGETS: Summe Notifications &lt;= 200/s */
+</span><span class="l" id="L13"><a href="#L13">13</a>
+</span><span class="l" id="L14"><a href="#L14">14</a>/* ble_thingy.c */
+</span><span class="l" id="L15"><a href="#L15">15</a>int ble_thingy_init(void);
+</span><span class="l" id="L16"><a href="#L16">16</a>bool ble_is_connected(void);
+</span><span class="l" id="L17"><a href="#L17">17</a>void ble_get_motion_config(thingy_motion_config_t *cfg);
+</span><span class="l" id="L18"><a href="#L18">18</a>bool ble_motion_wanted(void);
+</span><span class="l" id="L19"><a href="#L19">19</a>void ble_publish_motion(const float q[4], float roll, float pitch, float yaw, const thingy_raw_motion_t *raw,
+</span><span class="l" id="L20"><a href="#L20">20</a>			const thingy_raw_hr_t *hr);
+</span><span class="l" id="L21"><a href="#L21">21</a>void ble_publish_button(bool pressed);
+</span><span class="l" id="L22"><a href="#L22">22</a>void ble_publish_speaker_done(void);
+</span><span class="l" id="L23"><a href="#L23">23</a>void ble_publish_ui_ext(const ui_ext_state_t *s); /* EF680380, ui_svc.attrs[7] */
+</span><span class="l" id="L24"><a href="#L24">24</a>
+</span><span class="l" id="L25"><a href="#L25">25</a>/* imu_task.c */
+</span><span class="l" id="L26"><a href="#L26">26</a>int imu_task_start(void);
+</span><span class="l" id="L27"><a href="#L27">27</a>void imu_request_calibration(void);
+</span><span class="l" id="L28"><a href="#L28">28</a>bool imu_at_rest_for_s(uint32_t seconds);
+</span><span class="l" id="L29"><a href="#L29">29</a>int imu_enter_wake_on_motion(void);
+</span><span class="l" id="L30"><a href="#L30">30</a>
+</span><span class="l" id="L31"><a href="#L31">31</a>/* ui.c */
+</span><span class="l" id="L32"><a href="#L32">32</a>int ui_init(void);
+</span><span class="l" id="L33"><a href="#L33">33</a>void ui_led_apply(const thingy_led_cmd_t *cmd);
+</span><span class="l" id="L34"><a href="#L34">34</a>void ui_speaker_tone(const thingy_speaker_tone_t *tone);
+</span><span class="l" id="L35"><a href="#L35">35</a>void ui_vibrate_ms(uint32_t ms);
+</span><span class="l" id="L36"><a href="#L36">36</a>int ui_arm_button_wakeup(void);
+</span><span class="l" id="L37"><a href="#L37">37</a>
+</span><span class="l" id="L38"><a href="#L38">38</a>/* ext.c (r4 J5 Bedienplatine) */
+</span><span class="l" id="L39"><a href="#L39">39</a>int ext_input_start(void);
+</span><span class="l" id="L40"><a href="#L40">40</a>void ext_input_suspend(void);
+</span><span class="l" id="L41"><a href="#L41">41</a>void ext_publish_stick(int8_t x_pct, int8_t y_pct, bool btn);
+</span><span class="l" id="L42"><a href="#L42">42</a>void ext_publish_touch(bool down);
+</span><span class="l" id="L43"><a href="#L43">43</a>void ext_ui_subscribed(void); /* CCC EF680380 aktiviert */
+</span><span class="l" id="L44"><a href="#L44">44</a>
+</span><span class="l" id="L45"><a href="#L45">45</a>/* battery.c */
+</span><span class="l" id="L46"><a href="#L46">46</a>int battery_init(void);
+</span><span class="l" id="L47"><a href="#L47">47</a>uint16_t battery_read_mv(void);
+</span><span class="l" id="L48"><a href="#L48">48</a>uint16_t battery_last_mv(void); /* letzte Messung, ohne ADC-Zugriff; 0 = keine */
+</span><span class="l" id="L49"><a href="#L49">49</a>
+</span><span class="l" id="L50"><a href="#L50">50</a>#endif
+</span></pre></body></html>

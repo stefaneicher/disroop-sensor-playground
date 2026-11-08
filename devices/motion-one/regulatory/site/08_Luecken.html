@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Luecken</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="top"><a href="index.html">Start</a> · <a href="01_Normen.html">Normen</a> · <a href="02_SRS.html">SRS</a> · <a href="03_SAD.html">SAD</a> · <a href="04_SDD.html">SDD</a> · <a href="05_SOUP.html">SOUP</a> · <a href="06_Risiko.html">Risiko</a> · <a href="07_Rueckverfolgbarkeit.html">Rückverfolgbarkeit</a> · <a href="08_Luecken.html">Lücken</a> · <a href="09_Skills.html">Skills</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#lückenanalyse-klasse-c-und-fda"
+id="toc-lückenanalyse-klasse-c-und-fda">Lückenanalyse: Klasse C und
+FDA</a>
+<ul>
+<li><a href="#1-befunde-im-code-aus-dem-reverse-engineering"
+id="toc-1-befunde-im-code-aus-dem-reverse-engineering">1. Befunde im
+Code (aus dem Reverse Engineering)</a></li>
+<li><a href="#2-prozesslücken-nach-iec-62304"
+id="toc-2-prozesslücken-nach-iec-62304">2. Prozesslücken nach IEC
+62304</a></li>
+<li><a href="#3-fda-erwartete-unterlagen-dokumentationsstufe-enhanced"
+id="toc-3-fda-erwartete-unterlagen-dokumentationsstufe-enhanced">3. FDA:
+erwartete Unterlagen (Dokumentationsstufe <em>Enhanced</em>)</a></li>
+<li><a href="#4-reihenfolge-wenn-es-ernst-würde"
+id="toc-4-reihenfolge-wenn-es-ernst-würde">4. Reihenfolge, wenn es ernst
+würde</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="lückenanalyse-klasse-c-und-fda">Lückenanalyse: Klasse C und
+FDA</h1>
+<p>Was ein Audit finden würde. Klauselnummern nach IEC
+62304:2006+A1:2015 <strong>aus dem Gedächtnis</strong>; vor Verwendung
+gegen den gekauften Normtext prüfen. Status: <strong>vorhanden</strong>
+· <strong>teilweise</strong> · <strong>fehlt</strong>. Priorität:
+<strong>P1</strong> blockiert jede Einreichung, <strong>P2</strong> vor
+der Einreichung, <strong>P3</strong> Qualität.</p>
+<h2 id="1-befunde-im-code-aus-dem-reverse-engineering">1. Befunde im
+Code (aus dem Reverse Engineering)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Prio</th>
+<th>Befund</th>
+<th>Bezug</th>
+<th>Vorschlag</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="GAP-05"></a><strong>GAP-05</strong></td>
+<td>P1</td>
+<td>Kein Watchdog. Initfehler von IMU, UI, Akku und J5 werden nur
+geloggt, das Gerät läuft weiter ohne Daten. Bei BLE-Initfehler endet
+<code>main</code> und das Gerät ist untätig.</td>
+<td><a href="02_SRS.html#SRS-070">SRS-070</a>, <a
+href="02_SRS.html#SRS-090">SRS-090</a>, <a
+href="02_SRS.html#SRS-091">SRS-091</a>, <a
+href="06_Risiko.html#HAZ-02">HAZ-02</a>, <a
+href="06_Risiko.html#HAZ-03">HAZ-03</a>, <a
+href="src/firmware__app__src__main.c.html#L8"><code>main</code></a></td>
+<td>Watchdog einschalten, Fehlerzustand mit LED-Code und BLE-Statuswert,
+sicherer Zustand definieren</td>
+</tr>
+<tr class="even">
+<td><a id="GAP-09"></a><strong>GAP-09</strong></td>
+<td>P2</td>
+<td>Gemeinsame Daten ohne Sperre: <code>led_cmd</code> (BLE-Thread und
+Rückgabe), <code>env_cfg</code>, <code>sound_cfg</code>;
+<code>rest_samples</code> wird im IMU-Thread geschrieben und in
+<code>main</code> gelesen; <code>bias_cal_request</code> läuft in der
+Workqueue gegen den IMU-Thread.</td>
+<td><a
+href="src/firmware__app__src__ble_thingy.c.html#L108"><code>wr_led</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L62"><code>imu_at_rest_for_s</code></a>,
+<a
+href="src/firmware__app__src__imu_task.c.html#L56"><code>imu_request_calibration</code></a></td>
+<td>Atomare Typen oder Mutex, Race-Analyse, Werkzeug (ThreadSanitizer
+auf dem Host, statische Analyse)</td>
+</tr>
+<tr class="odd">
+<td><a id="GAP-10"></a><strong>GAP-10</strong></td>
+<td>P3</td>
+<td>Keine Tests für den Überlauf der 32-Bit-Millisekundenzeit (nach 49,7
+Tagen) in Taster, Touch und Ratenbegrenzer.</td>
+<td><a
+href="src/firmware__codec__src__thingy_codec.c.html#L372"><code>thingy_button_update</code></a>,
+<a
+href="src/firmware__input__src__ext_input.c.html#L76"><code>touch_update</code></a></td>
+<td>Grenzwerttests mit Zeit nahe <code>UINT32_MAX</code></td>
+</tr>
+<tr class="even">
+<td><a id="GAP-11"></a><strong>GAP-11</strong></td>
+<td>P3</td>
+<td>Filter ohne Schutz gegen Norm 0 bei der Quaternion-Normalisierung;
+Gleitkomma-Ergebnisse können je Compiler abweichen.</td>
+<td><a
+href="src/firmware__fusion__src__motion_fusion.c.html#L18"><code>madgwick_update</code></a></td>
+<td>Guard, Toleranz-Tests, Compiler-Matrix (IDEEN.md)</td>
+</tr>
+<tr class="odd">
+<td><a id="GAP-12"></a><strong>GAP-12</strong></td>
+<td>P1</td>
+<td>ICM-45686-Registerwerte nicht gegen das Datenblatt (DS-000577)
+geprüft; der Header sagt es selbst.</td>
+<td><a
+href="src/firmware__icm__include__icm45686.h.html"><code>firmware/icm/include/icm45686.h</code></a>,
+<a href="05_SOUP.html#SOUP-20">SOUP-20</a></td>
+<td>Datenblatt beschaffen, Register Zeile für Zeile abgleichen, am Gerät
+messen</td>
+</tr>
+<tr class="even">
+<td><a id="GAP-13"></a><strong>GAP-13</strong></td>
+<td>P1</td>
+<td>Keine BLE-Kopplung, keine Verschlüsselung (<code>BT_SMP=n</code>);
+Bootloader ohne Signaturprüfung; kein Bedrohungsmodell; keine SBOM.</td>
+<td><a href="02_SRS.html#SRS-003">SRS-003</a>, <a
+href="02_SRS.html#SRS-092">SRS-092</a>, <a
+href="06_Risiko.html#HAZ-04">HAZ-04</a>, <a
+href="05_SOUP.html#SOUP-10">SOUP-10</a></td>
+<td>Bedrohungsmodell, LE Secure Connections, signierte Updates, SBOM
+(IEC 81001-5-1, FDA-Cybersecurity-Leitfaden)</td>
+</tr>
+<tr class="odd">
+<td><a id="GAP-14"></a><strong>GAP-14</strong></td>
+<td>P1</td>
+<td>Keine Firmware-Version, keine Geräte-ID (UDI), keine Build-Kennung
+im Gerät.</td>
+<td><a href="02_SRS.html#SRS-093">SRS-093</a>, <a
+href="06_Risiko.html#HAZ-10">HAZ-10</a></td>
+<td>Device-Information-Service (Version, Seriennummer), Version aus
+Git-Tag in den Build einbetten</td>
+</tr>
+<tr class="even">
+<td><a id="GAP-20"></a><strong>GAP-20</strong></td>
+<td>P2</td>
+<td>Widerspruch: README nennt 32/32 PASS, im Code stehen 69
+<code>RUN_TEST</code>. In dieser Sitzung wurden die Tests nicht
+ausgeführt.</td>
+<td><code>firmware/README.md</code>, <code>firmware/tests/</code></td>
+<td>Testlauf in CI, Ergebnis als Bericht ablegen, README aus dem Bericht
+erzeugen</td>
+</tr>
+<tr class="odd">
+<td><a id="GAP-21"></a><strong>GAP-21</strong></td>
+<td>P2</td>
+<td>Werkzeuge nicht validiert und nicht unveränderlich gepinnt
+(<code>west</code>, Basis-Image). Nur ein Compiler (GCC des Zephyr-SDK)
+für die Firmware.</td>
+<td><a href="05_SOUP.html#SOUP-30">SOUP-30</a>, <a
+href="05_SOUP.html#SOUP-31">SOUP-31</a>, <a
+href="05_SOUP.html#SOUP-34">SOUP-34</a></td>
+<td>Compiler-Matrix mit Warnungen als Fehler (IDEEN.md), Digest-Pinning,
+Werkzeugbewertung</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-prozesslücken-nach-iec-62304">2. Prozesslücken nach IEC
+62304</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Prio</th>
+<th>Klausel</th>
+<th>Anforderung (Kurzfassung)</th>
+<th>Vorhanden im Repo</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="GAP-01"></a><strong>GAP-01</strong></td>
+<td>P1</td>
+<td>4.1</td>
+<td>Qualitätsmanagementsystem (ISO 13485)</td>
+<td>nur Prozesshinweise in <code>RESUME.md</code></td>
+<td>fehlt</td>
+</tr>
+<tr class="even">
+<td><a id="GAP-18"></a><strong>GAP-18</strong></td>
+<td>P1</td>
+<td>4.2, 7</td>
+<td>Risikomanagement nach ISO 14971, Risikokontrollen in der Software
+verifizieren</td>
+<td>erste Gefährdungsliste in <a href="06_Risiko.html">Risiko</a></td>
+<td>teilweise</td>
+</tr>
+<tr class="odd">
+<td><a id="GAP-02"></a><strong>GAP-02</strong></td>
+<td>P1</td>
+<td>4.3</td>
+<td>Sicherheitsklasse aus der Risikoanalyse</td>
+<td>Klasse gesetzt, nicht begründet durch Analyse</td>
+<td>teilweise</td>
+</tr>
+<tr class="even">
+<td><a id="GAP-03"></a><strong>GAP-03</strong></td>
+<td>P1</td>
+<td>5.1</td>
+<td>Softwareentwicklungsplan (Normen, Werkzeuge, SOUP, Konfiguration,
+Verifikation)</td>
+<td>verteilt auf <code>RESUME.md</code>,
+<code>PROMPT_1_ENTWICKLUNG.md</code>, <code>management/</code></td>
+<td>teilweise</td>
+</tr>
+<tr class="odd">
+<td><a id="GAP-04"></a><strong>GAP-04</strong></td>
+<td>P1</td>
+<td>5.2</td>
+<td>Softwareanforderungen: funktional, Leistung, Schnittstellen,
+Sicherheit, Gebrauchstauglichkeit, Risikokontrollen; geprüft und
+freigegeben</td>
+<td><a href="02_SRS.html">SRS</a> rückwärts erstellt, nicht freigegeben,
+ohne Risiko- und Sicherheitsanforderungen</td>
+<td>teilweise</td>
+</tr>
+<tr class="even">
+<td><a id="GAP-06"></a><strong>GAP-06</strong></td>
+<td>P2</td>
+<td>5.3.5</td>
+<td>Trennung der Einheiten nach Klasse</td>
+<td>keine Trennung, alles im selben Adressraum</td>
+<td>fehlt</td>
+</tr>
+<tr class="odd">
+<td><a id="GAP-07"></a><strong>GAP-07</strong></td>
+<td>P2</td>
+<td>5.3.6, 5.4.5</td>
+<td>Architektur und Detailentwurf verifizieren (Review)</td>
+<td>keine aufgezeichneten Reviews</td>
+<td>fehlt</td>
+</tr>
+<tr class="even">
+<td><a id="GAP-08"></a><strong>GAP-08</strong></td>
+<td>P1</td>
+<td>5.5</td>
+<td>Einheiten implementieren und verifizieren, Abnahmekriterien (Klasse
+C zusätzlich)</td>
+<td>Host-Tests für den Kern; Adapter (UNIT-12 bis UNIT-18) ohne Test;
+keine Abdeckungsmessung</td>
+<td>teilweise</td>
+</tr>
+<tr class="odd">
+<td><a id="GAP-15"></a><strong>GAP-15</strong></td>
+<td>P1</td>
+<td>5.6, 5.7</td>
+<td>Integrations- und Systemtests</td>
+<td>Smoke-Tests im Container; Hardware <code>NOT RUN</code></td>
+<td>fehlt</td>
+</tr>
+<tr class="even">
+<td><a id="GAP-16"></a><strong>GAP-16</strong></td>
+<td>P2</td>
+<td>5.8</td>
+<td>Release: Stand, bekannte Anomalien, Archivierung</td>
+<td><code>releases/V1_BASELINE/</code> geplant (§13
+<code>NOT RUN</code>)</td>
+<td>fehlt</td>
+</tr>
+<tr class="odd">
+<td><a id="GAP-17"></a><strong>GAP-17</strong></td>
+<td>P2</td>
+<td>5.3.3, 7.1.3</td>
+<td>SOUP: Anforderungen, Fehlerlisten, Bewertung</td>
+<td><a href="05_SOUP.html">SOUP</a> erfasst, Fehlerlisten ungeprüft</td>
+<td>teilweise</td>
+</tr>
+<tr class="even">
+<td><a id="GAP-19"></a><strong>GAP-19</strong></td>
+<td>P2</td>
+<td>6, 8, 9</td>
+<td>Wartungsplan, Änderungssteuerung, Konfigurationsstatus,
+Problemlösung</td>
+<td>Git-Verlauf, <code>CHANGE_REQUEST_USAGE.md</code>, ADR; kein
+Problembericht-Prozess</td>
+<td>teilweise</td>
+</tr>
+<tr class="odd">
+<td><a id="GAP-22"></a><strong>GAP-22</strong></td>
+<td>P3</td>
+<td>IEC 62366-1</td>
+<td>Gebrauchstauglichkeit von Taster, LED, Summer, Vibration</td>
+<td>keine</td>
+<td>fehlt</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-fda-erwartete-unterlagen-dokumentationsstufe-enhanced">3. FDA:
+erwartete Unterlagen (Dokumentationsstufe <em>Enhanced</em>)</h2>
+<p>Nach dem Software-Leitfaden der FDA (2023) enthält die Einreichung
+etwa: Softwarebeschreibung, Risikomanagement-Akte, SRS,
+Architektur-Diagramm, Detailentwurf, Rückverfolgbarkeitsmatrix,
+Beschreibung der Entwicklungs- und Wartungspraxis, Verifikation und
+Validierung, Revisionshistorie, Liste ungelöster Anomalien; dazu
+Cybersecurity-Unterlagen (Bedrohungsmodell, SBOM, Updatefähigkeit).</p>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Unterlage</th>
+<th>Stand</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="GAP-23"></a><strong>GAP-23</strong></td>
+<td>Alle oben genannten in einer Form, die ein Prüfer lesen kann</td>
+<td><a href="02_SRS.html">SRS</a>, <a href="03_SAD.html">SAD</a>, <a
+href="04_SDD.html">SDD</a>, <a href="07_Rueckverfolgbarkeit.html">Matrix</a>
+und <a href="05_SOUP.html">SOUP</a> liegen als Entwurf vor; Risikoakte,
+V&amp;V-Berichte, Cybersecurity-Unterlagen, Anomalienliste fehlen</td>
+</tr>
+</tbody>
+</table>
+<p>Die Zuordnung zur FDA-Dokumentationsstufe und zur Geräteklasse (I,
+II, III) ist eine regulatorische Entscheidung (z. B. 510(k) mit
+Vergleichsprodukt). Sie gehört in die Hände einer Regulatory-Fachperson
+und ist hier <strong>nicht</strong> getroffen.</p>
+<h2 id="4-reihenfolge-wenn-es-ernst-würde">4. Reihenfolge, wenn es ernst
+würde</h2>
+<ol type="1">
+<li>Zweckbestimmung festlegen (OPEN-01), daraus Geräteklasse und
+Sicherheitsklasse ableiten.</li>
+<li>P1-Befunde im Code beheben: Watchdog und Fehlerbehandlung (<a
+href="08_Luecken.html#GAP-05">GAP-05</a>), Version und UDI (<a
+href="08_Luecken.html#GAP-14">GAP-14</a>), BLE-Sicherheit (<a
+href="08_Luecken.html#GAP-13">GAP-13</a>), Datenblattabgleich (<a
+href="08_Luecken.html#GAP-12">GAP-12</a>).</li>
+<li>Risikomanagement-Akte aufbauen (ISO 14971), Risikokontrollen als
+SRS-Anforderungen nachführen.</li>
+<li>Adapter-Tests (Simulation der Zephyr-APIs oder
+Hardware-in-the-Loop), Abdeckungsmessung, Systemtests am Gerät.</li>
+<li>Release-Stand mit Anomalienliste, SBOM, signierte Images.</li>
+</ol>
+</body>
+</html>

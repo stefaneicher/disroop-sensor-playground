@@ -1,0 +1,144 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/icm/src/icm45686.c</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/icm/src/icm45686.c</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a>/* ICM-45686 Registerlogik. QUELLE: TDK hal_tdk (siehe icm45686.h). */
+</span><span class="l" id="L2"><a href="#L2">2</a>#include &quot;icm45686.h&quot;
+</span><span class="l" id="L3"><a href="#L3">3</a>
+</span><span class="l" id="L4"><a href="#L4">4</a>static int16_t get_i16(const uint8_t *p)
+</span><span class="l" id="L5"><a href="#L5">5</a>{
+</span><span class="l" id="L6"><a href="#L6">6</a>	return (int16_t)(uint16_t)(p[0] | (p[1] &lt;&lt; 8));
+</span><span class="l" id="L7"><a href="#L7">7</a>}
+</span><span class="l" id="L8"><a href="#L8">8</a>
+</span><span class="l" id="L9"><a href="#L9">9</a>icm_frame_status_t icm45686_parse_frame(const uint8_t *in, size_t len, icm_sample_t *out)
+</span><span class="l" id="L10"><a href="#L10">10</a>{
+</span><span class="l" id="L11"><a href="#L11">11</a>	if (in == NULL || out == NULL || len &lt; ICM_FIFO_FRAME_LEN) {
+</span><span class="l" id="L12"><a href="#L12">12</a>		return ICM_FRAME_SHORT;
+</span><span class="l" id="L13"><a href="#L13">13</a>	}
+</span><span class="l" id="L14"><a href="#L14">14</a>	const uint8_t hdr = in[0];
+</span><span class="l" id="L15"><a href="#L15">15</a>	if ((hdr &amp; (ICM_FIFO_HDR_EXT | ICM_FIFO_HDR_20BIT)) ||
+</span><span class="l" id="L16"><a href="#L16">16</a>	    (hdr &amp; (ICM_FIFO_HDR_ACCEL | ICM_FIFO_HDR_GYRO)) != (ICM_FIFO_HDR_ACCEL | ICM_FIFO_HDR_GYRO)) {
+</span><span class="l" id="L17"><a href="#L17">17</a>		return ICM_FRAME_INVALID;
+</span><span class="l" id="L18"><a href="#L18">18</a>	}
+</span><span class="l" id="L19"><a href="#L19">19</a>	for (int i = 0; i &lt; 3; i++) {
+</span><span class="l" id="L20"><a href="#L20">20</a>		const int16_t a = get_i16(&amp;in[1 + 2 * i]);
+</span><span class="l" id="L21"><a href="#L21">21</a>		const int16_t g = get_i16(&amp;in[7 + 2 * i]);
+</span><span class="l" id="L22"><a href="#L22">22</a>		if (a == ICM_INVALID_SAMPLE || g == ICM_INVALID_SAMPLE) {
+</span><span class="l" id="L23"><a href="#L23">23</a>			return ICM_FRAME_INVALID;
+</span><span class="l" id="L24"><a href="#L24">24</a>		}
+</span><span class="l" id="L25"><a href="#L25">25</a>		out-&gt;accel_g[i] = (float)a / ICM_ACCEL_LSB_PER_G;
+</span><span class="l" id="L26"><a href="#L26">26</a>		out-&gt;gyro_dps[i] = (float)g / ICM_GYRO_LSB_PER_DPS;
+</span><span class="l" id="L27"><a href="#L27">27</a>		/* 0x8000 ist &quot;ungueltig&quot;, daher Saettigung bei +-32767 */
+</span><span class="l" id="L28"><a href="#L28">28</a>		out-&gt;accel_sat[i] = (a == INT16_MAX || a == -INT16_MAX);
+</span><span class="l" id="L29"><a href="#L29">29</a>		out-&gt;gyro_sat[i] = (g == INT16_MAX || g == -INT16_MAX);
+</span><span class="l" id="L30"><a href="#L30">30</a>	}
+</span><span class="l" id="L31"><a href="#L31">31</a>	out-&gt;timestamp = (uint16_t)(in[14] | (in[15] &lt;&lt; 8));
+</span><span class="l" id="L32"><a href="#L32">32</a>	return ICM_FRAME_OK;
+</span><span class="l" id="L33"><a href="#L33">33</a>}
+</span><span class="l" id="L34"><a href="#L34">34</a>
+</span><span class="l" id="L35"><a href="#L35">35</a>static int wr(const icm_bus_t *bus, uint8_t reg, uint8_t v)
+</span><span class="l" id="L36"><a href="#L36">36</a>{
+</span><span class="l" id="L37"><a href="#L37">37</a>	return bus-&gt;write(bus-&gt;ctx, reg, &amp;v, 1);
+</span><span class="l" id="L38"><a href="#L38">38</a>}
+</span><span class="l" id="L39"><a href="#L39">39</a>
+</span><span class="l" id="L40"><a href="#L40">40</a>icm_status_t icm45686_ireg_write(const icm_bus_t *bus, uint16_t addr, uint8_t value)
+</span><span class="l" id="L41"><a href="#L41">41</a>{
+</span><span class="l" id="L42"><a href="#L42">42</a>	/* hal_tdk write_sreg: Adresse High/Low + Daten in einem Burst, danach &gt;= 4 us warten */
+</span><span class="l" id="L43"><a href="#L43">43</a>	const uint8_t buf[3] = {(uint8_t)(addr &gt;&gt; 8), (uint8_t)addr, value};
+</span><span class="l" id="L44"><a href="#L44">44</a>	if (bus-&gt;write(bus-&gt;ctx, ICM_REG_IREG_ADDR_15_8, buf, sizeof buf) != 0) {
+</span><span class="l" id="L45"><a href="#L45">45</a>		return ICM_ERR_BUS;
+</span><span class="l" id="L46"><a href="#L46">46</a>	}
+</span><span class="l" id="L47"><a href="#L47">47</a>	bus-&gt;delay_us(bus-&gt;ctx, 4);
+</span><span class="l" id="L48"><a href="#L48">48</a>	return ICM_OK;
+</span><span class="l" id="L49"><a href="#L49">49</a>}
+</span><span class="l" id="L50"><a href="#L50">50</a>
+</span><span class="l" id="L51"><a href="#L51">51</a>static icm_status_t configure_measurement(const icm_bus_t *bus, uint8_t odr)
+</span><span class="l" id="L52"><a href="#L52">52</a>{
+</span><span class="l" id="L53"><a href="#L53">53</a>	int e = 0;
+</span><span class="l" id="L54"><a href="#L54">54</a>	e |= wr(bus, ICM_REG_TMST_WOM_CONFIG, 0);
+</span><span class="l" id="L55"><a href="#L55">55</a>	e |= wr(bus, ICM_REG_INT1_CONFIG1, 0);
+</span><span class="l" id="L56"><a href="#L56">56</a>	e |= wr(bus, ICM_REG_ACCEL_CONFIG0, ICM_ACCEL_FS_32G | odr);
+</span><span class="l" id="L57"><a href="#L57">57</a>	e |= wr(bus, ICM_REG_GYRO_CONFIG0, ICM_GYRO_FS_4000DPS | odr);
+</span><span class="l" id="L58"><a href="#L58">58</a>	e |= wr(bus, ICM_REG_INT1_CONFIG0, ICM_INT1_FIFO_THS);
+</span><span class="l" id="L59"><a href="#L59">59</a>	e |= wr(bus, ICM_REG_PWR_MGMT0, ICM_PWR_ACCEL_LN | ICM_PWR_GYRO_LN);
+</span><span class="l" id="L60"><a href="#L60">60</a>	if (e) {
+</span><span class="l" id="L61"><a href="#L61">61</a>		return ICM_ERR_BUS;
+</span><span class="l" id="L62"><a href="#L62">62</a>	}
+</span><span class="l" id="L63"><a href="#L63">63</a>	bus-&gt;delay_us(bus-&gt;ctx, 70000); /* Gyro-Startzeit 70 ms laut hal_tdk */
+</span><span class="l" id="L64"><a href="#L64">64</a>	return ICM_OK;
+</span><span class="l" id="L65"><a href="#L65">65</a>}
+</span><span class="l" id="L66"><a href="#L66">66</a>
+</span><span class="l" id="L67"><a href="#L67">67</a>icm_status_t icm45686_init(const icm_bus_t *bus, uint8_t odr, uint16_t watermark_frames)
+</span><span class="l" id="L68"><a href="#L68">68</a>{
+</span><span class="l" id="L69"><a href="#L69">69</a>	if (wr(bus, ICM_REG_MISC2, ICM_MISC2_SOFT_RST)) {
+</span><span class="l" id="L70"><a href="#L70">70</a>		return ICM_ERR_BUS;
+</span><span class="l" id="L71"><a href="#L71">71</a>	}
+</span><span class="l" id="L72"><a href="#L72">72</a>	bus-&gt;delay_us(bus-&gt;ctx, 1000);
+</span><span class="l" id="L73"><a href="#L73">73</a>	uint8_t who = 0;
+</span><span class="l" id="L74"><a href="#L74">74</a>	if (bus-&gt;read(bus-&gt;ctx, ICM_REG_WHO_AM_I, &amp;who, 1)) {
+</span><span class="l" id="L75"><a href="#L75">75</a>		return ICM_ERR_BUS;
+</span><span class="l" id="L76"><a href="#L76">76</a>	}
+</span><span class="l" id="L77"><a href="#L77">77</a>	if (who != ICM_WHO_AM_I_VALUE) {
+</span><span class="l" id="L78"><a href="#L78">78</a>		return ICM_ERR_WHOAMI;
+</span><span class="l" id="L79"><a href="#L79">79</a>	}
+</span><span class="l" id="L80"><a href="#L80">80</a>	int e = 0;
+</span><span class="l" id="L81"><a href="#L81">81</a>	e |= wr(bus, ICM_REG_INT1_CONFIG2, ICM_INT1_PUSH_PULL_PULSED_HIGH);
+</span><span class="l" id="L82"><a href="#L82">82</a>	e |= wr(bus, ICM_REG_INT2_CONFIG2, ICM_INT1_PUSH_PULL_PULSED_HIGH); /* INT2 push-pull (PINOUT), ungenutzt */
+</span><span class="l" id="L83"><a href="#L83">83</a>	e |= wr(bus, ICM_REG_FIFO_CONFIG3, 0);
+</span><span class="l" id="L84"><a href="#L84">84</a>	e |= wr(bus, ICM_REG_FIFO_CONFIG0, ICM_FIFO_MODE_STREAM | ICM_FIFO_DEPTH_MAX);
+</span><span class="l" id="L85"><a href="#L85">85</a>	e |= wr(bus, ICM_REG_FIFO_CONFIG1_0, (uint8_t)watermark_frames);
+</span><span class="l" id="L86"><a href="#L86">86</a>	e |= wr(bus, ICM_REG_FIFO_CONFIG1_1, (uint8_t)(watermark_frames &gt;&gt; 8));
+</span><span class="l" id="L87"><a href="#L87">87</a>	e |= wr(bus, ICM_REG_FIFO_CONFIG2, ICM_FIFO_FLUSH | ICM_FIFO_WM_GT_TH);
+</span><span class="l" id="L88"><a href="#L88">88</a>	e |= wr(bus, ICM_REG_FIFO_CONFIG3, ICM_FIFO_IF_EN | ICM_FIFO_ACCEL_EN | ICM_FIFO_GYRO_EN);
+</span><span class="l" id="L89"><a href="#L89">89</a>	if (e) {
+</span><span class="l" id="L90"><a href="#L90">90</a>		return ICM_ERR_BUS;
+</span><span class="l" id="L91"><a href="#L91">91</a>	}
+</span><span class="l" id="L92"><a href="#L92">92</a>	return configure_measurement(bus, odr);
+</span><span class="l" id="L93"><a href="#L93">93</a>}
+</span><span class="l" id="L94"><a href="#L94">94</a>
+</span><span class="l" id="L95"><a href="#L95">95</a>icm_status_t icm45686_fifo_count(const icm_bus_t *bus, uint16_t *frames)
+</span><span class="l" id="L96"><a href="#L96">96</a>{
+</span><span class="l" id="L97"><a href="#L97">97</a>	uint8_t b[2];
+</span><span class="l" id="L98"><a href="#L98">98</a>	if (bus-&gt;read(bus-&gt;ctx, ICM_REG_FIFO_COUNT_0, b, 2)) {
+</span><span class="l" id="L99"><a href="#L99">99</a>		return ICM_ERR_BUS;
+</span><span class="l" id="L100"><a href="#L100">100</a>	}
+</span><span class="l" id="L101"><a href="#L101">101</a>	*frames = (uint16_t)(b[0] | (b[1] &lt;&lt; 8));
+</span><span class="l" id="L102"><a href="#L102">102</a>	return ICM_OK;
+</span><span class="l" id="L103"><a href="#L103">103</a>}
+</span><span class="l" id="L104"><a href="#L104">104</a>
+</span><span class="l" id="L105"><a href="#L105">105</a>icm_status_t icm45686_enter_wom(const icm_bus_t *bus, uint16_t threshold_mg)
+</span><span class="l" id="L106"><a href="#L106">106</a>{
+</span><span class="l" id="L107"><a href="#L107">107</a>	uint32_t lsb = ((uint32_t)threshold_mg * 256u + 500u) / 1000u;
+</span><span class="l" id="L108"><a href="#L108">108</a>	if (lsb &gt; 255u) {
+</span><span class="l" id="L109"><a href="#L109">109</a>		lsb = 255u;
+</span><span class="l" id="L110"><a href="#L110">110</a>	}
+</span><span class="l" id="L111"><a href="#L111">111</a>	int e = 0;
+</span><span class="l" id="L112"><a href="#L112">112</a>	e |= wr(bus, ICM_REG_INT1_CONFIG0, 0);
+</span><span class="l" id="L113"><a href="#L113">113</a>	e |= wr(bus, ICM_REG_PWR_MGMT0, 0);
+</span><span class="l" id="L114"><a href="#L114">114</a>	e |= wr(bus, ICM_REG_ACCEL_CONFIG0, ICM_ACCEL_FS_32G | ICM_ODR_25HZ);
+</span><span class="l" id="L115"><a href="#L115">115</a>	if (e) {
+</span><span class="l" id="L116"><a href="#L116">116</a>		return ICM_ERR_BUS;
+</span><span class="l" id="L117"><a href="#L117">117</a>	}
+</span><span class="l" id="L118"><a href="#L118">118</a>	for (uint16_t i = 0; i &lt; 3; i++) {
+</span><span class="l" id="L119"><a href="#L119">119</a>		if (icm45686_ireg_write(bus, (uint16_t)(ICM_IREG_ACCEL_WOM_X_THR + i), (uint8_t)lsb) != ICM_OK) {
+</span><span class="l" id="L120"><a href="#L120">120</a>			return ICM_ERR_BUS;
+</span><span class="l" id="L121"><a href="#L121">121</a>		}
+</span><span class="l" id="L122"><a href="#L122">122</a>	}
+</span><span class="l" id="L123"><a href="#L123">123</a>	e |= wr(bus, ICM_REG_TMST_WOM_CONFIG, ICM_WOM_MODE_PREV);
+</span><span class="l" id="L124"><a href="#L124">124</a>	e |= wr(bus, ICM_REG_PWR_MGMT0, ICM_PWR_ACCEL_LP);
+</span><span class="l" id="L125"><a href="#L125">125</a>	if (e) {
+</span><span class="l" id="L126"><a href="#L126">126</a>		return ICM_ERR_BUS;
+</span><span class="l" id="L127"><a href="#L127">127</a>	}
+</span><span class="l" id="L128"><a href="#L128">128</a>	bus-&gt;delay_us(bus-&gt;ctx, 10000); /* Accel-Startzeit 10 ms */
+</span><span class="l" id="L129"><a href="#L129">129</a>	e |= wr(bus, ICM_REG_TMST_WOM_CONFIG, ICM_WOM_EN | ICM_WOM_MODE_PREV);
+</span><span class="l" id="L130"><a href="#L130">130</a>	e |= wr(bus, ICM_REG_INT1_CONFIG1, ICM_INT1_WOM_XYZ);
+</span><span class="l" id="L131"><a href="#L131">131</a>	return e ? ICM_ERR_BUS : ICM_OK;
+</span><span class="l" id="L132"><a href="#L132">132</a>}
+</span><span class="l" id="L133"><a href="#L133">133</a>
+</span><span class="l" id="L134"><a href="#L134">134</a>icm_status_t icm45686_exit_wom(const icm_bus_t *bus, uint8_t odr)
+</span><span class="l" id="L135"><a href="#L135">135</a>{
+</span><span class="l" id="L136"><a href="#L136">136</a>	if (wr(bus, ICM_REG_FIFO_CONFIG2, ICM_FIFO_FLUSH | ICM_FIFO_WM_GT_TH)) {
+</span><span class="l" id="L137"><a href="#L137">137</a>		return ICM_ERR_BUS;
+</span><span class="l" id="L138"><a href="#L138">138</a>	}
+</span><span class="l" id="L139"><a href="#L139">139</a>	return configure_measurement(bus, odr);
+</span><span class="l" id="L140"><a href="#L140">140</a>}
+</span></pre></body></html>

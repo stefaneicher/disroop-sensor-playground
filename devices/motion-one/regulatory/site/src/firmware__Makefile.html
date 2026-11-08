@@ -1,0 +1,38 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>firmware/Makefile</title><link rel="stylesheet" href="../style.css"></head><body class="src">
+<p><a href="../index.html">← Dokumentation</a> · <code>devices/motion-one/firmware/Makefile</code></p>
+<pre class="code"><span class="l" id="L1"><a href="#L1">1</a># Host-Unit-Tests (gcc + Unity) im Image disroop-motion-one-fw: make test
+</span><span class="l" id="L2"><a href="#L2">2</a>UNITY_DIR ?= /opt/unity
+</span><span class="l" id="L3"><a href="#L3">3</a>BUILD ?= build/host
+</span><span class="l" id="L4"><a href="#L4">4</a>CFLAGS = -std=c11 -Wall -Wextra -Werror -O2 -Icodec/include -Ifusion/include -Iicm/include -Ipower/include -Iinput/include -I$(UNITY_DIR)/src
+</span><span class="l" id="L5"><a href="#L5">5</a>UNITY = $(UNITY_DIR)/src/unity.c
+</span><span class="l" id="L6"><a href="#L6">6</a>HDRS = $(wildcard codec/include/*.h fusion/include/*.h icm/include/*.h power/include/*.h input/include/*.h)
+</span><span class="l" id="L7"><a href="#L7">7</a>
+</span><span class="l" id="L8"><a href="#L8">8</a>TESTS = test_thingy_codec test_thingy_profile test_motion_fusion test_icm45686 test_vbat test_motor_drive test_ext_input test_ui_ext
+</span><span class="l" id="L9"><a href="#L9">9</a>SRC_test_thingy_codec = codec/src/thingy_codec.c
+</span><span class="l" id="L10"><a href="#L10">10</a>SRC_test_thingy_profile = codec/src/thingy_codec.c
+</span><span class="l" id="L11"><a href="#L11">11</a>SRC_test_motion_fusion = fusion/src/motion_fusion.c
+</span><span class="l" id="L12"><a href="#L12">12</a>SRC_test_icm45686 = icm/src/icm45686.c
+</span><span class="l" id="L13"><a href="#L13">13</a>SRC_test_vbat = power/src/vbat.c
+</span><span class="l" id="L14"><a href="#L14">14</a>SRC_test_motor_drive = power/src/motor_drive.c
+</span><span class="l" id="L15"><a href="#L15">15</a>SRC_test_ext_input = input/src/ext_input.c
+</span><span class="l" id="L16"><a href="#L16">16</a>SRC_test_ui_ext = codec/src/thingy_codec.c
+</span><span class="l" id="L17"><a href="#L17">17</a>
+</span><span class="l" id="L18"><a href="#L18">18</a>.SECONDEXPANSION:
+</span><span class="l" id="L19"><a href="#L19">19</a>$(BUILD)/%: tests/%.c $$(SRC_%) $(HDRS)
+</span><span class="l" id="L20"><a href="#L20">20</a>	mkdir -p $(BUILD)
+</span><span class="l" id="L21"><a href="#L21">21</a>	$(CC) $(CFLAGS) -o $@ $&lt; $(SRC_$*) $(UNITY) -lm
+</span><span class="l" id="L22"><a href="#L22">22</a>
+</span><span class="l" id="L23"><a href="#L23">23</a># Alle Tests laufen, auch wenn einer fehlschlaegt; Exit != 0, wenn einer fehlschlaegt.
+</span><span class="l" id="L24"><a href="#L24">24</a>test: $(addprefix $(BUILD)/,$(TESTS))
+</span><span class="l" id="L25"><a href="#L25">25</a>	@rc=0; echo &quot;== pincheck&quot;; python3 scripts/check_pinout.py || rc=1; echo &quot;== bootloader-pincheck&quot;; python3 scripts/check_bootloader_board.py || rc=1; for t in $(TESTS); do echo &quot;== $$t&quot;; ./$(BUILD)/$$t || rc=1; done; exit $$rc
+</span><span class="l" id="L26"><a href="#L26">26</a>
+</span><span class="l" id="L27"><a href="#L27">27</a>clean:
+</span><span class="l" id="L28"><a href="#L28">28</a>	rm -rf $(BUILD)
+</span><span class="l" id="L29"><a href="#L29">29</a>
+</span><span class="l" id="L30"><a href="#L30">30</a>pincheck:
+</span><span class="l" id="L31"><a href="#L31">31</a>	python3 scripts/check_pinout.py
+</span><span class="l" id="L32"><a href="#L32">32</a>	python3 scripts/check_bootloader_board.py
+</span><span class="l" id="L33"><a href="#L33">33</a>
+</span><span class="l" id="L34"><a href="#L34">34</a>.PHONY: test clean pincheck
+</span></pre></body></html>
