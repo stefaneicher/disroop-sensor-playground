@@ -1,0 +1,36 @@
+2026-11-08 13:39:30.127 INFO   Freerouting v2.5.0 (build-date: 2026-10-05)
+2026-11-08 13:39:30.556 INFO   Hardware: 12 CPU cores, 477 CPU score, 1910 MB RAM
+2026-11-08 13:39:30.561 WARN   Deprecated settings path '-mp / --router.max_passes'; use '--router.autorouter.max_passes' instead. The old path will be removed in a future release.
+2026-11-08 13:39:30.562 WARN   Couldn't get screen resolution. If you are running in a headless environment, disable the GUI by setting gui.enabled to false.
+2026-11-08 13:39:31.632 WARN   Deprecated settings path 'router.max_passes'; use 'router.autorouter.max_passes' instead. The old path will be removed in a future release.
+2026-11-08 13:39:31.918 INFO   [D2F0CF\6E25EF] Loading board file 'motion-one.dsn'...
+2026-11-08 13:39:32.174 INFO   [D2F0CF\6E25EF] Job 'D2F0CF\6E25EF' started at 2026-11-08T13:39:32.173913577Z.
+2026-11-08 13:39:32.364 INFO   [D2F0CF\6E25EF] Pipeline thread limits: autorouter pass is single-threaded, optimizer.max_threads=11.
+2026-11-08 13:39:32.477 INFO   [D2F0CF\6E25EF] Fanout stage started on board '4b434f9076959137a14b91ac9a014eca' with 223 of 246 SMD pins needing fanout (19 already connected, 4 netless).
+2026-11-08 13:39:37.099 INFO   [D2F0CF\6E25EF] Fanout pass #1 on board '9a08c67133dabec6203177edb78607c4' completed in 4.55 seconds with 210 SMD pins fanouted, 1 not routed, 0 insert errors, +89 extra vias (0 SMD pins still to check in pass, ripup costs=100).
+2026-11-08 13:39:38.282 INFO   [D2F0CF\6E25EF] Fanout pass #2 on board 'fa23cf226b7bfeb5165cef6239e3e4e5' completed in 1.15 seconds with 36 SMD pins fanouted, 1 not routed, 0 insert errors, +19 extra vias (0 SMD pins still to check in pass, ripup costs=200).
+2026-11-08 13:39:38.722 INFO   [D2F0CF\6E25EF] Fanout pass #3 on board '41ce5901084ef7e25defb25bd0ee3802' completed in 0.41 seconds with 11 SMD pins fanouted, 2 not routed, 0 insert errors, +2 extra vias (0 SMD pins still to check in pass, ripup costs=300).
+2026-11-08 13:39:39.194 INFO   [D2F0CF\6E25EF] Fanout pass #4 on board '6c6a63bf07905f05403cb114547b4cbd' completed in 0.45 seconds with 10 SMD pins fanouted, 1 not routed, 0 insert errors, +1 extra via (0 SMD pins still to check in pass, ripup costs=400).
+2026-11-08 13:39:39.507 INFO   [D2F0CF\6E25EF] Fanout pass #5 on board '21e502e28005449e35f6ffd8a93af1c1' completed in 0.29 seconds with 8 SMD pins fanouted, 1 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=500).
+2026-11-08 13:39:39.850 INFO   [D2F0CF\6E25EF] Fanout pass #6 on board 'd6f44df4a3b7f4cd23e3838970bbab81' completed in 0.32 seconds with 8 SMD pins fanouted, 1 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=600).
+2026-11-08 13:39:40.190 INFO   [D2F0CF\6E25EF] Fanout pass #7 on board 'c3cad54c659b32e2b1ac13e400410067' completed in 0.31 seconds with 8 SMD pins fanouted, 1 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=700).
+2026-11-08 13:39:40.497 INFO   [D2F0CF\6E25EF] Fanout pass #8 on board 'f893c3da1d501afdda404660fb0f9a69' completed in 0.28 seconds with 8 SMD pins fanouted, 1 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=800).
+2026-11-08 13:39:40.499 INFO   Fanout stopped after 8 passes: no progress for 3 consecutive passes.
+2026-11-08 13:39:40.517 INFO   [D2F0CF\6E25EF] Fanout stage completed: started with 242 total SMD pins, completed in 8.00 seconds, escaped pins: 220/242 (90.9%), using 7.62 total CPU seconds, 2.89 GB total allocated, and 152.4 MB peak heap usage.
+2026-11-08 13:39:40.627 INFO   [D2F0CF\6E25EF] Auto-routing stage started on board 'f893c3da1d501afdda404660fb0f9a69' with baseline score 434.11 for 73 unrouted items.
+2026-11-08 13:39:54.027 INFO   [D2F0CF\6E25EF] Auto-routing pass #1 on board 'f893c3da1d501afdda404660fb0f9a69' was completed in 13.32 seconds with score 945.74 (7 unrouted and 0 violations), using 19.83 CPU seconds and the job allocated 10.26 GB of memory so far.
+2026-11-08 13:39:55.388 INFO   [D2F0CF\6E25EF] Auto-routing pass #2 on board '2403e44c933d259cc0be267cc5e0b54e' was completed in 1.29 seconds with score 596.90 (52 unrouted and 0 violations), using 21.75 CPU seconds and the job allocated 11.69 GB of memory so far.
+2026-11-08 13:39:59.301 INFO   [D2F0CF\6E25EF] Auto-routing pass #3 on board 'a310ef87c7f4fca56cacc66ce66b646a' was completed in 3.87 seconds with score 976.74 (3 unrouted and 0 violations), using 25.60 CPU seconds and the job allocated 14.36 GB of memory so far.
+2026-11-08 13:39:58.730 INFO   [D2F0CF\6E25EF] Auto-routing pass #4 on board 'ee7f5bb25476a3951d7a34b8ff558d30' was completed in 0.00 seconds with score 1000.00 (0 unrouted and 0 violations), using 25.60 CPU seconds and the job allocated 14.36 GB of memory so far.
+2026-11-08 13:39:58.871 INFO   [D2F0CF\6E25EF] Auto-routing pass #5 on board '44fe591a613ff4a9da1d6978702963c4' was completed in 0.05 seconds with score 1000.00 (0 unrouted and 0 violations), using 25.60 CPU seconds and the job allocated 14.36 GB of memory so far.
+2026-11-08 13:39:59.729 INFO   [D2F0CF\6E25EF] Auto-routing stage completed: started with 168 unrouted nets, completed in 27.30 seconds, final score: 1000.00 (0 unrouted and 0 violations), using 26.56 total CPU seconds, 14.92 GB total allocated, and 200.0 MB peak heap usage.
+2026-11-08 13:39:59.949 INFO   [D2F0CF\6E25EF] Optimization stage started on board 'a47f291540b8c5b08f675cbdbc77c7e9'. Baseline router score: 1000.00, optimizer score: 602.60, incomplete connections: 0, clearance violations: 0.
+2026-11-08 13:40:03.283 INFO   [D2F0CF\6E25EF] Stopping optimization pass #1 early after 12 consecutive items could not be improved.
+2026-11-08 13:40:03.658 INFO   [D2F0CF\6E25EF] Optimizer pass #1 on board 'a47f291540b8c5b08f675cbdbc77c7e9' was completed in 3.15 seconds with the score of 602.60 (0 unrouted and 0 violations).
+2026-11-08 13:40:03.886 INFO   [D2F0CF\6E25EF] Optimizer pass #1 candidate rejected: OPTIMIZER_SCORE_NOT_IMPROVED. Restoring incumbent (optimizer score 602.60, incomplete connections: 0, clearance violations: 0).
+2026-11-08 13:40:04.162 INFO   [D2F0CF\6E25EF] Optimizer pass #1: optimizer score 602.60 -> 602.60 (UNCHANGED, 0.0000%), router score: 1000.00, incomplete connections: 0, clearance violations: 0.
+2026-11-08 13:40:04.164 INFO   [D2F0CF\6E25EF] Stopping optimizer because the improvement in this pass (0.0000%) is below the threshold (2.50%).
+2026-11-08 13:40:04.509 INFO   [D2F0CF\6E25EF] Optimization stage completed:. Baseline router score: 1000.00, baseline optimizer score: 602.60, final router score: 1000.00, final optimizer score: 602.60, completed in 4.39 seconds, using 12.71 total CPU seconds, 2.25 GB total allocated, and 254.0 MB peak heap usage.
+2026-11-08 13:40:04.542 INFO   [D2F0CF\6E25EF] Job 'D2F0CF\6E25EF' finished with state: COMPLETED (elapsed: 32.37 seconds, finished at UTC: 2026-11-08T13:40:04.540529066Z).
+2026-11-08 13:40:04.574 INFO   Saving output file '/workspace/devices/motion-one/electronics/kicad/motion-one/motion-one.ses' (SES)...
+2026-11-08 13:40:04.598 INFO   Successfully saved output file '/workspace/devices/motion-one/electronics/kicad/motion-one/motion-one.ses' (67716 bytes).

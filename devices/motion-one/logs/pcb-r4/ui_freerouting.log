@@ -1,0 +1,33 @@
+2026-11-08 13:46:44.085 INFO   Freerouting v2.5.0 (build-date: 2026-10-05)
+2026-11-08 13:46:44.498 INFO   Hardware: 12 CPU cores, 474 CPU score, 1910 MB RAM
+2026-11-08 13:46:44.501 WARN   Deprecated settings path '-mp / --router.max_passes'; use '--router.autorouter.max_passes' instead. The old path will be removed in a future release.
+2026-11-08 13:46:44.503 WARN   Couldn't get screen resolution. If you are running in a headless environment, disable the GUI by setting gui.enabled to false.
+2026-11-08 13:46:45.576 WARN   Deprecated settings path 'router.max_passes'; use 'router.autorouter.max_passes' instead. The old path will be removed in a future release.
+2026-11-08 13:46:46.114 INFO   [92DE9E\890FA7] Loading board file 'motion-one-ui.dsn'...
+2026-11-08 13:46:46.247 INFO   [92DE9E\890FA7] Job '92DE9E\890FA7' started at 2026-11-08T13:46:46.247268882Z.
+2026-11-08 13:46:46.357 INFO   [92DE9E\890FA7] Pipeline thread limits: autorouter pass is single-threaded, optimizer.max_threads=11.
+2026-11-08 13:46:46.455 INFO   [92DE9E\890FA7] Fanout stage started on board 'a8c7d2d6295ef264e5e2c257e894dde6' with 27 of 29 SMD pins needing fanout (2 already connected, 0 netless).
+2026-11-08 13:46:47.404 INFO   [92DE9E\890FA7] Fanout pass #1 on board '557e940093e349ecaa8e4ed0b70d914c' completed in 0.92 seconds with 22 SMD pins fanouted, 0 not routed, 0 insert errors, +9 extra vias (0 SMD pins still to check in pass, ripup costs=100).
+2026-11-08 13:46:47.438 INFO   [92DE9E\890FA7] Fanout pass #2 on board '557e940093e349ecaa8e4ed0b70d914c' completed in 0.02 seconds with 0 SMD pins fanouted, 0 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=200).
+2026-11-08 13:46:47.443 INFO   [92DE9E\890FA7] Fanout stage completed: started with 29 total SMD pins, completed in 0.98 seconds, escaped pins: 27/29 (93.1%), using 0.90 total CPU seconds, 0.14 GB total allocated, and 142.4 MB peak heap usage.
+2026-11-08 13:46:47.472 INFO   [92DE9E\890FA7] Auto-routing stage started on board '557e940093e349ecaa8e4ed0b70d914c' with baseline score 298.85 for 16 unrouted items.
+2026-11-08 13:46:48.079 INFO   [92DE9E\890FA7] Auto-routing pass #1 on board '557e940093e349ecaa8e4ed0b70d914c' was completed in 0.56 seconds with score 1000.00 (0 unrouted and 0 violations), using 0.86 CPU seconds and the job allocated 0.10 GB of memory so far.
+2026-11-08 13:46:48.103 INFO   [92DE9E\890FA7] Auto-routing pass #2 on board '2a447f2704a7b786def5c8bf3faa63fd' was completed in 0.01 seconds with score 1000.00 (0 unrouted and 0 violations), using 0.86 CPU seconds and the job allocated 0.10 GB of memory so far.
+2026-11-08 13:46:48.139 INFO   [92DE9E\890FA7] Auto-routing stage completed: started with 29 unrouted nets, completed in 1.77 seconds, final score: 1000.00 (0 unrouted and 0 violations), using 0.86 total CPU seconds, 0.10 GB total allocated, and 96.0 MB peak heap usage.
+2026-11-08 13:46:48.207 INFO   [92DE9E\890FA7] Optimization stage started on board 'f07dac6a616519fe7cd3822901225373'. Baseline router score: 1000.00, optimizer score: 720.93, incomplete connections: 0, clearance violations: 0.
+2026-11-08 13:46:49.081 INFO   [92DE9E\890FA7] Stopping optimization pass #1 early after 12 consecutive items could not be improved.
+2026-11-08 13:46:49.138 INFO   [92DE9E\890FA7] Optimizer pass #1 on board '349210dc4914f9a251b3af96dd77672e' was completed in 0.87 seconds with the score of 744.19 (0 unrouted and 0 violations).
+2026-11-08 13:46:49.158 INFO   [92DE9E\890FA7] Optimizer pass #1: optimizer score 720.93 -> 744.19 (IMPROVED, 3.2258%), router score: 1000.00, incomplete connections: 0, clearance violations: 0.
+2026-11-08 13:46:49.806 INFO   [92DE9E\890FA7] Optimizer pass #2 on board 'd999a2209afc88cf425e8ac6ff00b379' was completed in 0.59 seconds with the score of 767.44 (0 unrouted and 0 violations).
+2026-11-08 13:46:49.836 INFO   [92DE9E\890FA7] Optimizer pass #2: optimizer score 744.19 -> 767.44 (IMPROVED, 3.1250%), router score: 1000.00, incomplete connections: 0, clearance violations: 0.
+2026-11-08 13:46:50.604 INFO   [92DE9E\890FA7] Optimizer pass #3 on board 'e18921419f31d753f5304706cff88f0a' was completed in 0.72 seconds with the score of 738.70 (0 unrouted and 0 violations).
+2026-11-08 13:46:50.613 INFO   [92DE9E\890FA7] Optimizer pass #3 candidate rejected: OPTIMIZER_SCORE_NOT_IMPROVED. Restoring incumbent (optimizer score 767.44, incomplete connections: 0, clearance violations: 0).
+2026-11-08 13:46:50.633 INFO   [92DE9E\890FA7] Optimizer pass #3: optimizer score 767.44 -> 738.70 (REGRESSED, -3.7458%), router score: 1000.00, incomplete connections: 0, clearance violations: 0.
+2026-11-08 13:46:51.816 INFO   [92DE9E\890FA7] Optimizer pass #4 on board '9a2d9f6136a3a0d7d90b5a34f0980da9' was completed in 1.14 seconds with the score of 679.67 (0 unrouted and 0 violations).
+2026-11-08 13:46:51.833 INFO   [92DE9E\890FA7] Optimizer pass #4 candidate rejected: OPTIMIZER_SCORE_NOT_IMPROVED. Restoring incumbent (optimizer score 767.44, incomplete connections: 0, clearance violations: 0).
+2026-11-08 13:46:51.869 INFO   [92DE9E\890FA7] Optimizer pass #4: optimizer score 767.44 -> 679.67 (REGRESSED, -11.4370%), router score: 1000.00, incomplete connections: 0, clearance violations: 0.
+2026-11-08 13:46:51.870 INFO   [92DE9E\890FA7] Stopping optimizer because the improvement in this pass (-11.4370%) is below the threshold (2.50%).
+2026-11-08 13:46:51.892 INFO   [92DE9E\890FA7] Optimization stage completed:. Baseline router score: 1000.00, baseline optimizer score: 720.93, final router score: 1000.00, final optimizer score: 767.44, completed in 3.67 seconds, using 16.38 total CPU seconds, 3.09 GB total allocated, and 258.6 MB peak heap usage.
+2026-11-08 13:46:51.901 INFO   [92DE9E\890FA7] Job '92DE9E\890FA7' finished with state: COMPLETED (elapsed: 5.65 seconds, finished at UTC: 2026-11-08T13:46:51.899669497Z).
+2026-11-08 13:46:51.930 INFO   Saving output file '/workspace/devices/motion-one/electronics/kicad/motion-one-ui/motion-one-ui.ses' (SES)...
+2026-11-08 13:46:51.940 INFO   Successfully saved output file '/workspace/devices/motion-one/electronics/kicad/motion-one-ui/motion-one-ui.ses' (9172 bytes).

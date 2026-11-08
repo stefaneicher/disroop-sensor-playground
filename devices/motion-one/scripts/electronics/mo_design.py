@@ -1,4 +1,4 @@
-"""Motion One V1 (Board r3, 2026-11-08): Bauteile, Netze, Platzierung (PCB-Koordinaten mm, y nach unten, Platine 0..70 x 0..25).
+"""Motion One V1 (Board r4, 2026-11-08; r4: J5 Erweiterung JST-SH 8p, H1/H2 M2, LED auf P0.13/P0.20/P0.22; TP3/TP4 entfallen, 3V3/GND an J5.1/J5.8 messbar): Bauteile, Netze, Platzierung (PCB-Koordinaten mm, y nach unten, Platine 0..70 x 0..25).
 INTERFACES-Koordinaten: x gleich, y_if = 25 - y_pcb."""
 R04, C04, R06, C06, C08, R12 = ('Resistor_SMD:R_0402_1005Metric', 'Capacitor_SMD:C_0402_1005Metric', 'Resistor_SMD:R_0603_1608Metric',
                                 'Capacitor_SMD:C_0603_1608Metric', 'Capacitor_SMD:C_0805_2012Metric', 'Resistor_SMD:R_1206_3216Metric')
@@ -6,7 +6,7 @@ S23, S236 = 'Package_TO_SOT_SMD:SOT-23-3', 'Package_TO_SOT_SMD:SOT-23-6'
 MCX = 60.6  # Modulmitte x
 # ref: (symlib, symbol, value, footprint, lcsc, x, y, rot)
 P = {
- 'U1': ('motion-one', 'E73-2G4M08S1C', 'E73-2G4M08S1C', 'motion-one:E73-2G4M08S1C', 'C356849', MCX, 12.5, 90),
+ 'U1': ('motion-one', 'E73-2G4M08S1C', 'E73-2G4M08S1C', 'motion-one:E73-2G4M08S1C', 'C356849', MCX, 11.5, 90),
  'U2': ('Power_Protection', 'USBLC6-2SC6', 'USBLC6-2SC6', S236, 'C7519', 11.2, 12.5, 0),
  'U3': ('Battery_Management', 'TP4056-42-ESOP8', 'TP4056', 'Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm', 'C16581', 20.0, 8.0, 0),
  'U4': ('Battery_Management', 'DW01A', 'DW01A', S236, 'C351410', 19.8, 21.7, 0),
@@ -50,12 +50,14 @@ P = {
  'C9': ('Device', 'C', '22pF', C04, 'C1555', 46.3, 6.4, 90), 'C10': ('Device', 'C', '22pF', C04, 'C1555', 49.0, 8.15, 0),
  'C11': ('Device', 'C', '100nF', C04, 'C1525', 31.6, 10.2, 0), 'C12': ('Device', 'C', '100nF', C04, 'C1525', 34.4, 9.4, 0),
  'C13': ('Device', 'C', '100nF', C04, 'C1525', 43.1, 8.6, 0), 'C14': ('Device', 'C', '10uF', C08, 'C15850', 22.5, 12.8, 90),
- 'TP1': ('Connector', 'TestPoint', 'VBAT', 'TestPoint:TestPoint_Pad_D1.0mm', '', 52.6, 21.4, 0),
- 'TP2': ('Connector', 'TestPoint', 'VSYS', 'TestPoint:TestPoint_Pad_D1.0mm', '', 54.9, 21.4, 0),
- 'TP3': ('Connector', 'TestPoint', '3V3', 'TestPoint:TestPoint_Pad_D1.0mm', '', 57.2, 21.4, 0),
- 'TP4': ('Connector', 'TestPoint', 'GND', 'TestPoint:TestPoint_Pad_D1.0mm', '', 59.5, 21.4, 0),
- 'TP5': ('Connector', 'TestPoint', 'VBUS', 'TestPoint:TestPoint_Pad_D1.0mm', '', 61.8, 21.4, 0),
- 'TP6': ('Connector', 'TestPoint', 'VSW', 'TestPoint:TestPoint_Pad_D1.0mm', '', 64.1, 21.4, 0),
+ 'TP1': ('Connector', 'TestPoint', 'VBAT', 'TestPoint:TestPoint_Pad_D1.0mm', '', 51.6, 2.7, 0),
+ 'TP2': ('Connector', 'TestPoint', 'VSYS', 'TestPoint:TestPoint_Pad_D1.0mm', '', 53.7, 2.7, 0),
+ 'TP5': ('Connector', 'TestPoint', 'VBUS', 'TestPoint:TestPoint_Pad_D1.0mm', '', 62.1, 2.7, 0),
+ 'TP6': ('Connector', 'TestPoint', 'VSW', 'TestPoint:TestPoint_Pad_D1.0mm', '', 64.25, 2.7, 0),
+ 'J5': ('Connector_Generic_MountingPin', 'Conn_01x08_MountingPin', 'EXT JST-SH 8p', 'Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal', 'C160407', 58.5, 21.65, 0),
+
+ 'H1': ('Mechanical', 'MountingHole', 'M2', 'MountingHole:MountingHole_2.2mm_M2', '', 42.4, 12.3, 0),
+ 'H2': ('Mechanical', 'MountingHole', 'M2', 'MountingHole:MountingHole_2.2mm_M2', '', 58.5, 2.2, 0),
  '#FLG01': ('power', 'PWR_FLAG', 'PWR_FLAG', '', '', 0, 0, 0), '#FLG02': ('power', 'PWR_FLAG', 'PWR_FLAG', '', '', 0, 0, 0),
  '#FLG03': ('power', 'PWR_FLAG', 'PWR_FLAG', '', '', 0, 0, 0), '#FLG04': ('power', 'PWR_FLAG', 'PWR_FLAG', '', '', 0, 0, 0),
  '#FLG05': ('power', 'PWR_FLAG', 'PWR_FLAG', '', '', 0, 0, 0),
@@ -63,8 +65,8 @@ P = {
 N = {
  'VBUS': 'J1.A4 J1.A9 J1.B4 J1.B9 U2.5 C1.1 U3.4 U3.8 D1.2 U1.27 R4.1 R6.1 Q1.1 R9.1 TP5.1 #FLG01.1',
  'GND': 'J1.A1 J1.A12 J1.B1 J1.B12 J1.SH U2.2 C1.2 U3.3 U3.9 R3.2 TH1.2 C2.2 Q3.3 R8.2 C4.2 C5.2 C6.2 C7.2 C8.2 C9.2 C10.2 '
-        'C11.2 C12.2 C13.2 C14.2 U5.1 U1.5 U1.21 U1.24 U6.6 U6.2 U6.3 U6.7 U6.10 R14.2 Q5.2 R12.2 Q6.2 Q7.2 R16.2 R17.2 R9.2 '
-        'R1.2 R2.2 SW1.1 SW2.2 J4.5 TP4.1 #FLG02.1',
+        'C11.2 C12.2 C13.2 C14.2 J5.8 J5.MP U5.1 U1.5 U1.21 U1.24 U6.6 U6.2 U6.3 U6.7 U6.10 R14.2 Q5.2 R12.2 Q6.2 Q7.2 R16.2 R17.2 R9.2 '
+        'R1.2 R2.2 SW1.1 SW2.2 J4.5 #FLG02.1',
  'VBAT': 'J2.1 U3.5 C2.1 R7.1 Q1.3 Q4.2 R11.1 TP1.1',
  'BATN': 'J2.2 U4.6 C3.2 Q3.1 #FLG03.1', 'DW_VCC': 'R7.2 U4.5 C3.1 #FLG04.1', 'DW_OD': 'U4.1 Q3.6', 'DW_OC': 'U4.3 Q3.4',
  'DW_CS': 'U4.2 R8.1', 'FS_D': 'Q3.2 Q3.5',
@@ -72,17 +74,19 @@ N = {
  'CHG_PROG': 'U3.2 R3.1', 'CHG_TEMP': 'U3.1 TH1.1 R5.2', 'NTC_TOP': 'R4.2 R5.1', 'CHG_LED_K': 'U3.7 D5.1', 'CHG_LED_A': 'D5.2 R6.2',
  'VSYS': 'D1.1 Q1.2 C4.1 Q2.2 R10.1 TP2.1', 'PSW_G': 'Q2.1 R10.2 SW1.2',
  'VSW': 'Q2.3 C5.1 U5.3 J3.1 D3.1 TP6.1 #FLG05.1', 'MOT_N': 'J3.2 D3.2 Q7.3', 'MOT_EN': 'Q7.1 R17.1 U1.6',
- '3V3': 'U5.2 C6.1 C7.1 C8.1 U1.19 U1.23 U6.8 U6.5 C11.1 C12.1 D4.2 C14.1 BZ1.1 D2.1 J4.1 TP3.1',
+ '3V3': 'U5.2 C6.1 C7.1 C8.1 U1.19 U1.23 U6.8 U6.5 C11.1 C12.1 D4.2 C14.1 BZ1.1 D2.1 J4.1 J5.1',
  'BUZ_N': 'BZ1.2 D2.2 R15.1', 'BUZ_D': 'R15.2 Q6.3', 'BUZ_PWM': 'Q6.1 R16.1 U1.7',
  'VDIV_TOP': 'Q4.3 R13.1', 'VDIV_G': 'Q4.1 R11.2 Q5.3', 'VBAT_EN': 'Q5.1 R12.1 U1.15', 'VBAT_ADC': 'R13.2 R14.1 C13.1 U1.18',
  'XL1': 'U1.11 Y1.1 C9.1', 'XL2': 'U1.13 Y1.2 C10.1',
  'IMU_SCK': 'U6.13 U1.14', 'IMU_MOSI': 'U6.14 U1.16', 'IMU_MISO': 'U6.1 U1.17', 'IMU_CS': 'U6.12 U1.20',
  'IMU_INT1': 'U6.4 U1.22', 'IMU_INT2': 'U6.9 U1.12',
- 'LED_R': 'R18.1 U1.10', 'LED_G': 'R19.1 U1.9', 'LED_B': 'R20.1 U1.8',
+ 'LED_R': 'R18.1 U1.28', 'LED_G': 'R19.1 U1.30', 'LED_B': 'R20.1 U1.2',
+ 'EXT1': 'J5.2 U1.8', 'EXT2': 'J5.3 U1.10', 'EXT3': 'J5.4 U1.9',
+ 'EXT4': 'J5.5 U1.3', 'EXT5': 'J5.6 U1.1',
  'LED_RK': 'R18.2 D4.1', 'LED_GK': 'R19.2 D4.3', 'LED_BK': 'R20.2 D4.4',
  'BTN': 'SW2.1 U1.4', 'SWDIO': 'J4.2 U1.37', 'SWCLK': 'J4.4 U1.39', 'NRESET': 'J4.3 U1.26',
 }
 N = {k: [tuple(t.rsplit('.', 1)) for t in v.split()] for k, v in N.items()}
-NC = [tuple(t.rsplit('.', 1)) for t in ('J1.A8 J1.B8 U3.6 SW1.3 J2.MP J4.6 ' + ' '.join(
-    'U1.%d' % n for n in (1, 2, 3, 25, 28, 30, 32, 33, 34, 35, 36, 38, 40, 41, 42, 43))).split()]
+NC = [tuple(t.rsplit('.', 1)) for t in ('J1.A8 J1.B8 U3.6 SW1.3 J2.MP J4.6 J5.7 ' + ' '.join(
+    'U1.%d' % n for n in (25, 32, 33, 34, 35, 36, 38, 40, 41, 42, 43))).split()]
 POWER = ['VBUS', 'GND', 'VBAT', 'BATN', 'VSYS', 'VSW', '3V3', 'FS_D', 'BUZ_N', 'BUZ_D', 'MOT_N']

@@ -1,6 +1,6 @@
 {
-  "revision": "r3",
-  "status": "Board r3 (pcb-engineer, 2026-11-08): Mechanik-Forderungen 1-7 aus Handoff mechanical-engineer 2026-11-07 umgesetzt; Positionen aus geroutetem Layout (QUELLE heights.json); Mechanik-Abnahme offen",
+  "revision": "r4",
+  "status": "Board r4 (pcb-engineer, 2026-11-08, Q-04): J5 Erweiterungsstecker + 2x M2; Mechanik-Abnahme offen (Gehaeuse r3 hat keinen J5-Durchbruch)",
   "ble_profile": {
     "source": "docs/protocol.md:8-35; bridge/internal/thingy/uuids.go",
     "advertising_name": "Thingy",
@@ -110,7 +110,26 @@
       "shape": "laenglich, Kopfende Ecken R2, Griffende Ausklinkungen fuer Schraubdome"
     },
     "layers": 4,
-    "mounting_holes": [],
+    "mounting_holes": [
+      {
+        "ref": "H1",
+        "x": 42.4,
+        "y": 12.7,
+        "drill_mm": 2.2,
+        "pad_mm": null,
+        "screw": "M2",
+        "keepout_d_mm": 4.4
+      },
+      {
+        "ref": "H2",
+        "x": 58.5,
+        "y": 22.8,
+        "drill_mm": 2.2,
+        "pad_mm": null,
+        "screw": "M2",
+        "keepout_d_mm": 4.4
+      }
+    ],
     "origin": "Board-Ecke unten links, x entlang Laengsachse Richtung Kopfende (oben), Bestueckung Oberseite",
     "max_component_height_mm": {
       "top": 3.5,
@@ -140,12 +159,12 @@
       }
     ],
     "notch_note": "Schraubdome bei Board (10.5; 12.5+-11.5) sitzen in den Ausklinkungen; Zone bauteilfrei",
-    "mounting_note": "H1/H2 entfernt (r3); Board wird ueber Randstreifen geklemmt",
+    "mounting_note": "r4: H1/H2 M2 (NPTH 2.2) fuer Eigen-Gehaeuse; Motion-One-Gehaeuse klemmt weiterhin ueber Randstreifen",
     "edge_strip_mm": {
       "width": 1.5,
       "edges": "y=0 und y=25 (laengs)",
       "component_free": true,
-      "exception": "SW1-Hebel/Koerper an y=25 (Hebel muss ueber Kante ragen, seitlicher Durchbruch)"
+      "exception": "SW1 an y=25; J5 an y=0 (Steckoeffnung zur Kante); H2-Keepout-Ring beruehrt Randstreifen y=0"
     }
   },
   "positions": {
@@ -248,34 +267,42 @@
     },
     "testpoints": {
       "TP1": {
-        "x": 52.6,
-        "y": 3.6,
+        "x": 51.6,
+        "y": 22.3,
         "height_mm": 0.05
       },
       "TP2": {
-        "x": 54.9,
-        "y": 3.6,
-        "height_mm": 0.05
-      },
-      "TP3": {
-        "x": 57.2,
-        "y": 3.6,
-        "height_mm": 0.05
-      },
-      "TP4": {
-        "x": 59.5,
-        "y": 3.6,
+        "x": 53.7,
+        "y": 22.3,
         "height_mm": 0.05
       },
       "TP5": {
-        "x": 61.8,
-        "y": 3.6,
+        "x": 62.1,
+        "y": 22.3,
         "height_mm": 0.05
       },
       "TP6": {
-        "x": 64.1,
-        "y": 3.6,
+        "x": 64.25,
+        "y": 22.3,
         "height_mm": 0.05
+      }
+    },
+    "expansion_connector": {
+      "x": 58.5,
+      "y": 3.35,
+      "height_mm": 2.9,
+      "ref": "J5",
+      "type": "JST-SH 1.0 mm 8-polig SM08B-SRSS-TB liegend, Steckrichtung zur Kante y=0",
+      "part": "C160407",
+      "pins": {
+        "1": "3V3 (max. 10 mA)",
+        "2": "EXT1 P0.29/AIN5",
+        "3": "EXT2 P0.30/AIN6",
+        "4": "EXT3 P0.31/AIN7",
+        "5": "EXT4 P0.03/AIN1",
+        "6": "EXT5 P1.11 GPIO",
+        "7": "RSV (NC)",
+        "8": "GND"
       }
     }
   },
@@ -299,7 +326,59 @@
   "connectors": {
     "usb": "USB-C 5 V Laden + USB-DFU",
     "battery": "JST-SH 1.0 2-polig",
-    "debug": "Tag-Connect TC2030 (Pads)"
+    "debug": "Tag-Connect TC2030 (Pads)",
+    "expansion": "JST-SH 1.0 8-polig (J5), Gegenstueck Bedienplatine J1"
   },
-  "pinout": "electronics/PINOUT_V1.json"
+  "pinout": "electronics/PINOUT_V1.json",
+  "ui_board": {
+    "project": "electronics/kicad/motion-one-ui",
+    "outline_mm": {
+      "length": 41.0,
+      "width": 27.0,
+      "thickness": 1.6,
+      "corner_r": 2.0
+    },
+    "origin": "Ecke oben links (KiCad), y nach unten",
+    "layers": 2,
+    "mounting_holes": [
+      {
+        "ref": "H1",
+        "x": 37.5,
+        "y": 17.0,
+        "drill_mm": 2.2
+      },
+      {
+        "ref": "H2",
+        "x": 24.0,
+        "y": 23.5,
+        "drill_mm": 2.2
+      }
+    ],
+    "stick": {
+      "ref": "SW1",
+      "part": "Alps RKJXV1224005 C146170",
+      "x": 12.0,
+      "y": 13.5,
+      "note": "Bauhoehe/Hebel gemaess Datenblatt, THT"
+    },
+    "touch_pad": {
+      "ref": "E1",
+      "x": 32.0,
+      "y": 8.0,
+      "size_mm": [
+        10,
+        10
+      ],
+      "note": "Gehaeusewand darueber <= 2 mm Kunststoff (ANNAHME)"
+    },
+    "connector": {
+      "ref": "J1",
+      "x": 33.0,
+      "y": 23.4,
+      "part": "C160407",
+      "height_mm": 2.9,
+      "orientation": "Steckoeffnung zur Kante y=27"
+    },
+    "step": "electronics/kicad/motion-one-ui/export/motion-one-ui-board.step"
+  }
 }

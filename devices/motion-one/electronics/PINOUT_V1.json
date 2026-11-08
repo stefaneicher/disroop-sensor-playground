@@ -1,9 +1,27 @@
 {
- "revision": "r1",
+ "revision": "r4",
  "board": "motion-one V1",
  "module": "Ebyte E73-2G4M08S1C (nRF52840)",
  "source": "scripts/electronics/mo_design.py",
  "pins": [
+  {
+   "signal": "EXT5",
+   "module_pin": 1,
+   "gpio": "P1.11",
+   "function": "J5.6 EXT5, GPIO (Touch-Ausgang TTP233H, aktiv high)"
+  },
+  {
+   "signal": "LED_B",
+   "module_pin": 2,
+   "gpio": "P1.10",
+   "function": "RGB blau, aktiv low (Common-Anode 3V3)"
+  },
+  {
+   "signal": "EXT4",
+   "module_pin": 3,
+   "gpio": "P0.03",
+   "function": "J5.5 EXT4, GPIO/AIN1 (Stick-Taste aktiv low, interner Pull-up)"
+  },
   {
    "signal": "BTN",
    "module_pin": 4,
@@ -23,22 +41,22 @@
    "function": "Summer-FET Gate PWM 2-4 kHz (100k Pull-down)"
   },
   {
-   "signal": "LED_B",
+   "signal": "EXT1",
    "module_pin": 8,
    "gpio": "P0.29/AIN5",
-   "function": "RGB blau, aktiv low (Common-Anode 3V3)"
+   "function": "J5.2 EXT1, SAADC AIN5 (Stick X), 0..3V3"
   },
   {
-   "signal": "LED_G",
+   "signal": "EXT3",
    "module_pin": 9,
    "gpio": "P0.31/AIN7",
-   "function": "RGB gruen, aktiv low"
+   "function": "J5.4 EXT3, SAADC AIN7 (frei/analog)"
   },
   {
-   "signal": "LED_R",
+   "signal": "EXT2",
    "module_pin": 10,
    "gpio": "P0.30/AIN6",
-   "function": "RGB rot, aktiv low"
+   "function": "J5.3 EXT2, SAADC AIN6 (Stick Y), 0..3V3"
   },
   {
    "signal": "XL1",
@@ -113,10 +131,22 @@
    "function": "USB-Detect (VBUS-Pin Modul, POWER.USBDETECTED)"
   },
   {
+   "signal": "LED_R",
+   "module_pin": 28,
+   "gpio": "P0.15",
+   "function": "RGB rot, aktiv low"
+  },
+  {
    "signal": "USB_DM",
    "module_pin": 29,
    "gpio": "D-",
    "function": "USB D-"
+  },
+  {
+   "signal": "LED_G",
+   "module_pin": 30,
+   "gpio": "P0.17",
+   "function": "RGB gruen, aktiv low"
   },
   {
    "signal": "USB_DP",
@@ -142,6 +172,8 @@
   "IMU ICM-45686 per SPI Mode 0/3, AP_CS aktiv low",
   "VBAT_ADC = VBAT * 100k/(100k+100k), Referenz intern 0.6 V Gain 1/6",
   "Ein/Aus: Schiebeschalter SW1 trennt VSYS->VSW hardwareseitig (kein GPIO)",
-  "Ladezustand nur LED (TP4056 CHRG), kein GPIO"
+  "Ladezustand nur LED (TP4056 CHRG), kein GPIO",
+  "r4: J5 JST-SH 8p: 1=3V3 (max. 10 mA), 2..6=EXT1..EXT5, 7=RSV (NC), 8=GND; Serien-R 100 Ohm + ESD auf Bedienplatine",
+  "r4: LED R/G/B von P0.30/P0.31/P0.29 auf P0.15/P0.17/P1.10 verlegt (ADC-Pins frei fuer EXT)"
  ]
 }

@@ -4,14 +4,17 @@ sys.path.insert(0, os.path.dirname(__file__))
 from sexpr import parse, dump, find, Q
 
 LIB = '/usr/share/kicad/symbols/'
-LOCAL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../electronics/kicad/motion-one/motion-one.kicad_sym')
+import importlib
+D = importlib.import_module(os.environ.get('MO_DESIGN', 'mo_design'))  # r4: auch ui_design (Bedienplatine)
+PROJ = getattr(D, 'PROJ', 'motion-one')
+LOCAL = os.path.join(os.path.dirname(os.path.abspath(__file__)), getattr(D, 'SYMLIB', '../../electronics/kicad/motion-one/motion-one.kicad_sym'))
 OUT = sys.argv[1]
 U = lambda: Q(str(uuid.uuid4()))
 _cache = {}
 
 def libsym(lib, name):
     if lib not in _cache:
-        _cache[lib] = parse(open(LOCAL if lib == 'motion-one' else LIB + lib + '.kicad_sym').read())
+        _cache[lib] = parse(open(LOCAL if lib == getattr(D, 'LOCALLIB', 'motion-one') else LIB + lib + '.kicad_sym').read())
     syms = {s[1]: s for s in find(_cache[lib], 'symbol')}
     s = copy.deepcopy(syms[name])
     ext = find(s, 'extends')
@@ -38,7 +41,6 @@ def pins(sym):
             res[find(p, 'number')[0][1]] = (float(at[1]), float(at[2]), find(p, 'name')[0][1])
     return res
 
-import mo_design as D
 root = U()
 order = ['U1'] + [r for r in D.P if r != 'U1']
 parts, cx, cy = [], 0, 0
@@ -82,7 +84,7 @@ for ref, lib, name, val, fp, x, y, lcsc in parts:
         pinname[ref + '.' + num] = pnm
         inst.append(['pin', Q(num), ['uuid', U()]])
         pinpos[(ref, num)] = (round(x + px, 4), round(y - py, 4))
-    inst.append(['instances', ['project', Q('motion-one'), ['path', Q('/' + root), ['reference', Q(ref)], ['unit', 1]]]])
+    inst.append(['instances', ['project', Q(PROJ), ['path', Q('/' + root), ['reference', Q(ref)], ['unit', 1]]]])
     items.append(inst)
 
 for net, members in nets.items():

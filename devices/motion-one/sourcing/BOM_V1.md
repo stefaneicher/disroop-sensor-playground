@@ -59,3 +59,24 @@ Bewertung Basic vor Extended: alle Passiven, FETs, Dioden, Regler, Quarz, Taster
 Kritisch (Bestand < 10x Bedarf): keine. E73 C356849 hat 319 Stk (QUELLE 2026-11-08T10:39Z): fuer 10 Geraete PASS, fuer Serie >32 Geraete Risiko -> vor Bestellung erneut pruefen, Alternative Modul-Listing C2764963.
 
 Ein/Aus: Schiebeschalter MSK12C02 schaltet Gate des P-FET Q2 (Soft-Switch). Begruendung: Aus-Zustand 0 uA ueber R10 (Gate=Source), kein Firmware-Risiko, Schalter traegt keinen Laststrom; Soft-Latch per Taster spart den Schalter, braucht aber Firmware-Halteleitung und hat ~1 uA Leckage -> V2-Option.
+
+## r4-Ergaenzung (Q-04, Stand 2026-11-08, Abfrage 12:42 UTC, Rohdaten `logs/pcb-r4/sourcing/jlc_r4.json`, URL `https://jlcpcb.com/partdetail/<LCSC>`, USD Stufe 1, QUELLE)
+
+Hauptboard r4: neu J5; TP3/TP4 entfallen; H1/H2 NPTH (keine BOM-Position).
+
+| LCSC | MPN | Wert | Refs | Menge | Bestand | >=10x | USD/Stk | Alternative |
+|---|---|---|---|---|---|---|---|---|
+| C160407 | SM08B-SRSS-TB(LF)(SN) | JST-SH 8p | J5 (Haupt), J1 (UI) | 1+1 | 180688 | PASS | 0.3235 | XY-SM08B-SRSS-TB C54582896 (2000 Stk, 0.0892 USD; Footprint-Kompat. ANNAHME) |
+
+Bedienplatine motion-one-ui (BOM `manufacturing/pcba/ui/BOM_motion-one-ui_JLC.csv`):
+
+| LCSC | MPN | Wert | Refs | Menge | Bestand | >=10x | USD/Stk | USD/Geraet | Alternative |
+|---|---|---|---|---|---|---|---|---|---|
+| C146170 | RKJXV1224005 | Analog-Stick | SW1 | 1 | 2175 | PASS | 1.2005 | 1.201 | RKJXV122400R C918854 (4631 Stk, 1.1972) |
+| C2890349 | TTP233H-BA6 | Touch-IC | U1 | 1 | 44791 | PASS | 0.116 | 0.116 | TTP223-Varianten aktuell 0 Lager -> nRF52840-COMP (Firmware) |
+| C160407 | SM08B-SRSS-TB | JST-SH 8p | J1 | 1 | 180688 | PASS | 0.3235 | 0.324 | s. o. |
+| C25076 | 0402 100R | 100 | R1-R4 | 4 | Basic | PASS (ANNAHME, Basic) | ~0.001 | 0.004 | Basic-Aequivalent |
+| C11702 | 0402 1k | 1k | R5 | 1 | Basic | PASS (ANNAHME, Basic) | ~0.001 | 0.001 | Basic-Aequivalent |
+| C1525 | CL05B104KO5NNNC | 100nF | C1 | 1 | 34320311 | PASS | 0.0031 | 0.003 | Basic-Aequivalent |
+
+Summe UI-Teile ca. 1.65 USD/Geraet (BERECHNUNG, ohne PCB/Setup/Extended-Gebuehr). Hauptboard +0.32 USD (J5). C25076/C11702 nicht neu abgefragt (Basic, NOT RUN).

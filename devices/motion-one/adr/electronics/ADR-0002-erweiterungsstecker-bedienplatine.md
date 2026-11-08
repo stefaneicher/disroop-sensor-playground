@@ -22,3 +22,10 @@ Vorschlag mit Bewertung: [media/ADR-0002-erweiterung.html](media/ADR-0002-erweit
 - Durch r4 verschiebt sich die Bestellung.
 - In der Firmware ändern sich die Pinmap (Bootloader und App) und die Treiber für Stick und Touch.
 - Die Mechanik plant den Platz für die Bedienplatine.
+
+## Umsetzung r4 (Handoff `management/handoffs/pcb-engineer/2026-11-08-r4.md`)
+- J5 JST-SH 8-pol. (C160407) bei (58.5; 3.35). Belegung: 3V3, EXT1–3 = AIN5/6/7, EXT4 = P0.03/AIN1, EXT5 = P1.11, RSV, GND. 3V3 max. 10 mA.
+- LEDs neu: R = P0.15, G = P0.17, B = P1.10. P0.13, P0.20 und P0.22 liessen sich nicht routen.
+- M2: H1 (42.4; 12.7), H2 (58.5; 22.8). Beide ausserhalb der Antennen-Freizone.
+- Bedienplatine `motion-one-ui` 41 × 27 mm: Alps-Stick C146170, Touch TTP233H C2890349 (1.5 µA, weckt die CPU nicht), 100 Ω je Leitung. ERC/DRC 0.
+- Offen: TVS-ESD-Schutz für Kabel, Pin 1 von J5 prüfen, Rotationen in der JLC-Vorschau.

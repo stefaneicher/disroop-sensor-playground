@@ -8,8 +8,14 @@ LOC = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../electronic
 STAGE, OUT = sys.argv[1], sys.argv[2]
 W, H, R = 70.0, 25.0, 2.0
 NX, NY, STRIP = 10.0, 5.0, 1.5  # r3 Mechanik-Forderungen 4 und 6
-STRIP_EXC = {'SW1'}  # Hebel muss ueber Kante y_if=25 (pcb y=0) ragen
+STRIP_EXC = {'SW1', 'J5', 'H2'}  # r4: J5-Steckeroeffnung an Kante y_if=0 (pcb y=25), Kabelabgang  # Hebel muss ueber Kante y_if=25 (pcb y=0) ragen
 KO_X = D.MCX + 5.6  # Antennenbereich Modul (Footprint y 5.6..9.1 -> x nach Rotation 90)
+
+M3D = '${KIPRJMOD}/motion-one.3dshapes/'
+MODELS = {'SW2': (M3D + 'SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5.step', (0, 0, 0), 0),
+          'J1': (M3D + 'USB-C_SMD-TYPE-C-31-M-12_1.step', (0, 1.39, 0), 180),
+          'SW1': (M3D + 'SW-SMD_3P-L6.6-W2.7-LS7.8-P1.50.step', (0, 0.55, 0), 180),
+          'U1': (M3D + 'WIRELM-SMD_L18.0-W13.0-H3.0-E73-2G4M08S1C.step', (0, 0, 0), 0)}
 
 def place():
     uu = json.load(open(OUT.replace('.kicad_pcb', '.kicad_sch') + '.uuids.json'))
@@ -34,6 +40,9 @@ def place():
         fp.Reference().SetLayer(P.F_Fab); fp.Reference().SetTextSize(P.VECTOR2I(mm(0.5), mm(0.5))); fp.Reference().SetTextThickness(mm(0.08))
         if lcsc:
             f = P.PCB_FIELD(fp, fp.GetNextFieldOrdinal(), 'LCSC'); f.SetText(lcsc); f.SetVisible(False); fp.Add(f)
+        if ref in MODELS:
+            fn, off, rz = MODELS[ref]; fp.Models().clear(); m = P.FP_3DMODEL(); m.m_Filename = fn
+            m.m_Offset = P.VECTOR3D(*off); m.m_Rotation = P.VECTOR3D(0, 0, rz); fp.Models().append(m)
         b.Add(fp); fp.SetPosition(P.VECTOR2I(mm(x), mm(y))); fp.SetOrientationDegrees(rot)
         for p in fp.Pads():
             num = p.GetNumber()
@@ -71,7 +80,8 @@ def place():
     ks = sorted(bb)
     for i, a in enumerate(ks):
         A = bb[a]
-        if A[0] < 0 or A[1] < 0 or A[2] > W or A[3] > H: print('EDGE', a, [round(v, 2) for v in A])
+        if a == 'H2' and A[1] > -0.5: pass  # r4: M2-Loch 2.2 mm von Kante, nur Kupfer-Keepout-Ring ragt ueber
+        elif A[0] < 0 or A[1] < 0 or A[2] > W or A[3] > H: print('EDGE', a, [round(v, 2) for v in A])
         if a not in STRIP_EXC and (A[1] < STRIP or A[3] > H - STRIP): print('STRIP', a, [round(v, 2) for v in A])
         if A[0] < NX + 0.5 and (A[1] < NY + 0.5 or A[3] > H - NY - 0.5): print('NOTCH', a, [round(v, 2) for v in A])
         for c in ks[i + 1:]:

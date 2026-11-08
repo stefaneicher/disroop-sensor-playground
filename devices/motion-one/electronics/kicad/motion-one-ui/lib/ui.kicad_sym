@@ -1,0 +1,362 @@
+(kicad_symbol_lib
+  (version 20211014)
+  (generator https://github.com/uPesy/easyeda2kicad.py)
+
+  (symbol "RKJXV1224005"
+    (in_bom yes)
+    (on_board yes)
+    (property
+      "Reference"
+      "SW"
+      (id 0)
+      (at 0 21.59 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Value"
+      "RKJXV1224005"
+      (id 1)
+      (at 0 -21.59 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Footprint"
+      "ui:SW-TH_RKJXV1224005"
+      (id 2)
+      (at 0 -24.13 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Datasheet"
+      "https://lcsc.com/product-detail/5-way-Tactile-Switchs_ALPS_RKJXV1224005_RKJXV1224005_C146170.html"
+      (id 3)
+      (at 0 -26.67 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Manufacturer"
+      "ALPSALPINE(阿尔卑斯阿尔派)"
+      (id 4)
+      (at 0 -29.21 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "MPN"
+      "RKJXV1224005"
+      (id 5)
+      (at 0 -31.75 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "LCSC Part"
+      "C146170"
+      (id 6)
+      (at 0 -34.29 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "ki_keywords"
+      "Multi-Directional Switches"
+      (id 8)
+      (at 0 -36.83 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (symbol "RKJXV1224005_0_1"
+      (rectangle
+        (start -2.03 13.97)
+        (end 4.57 11.43)
+        (stroke (width 0) (type default))
+        (fill (type background))
+      )
+      (rectangle
+        (start -6.35 9.65)
+        (end -3.81 3.05)
+        (stroke (width 0) (type default))
+        (fill (type background))
+      )
+      (circle
+        (center 1.27 6.35)
+        (radius 1.52)
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (circle
+        (center 1.27 -9.40)
+        (radius 0.51)
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (circle
+        (center 1.27 -13.46)
+        (radius 0.51)
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -3.81 11.43) (xy -2.29 9.91)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -3.81 11.43) (xy -3.81 13.97)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 6.35 13.97) (xy 6.35 11.43) (xy 4.83 9.91)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 6.35 -1.27) (xy 6.35 1.27) (xy 4.83 2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -3.81 -1.27) (xy -3.81 1.27) (xy -2.29 2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -3.81 -6.35) (xy 6.35 -6.35)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 1.27 -6.35) (xy 1.27 -8.89)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -3.81 -16.51) (xy 6.35 -16.51)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 1.27 -16.51) (xy 1.27 -13.97)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 1.78 -9.14) (xy 3.05 -13.46)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (pin passive line
+        (at -8.89 3.81 0)
+        (length 2.54)
+        (name "B" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -8.89 6.35 0)
+        (length 2.54)
+        (name "DTA" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -8.89 8.89 0)
+        (length 2.54)
+        (name "A" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -1.27 16.51 270)
+        (length 2.54)
+        (name "A" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 1.27 16.51 270)
+        (length 2.54)
+        (name "DTA" (effects (font (size 1.27 1.27))))
+        (number "5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 3.81 16.51 270)
+        (length 2.54)
+        (name "B" (effects (font (size 1.27 1.27))))
+        (number "6" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -3.81 16.51 270)
+        (length 2.54)
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "7" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 6.35 16.51 270)
+        (length 2.54)
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "8" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 6.35 -3.81 90)
+        (length 2.54)
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "9" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -3.81 -3.81 90)
+        (length 2.54)
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "10" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -6.35 -6.35 0)
+        (length 2.54)
+        (name "a" (effects (font (size 1.27 1.27))))
+        (number "a" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 8.89 -6.35 180)
+        (length 2.54)
+        (name "c" (effects (font (size 1.27 1.27))))
+        (number "c" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -6.35 -16.51 0)
+        (length 2.54)
+        (name "b" (effects (font (size 1.27 1.27))))
+        (number "b" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 8.89 -16.51 180)
+        (length 2.54)
+        (name "d" (effects (font (size 1.27 1.27))))
+        (number "d" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+
+  (symbol "TTP233H-BA6"
+    (in_bom yes)
+    (on_board yes)
+    (property
+      "Reference"
+      "U"
+      (id 0)
+      (at 0 7.62 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Value"
+      "TTP233H-BA6"
+      (id 1)
+      (at 0 -7.62 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Footprint"
+      "ui:SOT-23-6_L2.9-W1.7-P0.95-LS2.8-BL"
+      (id 2)
+      (at 0 -10.16 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Datasheet"
+      "https://www.lcsc.com/datasheet/C2890349.pdf"
+      (id 3)
+      (at 0 -12.70 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Manufacturer"
+      "TONTEK(通泰)"
+      (id 4)
+      (at 0 -15.24 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "MPN"
+      "TTP233H-BA6"
+      (id 5)
+      (at 0 -17.78 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "LCSC Part"
+      "C2890349"
+      (id 6)
+      (at 0 -20.32 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "ki_keywords"
+      "Touch Screen Controllers"
+      (id 8)
+      (at 0 -22.86 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (symbol "TTP233H-BA6_0_1"
+      (rectangle
+        (start -7.62 5.08)
+        (end 7.62 -5.08)
+        (stroke (width 0) (type default))
+        (fill (type background))
+      )
+      (circle
+        (center -6.35 3.81)
+        (radius 0.38)
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (pin passive line
+        (at -10.16 2.54 0)
+        (length 2.54)
+        (name "Q" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -10.16 -0.00 0)
+        (length 2.54)
+        (name "VSS" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -10.16 -2.54 0)
+        (length 2.54)
+        (name "I" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 10.16 -2.54 180)
+        (length 2.54)
+        (name "AHLB" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 10.16 -0.00 180)
+        (length 2.54)
+        (name "VDD" (effects (font (size 1.27 1.27))))
+        (number "5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 10.16 2.54 180)
+        (length 2.54)
+        (name "TOG" (effects (font (size 1.27 1.27))))
+        (number "6" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+)

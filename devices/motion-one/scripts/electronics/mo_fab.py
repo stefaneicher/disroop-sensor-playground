@@ -48,16 +48,20 @@ use = {'BTN': 'Taster aktiv low, interner Pull-up', 'MOT_EN': 'Motor-FET Gate, h
        'IMU_INT2': 'IMU INT2, push-pull', 'IMU_SCK': 'SPI SCK (SPIM, bis 8 MHz)', 'VBAT_EN': 'Teiler-Freigabe high=an (Messung), sonst low',
        'IMU_MOSI': 'SPI MOSI', 'IMU_MISO': 'SPI MISO', 'VBAT_ADC': 'SAADC AIN2, Vbat/2, Freigabe >= 25 ms vor Messung (tau 5 ms, 1%)', 'IMU_CS': 'SPI CS aktiv low',
        'IMU_INT1': 'IMU INT1 (Data-ready/Wake-on-motion), push-pull', 'NRESET': 'Reset (TC2030)', 'USB_DM': 'USB D-', 'USB_DP': 'USB D+',
-       'SWDIO': 'SWD', 'SWCLK': 'SWD', 'VBUS': 'USB-Detect (VBUS-Pin Modul, POWER.USBDETECTED)'}
+       'SWDIO': 'SWD', 'SWCLK': 'SWD',
+       'EXT1': 'J5.2 EXT1, SAADC AIN5 (Stick X), 0..3V3', 'EXT2': 'J5.3 EXT2, SAADC AIN6 (Stick Y), 0..3V3', 'EXT3': 'J5.4 EXT3, SAADC AIN7 (frei/analog)',
+       'EXT4': 'J5.5 EXT4, GPIO/AIN1 (Stick-Taste aktiv low, interner Pull-up)', 'EXT5': 'J5.6 EXT5, GPIO (Touch-Ausgang TTP233H, aktiv high)', 'VBUS': 'USB-Detect (VBUS-Pin Modul, POWER.USBDETECTED)'}
 pins = []
 for net, m in D.N.items():
     for r, p in m:
         if r == 'U1' and net in use:
             pins.append({'signal': net, 'module_pin': int(p), 'gpio': pn['U1.' + p], 'function': use[net]})
-json.dump({'revision': 'r1', 'board': 'motion-one V1', 'module': 'Ebyte E73-2G4M08S1C (nRF52840)', 'source': 'scripts/electronics/mo_design.py',
+json.dump({'revision': 'r4', 'board': 'motion-one V1', 'module': 'Ebyte E73-2G4M08S1C (nRF52840)', 'source': 'scripts/electronics/mo_design.py',
            'pins': sorted(pins, key=lambda q: q['module_pin']),
            'notes': ['LED aktiv low: GPIO low = an', 'IMU ICM-45686 per SPI Mode 0/3, AP_CS aktiv low', 'VBAT_ADC = VBAT * 100k/(100k+100k), Referenz intern 0.6 V Gain 1/6',
-                     'Ein/Aus: Schiebeschalter SW1 trennt VSYS->VSW hardwareseitig (kein GPIO)', 'Ladezustand nur LED (TP4056 CHRG), kein GPIO']},
+                     'Ein/Aus: Schiebeschalter SW1 trennt VSYS->VSW hardwareseitig (kein GPIO)', 'Ladezustand nur LED (TP4056 CHRG), kein GPIO',
+                     'r4: J5 JST-SH 8p: 1=3V3 (max. 10 mA), 2..6=EXT1..EXT5, 7=RSV (NC), 8=GND; Serien-R 100 Ohm + ESD auf Bedienplatine',
+                     'r4: LED R/G/B von P0.30/P0.31/P0.29 auf P0.15/P0.17/P1.10 verlegt (ADC-Pins frei fuer EXT)']},
           open(R + '/electronics/PINOUT_V1.json', 'w'), indent=1)
 # STEP
 import cadquery as cq

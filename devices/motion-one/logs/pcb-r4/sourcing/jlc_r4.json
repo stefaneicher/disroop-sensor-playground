@@ -1,0 +1,402 @@
+[
+ {
+  "query": "SM08B-SRSS-TB",
+  "utc": "2026-11-08T12:42:21+00:00",
+  "lcsc": "C54582896",
+  "mpn": "XY-SM08B-SRSS-TB",
+  "type": "expand",
+  "stock": 2000,
+  "price": [
+   [
+    1,
+    0.0892
+   ],
+   [
+    50,
+    0.0709
+   ],
+   [
+    150,
+    0.0617
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "SMD,P=1mm,\u5367\u8d34 Wire To Board Connector ROHS",
+  "url": "https://jlcpcb.com/partdetail/C54582896",
+  "datasheet": null
+ },
+ {
+  "query": "SM08B-SRSS-TB",
+  "utc": "2026-11-08T12:42:21+00:00",
+  "lcsc": "C160407",
+  "mpn": "SM08B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 180688,
+  "price": [
+   [
+    1,
+    0.3235
+   ],
+   [
+    50,
+    0.2589
+   ],
+   [
+    150,
+    0.2272
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 10mm 1A 1mm 1x8P 2.9mm 4.32mm 50V 8 8P Auxiliary Solder Pin Copper alloy PA SH",
+  "url": "https://jlcpcb.com/partdetail/C160407",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-SM08B-SRSS-TB-LF-SN_C160407.pdf"
+ },
+ {
+  "query": "SM08B-SRSS-TB",
+  "utc": "2026-11-08T12:42:21+00:00",
+  "lcsc": "C5306078",
+  "mpn": "SM08B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.4056
+   ],
+   [
+    10,
+    0.3271
+   ],
+   [
+    30,
+    0.2944
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 10mm 1A 1mm 1x8P 2.9mm 4.32mm 50V 8 8P Auxiliary Solder Pin Copper alloy PA SH",
+  "url": "https://jlcpcb.com/partdetail/C5306078",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2402261208_JST-SM08B-SRSS-TB-LF-SN_C5306078.pdf"
+ },
+ {
+  "query": "C160402",
+  "utc": "2026-11-08T12:42:21+00:00",
+  "lcsc": "C160402",
+  "mpn": "SM02B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 69091,
+  "price": [
+   [
+    1,
+    0.1322
+   ],
+   [
+    50,
+    0.1088
+   ],
+   [
+    150,
+    0.0969
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2.9mm 2P 4.32mm 4mm 50V Auxiliary Solder Pin Copper alloy PA SH ",
+  "url": "https://jlcpcb.com/partdetail/C160402",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-SM02B-SRSS-TB-LF-SN_C160402.pdf"
+ },
+ {
+  "query": "TTP223",
+  "utc": "2026-11-08T12:42:22+00:00",
+  "lcsc": "C93723",
+  "mpn": "TTP223N-HA6",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.2356
+   ],
+   [
+    10,
+    0.229
+   ],
+   [
+    30,
+    0.2257
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "-20\u2103~+70\u2103 1 1.5uA 1.5uA 2V~5.5V 4kV 60ms Capacitive Touch\u3001Automatic sensitivity calibratio",
+  "url": "https://jlcpcb.com/partdetail/C93723",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1809281615_Tontek-Design-Tech-TTP223N-HA6_C93723.pdf"
+ },
+ {
+  "query": "TTP223",
+  "utc": "2026-11-08T12:42:22+00:00",
+  "lcsc": "C129457",
+  "mpn": "TTP223E-BA6",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.185
+   ],
+   [
+    50,
+    0.1464
+   ],
+   [
+    150,
+    0.1299
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "-40\u2103~+85\u2103 1 2V~5.5V 2uA 5kV Capacitive Touch\u3001Automatic sensitivity calibration No SOT-23-6",
+  "url": "https://jlcpcb.com/partdetail/C129457",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/1810251711_Tontek-Design-Tech-TTP223E-BA6_C129457.pdf"
+ },
+ {
+  "query": "TTP223",
+  "utc": "2026-11-08T12:42:22+00:00",
+  "lcsc": "C9900049508",
+  "mpn": "TTP223",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BR",
+  "desc": "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BR New Arrivals ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900049508",
+  "datasheet": null
+ },
+ {
+  "query": "TTP223",
+  "utc": "2026-11-08T12:42:22+00:00",
+  "lcsc": "C9900094558",
+  "mpn": "TTP223",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "TH-3P",
+  "desc": "SMD New Arrivals ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900094558",
+  "datasheet": null
+ },
+ {
+  "query": "RKJXV1224005",
+  "utc": "2026-11-08T12:42:22+00:00",
+  "lcsc": "C918854",
+  "mpn": "RKJXV122400R",
+  "type": "expand",
+  "stock": 4631,
+  "price": [
+   [
+    1,
+    1.1972
+   ],
+   [
+    10,
+    0.9731
+   ],
+   [
+    30,
+    0.8505
+   ]
+  ],
+  "pkg": "Plugin",
+  "desc": "10k\u03a9 125mW 5V \u00b15% \u63d2\u4ef6 Potentiometers, Variable Resistors ROHS",
+  "url": "https://jlcpcb.com/partdetail/C918854",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2201131330_ALPSALPINE-RKJXV122400R_C918854.pdf"
+ },
+ {
+  "query": "RKJXV1224005",
+  "utc": "2026-11-08T12:42:22+00:00",
+  "lcsc": "C2687349",
+  "mpn": "RKJXV122400D",
+  "type": "expand",
+  "stock": 64,
+  "price": [
+   [
+    1,
+    0.893
+   ],
+   [
+    10,
+    0.7327
+   ],
+   [
+    30,
+    0.6526
+   ]
+  ],
+  "pkg": "Plugin",
+  "desc": "\u63d2\u4ef6 Multi-Directional Switches ROHS",
+  "url": "https://jlcpcb.com/partdetail/C2687349",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2102221837_ALPSALPINE-RKJXV122400D_C2687349.pdf"
+ },
+ {
+  "query": "RKJXV1224005",
+  "utc": "2026-11-08T12:42:22+00:00",
+  "lcsc": "C146170",
+  "mpn": "RKJXV1224005",
+  "type": "expand",
+  "stock": 2175,
+  "price": [
+   [
+    1,
+    1.2005
+   ],
+   [
+    10,
+    0.9993
+   ],
+   [
+    30,
+    0.8881
+   ]
+  ],
+  "pkg": "Plugin,13x13mm",
+  "desc": "\u63d2\u4ef6,13x13mm Multi-Directional Switches ROHS",
+  "url": "https://jlcpcb.com/partdetail/C146170",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1810161908_ALPSALPINE-RKJXV1224005_C146170.pdf"
+ },
+ {
+  "query": "RKJXV1224005",
+  "utc": "2026-11-08T12:42:22+00:00",
+  "lcsc": "C9900243014",
+  "mpn": "RKJXV1224005",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "TH-14P-P2.5",
+  "desc": "TH-14P-P2.5 SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900243014",
+  "datasheet": null
+ },
+ {
+  "query": "RKJXK",
+  "utc": "2026-11-08T12:42:22+00:00",
+  "lcsc": "C470769",
+  "mpn": "RKJXK122000D",
+  "type": "expand",
+  "stock": 3,
+  "price": [
+   [
+    1,
+    8.4864
+   ],
+   [
+    10,
+    7.3858
+   ],
+   [
+    30,
+    6.2393
+   ]
+  ],
+  "pkg": "\u63d2\u4ef6-10P,22.7x20.7mm",
+  "desc": "50V \u63d2\u4ef6-10P,22.7x20.7mm Multi-Directional Switches ROHS",
+  "url": "https://jlcpcb.com/partdetail/C470769",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2304140030_ALPSALPINE-RKJXK122000D_C470769.pdf"
+ },
+ {
+  "query": "RKJXK",
+  "utc": "2026-11-08T12:42:22+00:00",
+  "lcsc": "C262409",
+  "mpn": "RKJXK122400Y",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    6.3031
+   ],
+   [
+    10,
+    5.5295
+   ],
+   [
+    30,
+    5.0585
+   ]
+  ],
+  "pkg": "Plugin,25.4x20.7mm",
+  "desc": "\u63d2\u4ef6,25.4x20.7mm Multi-Directional Switches ROHS",
+  "url": "https://jlcpcb.com/partdetail/C262409",
+  "datasheet": "https://datasheet.lcsc.com/lcsc/1808071254_ALPSALPINE-RKJXK122400Y_C262409.pdf"
+ },
+ {
+  "query": "RKJXK",
+  "utc": "2026-11-08T12:42:22+00:00",
+  "lcsc": "C470770",
+  "mpn": "RKJXK1210002",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    4.9326
+   ],
+   [
+    10,
+    4.8148
+   ],
+   [
+    30,
+    4.7363
+   ]
+  ],
+  "pkg": "Plugin",
+  "desc": "Plugin Multi-Directional Switches ROHS",
+  "url": "https://jlcpcb.com/partdetail/C470770",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2005150702_ALPSALPINE-RKJXK1210002_C470770.pdf"
+ },
+ {
+  "query": "RKJXK",
+  "utc": "2026-11-08T12:42:22+00:00",
+  "lcsc": "C9900261056",
+  "mpn": "RKJXK1220",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "Plugin",
+  "desc": "\u63d2\u4ef6 SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900261056",
+  "datasheet": null
+ }
+]

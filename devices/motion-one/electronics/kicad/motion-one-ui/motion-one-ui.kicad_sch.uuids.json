@@ -1,0 +1,159 @@
+{
+ "uuid": {
+  "U1": "1cf63b37-6ddb-4944-87a6-9868c974b7ba",
+  "SW1": "acbbdbc5-fc6c-4cb1-836b-c9c6ea8cdc7e",
+  "J1": "fbfc4afd-8a3c-4d82-bd53-2483a01642c8",
+  "E1": "c01e4343-8131-44fe-a152-97e7e82460cd",
+  "R1": "3d9bf664-5b43-4a8f-a1e3-7f7f22b48171",
+  "R2": "ceef8cee-7336-4d54-bdb5-8be7d075353d",
+  "R3": "5e87b739-ee6e-4cc2-99f6-be9b2581e75c",
+  "R4": "a054ab5b-60eb-4d2f-ac52-2bbe05a730fb",
+  "R5": "fbda323f-a3b5-47cf-9c81-19569d97b539",
+  "C1": "e3e4e148-2837-4b44-9828-fd52d6ce60f4",
+  "H1": "dac00f3c-be7c-4ec0-b3c8-90c9622f24ea",
+  "H2": "24922c67-c38b-4c08-9571-b17e8cd6e2b2"
+ },
+ "pinname": {
+  "U1.1": "Q",
+  "U1.2": "VSS",
+  "U1.3": "I",
+  "U1.4": "AHLB",
+  "U1.5": "VDD",
+  "U1.6": "TOG",
+  "SW1.1": "B",
+  "SW1.2": "DTA",
+  "SW1.3": "A",
+  "SW1.4": "A",
+  "SW1.5": "DTA",
+  "SW1.6": "B",
+  "SW1.7": "GND",
+  "SW1.8": "GND",
+  "SW1.9": "GND",
+  "SW1.10": "GND",
+  "SW1.a": "a",
+  "SW1.c": "c",
+  "SW1.b": "b",
+  "SW1.d": "d",
+  "J1.1": "Pin_1",
+  "J1.2": "Pin_2",
+  "J1.3": "Pin_3",
+  "J1.4": "Pin_4",
+  "J1.5": "Pin_5",
+  "J1.6": "Pin_6",
+  "J1.7": "Pin_7",
+  "J1.8": "Pin_8",
+  "J1.MP": "MountPin",
+  "E1.1": "Pin_1",
+  "R1.1": "",
+  "R1.2": "",
+  "R2.1": "",
+  "R2.2": "",
+  "R3.1": "",
+  "R3.2": "",
+  "R4.1": "",
+  "R4.2": "",
+  "R5.1": "",
+  "R5.2": "",
+  "C1.1": "",
+  "C1.2": ""
+ },
+ "props": {
+  "U1": {
+   "Reference": "U1",
+   "Value": "TTP233H-BA6",
+   "Footprint": "ui:SOT-23-6_L2.9-W1.7-P0.95-LS2.8-BL",
+   "Datasheet": "https://www.lcsc.com/datasheet/C2890349.pdf",
+   "Manufacturer": "TONTEK(\u901a\u6cf0)",
+   "MPN": "TTP233H-BA6",
+   "LCSC Part": "C2890349",
+   "LCSC": "C2890349"
+  },
+  "SW1": {
+   "Reference": "SW1",
+   "Value": "RKJXV1224005",
+   "Footprint": "ui:SW-TH_RKJXV1224005",
+   "Datasheet": "https://lcsc.com/product-detail/5-way-Tactile-Switchs_ALPS_RKJXV1224005_RKJXV1224005_C146170.html",
+   "Manufacturer": "ALPSALPINE(\u963f\u5c14\u5351\u65af\u963f\u5c14\u6d3e)",
+   "MPN": "RKJXV1224005",
+   "LCSC Part": "C146170",
+   "LCSC": "C146170"
+  },
+  "J1": {
+   "Reference": "J1",
+   "Value": "EXT JST-SH 8p",
+   "Footprint": "Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal",
+   "Datasheet": "",
+   "Description": "Generic connectable mounting pin connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)",
+   "LCSC": "C160407"
+  },
+  "E1": {
+   "Reference": "E1",
+   "Value": "TouchPad",
+   "Footprint": "ui:TouchPad_10x10",
+   "Datasheet": "",
+   "Description": "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+  },
+  "R1": {
+   "Reference": "R1",
+   "Value": "100",
+   "Footprint": "Resistor_SMD:R_0402_1005Metric",
+   "Datasheet": "",
+   "Description": "Resistor",
+   "LCSC": "C25076"
+  },
+  "R2": {
+   "Reference": "R2",
+   "Value": "100",
+   "Footprint": "Resistor_SMD:R_0402_1005Metric",
+   "Datasheet": "",
+   "Description": "Resistor",
+   "LCSC": "C25076"
+  },
+  "R3": {
+   "Reference": "R3",
+   "Value": "100",
+   "Footprint": "Resistor_SMD:R_0402_1005Metric",
+   "Datasheet": "",
+   "Description": "Resistor",
+   "LCSC": "C25076"
+  },
+  "R4": {
+   "Reference": "R4",
+   "Value": "100",
+   "Footprint": "Resistor_SMD:R_0402_1005Metric",
+   "Datasheet": "",
+   "Description": "Resistor",
+   "LCSC": "C25076"
+  },
+  "R5": {
+   "Reference": "R5",
+   "Value": "1k",
+   "Footprint": "Resistor_SMD:R_0402_1005Metric",
+   "Datasheet": "",
+   "Description": "Resistor",
+   "LCSC": "C11702"
+  },
+  "C1": {
+   "Reference": "C1",
+   "Value": "100nF",
+   "Footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "Datasheet": "",
+   "Description": "Unpolarized capacitor",
+   "LCSC": "C1525"
+  },
+  "H1": {
+   "Reference": "H1",
+   "Value": "M2",
+   "Footprint": "MountingHole:MountingHole_2.2mm_M2",
+   "Datasheet": "",
+   "Description": "Mounting Hole without connection"
+  },
+  "H2": {
+   "Reference": "H2",
+   "Value": "M2",
+   "Footprint": "MountingHole:MountingHole_2.2mm_M2",
+   "Datasheet": "",
+   "Description": "Mounting Hole without connection"
+  }
+ }
+}

@@ -1,0 +1,180 @@
+[
+ {
+  "query": "TTP223-BA6",
+  "utc": "2026-11-08T12:42:55+00:00",
+  "lcsc": "C2890349",
+  "mpn": "TTP233H-BA6",
+  "type": "expand",
+  "stock": 44791,
+  "price": [
+   [
+    1,
+    0.1158
+   ],
+   [
+    50,
+    0.0925
+   ],
+   [
+    150,
+    0.0808
+   ]
+  ],
+  "pkg": "SOT-23-6L",
+  "desc": "-40\u2103~+85\u2103 1.5uA 2.4V~5.5V 4kV Capacitive Touch No SOT-23-6L Touch Sensors ROHS",
+  "url": "https://jlcpcb.com/partdetail/C2890349",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2109061130_Tontek-Design-Tech-TTP233H-BA6_C2890349.pdf"
+ },
+ {
+  "query": "TTP223-BA6",
+  "utc": "2026-11-08T12:42:55+00:00",
+  "lcsc": "C80757",
+  "mpn": "TTP223-BA6",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.1636
+   ],
+   [
+    10,
+    0.1014
+   ],
+   [
+    30,
+    0.0965
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "SOT-23-6 Touch Sensors ROHS",
+  "url": "https://jlcpcb.com/partdetail/C80757",
+  "datasheet": ""
+ },
+ {
+  "query": "TTP223-BA6",
+  "utc": "2026-11-08T12:42:55+00:00",
+  "lcsc": "C2757936",
+  "mpn": "TTP223-BA6",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.3672
+   ],
+   [
+    50,
+    0.2877
+   ],
+   [
+    150,
+    0.2535
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "-40\u2103~+85\u2103 1 1.5uA 2V~5.5V 4kV 60ms Capacitive Touch\u3001Automatic sensitivity calibration No\u3001Y",
+  "url": "https://jlcpcb.com/partdetail/C2757936",
+  "datasheet": "https://datasheet.lcsc.com/lcsc/2103021107_Tontek-Design-Tech-TTP223-BA6_C2757936.pdf"
+ },
+ {
+  "query": "TTP223-BA6",
+  "utc": "2026-11-08T12:42:55+00:00",
+  "lcsc": "C9900234863",
+  "mpn": "TTP223-BA6",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "SOT-23-6 SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900234863",
+  "datasheet": null
+ },
+ {
+  "query": "C146170",
+  "utc": "2026-11-08T12:42:56+00:00",
+  "lcsc": "C146170",
+  "mpn": "RKJXV1224005",
+  "type": "expand",
+  "stock": 2175,
+  "price": [
+   [
+    1,
+    1.2005
+   ],
+   [
+    10,
+    0.9993
+   ],
+   [
+    30,
+    0.8881
+   ]
+  ],
+  "pkg": "Plugin,13x13mm",
+  "desc": "\u63d2\u4ef6,13x13mm Multi-Directional Switches ROHS",
+  "url": "https://jlcpcb.com/partdetail/C146170",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1810161908_ALPSALPINE-RKJXV1224005_C146170.pdf"
+ },
+ {
+  "query": "C918854",
+  "utc": "2026-11-08T12:42:56+00:00",
+  "lcsc": "C918854",
+  "mpn": "RKJXV122400R",
+  "type": "expand",
+  "stock": 4631,
+  "price": [
+   [
+    1,
+    1.1972
+   ],
+   [
+    10,
+    0.9731
+   ],
+   [
+    30,
+    0.8505
+   ]
+  ],
+  "pkg": "Plugin",
+  "desc": "10k\u03a9 125mW 5V \u00b15% \u63d2\u4ef6 Potentiometers, Variable Resistors ROHS",
+  "url": "https://jlcpcb.com/partdetail/C918854",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2201131330_ALPSALPINE-RKJXV122400R_C918854.pdf"
+ },
+ {
+  "query": "C160407",
+  "utc": "2026-11-08T12:42:56+00:00",
+  "lcsc": "C160407",
+  "mpn": "SM08B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 180688,
+  "price": [
+   [
+    1,
+    0.3235
+   ],
+   [
+    50,
+    0.2589
+   ],
+   [
+    150,
+    0.2272
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 10mm 1A 1mm 1x8P 2.9mm 4.32mm 50V 8 8P Auxiliary Solder Pin Copper alloy PA SH",
+  "url": "https://jlcpcb.com/partdetail/C160407",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-SM08B-SRSS-TB-LF-SN_C160407.pdf"
+ }
+]
