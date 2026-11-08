@@ -73,3 +73,6 @@ Ski: kompakte Querformat-HUD, zweispaltiges Menü mit grossen Touch-Zielen, Test
 
 ## 2026-11-08 Konzept Playground
 - Neu: `docs/KONZEPT_PLAYGROUND.md` (Framing, Publikum, Leiter, Zielstruktur, Umbauschritte). Skicross für bis zu 20 Handys im Handy-Konzept ergänzt. TODO erweitert. Noch kein Code.
+
+## 2026-11-08 Konzept Systemlandschaft
+- Neu: `docs/KONZEPT_LANDSCHAFT.md` (Bausteine, Lücken, Reihenfolge; Ranglisten ohne DB). Alle drei Playground-Konzepte in `IDEEN.md` referenziert. Umsetzung später.

@@ -54,7 +54,7 @@ Warum das wichtig ist:
 ## Stand-Modus
 
 - **Attract-Loop:** Ohne Spieler läuft eine Demo-Abfahrt (Simulator) mit grossem QR-Code.
-- **Rangliste:** Ski-Zeiten mit Spitzname (frei gewählt, keine Personendaten), Tages-Reset.
+- **Rangliste:** Ski-Zeiten mit Spitzname (frei gewählt, keine Personendaten), nur im Speicher des Relays, keine Datenbank.
 - **Mehrspieler:** zwei Handys = Tennis 1:1. Bei Ski fährt nacheinander, wer in der Warteschlange ist.
 - **Zweiter Bildschirm (optional):** CI-Pipeline, Agenten-Journal und «so wurde das gebaut».
 - **Upgrade-Moment:** Neben dem Bildschirm liegen Thingy und Motion One. «Jetzt mit echter Embedded-Sensorik probieren.»
