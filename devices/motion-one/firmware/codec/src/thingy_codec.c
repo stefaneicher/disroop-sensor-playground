@@ -390,3 +390,55 @@ thingy_button_evt_t thingy_button_update(thingy_button_t *b, bool pressed, uint3
 	}
 	return THINGY_BTN_EVT_NONE;
 }
+
+static int8_t clamp_pct(int8_t v) { return v > 100 ? 100 : (v < -100 ? -100 : v); }
+
+size_t thingy_encode_ui_ext(const ui_ext_state_t *s, uint8_t *out, size_t out_len)
+{
+	if (s == NULL || out == NULL || out_len < THINGY_UI_EXT_LEN) {
+		return 0;
+	}
+	out[0] = UI_EXT_VERSION;
+	out[1] = s->flags;
+	out[2] = (uint8_t)clamp_pct(s->x);
+	out[3] = (uint8_t)clamp_pct(s->y);
+	out[4] = (uint8_t)(s->seq & 0xFFu);
+	out[5] = (uint8_t)(s->seq >> 8);
+	out[6] = 0;
+	out[7] = 0;
+	return THINGY_UI_EXT_LEN;
+}
+
+void ui_ext_next_seq(ui_ext_state_t *s) { s->seq = (uint16_t)(s->seq + 1u); }
+
+void ui_ext_rate_init(ui_ext_rate_t *r) { *r = (ui_ext_rate_t){0}; }
+
+void ui_ext_rate_mark(ui_ext_rate_t *r, bool changed)
+{
+	if (changed) {
+		r->pending = true;
+	}
+}
+
+bool ui_ext_rate_poll(ui_ext_rate_t *r, uint16_t motion_freq_hz, uint32_t now_ms, uint32_t *retry_ms)
+{
+	/* 20/s -> 50 ms, Spielmodus (> 50 Hz) 10/s -> 100 ms; Wartezeit <= Intervall <= 100 ms */
+	const uint32_t interval = motion_freq_hz > 50u ? 100u : 50u;
+	if (retry_ms != NULL) {
+		*retry_ms = 0;
+	}
+	if (!r->pending) {
+		return false;
+	}
+	const uint32_t dt = now_ms - r->last_tx_ms;
+	if (r->sent_any && dt < interval) {
+		if (retry_ms != NULL) {
+			*retry_ms = interval - dt;
+		}
+		return false;
+	}
+	r->pending = false;
+	r->sent_any = true;
+	r->last_tx_ms = now_ms;
+	return true;
+}

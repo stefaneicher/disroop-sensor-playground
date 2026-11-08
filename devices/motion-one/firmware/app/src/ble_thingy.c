@@ -123,6 +123,20 @@ static ssize_t rd_button(struct bt_conn *c, const struct bt_gatt_attr *a, void *
 	return bt_gatt_attr_read(c, a, buf, len, off, &button_state, 1);
 }
 
+/* EF680380 Bedienplatine (systems/ADR-0002) */
+static uint8_t ui_ext_buf[THINGY_UI_EXT_LEN] = {UI_EXT_VERSION};
+static ssize_t rd_ui_ext(struct bt_conn *c, const struct bt_gatt_attr *a, void *buf, uint16_t len, uint16_t off)
+{
+	return bt_gatt_attr_read(c, a, buf, len, off, ui_ext_buf, sizeof ui_ext_buf);
+}
+static void ui_ext_ccc_changed(const struct bt_gatt_attr *attr, uint16_t value)
+{
+	ARG_UNUSED(attr);
+	if (value & BT_GATT_CCC_NOTIFY) {
+		ext_ui_subscribed(); /* aktuellen Zustand (auch present=0) genau einmal senden */
+	}
+}
+
 static void ccc_changed(const struct bt_gatt_attr *attr, uint16_t value)
 {
 	ARG_UNUSED(attr);
@@ -142,13 +156,17 @@ BT_GATT_SERVICE_DEFINE(env_svc, BT_GATT_PRIMARY_SERVICE(TUUID(0x0200)),
 	BT_GATT_CHARACTERISTIC(TUUID(0x0206), BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE, RD | WR, rd_env_cfg,
 			       wr_env_cfg, NULL));
 
-/* UI: [1] decl 0301, [2] LED, [3] decl 0302, [4] Button, [5] CCC */
+/* UI: [1] decl 0301, [2] LED, [3] decl 0302, [4] Button, [5] CCC, [6] decl 0380, [7] UI-Ext, [8] CCC */
 BT_GATT_SERVICE_DEFINE(ui_svc, BT_GATT_PRIMARY_SERVICE(TUUID(0x0300)),
 	BT_GATT_CHARACTERISTIC(TUUID(0x0301), BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE, RD | WR, rd_led, wr_led,
 			       NULL),
 	BT_GATT_CHARACTERISTIC(TUUID(0x0302), BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY, RD, rd_button, NULL,
 			       NULL),
-	BT_GATT_CCC(ccc_changed, RD | WR));
+	BT_GATT_CCC(ccc_changed, RD | WR),
+	BT_GATT_CHARACTERISTIC(TUUID(0x0380), BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY, RD, rd_ui_ext, NULL, NULL),
+	BT_GATT_CCC(ui_ext_ccc_changed, RD | WR));
+/* Regression: 0301/0302 bleiben [2]/[4], 0380 haengt hinten an; Motion/Sound-Indizes unveraendert */
+BUILD_ASSERT(ARRAY_SIZE(attr_ui_svc) == 9, "ui_svc Attributindizes geaendert");
 
 /* Motion: [2] 0401, [4] 0404, [7] 0406, [10] 0407, [13] 0409, [16] 0480 */
 BT_GATT_SERVICE_DEFINE(motion_svc, BT_GATT_PRIMARY_SERVICE(TUUID(0x0400)),
@@ -164,6 +182,9 @@ BT_GATT_SERVICE_DEFINE(sound_svc, BT_GATT_PRIMARY_SERVICE(TUUID(0x0500)),
 	BT_GATT_CHARACTERISTIC(TUUID(0x0502), BT_GATT_CHRC_WRITE_WITHOUT_RESP | BT_GATT_CHRC_WRITE, WR, NULL,
 			       wr_speaker, NULL),
 	NOTIFY_CHR(TUUID(0x0503)));
+
+BUILD_ASSERT(ARRAY_SIZE(attr_motion_svc) == 18, "motion_svc Attributindizes geaendert");
+BUILD_ASSERT(ARRAY_SIZE(attr_sound_svc) == 8, "sound_svc Attributindizes geaendert");
 
 enum { M_QUAT, M_RAW, M_EULER, M_HEADING, M_HR, M_COUNT };
 static const struct bt_gatt_attr *const motion_attr[M_COUNT] = {
@@ -302,6 +323,14 @@ void ble_publish_motion(const float q[4], float roll, float pitch, float yaw, co
 	}
 	if (sub[M_HR] && thingy_encode_raw_hr(hr, b, sizeof b)) {
 		(void)bt_gatt_notify(c, motion_attr[M_HR], b, THINGY_RAW_HR_LEN);
+	}
+}
+
+void ble_publish_ui_ext(const ui_ext_state_t *s)
+{
+	(void)thingy_encode_ui_ext(s, ui_ext_buf, sizeof ui_ext_buf);
+	if (subscribed(&ui_svc.attrs[7])) {
+		(void)bt_gatt_notify(conn_cur, &ui_svc.attrs[7], ui_ext_buf, sizeof ui_ext_buf);
 	}
 }
 

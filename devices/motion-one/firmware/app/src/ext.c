@@ -21,8 +21,11 @@ static const struct device *const gpio0 = DEVICE_DT_GET(DT_NODELABEL(gpio0));
 static stick_axis_cal_t cx, cy;
 static stick_poll_t poll;
 static touch_t touch;
-static bool present;
+static bool present, center_ok;
 static struct gpio_callback touch_cb;
+static ui_ext_state_t ui; /* EF680380-Zustand */
+static ui_ext_rate_t rate;
+void ext_publish_touch(bool down);
 
 static int read_mv(const struct adc_dt_spec *ch, uint16_t *mv)
 {
@@ -85,6 +88,8 @@ static void touch_eval(struct k_work *w)
 	const touch_evt_t e = touch_update(&touch, gpio_pin_get_dt(&ext5) > 0, k_uptime_get_32());
 	if (e != TOUCH_EVT_NONE) {
 		ext_publish_touch(e == TOUCH_EVT_DOWN);
+	} else if (!!(ui.flags & UI_EXT_TOUCH_LOCKED) != touch.locked) {
+		ext_publish_touch(touch.stable); /* Sperrstatus melden */
 	}
 	if (touch.locked || touch.raw != touch.stable) {
 		k_work_reschedule(&touch_work, K_MSEC(touch.locked ? 1000 : TOUCH_DEBOUNCE_MS));
@@ -120,7 +125,8 @@ int ext_input_start(void)
 			(void)read_mv(&ax, &sx[i]);
 			(void)read_mv(&ay, &sy[i]);
 		}
-		if (!stick_axis_cal_center(&cx, sx, 8) || !stick_axis_cal_center(&cy, sy, 8)) {
+		center_ok = stick_axis_cal_center(&cx, sx, 8) & stick_axis_cal_center(&cy, sy, 8);
+		if (!center_ok) {
 			LOG_WRN("Stick-Mitte unplausibel, Default 1.65 V");
 		}
 		k_work_schedule(&stick_work, K_MSEC(EXT_POLL_IDLE_MS));
@@ -142,6 +148,57 @@ void ext_input_suspend(void)
 	(void)k_work_cancel_delayable(&touch_work);
 }
 
-/* Bis zur Festlegung im erweiterten Kanal (docs/EXTENDED_CHANNEL.md) nur Log; ueberschreibbar. */
-__weak void ext_publish_stick(int8_t x, int8_t y, bool btn) { LOG_DBG("stick %d %d %d", x, y, btn); }
-__weak void ext_publish_touch(bool down) { LOG_INF("touch %s", down ? "down" : "up"); }
+/* EF680380: Zustand + Ratenbegrenzer (codec/thingy_codec.c, Host-getestet). Alle Zugriffe im System-Workqueue. */
+
+static void ui_tx(struct k_work *w);
+static K_WORK_DELAYABLE_DEFINE(ui_tx_work, ui_tx);
+
+static void ui_tx(struct k_work *w)
+{
+	ARG_UNUSED(w);
+	thingy_motion_config_t cfg;
+	ble_get_motion_config(&cfg);
+	uint32_t retry = 0;
+	if (ui_ext_rate_poll(&rate, cfg.motion_freq_hz, k_uptime_get_32(), &retry)) {
+		ui_ext_next_seq(&ui);
+		ble_publish_ui_ext(&ui);
+	} else if (retry) {
+		k_work_reschedule(&ui_tx_work, K_MSEC(retry)); /* Flanke spaetestens nach <= 100 ms */
+	}
+}
+
+static void ui_set(uint8_t flags, int8_t x, int8_t y)
+{
+	flags |= present ? UI_EXT_PRESENT : 0u;
+	flags |= touch.locked ? UI_EXT_TOUCH_LOCKED : 0u;
+	flags |= center_ok ? UI_EXT_CENTER_OK : 0u;
+	const bool changed = flags != ui.flags || x != ui.x || y != ui.y;
+	ui.flags = flags;
+	ui.x = x;
+	ui.y = y;
+	ui_ext_rate_mark(&rate, changed);
+	if (changed) {
+		k_work_schedule(&ui_tx_work, K_NO_WAIT);
+	}
+}
+
+static void ui_sub(struct k_work *w)
+{
+	ARG_UNUSED(w);
+	ui_set(ui.flags & (UI_EXT_BTN | UI_EXT_TOUCH), ui.x, ui.y);
+	ui_ext_rate_mark(&rate, true);
+	k_work_reschedule(&ui_tx_work, K_NO_WAIT);
+}
+static K_WORK_DEFINE(ui_sub_work, ui_sub);
+
+void ext_ui_subscribed(void) { k_work_submit(&ui_sub_work); }
+
+void ext_publish_stick(int8_t x, int8_t y, bool btn)
+{
+	ui_set((uint8_t)((ui.flags & UI_EXT_TOUCH) | (btn ? UI_EXT_BTN : 0u)), x, y);
+}
+
+void ext_publish_touch(bool down)
+{
+	ui_set((uint8_t)((ui.flags & UI_EXT_BTN) | (down ? UI_EXT_TOUCH : 0u)), ui.x, ui.y);
+}

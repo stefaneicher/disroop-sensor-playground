@@ -20,6 +20,7 @@ void ble_publish_motion(const float q[4], float roll, float pitch, float yaw, co
 			const thingy_raw_hr_t *hr);
 void ble_publish_button(bool pressed);
 void ble_publish_speaker_done(void);
+void ble_publish_ui_ext(const ui_ext_state_t *s); /* EF680380, ui_svc.attrs[7] */
 
 /* imu_task.c */
 int imu_task_start(void);
@@ -39,6 +40,7 @@ int ext_input_start(void);
 void ext_input_suspend(void);
 void ext_publish_stick(int8_t x_pct, int8_t y_pct, bool btn);
 void ext_publish_touch(bool down);
+void ext_ui_subscribed(void); /* CCC EF680380 aktiviert */
 
 /* battery.c */
 int battery_init(void);

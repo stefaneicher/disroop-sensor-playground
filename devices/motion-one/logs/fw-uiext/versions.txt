@@ -1,0 +1,7 @@
+date: 2026-11-08T14:07:21+00:00
+gcc: gcc (Debian 14.2.0-19) 14.2.0
+cmake: cmake version 3.31.6
+west: West version: v1.5.0
+zephyr: VERSION_MAJOR = 4 VERSION_MINOR = 5 PATCHLEVEL = 0 VERSION_TWEAK = 0 EXTRAVERSION = 
+sdk: 1.0.1
+unity: 2.6.1

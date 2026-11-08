@@ -55,6 +55,33 @@ size_t thingy_encode_heading(float heading_deg, uint8_t *out, size_t out_len);
 /* EF680302: 0 = losgelassen, 1 = gedrueckt. */
 size_t thingy_encode_button(bool pressed, uint8_t *out, size_t out_len);
 
+
+/* EF680380 Bedienplatine (systems/ADR-0002): u8 version=1, u8 flags, i8 x, i8 y (-100..100), u16 seq LE, u16 reserved=0 */
+#define THINGY_UI_EXT_LEN 8u
+#define UI_EXT_VERSION 1u
+#define UI_EXT_PRESENT 0x01u
+#define UI_EXT_BTN 0x02u
+#define UI_EXT_TOUCH 0x04u
+#define UI_EXT_TOUCH_LOCKED 0x08u
+#define UI_EXT_CENTER_OK 0x10u
+typedef struct {
+	uint8_t flags;
+	int8_t x, y;
+	uint16_t seq;
+} ui_ext_state_t;
+size_t thingy_encode_ui_ext(const ui_ext_state_t *s, uint8_t *out, size_t out_len);
+void ui_ext_next_seq(ui_ext_state_t *s);
+
+/* Ratenbegrenzer: <= 20/s, bei motion_freq_hz > 50 <= 10/s; ausstehende Aenderung spaetestens nach 100 ms. */
+typedef struct {
+	bool pending, sent_any;
+	uint32_t last_tx_ms;
+} ui_ext_rate_t;
+void ui_ext_rate_init(ui_ext_rate_t *r);
+void ui_ext_rate_mark(ui_ext_rate_t *r, bool changed);
+/* true = jetzt senden; sonst *retry_ms (falls != NULL) = Wartezeit bis zur naechsten Pruefung, 0 = nichts offen. */
+bool ui_ext_rate_poll(ui_ext_rate_t *r, uint16_t motion_freq_hz, uint32_t now_ms, uint32_t *retry_ms);
+
 /* EF680401 Motion-Config */
 typedef struct {
 	uint16_t step_interval_ms;
