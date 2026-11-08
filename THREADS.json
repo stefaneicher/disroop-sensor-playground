@@ -191,6 +191,33 @@
       "summary": "Kollision mit vereinfachter Platine (Quader statt 216-MB-STEP); Cache für unveränderte Teile; Ober-/Unterschale parallel bauen; Repo nach WSL ~ verschieben (Datei-IO ~80× schneller), .wslconfig mehr RAM. Erst nach Gehäuse r3."
     },
     {
+      "parent": "T-01.3",
+      "kind": "feedback",
+      "topic": "Gehäuse & Gestaltung",
+      "source": "Chat 11:24",
+      "refs": [],
+      "note": "Stand: fem/fem_results.json 03:43, alte Geometrie v1; keine r3-Netzstudie. Wiederaufnahme nur auf Wunsch.",
+      "id": "F-09",
+      "title": "Vibrationsmotor: Modell + 3D-Modelle (PCB)",
+      "status": "running",
+      "owner": "pcb-engineer",
+      "agent_id": "d090dc26-b78f-4cd6-a645-5d8e5f337019",
+      "summary": "Motor war nur als Lötpads J3 „Motor separat“ geführt – kein Modell, nicht in BOM, keine Gehäuse-Mulde. PCB-Agent wählt Coin-Motor (LCSC), BOM, INTERFACES; dazu STEP-Modelle E73/USB-C/Taster/Schalter."
+    },
+    {
+      "parent": "T-01.3",
+      "kind": "feedback",
+      "topic": "Gehäuse & Gestaltung",
+      "source": "Chat 11:24",
+      "refs": [],
+      "note": "Stand: fem/fem_results.json 03:43, alte Geometrie v1; keine r3-Netzstudie. Wiederaufnahme nur auf Wunsch.",
+      "id": "F-10",
+      "title": "Motor-Mulde in Unterschale",
+      "status": "open",
+      "owner": "mechanical-engineer",
+      "summary": "Nach Gehäuse r3 + F-09: Mulde beim Akku mit Klebefläche und Litzenkanal; Kollision/Masse neu. Zusätzlich Vollständigkeitsprüfung: jedes Bauteil in BOM/INTERFACES muss Modell + Platz im Gehäuse haben."
+    },
+    {
       "id": "T-01.4",
       "parent": "T-01",
       "title": "Bootloader-Board-Definition (Q-01)",
