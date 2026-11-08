@@ -6,3 +6,7 @@ Fuegeband V=7169 valid=True
 [t]    869.1s Teil glatt 392.5s
   verrippt: nach Fusion V=31491 valid=True
 [t]   1383.8s Teil verrippt 514.7s
+  verrippt_ausgespart: nach Fusion V=29991 valid=True
+[t]   1940.5s Teil verrippt_ausgespart 556.8s
+Oberschale V=19540 valid=True (1902.5s)
+[t]   1942.0s Teile fertig
