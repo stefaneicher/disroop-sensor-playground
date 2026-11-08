@@ -1,6 +1,6 @@
 # Projektstand Disroop Motion One
 
-Stand: 2026-11-08 06:40 CET. Phase: Integration der V1-Entwürfe (§8–§11). Release-Baseline noch nicht erstellt.
+Stand: 2026-11-08 06:45 CET. Phase: Integration der V1-Entwürfe (§8–§13). Release-Baseline noch nicht erstellt.
 
 | Bereich | Status | Nachweis / offener Punkt |
 |---|---|---|
@@ -12,6 +12,7 @@ Stand: 2026-11-08 06:40 CET. Phase: Integration der V1-Entwürfe (§8–§11). R
 | Firmware V1 | PARTIAL | Zephyr-App/UF2 gebaut; Host-Unit-Tests 32/32. `PINOUT_V1.json` ist jetzt vorhanden und muss in DTS integriert werden; Hardwaretests NOT RUN |
 | Leistungsbudget | PARTIAL | Systems-Rechnung 65 h; PCB-Gegenrechnung 49 h. Verschiedene ANNAHMEN, konservative Planungszahl 49 h; beides ungemessen. Abweichung dokumentiert in `requirements/BUDGETS.md` |
 | Montage-/Bedienungsanleitung | IN PROGRESS | docs-media engineer entwirft quellengebundene Drafts; finale Revisionen und PDF erst nach Schnittstellenintegration |
+| Technischer Bericht | IN PROGRESS | Deutschsprachiger V1-Entwurf erstellt; PDF und endgültige Aussagen folgen nach Schnittstellenintegration |
 | MCP / Agents | PARTIAL | Playwright erfolgreich aus PCB-Spezialisten genutzt. KiCad/FreeCAD/Blender-MCP nicht eingerichtet, CLI-Ersatz genutzt. Projekt-Custom-Agent-Dateien angelegt, aber Runtime-Aufruf erst nach CLI-Neustart nachweisbar |
 | Media, Anleitungen, Bericht | NOT RUN | Smoke-Tests bestanden; Produktionsdokumente und Renderings aus integrierter Baugruppe fehlen |
 | Hardware / Bestellung | NOT RUN | Nichts bestellt, bezahlt, gedruckt, geflasht oder unter Spannung gesetzt |

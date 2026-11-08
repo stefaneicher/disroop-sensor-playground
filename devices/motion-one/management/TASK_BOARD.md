@@ -11,6 +11,6 @@
 | T08 | KiCad, Analyse, Beschaffung (§8) | pcb-engineer | PARTIAL: KiCad/ERC/DRC/Fertigungsdaten bereit; finale Angebots- und Mechanik-Abstimmung offen |
 | T09 | Firmware (§9) | firmware-engineer | PARTIAL: 32/32 Host-Tests, UF2; Pinout-Integration läuft, Hardwaretests NOT RUN |
 | T10 | Gehäuse, FEM, Slice (§10) | mechanical-engineer | PARTIAL: CAD/Export/Slice PASS; FEM-Netzstudie und Abgleich mit PCB r2 offen |
-| T11 | Media und Anleitungen (§11) | docs-media-engineer | NOT RUN: Smoke-Test §5.5/5.6 PASS; Produktdokumentation aus finalen Revisionen offen |
-| T12 | Bericht, Baseline V1 (§13) | Manager | NOT RUN |
+| T11 | Media und Anleitungen (§11) | docs-media-engineer | IN PROGRESS: Quellengebundene Montage-/Bedienungs-Drafts beauftragt; finaler Media-Stand wartet auf integrierte Revision |
+| T12 | Bericht, Baseline V1 (§13) | Manager | IN PROGRESS: technischer Bericht als Entwurf erstellt; finaler PDF/Release benötigt abgeschlossene Integrationsrunde und Verifikationsmatrix |
 | T13 | engineering-change vorbereiten (§14) | Manager | PARTIAL: Skill angelegt |
