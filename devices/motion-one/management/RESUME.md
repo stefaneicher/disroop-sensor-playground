@@ -46,3 +46,7 @@ PAUSIERT auf User-Entscheid („für das Gerät nicht so wichtig“). Letzter St
 ## User-Entscheide 2026-11-08
 - Q-01: Bootloader mit eigener Board-Definition schon in V1.
 - Q-02: Kein UART, kein TX-Testpad in r4; Debug ausschliesslich über SWD/Segger RTT.
+
+### User-Entscheid 2026-11-08 (Sourcing)
+- Q-03: Hersteller **JLCPCB + JLC3DP** (alles aus einer Hand). Material: Gehäuseteile **SLS PA12**, Lichtleiter **SLA transparent**. Swiss3D/Schaffner bleibt Rückfalloption.
+- Konsequenz: Gehäuse-r3-Toleranzen auf SLS-PA12 prüfen (nicht nur PETG-FDM-Profil); Druckteile `VORLAEUFIG_*` nach Gehäuse r3 final ersetzen, `mk_upload.py` neu laufen lassen. E73-Lager vor Bestellung neu prüfen.

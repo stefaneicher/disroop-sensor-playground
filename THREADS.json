@@ -103,9 +103,9 @@
       "title": "Beschaffung V1",
       "kind": "task",
       "owner": "manager",
-      "status": "review",
+      "status": "done",
       "question": "Material: PA12 bei JLC3DP (alles ein Hersteller, ~48 CHF/Gerät bei 5 Stk) oder PETG bei Swiss3D + Schaffner (CH, Preis auf Anfrage)?",
-      "recommendation": "JLC (PA12 + SLA-Lichtleiter); Druckteile erst nach Gehäuse r3 final ersetzen."
+      "recommendation": "JLC (PA12 + SLA-Lichtleiter); Druckteile erst nach Gehäuse r3 final ersetzen. — Entscheid User: JLC, SLS PA12 + SLA-Lichtleiter."
     },
     {
       "id": "F-03",
