@@ -1,5 +1,5 @@
 /* Adafruit nRF52 Bootloader 0.11.0 – Board-Definition Disroop Motion One V1.
- * QUELLE Pins: devices/motion-one/electronics/PINOUT_V1.json (r1); gleiche Pins wie
+ * QUELLE Pins: devices/motion-one/electronics/PINOUT_V1.json (r4); gleiche Pins wie
  * firmware/boards/disroop/motion_one/motion_one-pins.dtsi. Geprueft durch
  * firmware/scripts/check_bootloader_board.py (make pincheck / make test).
  * Q-02: kein UART, Debug nur SWD/RTT (DEBUG=1 -> SEGGER RTT im Bootloader). */
@@ -8,11 +8,11 @@
 
 /* LED: RGB D4, Common-Anode an 3V3, aktiv low */
 #define LEDS_NUMBER          1
-#define LED_PRIMARY_PIN      PINNUM(0, 30) /* LED_R */
+#define LED_PRIMARY_PIN      PINNUM(0, 15) /* LED_R */
 #define LED_STATE_ON         0
-#define LED_RGB_RED_PIN      PINNUM(0, 30) /* LED_R */
-#define LED_RGB_GREEN_PIN    PINNUM(0, 31) /* LED_G */
-#define LED_RGB_BLUE_PIN     PINNUM(0, 29) /* LED_B */
+#define LED_RGB_RED_PIN      PINNUM(0, 15) /* LED_R */
+#define LED_RGB_GREEN_PIN    PINNUM(0, 17) /* LED_G */
+#define LED_RGB_BLUE_PIN     PINNUM(1, 10) /* LED_B */
 #define BOARD_RGB_BRIGHTNESS 0x202020
 
 /* BUTTON: SW2 an P0.28, aktiv low, interner Pull-up. Kein OTA-Taster (nur ein Taster). */

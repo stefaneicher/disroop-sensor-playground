@@ -15,6 +15,7 @@ static void power_off(const char *why)
 	LOG_WRN("System OFF: %s", why);
 	thingy_led_cmd_t off = {.mode = THINGY_LED_OFF};
 	ui_led_apply(&off);
+	ext_input_suspend();
 	(void)imu_enter_wake_on_motion();
 	(void)ui_arm_button_wakeup();
 	sys_poweroff();
@@ -45,6 +46,9 @@ int main(void)
 	}
 	if (imu_task_start()) {
 		LOG_ERR("IMU-Init fehlgeschlagen");
+	}
+	if (ext_input_start()) {
+		LOG_ERR("J5-Init fehlgeschlagen");
 	}
 	uint32_t t = 0;
 	for (;;) {

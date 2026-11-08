@@ -34,6 +34,12 @@ void ui_speaker_tone(const thingy_speaker_tone_t *tone);
 void ui_vibrate_ms(uint32_t ms);
 int ui_arm_button_wakeup(void);
 
+/* ext.c (r4 J5 Bedienplatine) */
+int ext_input_start(void);
+void ext_input_suspend(void);
+void ext_publish_stick(int8_t x_pct, int8_t y_pct, bool btn);
+void ext_publish_touch(bool down);
+
 /* battery.c */
 int battery_init(void);
 uint16_t battery_read_mv(void);

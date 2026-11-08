@@ -1,7 +1,7 @@
 /*
  * EINZIGE Datei mit Pinbelegung fuer Motion One V1.
- * QUELLE: devices/motion-one/electronics/PINOUT_V1.json (revision r1,
- *         sha256 d7a0aa60579c1be62daae7849d40fafb72273c56a2dbda6a3d136e81524374ae).
+ * QUELLE: devices/motion-one/electronics/PINOUT_V1.json (revision r4,
+ *         sha256 132ac85436ab8b2bb6b5bffa5dbf85fc9524f2b3eff0b1ed6bde9a1ddc3e8e28).
  * Jede Pinzeile traegt ein Tag "PINOUT:<signal>"; firmware/scripts/check_pinout.py
  * gleicht Tag, Port/Pin und Polaritaet gegen PINOUT_V1.json ab (make pincheck).
  * Nicht als GPIO genutzt: XL1/XL2 (32k-Quarz, lfclk), NRESET P0.18 (uicr gpio-as-nreset),
@@ -26,16 +26,16 @@
 	/* LEDs Common-Anode an 3V3, aktiv low: nordic,invert -> Ruhepegel high (aus) */
 	pwm0_default: pwm0_default {
 		group1 {
-			psels = <NRF_PSEL(PWM_OUT0, 0, 30)>, /* PINOUT:LED_R */
-				<NRF_PSEL(PWM_OUT1, 0, 31)>, /* PINOUT:LED_G */
-				<NRF_PSEL(PWM_OUT2, 0, 29)>; /* PINOUT:LED_B */
+			psels = <NRF_PSEL(PWM_OUT0, 0, 15)>, /* PINOUT:LED_R */
+				<NRF_PSEL(PWM_OUT1, 0, 17)>, /* PINOUT:LED_G */
+				<NRF_PSEL(PWM_OUT2, 1, 10)>; /* PINOUT:LED_B */
 			nordic,invert;
 		};
 	};
 	pwm0_sleep: pwm0_sleep {
 		group1 {
-			psels = <NRF_PSEL(PWM_OUT0, 0, 30)>, <NRF_PSEL(PWM_OUT1, 0, 31)>,
-				<NRF_PSEL(PWM_OUT2, 0, 29)>;
+			psels = <NRF_PSEL(PWM_OUT0, 0, 15)>, <NRF_PSEL(PWM_OUT1, 0, 17)>,
+				<NRF_PSEL(PWM_OUT2, 1, 10)>;
 			low-power-enable;
 		};
 	};
@@ -121,6 +121,42 @@
 		zephyr,resolution = <12>;
 		zephyr,oversampling = <4>;
 	};
+	/* J5 EXT1 Stick X (r4), Quelle <= 2.5 kOhm + 100 Ohm -> 10 us */
+	channel@1 {
+		reg = <1>;
+		zephyr,gain = "ADC_GAIN_1_6";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 10)>;
+		zephyr,input-positive = <NRF_SAADC_AIN5>; /* PINOUT:EXT1 */
+		zephyr,resolution = <12>;
+	};
+	/* J5 EXT2 Stick Y */
+	channel@2 {
+		reg = <2>;
+		zephyr,gain = "ADC_GAIN_1_6";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 10)>;
+		zephyr,input-positive = <NRF_SAADC_AIN6>; /* PINOUT:EXT2 */
+		zephyr,resolution = <12>;
+	};
+	/* J5 EXT3 frei/analog */
+	channel@3 {
+		reg = <3>;
+		zephyr,gain = "ADC_GAIN_1_6";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 10)>;
+		zephyr,input-positive = <NRF_SAADC_AIN7>; /* PINOUT:EXT3 */
+		zephyr,resolution = <12>;
+	};
+	/* J5 EXT4 Stick-Taste analog (AIN1), Tag-Pin siehe zephyr,user */
+	channel@4 {
+		reg = <4>;
+		zephyr,gain = "ADC_GAIN_1_6";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 10)>;
+		zephyr,input-positive = <NRF_SAADC_AIN1>; /* EXT4 AIN1 */
+		zephyr,resolution = <12>;
+	};
 };
 
 / {
@@ -153,7 +189,11 @@
 	};
 
 	zephyr,user {
-		io-channels = <&adc 0>;
+		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>;
+		/* r4 J5: EXT4 Stick-Taste aktiv low mit internem Pull-up; EXT5 Touch TTP233H aktiv high,
+		 * Pull-down haelt den Eingang ohne Bedienplatine definiert low (kein Ereignisspam) */
+		ext4-gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; /* PINOUT:EXT4 */
+		ext5-gpios = <&gpio1 11 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>; /* PINOUT:EXT5 */
 		vbat-en-gpios = <&gpio0 5 GPIO_ACTIVE_HIGH>; /* PINOUT:VBAT_EN */
 		/* QUELLE PINOUT_V1 notes: VBAT_ADC = VBAT * 100k/(100k+100k) -> Faktor 2 */
 		vbat-divider-num = <2>;
