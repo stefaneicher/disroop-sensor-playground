@@ -1,0 +1,106 @@
+[
+ {
+  "query": "C356849",
+  "utc": "2026-11-08T16:37:38+00:00",
+  "lcsc": "C356849",
+  "mpn": "E73-2G4M08S1C",
+  "type": "expand",
+  "stock": 297,
+  "price": [
+   [
+    1,
+    7.69
+   ],
+   [
+    10,
+    7.5215
+   ],
+   [
+    12,
+    7.5215
+   ]
+  ],
+  "pkg": "SMD,18x13mm",
+  "desc": "-103dBm\u3001-95dBm -40\u2103~+85\u2103 120m 17.05mA 3.3V 8.27mA 8dBm Bluetooth 5.0\u3001Bluetooth 4.2 PWM\u3001SPI",
+  "url": "https://jlcpcb.com/partdetail/C356849",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2504101957_Chengdu-Ebyte-Elec-Tech-E73-2G4M08S1C_C356849.pdf"
+ },
+ {
+  "query": "C2764963",
+  "utc": "2026-11-08T16:37:39+00:00",
+  "lcsc": "C2764963",
+  "mpn": "E73-2G4M08S1CX",
+  "type": "expand",
+  "stock": 1011,
+  "price": [
+   [
+    1,
+    6.3718
+   ],
+   [
+    10,
+    6.2115
+   ],
+   [
+    12,
+    6.2115
+   ]
+  ],
+  "pkg": "SMD,18x13mm",
+  "desc": "-103dBm\u3001-95dBm -40\u2103~+85\u2103 120m 17.05mA 3.3V 8.27mA 8dBm Bluetooth 5.0\u3001Bluetooth 4.2 IPEX in",
+  "url": "https://jlcpcb.com/partdetail/C2764963",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2412091543_Chengdu-Ebyte-Elec-Tech-E73-2G4M08S1CX_C2764963.pdf"
+ },
+ {
+  "query": "C160407",
+  "utc": "2026-11-08T16:37:39+00:00",
+  "lcsc": "C160407",
+  "mpn": "SM08B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 180163,
+  "price": [
+   [
+    1,
+    0.3235
+   ],
+   [
+    50,
+    0.2589
+   ],
+   [
+    150,
+    0.2272
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 10mm 1A 1mm 1x8P 2.9mm 4.32mm 50V 8 8P Auxiliary Solder Pin Copper alloy PA SH",
+  "url": "https://jlcpcb.com/partdetail/C160407",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-SM08B-SRSS-TB-LF-SN_C160407.pdf"
+ },
+ {
+  "query": "C7519",
+  "utc": "2026-11-08T16:37:40+00:00",
+  "lcsc": "C7519",
+  "mpn": "USBLC6-2SC6",
+  "type": "expand",
+  "stock": 40852,
+  "price": [
+   [
+    1,
+    0.1623
+   ],
+   [
+    50,
+    0.124
+   ],
+   [
+    150,
+    0.1055
+   ]
+  ],
+  "pkg": "SOT-23-6L",
+  "desc": "-40\u2103~+125\u2103 150nA 17V 2 3.5pF 5.25V 5A 6V ESD IEC 61000-4-2 Unidirectional SOT-23-6L ESD an",
+  "url": "https://jlcpcb.com/partdetail/C7519",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2410121836_STMicroelectronics-USBLC6-2SC6_C7519.pdf"
+ }
+]
