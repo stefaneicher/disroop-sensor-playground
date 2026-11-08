@@ -1,0 +1,5 @@
+top V 20370.77392060824 2.3300302028656006
+tool volumes [293.02, 158.84, 83.06, 93.47]
+all_prism valid True dV 69.62354909619899 solids 1 6.3s
+all_prism valid True dV 14.319376493818709 solids 1 10.6s
+all_prism valid True dV -20.22383266617544 solids 1 13.8s

@@ -272,7 +272,8 @@ def j5_cuts():
         return cq.Wire.makePolygon([V(x - w / 2 - e, y, zc - hz - e), V(x + w / 2 + e, y, zc - hz - e),
                                     V(x + w / 2 + e, y, zc + hz + e), V(x - w / 2 - e, y, zc + hz + e)], close=True)
     fase = cq.Solid.makeLoft([rect(yo - 1.0, c + 1.0), rect(yo + c, 0.0)], True)
-    return [slot, pocket, fase]
+    # Fase: Loft UND Prisma ergeben im OCC-Cut ein negatives dV (Volumen steigt) -> Fase vorerst weggelassen (Probe j5_probe.py)
+    return [slot, pocket] + ([fase] if os.environ.get('MO_J5_FASE') == '1' else [])
 
 
 def cap_geom():
