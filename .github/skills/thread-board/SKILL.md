@@ -19,7 +19,7 @@ Der Manager führt wie ein Team-Manager **Threads**: ein Thread ist ein Faden ei
 - Typ-Marke je Thread: 💬 aus Chat (`feedback`), ❓ Frage, 📐 Entscheid, 📋 Aufgabe (Manager), 🤖 Agent-Auftrag bzw. pulsierend „Agent arbeitet“ (`task` mit Agent-`owner` und `status:running`).
 - Bedienung: Knöpfe „Alle auf/zu“, „Nur offene“; Tasten J/K bzw. ↑/↓, ←/→, Enter, E, C, O, A; Doppelklick klappt einen ganzen Teilbaum.
 - `archived:true` blendet einen Thread aus (Schalter „Archivierte ausblenden“, Standard an; Kinder werden mit ausgeblendet). Archivieren/Wiederherstellen per Knopf am Thread → Lavish-Prompt `tag:"archive"`, `data:{thread,archive}`.
-- Fragen an den User: `kind:"question"`, `status:"needs-user"`, optional `options:[…]`.
+- Fragen an den User: `kind:"question"`, `status:"needs-user"`, optional `options:[…]`; **Pflicht** `question` (ganze Frage mit Kontext) und `recommendation` – erscheinen aufklappbar am Thread.
 
 ## Regeln für den Manager
 1. Jedes User-Feedback erhält eine ID `F-nn`, wird einem Topic zugeordnet und öffnet oder ergänzt einen Thread.

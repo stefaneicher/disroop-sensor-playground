@@ -1,6 +1,6 @@
 {
  "project": "disroop-sensor-playground",
- "updated": "2026-11-08T09:39+01:00",
+ "updated": "2026-11-08T09:40+01:00",
  "threads": [
   {
    "id": "T-01",
@@ -74,7 +74,9 @@
    "options": [
     "Ja, V1",
     "Später (V2)"
-   ]
+   ],
+   "question": "Taster und LED sitzen auf dem Board an anderen Pins als beim nRF52840-DK. Damit der Bootloader (Firmware-Update per Bluetooth) funktioniert, braucht er eine eigene Board-Definition. Soll ich die erstellen lassen, oder bleibt es vorerst bei Programmierung nur per SWD?",
+   "recommendation": "Ja – eigene Board-Definition. Updates dann per Bluetooth ohne Gehäuse öffnen; reine Firmware-Arbeit, kein Hardware-Eingriff. Erstes Flashen bleibt per SWD."
   },
   {
    "id": "Q-02",
@@ -86,7 +88,9 @@
    "options": [
     "Ja",
     "Nein"
-   ]
+   ],
+   "question": "Der UART ist in r3 entfallen. Debug-Ausgaben gehen trotzdem per SWD mit Segger RTT. Soll in r4 trotzdem ein TX-Testpad an einem freien Pin dazukommen?",
+   "recommendation": "Ja – ein Pad ohne Bauteil, ohne Mehrkosten; Reserve, falls RTT nicht verfügbar ist (z. B. Programmieradapter ohne RTT)."
   },
   {
    "id": "T-02",
@@ -157,6 +161,10 @@
   {
    "t": "09:39",
    "msg": "Cockpit-Feed eingerichtet (Live-Ansicht, Auto-Reload 10 s)"
+  },
+  {
+   "t": "09:40",
+   "msg": "Board: Typ-Marken, Session-ID, Agent-IDs ergänzt (34d9b99)"
   }
  ],
  "session": "2161f388-0bc4-4170-b315-b3a7921669eb"

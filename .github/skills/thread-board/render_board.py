@@ -51,7 +51,9 @@ def node(t, kids, depth=0, idx=0, path=()):
     q = ""
     if t.get("kind") == "question" and t["status"] == "needs-user":
         opts = t.get("options") or ["Ja", "Nein"]
-        q = (f'<form data-lavish-question="{e(t["id"])}" onsubmit="event.preventDefault();'
+        q = (f'<details class="qd" open><summary>Frage &amp; Empfehlung</summary><p>{e(t.get("question", t["title"]))}</p>'
+             + (f'<p><b>Empfehlung:</b> {e(t["recommendation"])}</p>' if t.get("recommendation") else "") + '</details>')
+        q += (f'<form data-lavish-question="{e(t["id"])}" onsubmit="event.preventDefault();'
              f'const v=new FormData(this).get(\'a\');if(v)window.lavish?.queuePrompt(\'{e(t["id"])}: \'+v,'
              f'{{tag:\'choice\',text:\'{e(t["id"])} → \'+v,element:this,data:{{thread:\'{e(t["id"])}\',answer:v}}}});">'
              + "".join(f'<label><input type="radio" name="a" value="{e(o)}"> {e(o)}</label> ' for o in opts)
@@ -97,7 +99,7 @@ details{{margin:6px 0 6px 12px;padding:4px 8px;border-radius:6px}}summary{{curso
 .b{{font-size:11px;padding:1px 6px;border-radius:6px;white-space:nowrap}}.o{{color:#93c5fd;font-size:12px}}
 .m{{font-size:12px;color:#9ca3af;margin:0 0 4px 14px}}.r{{color:#6b7280}}.c{{background:#1f2937;border-radius:8px;padding:10px;margin-bottom:10px;font-size:13px}}
 .bar{{height:8px;background:#374151;border-radius:9px;overflow:hidden}}.bar i{{display:block;height:100%;background:#22c55e}}
-body.hide .arch{{display:none}}.arch{{opacity:.55}}.ab{{background:#4b5563;margin-left:6px}}.tg{{float:right;font-size:13px;color:#9ca3af;text-align:right}}.feed ul{{margin:0;padding-left:16px;max-height:260px;overflow:auto}}.feed li{{margin:2px 0}}.sid{{font-size:11px;color:#fbbf24}}.k{{color:#e5e7eb;margin-right:2px}}.live{{animation:pl 1.4s infinite}}@keyframes pl{{50%{{box-shadow:0 0 0 3px #10b98155}}}}.kh{{font-size:11px;margin-top:4px}}summary:focus{{outline:2px solid #fbbf24;outline-offset:2px;border-radius:4px}}
+body.hide .arch{{display:none}}.arch{{opacity:.55}}.ab{{background:#4b5563;margin-left:6px}}.tg{{float:right;font-size:13px;color:#9ca3af;text-align:right}}.feed ul{{margin:0;padding-left:16px;max-height:260px;overflow:auto}}.feed li{{margin:2px 0}}.qd{{margin:6px 0;padding:4px 8px;background:#1f2937;border-radius:6px}}.qd p{{margin:4px 0;color:#e5e7eb}}.sid{{font-size:11px;color:#fbbf24}}.k{{color:#e5e7eb;margin-right:2px}}.live{{animation:pl 1.4s infinite}}@keyframes pl{{50%{{box-shadow:0 0 0 3px #10b98155}}}}.kh{{font-size:11px;margin-top:4px}}summary:focus{{outline:2px solid #fbbf24;outline-offset:2px;border-radius:4px}}
 form{{margin-top:6px}}button{{font:inherit;font-size:12px;background:#2563eb;color:#fff;border:0;border-radius:5px;padding:3px 8px}}
 </style></head><body><div class="tg"><button type="button" id="exA" title="E">⊞ Alle auf</button> <button type="button" id="coA" title="C">⊟ Alle zu</button> <button type="button" id="opA" title="O">Nur offene</button> <label><input type="checkbox" id="hideArch" checked> Archivierte ausblenden ({narch})</label> <label><input type="checkbox" id="live" checked> Live (10 s)</label><div class="kh">Tasten: J/K oder ↑/↓ bewegen · ←/→ zu/auf · Enter umschalten · E/C alle auf/zu · O nur offene · A Archiv · Doppelklick: Teilbaum auf/zu</div></div><h1>{e(d.get('project', 'Projekt'))} – Thread-Board</h1>
 <p style="color:#9ca3af;font-size:13px">Stand {e(d.get('updated', ''))} · {done}/{total} Threads fertig · Session <code class="sid" title="{e(d.get('session', ''))}">{e(d.get('session', '–'))}</code></p>
