@@ -15,17 +15,17 @@
   "inner_volume": 110421.64951452092,
   "parts": {
     "oberschale": {
-      "volume_mm3": 19281.46486995023,
+      "volume_mm3": 19596.974562868923,
       "valid": true,
       "print_bbox": [
-        170.23732893015898,
-        43.72842008194862,
-        14.205021515459439
+        170.0142432639019,
+        43.60108053022891,
+        13.754368058348623
       ],
       "com": [
-        88.7804337386881,
-        -0.046562266644400656,
-        7.231490685774475
+        88.92533123989581,
+        -0.055471965339572535,
+        7.177885652205114
       ],
       "print_flip_about_x": false,
       "print_file": "devices/motion-one/mechanics/print/oberschale"
@@ -63,51 +63,51 @@
       "print_file": "devices/motion-one/mechanics/print/lichtleiter"
     },
     "unterschale_glatt": {
-      "volume_mm3": 25013.628308573338,
+      "volume_mm3": 27422.977575738834,
       "valid": true,
       "print_bbox": [
-        170.23799991383152,
-        43.78934828900522,
-        17.403894770319365
+        170.2593775321506,
+        43.83133147876621,
+        19.074201166830495
       ],
       "com": [
-        79.48474631757729,
-        0.03230062425381299,
-        -8.740560915934013
+        80.3840484367246,
+        0.016799485482273405,
+        -8.0033925969033
       ],
-      "print_flip_about_x": true,
+      "print_flip_about_x": false,
       "print_file": "devices/motion-one/mechanics/print/unterschale_glatt"
     },
     "unterschale_verrippt": {
-      "volume_mm3": 27573.23428947664,
+      "volume_mm3": 29951.74833889849,
       "valid": true,
       "print_bbox": [
-        170.21286239759573,
-        43.825820413365236,
-        17.520626038692317
+        170.26568988531432,
+        43.84670950756694,
+        19.077357343412363
       ],
       "com": [
-        83.84738438012413,
-        0.024238809184790096,
-        -8.495429480360709
+        84.16024268791578,
+        0.01322455850883246,
+        -7.858605652364113
       ],
-      "print_flip_about_x": true,
+      "print_flip_about_x": false,
       "print_file": "devices/motion-one/mechanics/print/varianten/unterschale_verrippt"
     },
     "unterschale_verrippt_ausgespart": {
-      "volume_mm3": 26073.190277297592,
+      "volume_mm3": 28451.91246177151,
       "valid": true,
       "print_bbox": [
-        170.21286239759573,
-        43.82582041336521,
-        17.520626038692317
+        170.26568988531432,
+        43.84670950756694,
+        19.077357343412363
       ],
       "com": [
-        81.45186569160914,
-        0.02577727726085943,
-        -8.731051059044695
+        81.9821282909073,
+        0.014033765895660683,
+        -8.041011220133901
       ],
-      "print_flip_about_x": true,
+      "print_flip_about_x": false,
       "print_file": "devices/motion-one/mechanics/print/varianten/unterschale_verrippt_ausgespart"
     }
   },
@@ -119,5 +119,5 @@
   ],
   "end_ellipse_r_min": 4.437763776155193,
   "chosen_variant": "glatt",
-  "runtime_s": 662.6124811172485
+  "runtime_s": 2101.2659499645233
 }

@@ -1,0 +1,146 @@
+{
+ "coordinate_system": "Geraetekoordinaten mm: x laengs (0=Griffende/USB-C, +x Kopf), y quer (Symmetrie y=0), z hoch (Daumenseite +z), Trennebene z=0",
+ "source": "BREP aus build_enclosure.py (r3), Board-STEP r3 (pcb-engineer, Quader-Bauteile), Akku-Huellkoerper 503040 (ANNAHME)",
+ "explode_unit": "mm",
+ "explode_note": "Explosionsvektor relativ zur Einbaulage (ANNAHME, Darstellung)",
+ "parts": {
+  "oberschale": {
+   "file": "oberschale.stl",
+   "explode_mm": [
+    0,
+    0,
+    30
+   ],
+   "tess_tol_mm": 0.05,
+   "triangles": 6068,
+   "bytes": 303484,
+   "watertight": true,
+   "bbox_min": [
+    0.0,
+    -21.8,
+    -0.0
+   ],
+   "bbox_max": [
+    170.0,
+    21.39,
+    13.6
+   ],
+   "sha256": "4bde711198b257e6728e40cce4f8b2e98acdadf17003a6440e19ba72636ab100"
+  },
+  "unterschale_glatt": {
+   "file": "unterschale_glatt.stl",
+   "explode_mm": [
+    0,
+    0,
+    -30
+   ],
+   "tess_tol_mm": 0.05,
+   "triangles": 5876,
+   "bytes": 293884,
+   "watertight": true,
+   "bbox_min": [
+    0.0,
+    -21.8,
+    -16.77
+   ],
+   "bbox_max": [
+    170.0,
+    21.8,
+    0.0
+   ],
+   "sha256": "eaf2f3e06b513793c96f19f8d4ccaaa9797391d5bbc560dbdfeb75d109967680"
+  },
+  "tastenkappe": {
+   "file": "tastenkappe.stl",
+   "explode_mm": [
+    0,
+    0,
+    55
+   ],
+   "tess_tol_mm": 0.05,
+   "triangles": 1550,
+   "bytes": 77584,
+   "watertight": true,
+   "bbox_min": [
+    46.1,
+    -6.48,
+    1.8
+   ],
+   "bbox_max": [
+    59.1,
+    6.48,
+    11.1
+   ],
+   "sha256": "bc778ec5e7488581a99d0066c9736d078f96a2ed9a77faa1a4c9cee3e32891dc"
+  },
+  "lichtleiter": {
+   "file": "lichtleiter.stl",
+   "explode_mm": [
+    0,
+    0,
+    50
+   ],
+   "tess_tol_mm": 0.05,
+   "triangles": 626,
+   "bytes": 31384,
+   "watertight": true,
+   "bbox_min": [
+    40.1,
+    -2.49,
+    0.75
+   ],
+   "bbox_max": [
+    45.1,
+    2.49,
+    10.7
+   ],
+   "sha256": "246c08c5abf504f2169523bd5dcad2d5ac2e8d9eb42bbfe2552360fd8ac797d3"
+  },
+  "pcb_r3": {
+   "file": "pcb_r3.stl",
+   "explode_mm": [
+    0,
+    0,
+    10
+   ],
+   "tess_tol_mm": 0.05,
+   "triangles": 824,
+   "bytes": 41284,
+   "watertight": true,
+   "bbox_min": [
+    3.9,
+    -12.5,
+    -1.0
+   ],
+   "bbox_max": [
+    74.6,
+    13.84,
+    3.5
+   ],
+   "sha256": "4e3f5101ad168e635e47d6929000d6482b434458f4ba0b4402deaa7602ac3fd5"
+  },
+  "akku": {
+   "file": "akku.stl",
+   "explode_mm": [
+    0,
+    0,
+    -12
+   ],
+   "tess_tol_mm": 0.05,
+   "triangles": 12,
+   "bytes": 684,
+   "watertight": true,
+   "bbox_min": [
+    15.5,
+    -15.0,
+    -7.5
+   ],
+   "bbox_max": [
+    55.5,
+    15.0,
+    -2.5
+   ],
+   "sha256": "9b1d0c9a425707d040536e12c44a1ceaa024cf79cc19a41e6ce260cd30035a51"
+  }
+ }
+}

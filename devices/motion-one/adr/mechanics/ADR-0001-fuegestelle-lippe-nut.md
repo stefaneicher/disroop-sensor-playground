@@ -30,3 +30,6 @@ Interaktive Quelle: [media/ADR-0001-fuegestelle.html](media/ADR-0001-fuegestelle
 - Mechanik setzt um und verifiziert Kollision, FEM und Slice auf dem neuen Stand (Handoff mechanical-engineer r3).
 - Passprobe am realen Druck: NOT RUN.
 - Anleitungen/Renderings zeigen die Fuge (docs-media).
+
+## Nachtrag 2026-11-08: Nut-Spiel für SLS
+Nach mechanics/ADR-0002 wird in SLS PA12 gefertigt, Toleranz ±0.2 mm (QUELLE JLC3DP). Das Spiel je Seite wird deshalb von 0.2 auf **0.25 mm** erhöht (`params.py`). Für den Eigendruck in FDM bleibt 0.2 mm eine Option.

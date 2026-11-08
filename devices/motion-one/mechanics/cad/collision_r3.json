@@ -1,0 +1,18 @@
+{
+ "board_step": "electronics/kicad/motion-one/export/motion-one-board.step",
+ "n_board_solids": 60,
+ "tol_mm3": 0.01,
+ "pairs": [
+  {
+   "shell": "oberschale",
+   "part": "J1",
+   "vol_mm3": 2.192
+  }
+ ],
+ "clearance_min": {
+  "tastenkappe": 0.3,
+  "lichtleiter": 0.2
+ },
+ "collisions": 1,
+ "status": "FAIL"
+}

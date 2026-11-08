@@ -10,8 +10,27 @@ sys.path.insert(0, os.path.dirname(__file__))
 import params as P
 
 DEV = "devices/motion-one"
-CAD, PRN = f"{DEV}/mechanics/cad", f"{DEV}/mechanics/print"
+OUT = os.environ.get("MO_OUT", DEV)   # F-08: Ausgabe nach /tmp moeglich (danach zurueckkopieren)
+CAD, PRN = f"{OUT}/mechanics/cad", f"{OUT}/mechanics/print"
 V = cq.Vector
+FAST = "--fast" in sys.argv          # F-08: nur Vorschau (grobe Tessellierung, kein STEP); Release unveraendert
+BATCH = os.environ.get("MO_BATCH", "0") == "1"   # F-08: Booleans gesammelt (eine Operation, Fuzzy) statt Schleife
+FUZZY = 1e-4                          # mm, Fuzzy-Wert gesammelter Booleans
+NPROC = int(os.environ.get("MO_NPROC", "1"))     # F-08: Prozesse fuer Teile (7 GB RAM -> max. 4)
+TIMES = []
+_T0 = time.perf_counter()
+
+
+def tick(label):
+    TIMES.append((label, round(time.perf_counter() - _T0, 2), os.getpid()))
+    print(f"[t] {TIMES[-1][1]:8.1f}s {label}", flush=True)
+
+
+try:   # F-08: OCC-Booleans mehrkernig
+    from OCP.BOPAlgo import BOPAlgo_Options
+    BOPAlgo_Options.SetParallelMode_s(os.environ.get("MO_OCCPAR", "0") == "1")
+except Exception as _e:
+    print("WARNUNG OCC-Parallelmodus nicht verfuegbar:", _e)
 
 _fa, _fbt, _fbb = (PchipInterpolator(P.PX, v) for v in (P.PA, P.PBT, P.PBB))
 
@@ -125,6 +144,17 @@ def safe_clean(s):
 
 
 def fuse_all(base, parts):
+    parts = [p for p in parts if p.Volume() >= 1e-6]
+    if BATCH and len(parts) > 1:
+        try:
+            r = base.fuse(*parts, tol=FUZZY)
+            r = r if r.isValid() else r.fix()
+            if r.isValid() and base.Volume() - 1e-3 <= r.Volume() <= base.Volume() + sum(p.Volume() for p in parts) + 1e-3 \
+                    and len(r.Solids()) <= len(base.Solids()):
+                return safe_clean(r)
+        except Exception as e:
+            print("  Batch-Fusion fehlgeschlagen, Schleife:", e)
+        print("  Batch-Fusion verworfen -> Schleife")
     for p in parts:
         if p.Volume() < 1e-6:
             continue
@@ -139,6 +169,15 @@ def fuse_all(base, parts):
 
 
 def cut_all(base, parts):
+    if BATCH and len(parts) > 1:
+        try:
+            r = base.cut(*parts, tol=FUZZY)
+            r = r if r.isValid() else r.fix()
+            if r.isValid() and 1 < r.Volume() <= base.Volume() + 1e-3 and len(r.Solids()) <= len(base.Solids()):
+                return safe_clean(r)
+        except Exception as e:
+            print("  Batch-Schnitt fehlgeschlagen, Schleife:", e)
+        print("  Batch-Schnitt verworfen -> Schleife")
     for p in parts:
         try:
             r = base.cut(p)
@@ -167,6 +206,34 @@ def cut_all(base, parts):
         else:
             print("WARNUNG Schnitt verworfen:", p.Center())
     return safe_clean(base)
+
+
+def clip_all(adds, o):
+    """F-08: alle Zusatzkoerper in EINEM Intersect gegen die Loft-Aussenhaut (Compound); Fallback einzeln."""
+    if BATCH and len(adds) > 1:
+        try:
+            r = cq.Compound.makeCompound(adds).intersect(o)
+            sol = r.Solids()
+            ref = sum(a.Volume() for a in adds)
+            if r.isValid() and 0 < r.Volume() <= ref + 1e-3:
+                return list(sol)
+        except Exception as e:
+            print("  Batch-Intersect fehlgeschlagen:", e)
+    return [a.intersect(o) for a in adds]
+
+
+def load_board():
+    """F-08: Board-STEP r3 einmal importieren, als BREP cachen (Schluessel SHA-256 der STEP-Datei)."""
+    import hashlib
+    src = P.BOARD_STEP if os.path.exists(P.BOARD_STEP) else f"{DEV}/{P.BOARD_STEP}"
+    h = hashlib.sha256(open(src, "rb").read()).hexdigest()[:16]
+    cdir = os.environ.get("MO_CACHE", "/tmp/mo_cache"); os.makedirs(cdir, exist_ok=True)
+    cf = f"{cdir}/board_{h}.brep"
+    if os.path.exists(cf):
+        return cq.Shape.importBrep(cf)
+    c = cq.Compound.makeCompound(cq.importers.importStep(src).solids().vals())
+    c.exportBrep(cf)
+    return c
 
 
 BX = P.BOARD_X0          # Board-Ursprung x (Geraet)
@@ -286,13 +353,13 @@ def groove():
 def top_shell(shell):
     top = shell.intersect(box(-5, P.L + 5, -40, 40, P.Z_S, 40))
     o = OUTER
-    adds = [cyl(sx, sy, 0, 40, P.BOSS_D_INS).intersect(o) for sx, sy in P.SCREWS]
+    adds = [cyl(sx, sy, 0, 40, P.BOSS_D_INS) for sx, sy in P.SCREWS]
     ribs = [(cx, sg) for cx in P.CLAMP_X for sg in (-1, 1)] + [(cx, 1) for cx in P.CLAMP_X_POS] + [(cx, -1) for cx in P.CLAMP_X_NEG]
     for cx, sgn in ribs:   # Klemmrippen: Unterkante auf Board-Oberseite (Randstreifen |y| 11..12.5)
         if True:
             y0, y1 = (BCY - P.BOARD_EDGE_KEEPOUT, 30) if sgn > 0 else (-30, -(BCY - P.BOARD_EDGE_KEEPOUT))
-            adds.append(box(cx - P.RIB_T / 2, cx + P.RIB_T / 2, y0, y1, 0.02, 40).intersect(o))   # 0.02: vermeidet koplanare Flaeche (OCC-Fehler)
-    top = fuse_all(top, adds)
+            adds.append(box(cx - P.RIB_T / 2, cx + P.RIB_T / 2, y0, y1, 0.02, 40))   # 0.02: vermeidet koplanare Flaeche (OCC-Fehler)
+    top = fuse_all(top, clip_all(adds, o))
     cuts = [cyl(sx, sy, -1, P.INS_HOLE_DEPTH, P.INS_D_HOLE) for sx, sy in P.SCREWS]
     cuts.append(cyl(BTN[0], BTN[1], 0, 40, P.CAP_D + 2 * P.CAP_CLR))
     cuts.append(cyl(LED[0], LED[1], 0, 40, P.LP_D + 2 * P.LP_CLR))
@@ -314,7 +381,7 @@ def bottom_shell(shell, variant):
     g, t = P.BAT_GAP, P.RIB_T
     bx0, bx1, by = P.BAT_X0 - g, P.BAT_X0 + bl + g, bw / 2 + g
     zb_top = P.Z_BB
-    adds = [cyl(sx, sy, -40, 0, P.BOSS_D_SCREW).intersect(o) for sx, sy in P.SCREWS]
+    adds = [cyl(sx, sy, -40, 0, P.BOSS_D_SCREW) for sx, sy in P.SCREWS]
     # Akkurahmen (Oberkante = Board-Unterseite -> Board-Auflage); Kabeldurchlass in der Stirnwand am Kopfende
     adds += [box(bx0 - t, bx0, -by - t, by + t, -40, zb_top), box(bx1, bx1 + t, -by - t, -6, -40, zb_top),
              box(bx1, bx1 + t, 6, by + t, -40, zb_top),
@@ -341,7 +408,7 @@ def bottom_shell(shell, variant):
         floor = [box(x0, x1, -P.RIB_T / 2, P.RIB_T / 2, -40, -(max(dims(xx)[2] for xx in np.arange(x0, x1, 2.0)) - P.W - h))]
         adds += floor
     clip = o
-    bot = fuse_all(bot, [a.intersect(clip) for a in adds])
+    bot = fuse_all(bot, clip_all(adds, clip))
     bot = safe_clean(bot.intersect(box(-5, P.L + 5, -40, 40, -40, P.Z_S)))
     bot = fuse_all(bot, [lip().intersect(clip)])   # ADR-0001 Lippe (ragt bis +LIP_H ueber die Trennebene)
     print(f'  {variant}: nach Fusion V={bot.Volume():.0f} valid={bot.isValid()}')
@@ -398,8 +465,7 @@ def components():
 
 def board_r3():
     """Board-STEP r3 (pcb-engineer) in Geraetekoordinaten: x+BX, y-BCY, z-1 (Board-Unterseite z=-1)."""
-    s = cq.importers.importStep(P.BOARD_STEP if os.path.exists(P.BOARD_STEP) else f"{DEV}/{P.BOARD_STEP}")
-    return cq.Compound.makeCompound(s.solids().vals()).translate(V(BX, -BCY, P.Z_BB))
+    return load_board().translate(V(BX, -BCY, P.Z_BB))
 
 
 def to_print(shape, flip):
@@ -425,6 +491,24 @@ def min_section_radius():
     return dict(section_r_min=rmin, section_r_min_at=where, end_ellipse_r_min=min(r_end, r_end_meridian))
 
 
+_SHELL = None
+
+
+def _build_part(job):
+    t = time.perf_counter()
+    r = top_shell(_SHELL) if job == "top" else bottom_shell(_SHELL, job)
+    tick(f"Teil {job} {time.perf_counter() - t:.1f}s")
+    return r
+
+
+def _part_job(job):
+    r = _build_part(job)
+    d = os.environ.get("MO_CACHE", "/tmp/mo_cache"); os.makedirs(d, exist_ok=True)
+    pth = f"{d}/part_{job}_{os.getpid()}.brep"
+    r.exportBrep(pth)
+    return pth
+
+
 def main():
     global OUTER, MOTOR_Z0
     t0 = time.time()
@@ -437,9 +521,21 @@ def main():
     jb = joint_band().intersect(OUTER)
     print(f"Fuegeband V={jb.Volume():.0f} valid={jb.isValid()}")
     shell = fuse_all(shell, [jb])
-    top = top_shell(shell)
+    tick("Schale+Fuegeband")
+    global _SHELL
+    _SHELL = shell
+    jobs = ["top"] + list(P.VARIANTS)
+    if NPROC > 1:   # F-08: je Teil ein Prozess (fork erbt Schale), Rueckgabe als BREP-Datei
+        import multiprocessing as mp
+        with mp.get_context("fork").Pool(min(NPROC, len(jobs))) as pool:
+            paths = pool.map(_part_job, jobs)
+        res_parts = {j: cq.Shape.importBrep(pth) for j, pth in zip(jobs, paths)}
+    else:
+        res_parts = {j: _build_part(j) for j in jobs}
+    top = res_parts["top"]
     print(f"Oberschale V={top.Volume():.0f} valid={top.isValid()} ({time.time()-t0:.1f}s)")
-    bots = {v: bottom_shell(shell, v) for v in P.VARIANTS}
+    bots = {v: res_parts[v] for v in P.VARIANTS}
+    tick("Teile fertig")
     for v, b in bots.items():
         print(f"Unterschale {v}: V={b.Volume():.0f} valid={b.isValid()} ({time.time()-t0:.1f}s)")
     cap, capinfo = cap_geom()
@@ -452,11 +548,13 @@ def main():
     for v, b in bots.items():
         parts[f"unterschale_{v}"] = (b, False)   # ADR-0001: Lippe muss nach oben zeigen -> Aussenboden aufs Bett (Support aussen)
     for name, (s, flip) in parts.items():
-        cq.exporters.export(cq.Workplane().add(s), f"{CAD}/{name}.step")
+        if not FAST:
+            cq.exporters.export(cq.Workplane().add(s), f"{CAD}/{name}.step")
         ps = to_print(s, flip)
         base = f"{PRN}/varianten/{name}" if name.startswith("unterschale") and not name.endswith(P.CHOSEN) else f"{PRN}/{name}"
         for ext in ("stl", "3mf"):
-            cq.exporters.export(cq.Workplane().add(ps), f"{base}.{ext}", tolerance=0.02, angularTolerance=0.1)
+            cq.exporters.export(cq.Workplane().add(ps), f"{base}.{ext}", tolerance=0.2 if FAST else 0.02,
+                                angularTolerance=0.5 if FAST else 0.1)
         bb = ps.BoundingBox()
         cm = s.Center()
         res["parts"][name] = dict(volume_mm3=s.Volume(), valid=s.isValid(), print_bbox=[bb.xlen, bb.ylen, bb.zlen],
@@ -475,9 +573,13 @@ def main():
     asm.add(board_r3(), name="board_r3", color=cq.Color(0.1, 0.5, 0.2))
     for name, (s, flip) in parts.items():   # BREP exakt (fuer FEM/Kollision; STEP-Reimport der Schalen ungueltig)
         s.exportBrep(f"{CAD}/{name}.brep")
-    asm.save(f"{CAD}/motion-one_baugruppe.step")
+    tick("Export STL/3MF/BREP")
+    if not FAST:
+        asm.save(f"{CAD}/motion-one_baugruppe.step")
+    tick("Baugruppe STEP")
     res["chosen_variant"] = P.CHOSEN
     res["runtime_s"] = time.time() - t0
+    res["f08"] = dict(batch=BATCH, nproc=NPROC, fast=FAST, times=TIMES)
     json.dump(res, open(f"{CAD}/cad_results.json", "w"), indent=2)
     print(json.dumps({k: v for k, v in res.items() if k != "parts"}, indent=1))
     for k, v in res["parts"].items():
