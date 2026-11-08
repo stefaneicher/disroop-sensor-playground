@@ -35,6 +35,7 @@ engineering-evidence, firmware-ble-workflow.
 - Skills: `engineering-evidence` immer, dazu die unten genannten (`.github/skills/<name>/SKILL.md`).
 - Neue Zahlen mit Einheit, Revision und Belegpfad in deinen Handoff; der Manager übernimmt sie in `management/metrics.json`.
 - **Nicht warten, nicht anhalten:** Lange Läufe im Vordergrund mit ausreichendem Timeout (bis 600 s, danach Log selbst pollen) ausführen. Beende deine Runde nie mit „Ich warte“, solange Arbeit offen ist; arbeite selbständig bis zum Handoff. Schwere Builds in einer Kopie unter `/tmp` statt auf `/mnt/c`, Zwischenergebnisse cachen, unabhängige Teile parallel bauen.
+- **Timebox:** Jeder Auftrag hat ein Zeitbudget (Standard 90 min). Nach 30 min Zwischenstand in den Handoff; ist das Budget erreicht, Stand sichern, Handoff PARTIAL schreiben und aufhören statt weiter zu probieren.
 - Nach drei erfolglosen Reparaturversuchen ohne neue Information: Diagnose sichern und als BLOCKED melden.
 
 ## Handoff-Format
