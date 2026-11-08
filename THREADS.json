@@ -1,6 +1,6 @@
 {
  "project": "disroop-sensor-playground",
- "updated": "2026-11-08T11:25+01:00",
+ "updated": "2026-11-08T11:39+01:00",
  "threads": [
   {
    "id": "T-01",
@@ -101,7 +101,7 @@
    "title": "Beschaffung V1",
    "kind": "task",
    "owner": "manager",
-   "status": "open"
+   "status": "running"
   },
   {
    "id": "F-03",
@@ -110,8 +110,8 @@
    "kind": "feedback",
    "topic": "Beschaffung",
    "owner": "pcb-engineer",
-   "status": "open",
-   "note": "Wartet auf User-Freigabe zum Start."
+   "status": "running",
+   "note": "Gestartet 11:39: Angebote PCBA+3D-Druck (JLC/JLC3DP, PCBWay, EU, Schweiz), J2 JST-SH in BOM, Upload-Pakete + Anleitung für User-Upload (kein Login durch Agent)."
   },
   {
    "id": "T-03",
@@ -202,6 +202,14 @@
   {
    "t": "11:25",
    "msg": "F-05, F-06 archiviert (User im Board)"
+  },
+  {
+   "t": "11:32",
+   "msg": "Präsentation Zwischenbericht r3 eingecheckt (media/presentation)"
+  },
+  {
+   "t": "11:39",
+   "msg": "T-02 gestartet: pcb-engineer holt Angebote inkl. Schweizer Optionen, baut Upload-Pakete"
   }
  ],
  "session": "2161f388-0bc4-4170-b315-b3a7921669eb"
