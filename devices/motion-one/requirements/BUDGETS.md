@@ -14,10 +14,22 @@ Vollständige Ausgabe: `requirements/budgets_output.md` (alle Zahlen dort mit Ke
 | Drift 60 s | Yaw ungestützt 2,73° worst case (Temp 1,5° + Rest-Bias 1,2°) | knapp < 3°, Rekalibrierung per Lang-Druck |
 | BLE-Durchsatz | Quaternion 16 B + Raw 18 B, 200 Notif./s, 3,4 kB/s; Funkzeit 13 % des CI | MTU 23 genügt; CI 7,5–15 ms; ≤ 200 Notif./s (JOURNAL.md:21) |
 | Latenz | im Gerät 2,8 typ. / 6,0 worst ms; bis Bildschirm 45 / 113 ms | Ziel < 10 ms im Gerät erfüllt (rechnerisch) |
-| Leistung | Spiel 4,72 mA (6,13 mit ×1,3); 10 Hz 1,07 mA; Advertising 0,09 mA; Aus 5 µA | 500 mAh → 65 h Spiel; für 6 h reichen 46 mAh |
+| Leistung (Systemmodell) | Spiel 4,72 mA (6,13 mit ×1,3); 10 Hz 1,07 mA; Advertising 0,09 mA; Aus 5 µA | 500 mAh mit 80 % nutzbar und ×1,3 Reserve → 65 h; für 6 h reichen 46 mAh |
 | Laden | 250 mA (0,5 C), ~2,5–3 h | ≤ 1 C |
 
 Akkuvorschlag: 1S-LiPo 500 mAh mit Schutz (ANNAHME 503040-Klasse ~10 g); Laufzeit ist kein Treiber, Grösse folgt Griffvolumen und Alterung.
+
+## PCB-Gegenrechnung und konservative Annahme
+
+Das detaillierte PCB-Leistungsbudget kommt auf **8,1 mA** und **49 h** mit 500 mAh × 80 % nutzbarer Kapazität
+(`electronics/analysis/ANALYSE_V1.md`, BERECHNUNG). Das liegt unter dem Systemmodell von 65 h, weil die beiden Modelle
+andere ANNAHMEN für MCU-/Funk-Mittelstrom sowie Tastverhältnisse von LED, Summer und Motor verwenden. Die PCB-Gegenrechnung
+enthält beispielsweise 5,0 mA Modulstrom und 1,0 mA LED-Mittelstrom; das Systemmodell rechnet MCU und Funk getrennt mit
+insgesamt rund 1,56 mA und modelliert andere Aktor-Tastgrade (`requirements/budgets_output.md` §6).
+
+Für Planung und Anforderung REQ-040 gilt daher **49 h als konservativer Rechenwert**; das Laufzeitziel ≥ 6 h besteht in
+beiden Modellen rechnerisch. Beide Zahlen bleiben BERECHNUNG, bis Stromaufnahme und Laufzeit am realen Gerät gemessen
+sind. Die Verbrauchsannahmen sind vor Fertigungsfreigabe zu vereinheitlichen.
 
 ## Quellen
 

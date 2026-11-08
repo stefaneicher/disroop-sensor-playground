@@ -51,7 +51,7 @@ Web-Quellen (Abruf 2026-11-07): [FLEISIG] Fleisig et al. 2003, Sports Biomech 2(
 
 | ID | Anforderung | Wert | Kennz. | Beleg | Verifikation | Status |
 |---|---|---|---|---|---|---|
-| REQ-040 | Laufzeit Spielmodus | ≥ 6 h (berechnet 65 h mit 500 mAh, Reserve ×1,3, 80 % nutzbar) | BERECHNUNG | PROMPT_1 §6; budgets_output.md §6 | Entladetest | NOT RUN |
+| REQ-040 | Laufzeit Spielmodus | ≥ 6 h (konservativer PCB-Rechenwert 49 h; separates Systemmodell 65 h mit 500 mAh, 80 % nutzbar) | BERECHNUNG | `electronics/analysis/ANALYSE_V1.md` §1; `requirements/budgets_output.md` §6; Annahmenvergleich in `requirements/BUDGETS.md` | Stromprofil vereinheitlichen; Entladetest | NOT RUN |
 | REQ-041 | 1S-LiPo mit Schutzschaltung, Vorschlag 500 mAh (503040-Klasse) | 500 mAh | ANNAHME | Budget braucht ≥ 46 mAh; Grösse nach Griffvolumen, Reserve für Alterung/Motor | Wareneingang | NOT RUN |
 | REQ-042 | Laden über USB-C 5 V, ≤ 1 C, Vorschlag 0,5 C | 250 mA | BERECHNUNG | budgets_output.md §6 | Ladekurve | NOT RUN |
 | REQ-043 | Ladezeit | ≤ 3 h | BERECHNUNG | budgets_output.md §6 (CV-Phase ANNAHME) | Ladekurve | NOT RUN |

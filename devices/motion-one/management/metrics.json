@@ -75,6 +75,15 @@
       "status": "NOT RUN (no battery/hardware measurement)"
     },
     {
+      "name": "calculated_runtime_game_mode_system_model",
+      "value": 65,
+      "unit": "h",
+      "classification": "BERECHNUNG (system model; different current and actuator-duty assumptions)",
+      "revision": "Systems V1",
+      "evidence": "requirements/budgets_output.md",
+      "status": "NOT RUN (superseded for planning by conservative PCB estimate; no hardware measurement)"
+    },
+    {
       "name": "calculated_off_current_max",
       "value": 6,
       "unit": "uA",
