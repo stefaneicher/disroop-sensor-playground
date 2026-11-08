@@ -36,7 +36,7 @@
   {
    "id": "T-01.3",
    "parent": "T-01",
-   "title": "Gehäuse r3: Kollision, FEM-Netzstudie, Slice",
+   "title": "Gehäuse r3: Kollision, Fügestelle, Slice (FEM pausiert)",
    "kind": "task",
    "owner": "mech-r3",
    "status": "running",
@@ -158,6 +158,18 @@
    "topic": "Prozess & Doku",
    "owner": "manager",
    "status": "done"
+  },
+  {
+   "id": "F-07",
+   "parent": "T-01.3",
+   "title": "FEM pausiert (für das Gerät nicht wichtig)",
+   "kind": "feedback",
+   "topic": "Gehäuse & Gestaltung",
+   "owner": "user",
+   "status": "done",
+   "source": "Chat 11:24",
+   "refs": [],
+   "note": "Stand: fem/fem_results.json 03:43, alte Geometrie v1; keine r3-Netzstudie. Wiederaufnahme nur auf Wunsch."
   }
  ],
  "log": [
@@ -180,6 +192,10 @@
   {
    "t": "11:24",
    "msg": "Q-01, Q-02 archiviert (vom User im Board); Antwort weiterhin offen"
+  },
+  {
+   "t": "11:24",
+   "msg": "FEM pausiert (User); mech-r3 informiert"
   }
  ],
  "session": "2161f388-0bc4-4170-b315-b3a7921669eb"

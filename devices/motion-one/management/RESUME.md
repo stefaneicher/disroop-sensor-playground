@@ -39,3 +39,6 @@ Stand 2026-11-08 06:45 CET. This is the authoritative task resume for Motion One
 - Agents use the roles in `.github/agents/` as instructions but are general-purpose subagents until the user restarts Copilot CLI; do not claim the Custom-Agent runtime was verified.
 - No purchasing, payment, hardware flashing, power-on testing, or account login without the user's explicit action/approval.
 - Commits go directly to `main` and include the Copilot co-author trailer.
+
+## FEM (2026-11-08)
+PAUSIERT auf User-Entscheid („für das Gerät nicht so wichtig“). Letzter Stand: `mechanics/fem/fem_results.json` (03:43, Geometrie v1). r3-Netzstudie nicht gerechnet; nur auf Wunsch wieder aufnehmen.
