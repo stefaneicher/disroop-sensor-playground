@@ -1,0 +1,67 @@
+{
+ "print/oberschale": {
+  "before": {
+   "watertight": false,
+   "open": 128508,
+   "nonmanifold": 0
+  },
+  "after": {
+   "watertight": false,
+   "open": 2248,
+   "nonmanifold": 251,
+   "volume_mm3": null
+  }
+ },
+ "print/unterschale_glatt": {
+  "before": {
+   "watertight": false,
+   "open": 122547,
+   "nonmanifold": 0
+  },
+  "after": {
+   "watertight": false,
+   "open": 2018,
+   "nonmanifold": 130,
+   "volume_mm3": null
+  }
+ },
+ "assembly_stl/oberschale": {
+  "before": {
+   "watertight": false,
+   "open": 28974,
+   "nonmanifold": 0
+  },
+  "after": {
+   "watertight": false,
+   "open": 1010,
+   "nonmanifold": 7,
+   "volume_mm3": null
+  }
+ },
+ "assembly_stl/unterschale_glatt": {
+  "before": {
+   "watertight": false,
+   "open": 36849,
+   "nonmanifold": 0
+  },
+  "after": {
+   "watertight": false,
+   "open": 538,
+   "nonmanifold": 0,
+   "volume_mm3": null
+  }
+ },
+ "assembly_stl/pcb_r4": {
+  "before": {
+   "watertight": false,
+   "open": 149034,
+   "nonmanifold": 0
+  },
+  "after": {
+   "watertight": false,
+   "open": 0,
+   "nonmanifold": 53,
+   "volume_mm3": null
+  }
+ }
+}
