@@ -12,7 +12,7 @@ const $ = <T extends HTMLElement = HTMLElement>(id: string): T => {
 export const STROKE: Record<Stroke, string> = { forehand: 'Vorhand', backhand: 'Rückhand', slice: 'Slice' };
 const TIMING: Record<Timing | 'weit', string> = { früh: 'zu früh', perfekt: 'perfekt', spät: 'zu spät', weit: 'zu weit weg' };
 
-export type Badge = 'live' | 'sim' | 'off';
+export type Badge = 'live' | 'sim' | 'phone' | 'off';
 
 export class Hud {
   private readonly el = {
@@ -47,7 +47,7 @@ export class Hud {
   }
 
   badge(b: Badge): void {
-    const text = b === 'live' ? 'LIVE' : b === 'sim' ? 'SIM' : 'TASTATUR';
+    const text = b === 'live' ? 'LIVE' : b === 'sim' ? 'SIM' : b === 'phone' ? 'HANDY' : 'TASTATUR';
     if (this.cache.get(this.el.badge) === text) return;
     this.set(this.el.badge, text);
     this.el.badge.className = `badge ${b}`;

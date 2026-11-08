@@ -1,133 +1,119 @@
-# disroop-sensor-playground
+# disroop Playground
 
-**Ein kleiner Sensor-Würfel wird zum Gamecontroller:** Der Nordic Thingy:52 schickt seine Sensordaten per Bluetooth live an ein Dashboard. Er dient als Tennisschläger, und auf der Lauberhorn-Abfahrt lenkst du damit den Skifahrer.
+**Die Spielkonsole, die KI gebaut hat.** Spiele, die man mit Bewegung steuert: per Handy, mit dem Sensor-Würfel
+Thingy:52 oder mit unserem eigenen Controller Motion One. Gebaut von KI-Agenten, von der Leiterplatte bis zum
+Spiel. Alle Werkzeuge laufen in Docker und CI.
 
-> **Was ist der Thingy:52?** Ein etwa 6 × 6 cm grosses Entwicklungsboard von Nordic Semiconductor im Gummigehäuse. Es enthält einen nRF52832-Chip mit Bluetooth LE und NFC, eine Bewegungseinheit (Beschleunigung, Gyro, Kompass), Temperatur-, Feuchte- und Luftdrucksensor, Gas- und Farbsensor, Mikrofon, Lautsprecher, eine RGB-LED und einen Taster. Foto und Datenblatt: [Nordic Thingy:52 – Produktseite](https://www.nordicsemi.com/Products/Development-hardware/Nordic-Thingy-52), [Werksfirmware auf GitHub](https://github.com/NordicSemiconductor/Nordic-Thingy52-FW).
-
-Das Projekt hat drei Teile. Der Thingy läuft dabei immer mit der **Werksfirmware**, Flashen ist nicht nötig.
-
-### 1. Sensorübersicht mit Verwendungszwecken
-
-Alle Sensorwerte laufen per Bluetooth LE live ins Terminal, in ein Web-Dashboard und in eine Android-App. Zu jedem Sensor erklärt das Dashboard, wofür man ihn braucht (ⓘ). Der Thingy spielt dazu „Highway to Hell“, die LED blinkt mit.
-
-![Web-Dashboard](docs/img/dashboard.png)
-*Web-Dashboard im Simulator-Modus (`thingy.exe --sim`). Mobile-Ansicht: [docs/img/dashboard-mobile.png](docs/img/dashboard-mobile.png)*
-
-<img src="docs/img/android-live-top.png" width="240" alt="Android-App: Verbindung, Lied & LED, Umgebung"> <img src="docs/img/android-live-motion.png" width="240" alt="Android-App: Bewegung"> <img src="docs/img/android-live-sound.png" width="240" alt="Android-App: Kompass & Lage, Mikrofon & Taster">
-
-*Android-App im Simulator-Modus. Die Bilder erzeugt `./project android screenshots`.*
-
-### 2. Tennis
-
-<img src="docs/img/tennis.png" width="640" alt="Tennis: Flutlicht-Platz in 3rd-Person-Ansicht">
-
-*Tennis im Browser, der Thingy ist der Schläger: `thingy.exe tennis` (live) oder `thingy.exe tennis --sim`. In der Android-App über „🎾 Tennis“. Mehr in [docs/TENNIS.md](docs/TENNIS.md).*
-
-### 3. Skiabfahrt
+> KI baut nicht nur Software. Sie kommt in der physischen Welt an. Die Spiele sind der Köder, die durchgehende
+> Kette Hardware → Firmware → Funk → Software → Spiel ist der Beweis.
 
 <img src="docs/img/ski-lauberhorn.png" width="640" alt="Ski: Lauberhorn-Abfahrt mit Netzen, Toren und Publikum">
 
-*Abfahrt auf Lauberhorn und Streif, der Thingy ist der Lenker: kippen = lenken, Nase runter = Hocke, Ruck = Sprung. http://127.0.0.1:8052/ski oder in der Android-App über „⛷ Ski“. Mehr in [docs/SKI.md](docs/SKI.md).*
+## In einer Minute spielen
 
-> **Keine Firmware, kein Flashen, kein Debugger.** Für dieses Projekt wird keine Firmware gebaut. Der Thingy läuft unverändert mit der Nordic-Werksfirmware (v2.x). Unsere Software ist ein reiner **BLE-Client**:
-> - **Empfangen:** Sie abonniert die GATT-Notifications des Thingy (Sensordaten) und dekodiert sie.
-> - **Senden:** Sie schreibt Befehle in GATT-Characteristics: Ton für das Lied, LED-Farbe, Sensor-Intervalle, NFC-Inhalt.
->
-> Das hat Grenzen: Es geht nur, was die Werksfirmware anbietet. So ist z. B. die Mikrofon-Abtastrate fest auf 16 kHz. Deshalb ist die Lautstärkemessung standardmässig aus, sie würde die BLE-Verbindung überlasten.
->
-> ```
-> Thingy:52 (Werks-FW) ──BLE──▶ thingy.exe (Windows) ──▶ Terminal + Web-Dashboard :8052
->                      ──BLE──▶ Android-App ch.disroop.sensorplayground (direkt, Start per NFC)
-> ```
+- **Im Browser:** [Startseite auf GitHub Pages](https://stefaneicher.github.io/disroop-sensor-playground/) → Ski oder Tennis, mit der Tastatur.
+- **Mit dem Handy:** Den Relay-Server starten (`./project relay image && ./project relay run`), das Spiel mit `?relay=same` öffnen und den QR-Code scannen. Handys brauchen HTTPS, siehe [relay/README.md](relay/README.md).
+- **Mit dem Thingy:52:** `./project play` (oder `--sim` ohne Hardware), siehe [docs/THINGY.md](docs/THINGY.md).
 
-## Features
+## Die Konsole
 
-- **`thingy.exe`** (Go, Windows): verbindet sich per BLE mit dem Thingy und zeigt alle Werte live im Terminal:
-  - Beschleunigung, Gyro, Kompass, Kurs, Euler-Winkel, Lage, Tippen, Schritte
-  - Temperatur, Feuchte, Luftdruck, eCO₂/TVOC, Farbe
-  - Mikrofonpegel, Taster, Akku, RSSI
-- **Web-Dashboard** auf http://localhost:8052. Es ist in die exe eingebettet und bekommt die Daten live per Server-Sent Events. Es zeigt Charts, 3D-Lage und Kompass, und du kannst damit das Lied und die LED steuern.
-- **Lied:** „Highway to Hell“ (Refrain, 24 Noten) über den Thingy-Lautsprecher. Die LED-Farbe folgt der Tonhöhe. Starten und stoppen geht per Taster am Thingy, im Dashboard oder in der App.
-- **NFC:** `thingy.exe nfc` schreibt einen Android Application Record auf den NFC-Tag des Thingy. Hältst du das Handy an den Thingy, öffnet sich die App.
-- **Android-App** `ch.disroop.sensorplayground`: verbindet sich direkt per BLE und zeigt dieselben Werte. Sie hat einen eingebauten Simulator.
-- **Tennis** (`games/src/tennis/`, eigenes Programm): Tennis-Spiel mit three.js, der Thingy ist der Schläger. Schwung = Schlag, Neigen = laufen. Die Bridge liefert die Bewegung mit 100 Hz per WebSocket und spielt das Spiel unter `/tennis/` aus. Ohne Thingy mit Tastatur oder im Simulator spielbar. Dazu **Ski** (`games/src/ski/`): Lauberhorn und Streif in 3D, siehe [docs/SKI.md](docs/SKI.md).
-- **Simulator** (`--sim`) für Demos, Tests und CI ohne Hardware.
-- **Alles im Docker-Devcontainer:** Lokal wird ausser Docker nichts installiert.
+| Konsole | Im Repo |
+|---|---|
+| Gehäuse, Menü | [`console/`](console/): Startseite |
+| Spielkassetten | [`games/`](games/): Tennis, Ski; gemeinsame Eingabe in `games/src/input/` |
+| Controller | Tastatur, Handy (`games/src/pad/` + `relay/`), Thingy:52 (`hardware/thingy-bridge/`, `hardware/android/`), Motion One |
+| Online-Dienst | [`relay/`](relay/): verbindet Handys mit dem Spielbildschirm |
+| Zubehör | [`hardware/`](hardware/): Thingy-Bridge, Android-App, Motion One |
 
-## Quickstart
+Alle Controller liefern dasselbe Bewegungsformat (`MotionFrame`, [docs/protocol.md](docs/protocol.md)). Den
+Spielen ist egal, woher die Bewegung kommt.
 
-**Voraussetzungen**
-- Windows 11 mit WSL2 (Ubuntu) und Docker in WSL
-- Bluetooth-LE-Adapter unter Windows
-- Thingy:52 mit Werksfirmware, geladen. Zum Aufwecken den Knopf drücken.
+## Systemlandschaft
 
-**Im Repo-Ordner unter WSL:**
-
-```bash
-./project image          # Devcontainer-Image bauen (einmalig, dauert einige Minuten)
-./project build          # build/thingy.exe, build/thingy-linux, build/disroop-sensor-playground-debug.apk
-./project bridge run     # thingy.exe auf Windows starten: Terminal-Live-Ansicht + Web-GUI
+```mermaid
+flowchart TB
+  subgraph DEV[Entwicklung]
+    REPO[Git-Repo<br/>Code, Doku, Agenten]
+    DC[Devcontainer<br/>Docker-Toolchain]
+    GHA[GitHub Actions<br/>CI, Pages, Release]
+  end
+  subgraph OUT[Auslieferung]
+    PAGES[GitHub Pages<br/>Konsole, Spiele]
+    REL[GitHub Releases<br/>thingy.exe, APK]
+    RELAY[Relay-Server<br/>Go, Docker]
+  end
+  subgraph DEV2[Geräte und Programme]
+    PAD[Handy-Pad<br/>QR, Gyro]
+    BROWSER[Browser<br/>das Spiel]
+    EXE[thingy.exe<br/>Windows, BLE]
+    APP[Android-App<br/>BLE, NFC]
+  end
+  subgraph HW[Hardware]
+    THINGY[Thingy:52]
+    M1[Motion One]
+  end
+  REPO --> GHA
+  DC --> GHA
+  GHA --> PAGES
+  GHA --> REL
+  GHA -. Image .-> RELAY
+  PAGES --> BROWSER
+  PAD -- Bewegung --> RELAY
+  RELAY -- Bewegung --> BROWSER
+  THINGY -- BLE --> EXE
+  THINGY -- BLE --> APP
+  EXE -- WebSocket --> BROWSER
+  M1 -. folgt .-> EXE
 ```
 
-Dann im Browser http://localhost:8052 öffnen. `Strg+C` beendet die exe.
+<img src="docs/img/console-landschaft.png" width="720" alt="Animierte Systemlandschaft auf der Startseite">
 
-**Ohne Hardware:** `./project bridge run --sim` startet die exe mit dem Simulator.
+Die Startseite zeigt dieselbe Landschaft animiert. Was noch fehlt (Hosting des Relays, Deploy, Betrieb):
+[docs/KONZEPT_LANDSCHAFT.md](docs/KONZEPT_LANDSCHAFT.md).
 
-**Tennis:** `./project play` (echter Thingy) oder `./project play --sim` baut alles, startet `thingy.exe tennis` und öffnet http://127.0.0.1:8052/tennis/. Mit dem Invoke-CLI: `./t tennis.play [--sim]`. Anleitung: [docs/TENNIS.md](docs/TENNIS.md).
-
-> Die exe läuft über WSL-Interop **unter Windows**, weil WSL kein Bluetooth hat. Der Port lauscht nur auf `127.0.0.1` von Windows. Aus WSL brauchst du deshalb `curl.exe` statt `curl`, siehe [Troubleshooting](docs/TROUBLESHOOTING.md).
-
-## Android-App installieren
-
-1. APK bauen mit `./project android build`. Das ergibt `build/disroop-sensor-playground-debug.apk`. Ein GitHub-Release mit fertiger APK ist geplant, siehe [Releases](https://github.com/stefaneicher/disroop-sensor-playground/releases).
-2. Installieren:
-   - **Sideload:** APK aufs Handy kopieren, öffnen und „Unbekannte Apps installieren“ erlauben.
-   - **adb (Windows):** `adb install -r build\disroop-sensor-playground-debug.apk`
-3. Beim ersten Start die Berechtigung „Geräte in der Nähe“ (Bluetooth) erteilen.
-
-Die APK ist mit einem öffentlich eingecheckten Demo-Schlüssel signiert. Neuinstallationen über lokale und CI-Builds hinweg funktionieren deshalb. Für den produktiven Einsatz ist sie nicht gedacht.
-
-## NFC: Handy an den Thingy halten
-
-```bash
-./project bridge nfc             # Backup nach build/nfc-backup.hex, dann AAR "ch.disroop.sensorplayground" schreiben
-./project bridge nfc --restore   # Original-Inhalt (Nordic-App) aus dem Backup zurückschreiben
-```
-
-Der Thingy nimmt nur **eine** BLE-Verbindung an. Während `nfc` läuft, müssen `thingy.exe` und die App getrennt sein.
-
-## Projektstruktur
+## Ordner
 
 ```
-console/                Startseite (Landingpage auf GitHub Pages)
-games/                  Spiele im Browser (TypeScript + three.js, kein Bundler); die exe liefert sie unter /tennis/ aus
-  src/input/            Eingabe: Verbindung zur Bridge/App, Bewegungsframes, Kalibrierung, Gesten (Schwung)
-  src/tennis/           Tennis
-  src/ski/              Ski (Lauberhorn, Streif)
-  src/common/           Gemeinsames (FPS-Anzeige, Texturen)
+console/                Startseite (GitHub Pages und Relay)
+games/                  Spiele im Browser (TypeScript + three.js, kein Bundler)
+  src/input/            Eingabe: Bridge/App-Verbindung, Handy-Modus (relay.ts, phone.ts), Kalibrierung, Gesten
+  src/tennis/ src/ski/  die Spiele
+  src/pad/              Handy-Controller-Seite
+relay/                  Go-Server: Handys ↔ Spielbildschirm, liefert auch die Website aus (Docker)
 hardware/
-  thingy-bridge/        Go: thingy.exe (BLE, Decoder, Telemetrie, TUI, HTTP/SSE, Lied, NFC); web/ = Dashboard
-  android/              Android-App (Kotlin, Compose) + reines Kotlin-Modul :protocol
-  shared/               chorus.json (Lied), telemetry.example.json (Beispiel-Snapshot)
-  motion-one/           Eigener Controller „Disroop Motion One“ (PCB, Firmware, Gehäuse); Stand: [Resume](hardware/motion-one/management/RESUME.md)
-project, scripts/       CLI: ./project <befehl>, ruft scripts/<bereich>.sh auf (bridge, web, games, android)
-.devcontainer/          Toolchain-Image (Go, Node, JDK 21, Android SDK, Chromium)
-docs/                   Protokoll-Vertrag, Schema, Architektur, Anleitungen, Konzepte
-build/                  Build-Ausgaben (nicht im Git)
+  thingy-bridge/        Go: thingy.exe (BLE, Telemetrie, TUI, HTTP/SSE, Lied, NFC); web/ = Dashboard
+  android/              Android-App (Kotlin, Compose)
+  shared/               chorus.json (Lied), telemetry.example.json
+  motion-one/           Eigener Controller (PCB, Firmware, Gehäuse); Stand: hardware/motion-one/management/RESUME.md
+project, scripts/       CLI: ./project <bereich> <befehl>
+.devcontainer/          Toolchain-Image (Go, Node, JDK, Android SDK, Chromium)
+docs/                   Protokoll, Architektur, Anleitungen, Konzepte
 ```
 
-## Dokumentation
+## Entwickeln
 
-Die Übersicht findest du in [docs/index.md](docs/index.md):
+Lokal wird ausser Docker nichts installiert (Windows 11 mit WSL2 und Docker in WSL).
 
-- [Architektur](docs/ARCHITECTURE.md)
-- [Bedienung](docs/USAGE.md)
-- [Entwicklung](docs/DEVELOPMENT.md)
-- [Troubleshooting](docs/TROUBLESHOOTING.md)
-- [Protokoll-Vertrag](docs/protocol.md)
-- [Tennis](docs/TENNIS.md)
-- READMEs der Bereiche: [bridge](hardware/thingy-bridge/README.md), [web](hardware/thingy-bridge/web/README.md), [tennis](games/README.md), [android](hardware/android/README.md)
+```bash
+./project image          # Devcontainer-Image bauen (einmalig)
+./project test           # alle Tests: bridge, web, games, relay, android
+./project games test     # nur die Spiele
+./project relay test     # Relay: Go-Tests + Smoke mit Bildschirm und Pad im headless Chromium
+./project build          # thingy.exe und Android-APK
+```
 
-## Lizenz
+Mehr: [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), Übersicht in [docs/index.md](docs/index.md).
 
-© 2026 Stefan Eicher. Alle Rechte vorbehalten, siehe [LICENSE](LICENSE). „Highway to Hell“ ist hier nur als grobe Tonfolge des Refrains enthalten (`hardware/shared/chorus.json`).
+## Konzepte
+
+- [docs/KONZEPT_PLAYGROUND.md](docs/KONZEPT_PLAYGROUND.md): Framing als Spielkonsole, Publikum, Ordner, Umbenennung, Präsentation
+- [docs/KONZEPT_HANDY_CONTROLLER.md](docs/KONZEPT_HANDY_CONTROLLER.md): Handy per QR-Code, Skicross bis 20 Spieler
+- [docs/KONZEPT_LANDSCHAFT.md](docs/KONZEPT_LANDSCHAFT.md): Systemlandschaft, was fehlt
+
+## So wurde es gebaut
+
+Ein Mensch gibt die Richtung vor, KI-Agenten in festen Rollen bauen (Systems, Firmware, Leiterplatte, Mechanik,
+Docs & Media, siehe [.github/agents](.github/agents)). Fortschritt und Entscheide stehen in [JOURNAL.md](JOURNAL.md),
+[TODO.md](TODO.md) und [IDEEN.md](IDEEN.md).
+
+Für Firmen: [disroop.ch](https://disroop.ch)

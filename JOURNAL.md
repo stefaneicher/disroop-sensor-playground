@@ -85,3 +85,10 @@ Ski: kompakte Querformat-HUD, zweispaltiges Menü mit grossen Touch-Zielen, Test
 - `bridge/` → `hardware/thingy-bridge/` (Go-Modulpfad angepasst), `android/` → `hardware/android/`, `shared/` → `hardware/shared/`, `devices/motion-one/` → `hardware/motion-one/`, `index.html` → `console/index.html`.
 - `./project games` (Alias `tennis`), CI-Matrix `games`, Pages: Spiele unter `/games/`, Motion One unter `/hardware/motion-one/`. URLs der Bridge und App unverändert.
 - Lokal geprüft: games (typecheck, 55 Unit-Tests, Ski-Smoke), web (132 Unit-Tests, Smoke), Go (gofmt, alle Pakete getestet, Linux-Build, Bridge-Smoke bis auf den Tennis-Canvas-Check, der hier auch auf main scheitert: Chrome ohne passende Software-GL). Android nicht gebaut (kein SDK), Windows-exe nicht gebaut (Abhängigkeiten nicht erreichbar) – CI prüft.
+
+## 2026-11-08 Handy-Controller, Konsole, README
+- `relay/`: Go-Server (Räume mit 4-stelligem Code, Pads, Frames, Feedback, Ablauf nach 30 min, volle Puffer verwerfen), Dockerfile (Spiele + Pad + Server), `./project relay test|smoke|build|image|run`, CI-Matrix `relay` + Job `relay image`.
+- `games/src/input/phone.ts` (Sensoren → MotionFrame, Achsen je Bildschirmdrehung), `relay.ts`, `relayui.ts` (QR-Panel, qrcode-generator vendored), `MotionLink` mit `?relay=`; Pad-Seite `games/src/pad/` (Ziehen ersetzt fehlende Sensoren).
+- `scripts/site.sh` baut die Website für Pages und das Relay-Image.
+- Konsolen-Startseite neu (Kassetten, Controller-Leiter, animierte Landschaft, Making-of, Für Firmen), README neu, alte README → `docs/THINGY.md`.
+- Geprüft: 66 Unit-Tests games, Go-Tests relay (-race), Relay-Smoke im headless Chrome (Bildschirm + Pad in getrennten Browsern). Nicht geprüft: echtes Handy (HTTPS nötig), Docker-Image (kein Docker hier, CI baut es).

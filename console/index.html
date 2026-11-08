@@ -3,65 +3,250 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Disroop Sensor Playground</title>
+<title>disroop Playground – die Spielkonsole, die KI gebaut hat</title>
+<meta name="description" content="Spiele, die man mit Bewegung steuert: per Handy, Thingy:52 oder dem eigenen Controller Motion One. Von KI-Agenten gebaut, von der Leiterplatte bis zum Spiel.">
 <style>
-:root{--bg:#111827;--card:#1f2937;--line:#374151;--a:#65a30d;--b:#a3e635;--c:#2aa5a1;--mut:#9ca3af}
+:root{--bg:#111827;--card:#1f2937;--line:#374151;--a:#65a30d;--b:#a3e635;--c:#2aa5a1;--o:#ff6b35;--mut:#9ca3af;--fg:#f9fafb}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:#f9fafb;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;min-height:100vh;overflow-x:hidden}
-body::before,body::after{content:"";position:fixed;width:60vmax;height:60vmax;border-radius:50%;filter:blur(110px);opacity:.22;z-index:-1;animation:drift 18s ease-in-out infinite alternate}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;min-height:100vh;overflow-x:hidden}
+body::before,body::after{content:"";position:fixed;width:60vmax;height:60vmax;border-radius:50%;filter:blur(110px);opacity:.2;z-index:-1;animation:drift 18s ease-in-out infinite alternate}
 body::before{background:var(--a);top:-25vmax;left:-15vmax}
-body::after{background:var(--b);bottom:-30vmax;right:-20vmax;animation-delay:-9s;opacity:.2}
+body::after{background:var(--c);bottom:-30vmax;right:-20vmax;animation-delay:-9s}
 @keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
-.grid{position:fixed;inset:0;z-index:-1;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse at 50% 20%,#000 10%,transparent 70%);opacity:.5}
-main{max-width:1040px;margin:0 auto;padding:72px 24px 48px}
-.badge{display:inline-flex;gap:8px;align-items:center;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--b);border:1px solid var(--line);background:var(--card);padding:6px 14px;border-radius:99px;backdrop-filter:blur(8px)}
+.grid{position:fixed;inset:0;z-index:-1;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse at 50% 20%,#000 10%,transparent 70%);opacity:.45}
+main{max-width:1080px;margin:0 auto;padding:64px 24px 48px}
+a{color:var(--b)}
+.badge{display:inline-flex;gap:8px;align-items:center;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--b);border:1px solid var(--line);background:var(--card);padding:6px 14px;border-radius:99px}
 .badge i{width:8px;height:8px;border-radius:50%;background:var(--b);box-shadow:0 0 12px var(--b);animation:p 2s infinite}
 @keyframes p{50%{opacity:.3}}
-h1{font-size:clamp(2.6rem,8vw,5.2rem);line-height:1.02;margin:22px 0 18px;letter-spacing:-.03em;font-weight:800}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center}
+h1{font-size:clamp(2.6rem,7vw,4.8rem);line-height:1.02;margin:22px 0 16px;letter-spacing:-.03em;font-weight:800}
 h1 span{background:linear-gradient(90deg,var(--b),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
-.lead{max-width:620px;font-size:1.15rem;color:var(--mut);margin:0 0 56px}
-h2{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin:44px 0 16px;font-weight:600}
+.lead{max-width:600px;font-size:1.15rem;color:var(--mut);margin:0 0 28px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;font-weight:700;text-decoration:none;border:1px solid var(--line);color:var(--fg);background:var(--card)}
+.btn.primary{background:var(--b);color:#111827;border-color:var(--b)}
+.phone{border:1px solid var(--line);background:rgba(31,41,55,.85);border-radius:20px;padding:22px}
+.phone h3{margin:0 0 6px;font-size:1.05rem}
+.phone p{margin:0 0 12px;color:var(--mut);font-size:.95rem}
+.phone .steps{display:flex;gap:10px;margin:14px 0}
+.phone .steps div{flex:1;text-align:center;font-size:.8rem;color:var(--mut)}
+.phone .steps b{display:block;font-size:1.6rem;color:var(--fg)}
+.phone .live{display:none}
+.relay-on .phone .live{display:block}
+.relay-on .phone .soon{display:none}
+h2{font-size:clamp(1.5rem,3.4vw,2.1rem);margin:84px 0 6px;letter-spacing:-.01em}
+.kicker{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--c);font-weight:700;margin-top:84px}
+.kicker+h2{margin-top:4px}
+.sub{color:var(--mut);max-width:680px;margin:0 0 24px}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
-.card{position:relative;display:flex;flex-direction:column;gap:6px;padding:22px;border-radius:18px;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(10px);color:inherit;text-decoration:none;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s}
-.card::before{content:"";position:absolute;inset:0;background:radial-gradient(400px circle at var(--x,50%) var(--y,0%),rgba(163,230,53,.14),transparent 60%);opacity:0;transition:opacity .25s}
-.card:hover{transform:translateY(-4px);border-color:#65a30d;box-shadow:0 18px 50px -18px rgba(163,230,53,.35)}
-.card:hover::before{opacity:1}
-.ico{font-size:1.8rem;position:relative}
-.card b{font-size:1.2rem;position:relative}
-.card span{color:var(--mut);font-size:.93rem;position:relative}
-.card em{margin-top:auto;padding-top:12px;font-style:normal;color:var(--b);font-size:.85rem;position:relative}
-.card em::after{content:" →";transition:margin .2s}
-.card:hover em::after{margin-left:6px}
+.card{position:relative;display:flex;flex-direction:column;gap:6px;padding:22px;border-radius:18px;border:1px solid var(--line);background:var(--card);color:inherit;text-decoration:none;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(400px circle at var(--x,50%) var(--y,0%),rgba(163,230,53,.14),transparent 60%);opacity:0;transition:opacity .25s;pointer-events:none}
+a.card:hover{transform:translateY(-4px);border-color:var(--a);box-shadow:0 18px 50px -18px rgba(163,230,53,.35)}
+a.card:hover::before{opacity:1}
+.card.cart{border-top:6px solid var(--b)}
+.card.soon{opacity:.75;border-top-color:var(--line)}
+.ico{font-size:1.8rem}
+.card b{font-size:1.2rem}
+.card span{color:var(--mut);font-size:.93rem}
+.card em{margin-top:auto;padding-top:12px;font-style:normal;color:var(--b);font-size:.85rem}
+.card em::after{content:" →"}
+.ctrl{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.ctrl i{font-style:normal;font-size:.72rem;border:1px solid var(--line);border-radius:99px;padding:2px 8px;color:var(--mut)}
+.card .alt{font-size:.85rem;color:var(--o);text-decoration:none;display:none;margin-top:4px}
+.relay-on .card .alt{display:inline}
+.ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative}
+.ladder::before{content:"";position:absolute;left:6%;right:6%;top:34px;height:2px;background:linear-gradient(90deg,var(--b),var(--c),var(--o));opacity:.6}
+.step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.step .n{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--bg);border:2px solid var(--b);margin-bottom:10px}
+.step b{display:block;font-size:1.1rem}
+.step span{color:var(--mut);font-size:.9rem}
+.land{background:rgba(17,24,39,.6);border:1px solid var(--line);border-radius:20px;padding:12px}
+.land svg{display:block;width:100%;height:auto}
+.land text{font-family:inherit}
+.layer{opacity:0}
+.land.in .layer{animation:rise .7s cubic-bezier(.2,.7,.2,1) var(--d) both}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.land .sig{opacity:0}
+.land.in .sig{opacity:1;transition:opacity .4s 2.2s}
+.legend{display:flex;gap:18px;flex-wrap:wrap;color:var(--mut);font-size:.85rem;margin:10px 4px 2px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.agents{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.agent{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.agent b{display:block}
+.agent span{color:var(--mut);font-size:.88rem}
+.biz{margin-top:84px;padding:32px;border-radius:22px;border:1px solid var(--a);background:linear-gradient(135deg,rgba(101,163,13,.18),rgba(42,165,161,.12))}
+.biz h2{margin-top:0}
 footer{margin-top:72px;color:var(--mut);font-size:.85rem;border-top:1px solid var(--line);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-footer a{color:var(--b);text-decoration:none}
+footer a{text-decoration:none}
+@media (max-width:820px){.hero{grid-template-columns:1fr}.ladder{grid-template-columns:1fr 1fr}.ladder::before{display:none}}
+@media (prefers-reduced-motion:reduce){body::before,body::after,.badge i{animation:none}.layer,.land .sig{opacity:1!important;animation:none!important}.land animateMotion{display:none}}
 </style>
 </head>
 <body>
 <div class="grid"></div>
 <main>
-<div class="badge"><i></i>Showcase · KI-entwickelt</div>
-<h1>Disroop<br><span>Sensor Playground</span></h1>
-<p class="lead">Bewegung wird zum Controller: Spiele, die du mit der Hand steuerst, und das Handgerät Motion One, das sie antreibt.</p>
 
+<section class="hero">
+  <div>
+    <div class="badge"><i></i>Showcase · von KI gebaut</div>
+    <h1>disroop<br><span>Playground</span></h1>
+    <p class="lead">Die Spielkonsole, die KI gebaut hat: Spiele, die du mit Bewegung steuerst – per Handy, mit dem Sensor-Würfel Thingy:52 oder mit unserem eigenen Controller Motion One. Von der Leiterplatte bis zum Skirennen.</p>
+    <div class="cta"><a class="btn primary" href="#spiele">Spielen</a><a class="btn" href="#haube">Unter der Haube</a></div>
+  </div>
+  <aside class="phone" aria-label="Mit dem Handy spielen">
+    <h3>📱 Mit dem Handy mitspielen</h3>
+    <p class="live">Ein Spiel mit Handy-Modus öffnen, QR-Code scannen, Handy quer halten – fertig. Keine App nötig.</p>
+    <p class="soon">Bald: QR-Code auf dem grossen Bildschirm scannen, und das Handy wird zum Controller. Keine App, keine Anmeldung.</p>
+    <div class="steps"><div><b>1</b>QR scannen</div><div><b>2</b>Namen tippen</div><div><b>3</b>kippen und fahren</div></div>
+    <a class="btn primary live" id="phone-go" href="games/ski/?relay=same">Ski mit Handy starten</a>
+  </aside>
+</section>
+
+<div class="kicker" id="spiele">Kassetten</div>
 <h2>Spiele</h2>
+<p class="sub">Jedes Spiel versteht dieselben Gesten: kippen, schwingen, Hocke, Sprung, Knopf. Welcher Controller sie liefert, ist dem Spiel egal.</p>
 <div class="cards">
-<a class="card" href="games/"><div class="ico">🎾</div><b>Tennis</b><span>Schlagerkennung per Bewegungssensor.</span><em>Spielen</em></a>
-<a class="card" href="games/ski/"><div class="ico">⛷️</div><b>Ski</b><span>Rollwinkel steuert, Sprung per Trigger.</span><em>Spielen</em></a>
+  <div class="card cart"><div class="ico">⛷️</div><b>Ski</b><span>Lauberhorn und Streif. Kippen = lenken, Nase runter = Hocke, Ruck = Sprung.</span><div class="ctrl"><i>Tastatur</i><i>Handy</i><i>Thingy:52</i></div><a class="alt" href="games/ski/?relay=same">📱 mit Handy</a><em><a href="games/ski/" style="color:inherit;text-decoration:none">Spielen</a></em></div>
+  <div class="card cart"><div class="ico">🎾</div><b>Tennis</b><span>Flutlicht-Platz. Schwung = Schlag, Neigen = laufen.</span><div class="ctrl"><i>Tastatur</i><i>Handy</i><i>Thingy:52</i></div><a class="alt" href="games/?relay=same">📱 mit Handy</a><em><a href="games/" style="color:inherit;text-decoration:none">Spielen</a></em></div>
+  <div class="card cart soon"><div class="ico">🏁</div><b>Skicross</b><span>Bis zu 20 Handys fahren gleichzeitig auf dem grossen Bildschirm.</span><div class="ctrl"><i>Handy</i></div><em style="color:var(--mut)">in Planung</em></div>
+  <div class="card cart soon"><div class="ico">🧸</div><b>Kinderspiele</b><span>Mit Kindern erfunden, mit KI gebaut.</span><div class="ctrl"><i>Tastatur</i><i>Touch</i></div><em style="color:var(--mut)">kommt</em></div>
 </div>
 
-<h2>Gerät · Motion One</h2>
-<div class="cards">
-<a class="card" href="hardware/motion-one/media/presentation/ZWISCHENBERICHT_2026-11-08_r3.html"><div class="ico">📊</div><b>Zwischenbericht</b><span>Stand r3 mit interaktivem 3D-Modell.</span><em>Öffnen</em></a>
-<a class="card" href="hardware/motion-one/media/presentation/pcb_r3/"><div class="ico">🔌</div><b>Leiterplatte r3</b><span>Technische Präsentation der Elektronik.</span><em>Öffnen</em></a>
-<a class="card" href="hardware/motion-one/media/presentation/erweiterung_r4/"><div class="ico">🧩</div><b>Erweiterung r4</b><span>Erweiterungsstecker und Bedienplatine.</span><em>Öffnen</em></a>
-<a class="card" href="hardware/motion-one/media/presentation/GEHAEUSE_FERTIGUNG_SLS_2026-11-08.html"><div class="ico">🧱</div><b>Gehäuse &amp; SLS</b><span>Fertigung im Nylon-Pulverdruck.</span><em>Öffnen</em></a>
+<div class="kicker">Controller</div>
+<h2>Vom Handy bis zum eigenen Gerät</h2>
+<p class="sub">Vier Stufen, vier Controller – und jede Stufe zeigt ein Stück mehr von dem, was dahintersteckt.</p>
+<div class="ladder">
+  <div class="step"><div class="n">1</div><b>Tastatur</b><span>Sofort spielbar, im Browser, ohne alles.</span></div>
+  <div class="step"><div class="n" style="border-color:var(--o)">2</div><b>Handy</b><span>QR-Code scannen, Gyro und Beschleunigung steuern. Läuft über unseren Relay-Server.</span></div>
+  <div class="step"><div class="n" style="border-color:var(--c)">3</div><b>Thingy:52</b><span>Echte Embedded-Sensorik: Bluetooth LE mit 100 Hz, über thingy.exe oder die Android-App.</span></div>
+  <div class="step"><div class="n" style="border-color:var(--c)">4</div><b>Motion One</b><span>Unser eigener Controller – Leiterplatte, Firmware und Gehäuse von KI-Agenten entworfen.</span></div>
 </div>
 
-<footer><span>© Disroop · Sensor Playground</span><a href="https://github.com/stefaneicher/disroop-sensor-playground">Quellcode auf GitHub</a></footer>
+<div class="kicker" id="haube">Unter der Haube</div>
+<h2>Die ganze Landschaft</h2>
+<p class="sub">Vier Ebenen, ein Repository. Ein Bewegungssignal läuft vom Gerät bis ins Spiel – und alles darüber wird automatisch gebaut, getestet und ausgeliefert.</p>
+<div class="land" id="land">
+<svg viewBox="0 0 1000 540" role="img" aria-labelledby="land-t land-d">
+  <title id="land-t">Systemlandschaft des disroop Playground</title>
+  <desc id="land-d">Entwicklung (Git-Repo, Devcontainer, GitHub Actions) liefert über GitHub Pages, GitHub Releases und den Relay-Server aus. Geräte und Programme: Handy-Pad, Browser, thingy.exe, Android-App. Hardware: Thingy:52 und Motion One.</desc>
+  <defs>
+    <style>
+      .ly{fill:rgba(31,41,55,.55);stroke:#374151}
+      .lt{fill:#f9fafb;font-size:17px;font-weight:700}
+      .ls{fill:#9ca3af;font-size:12px}
+      .bx{fill:#1f2937;stroke:#4b5563}
+      .bt{fill:#f9fafb;font-size:15px;font-weight:600;text-anchor:middle}
+      .bs{fill:#9ca3af;font-size:12px;text-anchor:middle}
+      .nw{fill:rgba(255,107,53,.14);stroke:#ff6b35}
+      .hw{fill:rgba(42,165,161,.14);stroke:#2aa5a1}
+      .wire{fill:none;stroke:#4b5563;stroke-width:1.5;stroke-dasharray:4 5}
+    </style>
+  </defs>
+
+  <g class="layer" style="--d:.0s">
+    <rect class="ly" x="10" y="10" width="980" height="112" rx="16"/>
+    <text class="lt" x="30" y="44">Entwicklung</text><text class="ls" x="30" y="64">Werkstatt</text>
+    <rect class="bx" x="200" y="38" width="220" height="60" rx="10"/><text class="bt" x="310" y="64">Git-Repo</text><text class="bs" x="310" y="84">Code, Doku, Agenten</text>
+    <rect class="bx" x="450" y="38" width="220" height="60" rx="10"/><text class="bt" x="560" y="64">Devcontainer</text><text class="bs" x="560" y="84">ganze Toolchain in Docker</text>
+    <rect class="bx" x="700" y="38" width="270" height="60" rx="10"/><text class="bt" x="835" y="64">GitHub Actions</text><text class="bs" x="835" y="84">testen, bauen, ausliefern</text>
+  </g>
+
+  <g class="layer" style="--d:.35s">
+    <rect class="ly" x="10" y="142" width="980" height="112" rx="16"/>
+    <text class="lt" x="30" y="176">Auslieferung</text><text class="ls" x="30" y="196">Schaufenster</text>
+    <rect class="bx" x="200" y="170" width="220" height="60" rx="10"/><text class="bt" x="310" y="196">GitHub Pages</text><text class="bs" x="310" y="216">Konsole und Spiele</text>
+    <rect class="bx" x="450" y="170" width="220" height="60" rx="10"/><text class="bt" x="560" y="196">GitHub Releases</text><text class="bs" x="560" y="216">thingy.exe, Android-App</text>
+    <rect class="bx nw" x="700" y="170" width="270" height="60" rx="10"/><text class="bt" x="835" y="196">Relay-Server</text><text class="bs" x="835" y="216">Handys ↔ Spiel, Go in Docker</text>
+  </g>
+
+  <g class="layer" style="--d:.7s">
+    <rect class="ly" x="10" y="274" width="980" height="112" rx="16"/>
+    <text class="lt" x="30" y="308">Geräte und</text><text class="lt" x="30" y="328">Programme</text>
+    <rect class="bx nw" x="200" y="302" width="170" height="60" rx="10"/><text class="bt" x="285" y="328">Handy-Pad</text><text class="bs" x="285" y="348">QR, Gyro</text>
+    <rect class="bx" x="390" y="302" width="170" height="60" rx="10" style="stroke:#a3e635"/><text class="bt" x="475" y="328">Browser</text><text class="bs" x="475" y="348">das Spiel</text>
+    <rect class="bx" x="580" y="302" width="170" height="60" rx="10"/><text class="bt" x="665" y="328">thingy.exe</text><text class="bs" x="665" y="348">Windows, BLE</text>
+    <rect class="bx" x="770" y="302" width="200" height="60" rx="10"/><text class="bt" x="870" y="328">Android-App</text><text class="bs" x="870" y="348">BLE, NFC-Start</text>
+  </g>
+
+  <g class="layer" style="--d:1.05s">
+    <rect class="ly" x="10" y="406" width="980" height="112" rx="16"/>
+    <text class="lt" x="30" y="440">Hardware</text><text class="ls" x="30" y="460">physische Welt</text>
+    <rect class="bx hw" x="580" y="434" width="170" height="60" rx="10"/><text class="bt" x="665" y="460">Thingy:52</text><text class="bs" x="665" y="480">Sensor-Würfel</text>
+    <rect class="bx hw" x="770" y="434" width="200" height="60" rx="10"/><text class="bt" x="870" y="460">Motion One</text><text class="bs" x="870" y="480">PCB, Firmware, Gehäuse</text>
+  </g>
+
+  <g class="sig">
+    <path id="p-build1" class="wire" d="M835 98 L835 170"/>
+    <path id="p-build2" class="wire" d="M835 98 C835 134 560 134 560 170"/>
+    <path id="p-build3" class="wire" d="M835 98 C835 134 310 134 310 170"/>
+    <path id="p-thingy" class="wire" d="M665 434 L665 362 M580 332 L560 332"/>
+    <path id="p-thingy-m" d="M665 434 L665 340 L560 332" fill="none" stroke="none"/>
+    <path id="p-app" class="wire" d="M750 464 C800 420 870 400 870 362"/>
+    <path id="p-phone" class="wire" d="M285 302 C285 262 835 272 835 230 M835 230 C835 272 475 262 475 302"/>
+    <path id="p-phone-m" d="M285 302 C285 262 835 272 835 230 C835 272 475 262 475 302" fill="none" stroke="none"/>
+    <path class="wire" d="M870 434 L870 362" style="stroke:#2aa5a1;stroke-dasharray:2 6"/>
+
+    <circle r="6" fill="#a3e635"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#p-build1"/></animateMotion></circle>
+    <circle r="6" fill="#a3e635"><animateMotion dur="2.4s" begin=".8s" repeatCount="indefinite"><mpath href="#p-build2"/></animateMotion></circle>
+    <circle r="6" fill="#a3e635"><animateMotion dur="2.4s" begin="1.6s" repeatCount="indefinite"><mpath href="#p-build3"/></animateMotion></circle>
+    <circle r="7" fill="#2aa5a1"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#p-thingy-m"/></animateMotion></circle>
+    <circle r="6" fill="#2aa5a1"><animateMotion dur="2.2s" begin=".5s" repeatCount="indefinite"><mpath href="#p-app"/></animateMotion></circle>
+    <circle r="7" fill="#ff6b35"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#p-phone-m"/></animateMotion></circle>
+  </g>
+</svg>
+<div class="legend"><span><i style="background:#a3e635"></i>Bauen und ausliefern</span><span><i style="background:#2aa5a1"></i>Bewegung vom Thingy</span><span><i style="background:#ff6b35"></i>Bewegung vom Handy (neu)</span><span><i style="border:2px dotted #2aa5a1"></i>Motion One: Anbindung folgt</span></div>
+</div>
+
+<div class="kicker">Making-of</div>
+<h2>So wurde es gebaut</h2>
+<p class="sub">Ein Mensch gibt die Richtung vor, KI-Agenten in festen Rollen bauen – mit Tests, Journal und Nachweisen im Repository. Alle Werkzeuge laufen in Docker, nichts wird lokal installiert.</p>
+<div class="agents">
+  <div class="agent"><b>Systems</b><span>Anforderungen, Schnittstellen, Integration</span></div>
+  <div class="agent"><b>Firmware</b><span>Zephyr, Bluetooth LE, Sensorfusion</span></div>
+  <div class="agent"><b>Leiterplatte</b><span>KiCad, Schaltplan, Layout, Fertigung</span></div>
+  <div class="agent"><b>Mechanik</b><span>Gehäuse, CAD, 3D-Druck</span></div>
+  <div class="agent"><b>Docs &amp; Media</b><span>Anleitungen, Renderings, Präsentationen</span></div>
+</div>
+<div class="cards" style="margin-top:16px" id="motion-one">
+  <a class="card" href="hardware/motion-one/media/presentation/ZWISCHENBERICHT_2026-11-08_r3.html"><div class="ico">📊</div><b>Zwischenbericht Motion One</b><span>Stand r3 mit interaktivem 3D-Modell.</span><em>Öffnen</em></a>
+  <a class="card" href="hardware/motion-one/media/presentation/pcb_r3/"><div class="ico">🔌</div><b>Leiterplatte r3</b><span>Technische Präsentation der Elektronik.</span><em>Öffnen</em></a>
+  <a class="card" href="hardware/motion-one/media/presentation/erweiterung_r4/"><div class="ico">🧩</div><b>Erweiterung r4</b><span>Erweiterungsstecker und Bedienplatine.</span><em>Öffnen</em></a>
+  <a class="card" href="hardware/motion-one/media/presentation/GEHAEUSE_FERTIGUNG_SLS_2026-11-08.html"><div class="ico">🧱</div><b>Gehäuse &amp; SLS</b><span>Fertigung im Nylon-Pulverdruck.</span><em>Öffnen</em></a>
+</div>
+
+<section class="biz">
+  <h2>Das können wir auch für euch</h2>
+  <p class="sub" style="margin-bottom:16px">Vom Sensor bis zur App, von der Pipeline bis zum Produkt: Wir zeigen, wie KI-Agenten Software und Embedded-Entwicklung beschleunigen – an eurem Projekt.</p>
+  <a class="btn primary" href="https://disroop.ch">disroop.ch</a>
+</section>
+
+<footer><span>© disroop · Playground</span><a href="https://github.com/stefaneicher/disroop-sensor-playground">Quellcode auf GitHub</a></footer>
 </main>
 <script>
-document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--x',e.clientX-r.left+'px');c.style.setProperty('--y',e.clientY-r.top+'px')}));
+// Relay im Einsatz? Dann zeigt die Konsole den Handy-Modus. PUBLIC_RELAY: öffentliche Relay-Adresse, sobald gehostet.
+const PUBLIC_RELAY = '';
+(async () => {
+  let relay = null;
+  try {
+    const r = await fetch('api/relay', { cache: 'no-store' });
+    if (r.ok && (await r.json()).relay) relay = 'same';
+  } catch {}
+  if (!relay && PUBLIC_RELAY) relay = PUBLIC_RELAY;
+  if (!relay) return;
+  document.body.classList.add('relay-on');
+  document.querySelectorAll('a[href*="relay=same"]').forEach((a) => (a.href = a.getAttribute('href').replace('relay=same', 'relay=' + encodeURIComponent(relay))));
+})();
+document.querySelectorAll('.card').forEach((c) => c.addEventListener('pointermove', (e) => {
+  const r = c.getBoundingClientRect();
+  c.style.setProperty('--x', e.clientX - r.left + 'px');
+  c.style.setProperty('--y', e.clientY - r.top + 'px');
+}));
+const land = document.getElementById('land');
+if ('IntersectionObserver' in window) {
+  new IntersectionObserver((es, o) => es.forEach((e) => { if (e.isIntersecting) { land.classList.add('in'); o.disconnect(); } }), { threshold: .25 }).observe(land);
+} else land.classList.add('in');
 </script>
 </body>
 </html>

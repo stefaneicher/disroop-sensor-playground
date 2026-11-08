@@ -25,6 +25,7 @@ b { color: var(--lime); }
 .badge { padding: 4px 10px; font-weight: 700; font-size: .8rem; letter-spacing: .05em; }
 .badge.live { color: #111827; background: var(--lime); border-color: var(--lime); }
 .badge.sim { color: #111827; background: var(--teal); border-color: var(--teal); }
+.badge.phone { color: #111827; background: #ff6b35; border-color: #ff6b35; }
 .badge.off { color: var(--warn); }
 .badge.cam { color: var(--muted); font-weight: 400; }
 .swing { position: absolute; top: 64px; right: 12px; padding: 8px 12px; font-size: .8rem; min-width: 210px; }

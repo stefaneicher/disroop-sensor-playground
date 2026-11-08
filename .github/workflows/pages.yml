@@ -26,12 +26,7 @@ jobs:
       - run: npm ci && npm run build
         working-directory: games
       - name: Seite zusammenstellen
-        run: |
-          mkdir -p _site/games _site/hardware/motion-one/media
-          cp console/index.html _site/
-          cp -r games/dist/. _site/games/
-          cp -r hardware/motion-one/media/presentation _site/hardware/motion-one/media/presentation
-          touch _site/.nojekyll
+        run: sh scripts/site.sh _site
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

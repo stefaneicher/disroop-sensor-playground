@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#0b1020">
+  <title>Handy-Controller · disroop Playground</title>
+  <link rel="icon" href="../disroop.png">
+  <link rel="stylesheet" href="pad.css">
+  <script type="module" src="../js/pad/main.js"></script>
+</head>
+<body>
+  <main id="setup" class="screen">
+    <img src="../disroop.png" alt="" width="48" height="48">
+    <h1>Handy-Controller</h1>
+    <p class="lead">Dein Handy steuert das Spiel auf dem grossen Bildschirm.</p>
+    <label>Raum-Code <input id="room" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="z. B. K7Q2"></label>
+    <label>Dein Name <input id="name" maxlength="16" autocomplete="nickname" placeholder="Spitzname"></label>
+    <button id="go" type="button">Los</button>
+    <p id="setup-msg" class="msg" role="status"></p>
+    <p class="fine">Es werden nur Bewegungsdaten an das Spiel geschickt, keine Personendaten.</p>
+  </main>
+
+  <main id="play" class="screen" hidden>
+    <div class="top"><span id="dot" class="dot"></span><b id="who">–</b><span id="room-label" class="muted"></span><span id="rate" class="muted"></span></div>
+    <div id="pad" class="pad" aria-label="Knopf">
+      <div class="tilt"><div id="bubble" class="bubble"></div></div>
+      <p id="hint">Handy quer und flach halten.<br>Kippen = lenken, nach vorne neigen = Hocke.<br>Bildschirm drücken = Knopf.</p>
+    </div>
+    <p id="play-msg" class="msg" role="status"></p>
+  </main>
+</body>
+</html>

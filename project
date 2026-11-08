@@ -21,11 +21,12 @@ usage() {
 Usage: ./project <command> [args]
 
   image                 build the devcontainer image (REBUILD=1 forces)
-  test                  run all tests (bridge, web, games, android)
+  test                  run all tests (bridge, web, games, relay, android)
   build                 build thingy.exe and the Android APK
   bridge <cmd> [args]   hardware/thingy-bridge/terminal/web commands  (see scripts/bridge.sh)
   web <cmd>             dashboard commands            (see scripts/web.sh)
   games <cmd>           games: Tennis, Ski, input (see scripts/games.sh; alias: tennis)
+  relay <cmd>           relay server for phones (see scripts/relay.sh)
   android <cmd>         Android commands              (see scripts/android.sh)
   run [args]            build and start thingy.exe (terminal + web on :8052)
   play [--sim]          build and start Tennis (thingy.exe tennis, opens /tennis/)
@@ -38,11 +39,11 @@ U
 cmd="${1:-help}"; shift || true
 case "$cmd" in
   image)   REBUILD=1 indev true ;;
-  test)    "$ROOT/scripts/bridge.sh" test; "$ROOT/scripts/web.sh" test; "$ROOT/scripts/games.sh" test; "$ROOT/scripts/android.sh" test ;;
+  test)    "$ROOT/scripts/bridge.sh" test; "$ROOT/scripts/web.sh" test; "$ROOT/scripts/games.sh" test; "$ROOT/scripts/relay.sh" test; "$ROOT/scripts/android.sh" test ;;
   build)   "$ROOT/scripts/bridge.sh" build; "$ROOT/scripts/android.sh" build ;;
   run)     "$ROOT/scripts/bridge.sh" run "$@" ;;
   play)    "$ROOT/scripts/bridge.sh" run tennis "$@" ;;
-  bridge|web|games|android) "$ROOT/scripts/$cmd.sh" "$@" ;;
+  bridge|web|games|relay|android) "$ROOT/scripts/$cmd.sh" "$@" ;;
   tennis)  "$ROOT/scripts/games.sh" "$@" ;;
   hw)      "$ROOT/hardware/motion-one/docker/hw.sh" "$@" ;;
   help|-h|--help) usage ;;

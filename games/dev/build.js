@@ -21,6 +21,11 @@ for (const f of ['build/three.module.js', 'build/three.core.js', 'LICENSE']) {
   cpSync(src, join(dist, 'vendor', 'three', f.replace('build/', '')));
 }
 
+// qrcode-generator (MIT): QR code for the phone mode (src/input/relayui.ts)
+const qr = join(root, 'node_modules', 'qrcode-generator');
+mkdirSync(join(dist, 'vendor', 'qrcode'), { recursive: true });
+cpSync(join(qr, 'dist', 'qrcode.mjs'), join(dist, 'vendor', 'qrcode', 'qrcode.js')); // .js: some servers (Android assets) lack a MIME type for .mjs
+
 // three/addons (examples/jsm) actually used by src/, plus their relative imports (walked recursively).
 const ADDONS = [
   'postprocessing/EffectComposer.js', 'postprocessing/RenderPass.js', 'postprocessing/UnrealBloomPass.js',

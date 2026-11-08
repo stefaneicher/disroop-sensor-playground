@@ -1,0 +1,7 @@
+# Build context for relay/Dockerfile (repo root): only games, console, relay and scripts are needed.
+.git
+build
+hardware
+docs
+**/node_modules
+games/dist

@@ -1,6 +1,6 @@
 # Konzept: Handy als Controller per QR-Code
 
-Status: **Konzept, entschieden als Richtung** (User, 2026-11-08). Aufgaben stehen in [`TODO.md`](../TODO.md) unter «Handy-Controller».
+Status: **Phase 1 umgesetzt** (2026-11-08): `relay/`, Pad-Seite `games/src/pad/`, Handy-Modus mit `?relay=` in Ski und Tennis. Offen: Hosting, echtes Handy testen, Stand-Modus, Skicross. Aufgaben stehen in [`TODO.md`](../TODO.md) unter «Handy-Controller».
 
 ## Idee
 

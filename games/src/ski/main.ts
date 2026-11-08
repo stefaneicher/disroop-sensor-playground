@@ -6,6 +6,7 @@ import { pitchDeg } from '../input/quat.ts';
 import { showFps } from '../common/fps.ts';
 import { radialTexture } from '../common/textures.ts';
 import { MotionLink } from '../input/link.ts';
+import { mountRelayPanel } from '../input/relayui.ts';
 import { COURSES } from './courses.ts';
 import { autopilot, newSkier, startSkier, stepSkier, type SkiInput, type SkierState, type World as PhysWorld } from './physics.ts';
 import { AlarmGate, checkSkiLimits, SKI_PITCH_DOWN_LIMIT_DEG, SKI_PITCH_UP_LIMIT_DEG, SKI_ROLL_LIMIT_DEG, type SkiLimitState } from './limits.ts';
@@ -204,6 +205,7 @@ function onFrame(f: MotionFrame): void {
 const link = new MotionLink(onFrame);
 showFps(() => `${Math.round(scale * 100)} %`);
 link.start();
+mountRelayPanel(link);
 
 function calibrate(leave = false): void {
   ctrl.calibrate();
@@ -399,9 +401,9 @@ function updateHud(): void {
   el.pen.textContent = sk.penalty > 0 ? `+${sk.penalty.toFixed(1)} s` : '–';
   el.sec.textContent = def.sections[track.sectionAt(sk.s)]!.name;
   el.tuck.style.width = `${Math.round(tuckSmooth * 100)}%`;
-  const badge = !live() ? 'TASTATUR' : link.source === 'sim' ? 'SIM' : 'LIVE';
+  const badge = !live() ? 'TASTATUR' : link.source === 'sim' ? 'SIM' : link.source === 'phone' ? 'HANDY' : 'LIVE';
   el.badge.textContent = badge;
-  el.badge.className = `badge ${badge === 'TASTATUR' ? 'off' : badge === 'SIM' ? 'sim' : 'live'}`;
+  el.badge.className = `badge ${badge === 'TASTATUR' ? 'off' : badge === 'SIM' ? 'sim' : badge === 'HANDY' ? 'phone' : 'live'}`;
   el.cam.textContent = CAM_LABEL[camMode];
   updateLimitUi();
   const now = performance.now();

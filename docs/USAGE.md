@@ -200,7 +200,7 @@ curl.exe -s -X POST -H "Content-Type: application/json" -d '{"r":255,"g":0,"b":0
   - Mikrofon & Taster
 - **Lied:** spielt in der App **einmal** durch, der Taster am Thingy startet und stoppt es.
 - **Kein Bluetooth/keine Berechtigung:** Die App zeigt einen Knopf „Bluetooth einschalten“ bzw. „Berechtigung erteilen“.
-- Installation: siehe [README](../README.md#android-app-installieren) und [hardware/android/README.md](../hardware/android/README.md).
+- Installation: siehe [README](THINGY.md#android-app-installieren) und [hardware/android/README.md](../hardware/android/README.md).
 
 ## Thingy aufwecken
 

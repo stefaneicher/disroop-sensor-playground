@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        area: [bridge, web, games, android]
+        area: [bridge, web, games, relay, android]
     steps:
       - uses: actions/checkout@v5
 
@@ -40,17 +40,41 @@ jobs:
         run: ./project ${{ matrix.area }} test
 
       - name: Build
-        if: matrix.area != 'web' && matrix.area != 'games'
+        if: matrix.area != 'web' && matrix.area != 'games' && matrix.area != 'relay'
         run: ./project ${{ matrix.area }} build
 
       - uses: actions/upload-artifact@v4
-        if: matrix.area != 'web' && matrix.area != 'games'
+        if: matrix.area != 'web' && matrix.area != 'games' && matrix.area != 'relay'
         with:
           name: ${{ matrix.area }}
           path: |
             build/thingy.exe
             build/disroop-sensor-playground-debug.apk
           if-no-files-found: error
+
+  relay-image:
+    name: relay image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-buildx-action@v3
+      - name: Relay-Image bauen (Spiele + Handy-Pad + Server)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: relay/Dockerfile
+          tags: disroop-relay
+          load: true
+          cache-from: type=gha,scope=relay
+          cache-to: type=gha,scope=relay,mode=max
+      - name: Smoke
+        run: |
+          docker run -d --name relay -p 8080:8080 disroop-relay
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:8080/healthz && break; sleep 1; done
+          curl -fsS http://127.0.0.1:8080/api/relay | grep -q '"relay":true'
+          curl -fsS http://127.0.0.1:8080/games/pad/ | grep -q 'pad'
+          curl -fsS http://127.0.0.1:8080/ | grep -q 'Playground'
+          docker rm -f relay
 
   release:
     name: Release

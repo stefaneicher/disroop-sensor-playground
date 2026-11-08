@@ -1,0 +1,29 @@
+:root { --bg: #0b1020; --fg: #e5e7eb; --muted: #94a3b8; --accent: #00a3e0; color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font: 16px/1.45 system-ui, -apple-system, Segoe UI, sans-serif; }
+body { -webkit-user-select: none; user-select: none; touch-action: none; overscroll-behavior: none; }
+.screen { min-height: 100%; padding: max(16px, env(safe-area-inset-top)) 20px 20px; display: flex; flex-direction: column; }
+#setup { max-width: 420px; margin: 0 auto; justify-content: center; gap: 14px; }
+#setup h1 { margin: 0; font-size: 1.6rem; }
+.lead { margin: 0; color: var(--muted); }
+label { display: flex; flex-direction: column; gap: 6px; font-size: .9rem; color: var(--muted); }
+input { font: inherit; font-size: 1.2rem; padding: 12px 14px; border-radius: 12px; border: 1px solid #334155; background: #111827; color: var(--fg); }
+#room { text-transform: uppercase; letter-spacing: .2em; font-family: ui-monospace, monospace; }
+button { font: inherit; font-weight: 700; font-size: 1.2rem; padding: 14px; border: 0; border-radius: 12px; background: var(--accent); color: #fff; }
+.msg { min-height: 1.4em; margin: 0; color: #fbbf24; }
+.fine { font-size: .75rem; color: var(--muted); margin: 0; }
+.top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.muted { color: var(--muted); font-size: .85rem; }
+.dot { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); flex: none; }
+.pad { flex: 1; margin-top: 12px; border-radius: 22px; border: 3px solid var(--accent); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; padding: 16px; background: rgba(255,255,255,.03); transition: background .08s; }
+.pad.down { background: rgba(255,255,255,.18); }
+.pad p { margin: 0; color: var(--muted); font-size: .95rem; }
+.tilt { width: 120px; height: 120px; border-radius: 50%; border: 2px solid #334155; position: relative; }
+.bubble { position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: var(--accent); }
+[hidden] { display: none !important; }
+#setup { overflow-y: auto; }
+@media (max-height: 460px) {
+  #setup { justify-content: flex-start; gap: 8px; }
+  #setup img, .lead, .fine { display: none; }
+  input, button { padding: 8px 12px; }
+}

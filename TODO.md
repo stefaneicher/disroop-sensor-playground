@@ -28,10 +28,10 @@ Status aller Punkte: **offen**.
 
 ### Handy-Controller per QR-Code (User, 2026-11-08, Konzept: [`docs/KONZEPT_HANDY_CONTROLLER.md`](docs/KONZEPT_HANDY_CONTROLLER.md))
 Status aller Punkte: **offen**.
-- [ ] (Pad) Pad-Seite `/pad`: Sensor-Freigabe per Tipp (iOS), Querformat, `deviceorientation`/`devicemotion` → `MotionFrame`, Touch = Taster, Vibration als Feedback.
-- [ ] (Relay) Kleines Go-Relay im Docker-Image: Räume mit Code, wss, Pad → Bildschirm, Ablauf nach Inaktivität, Tests mit Fake-Pads.
-- [ ] (Spiele) `MotionLink` um Quelle `phone` und Relay-Modus erweitern, Header-Badge «Handy».
-- [ ] (Spiele) QR-Code und Raum-Code im Menü von Ski und Tennis anzeigen.
+- [x] (Pad, 2026-11-08, im Browser per Smoke geprüft, nicht auf echtem Handy) Pad-Seite `/pad`: Sensor-Freigabe per Tipp (iOS), Querformat, `deviceorientation`/`devicemotion` → `MotionFrame`, Touch = Taster, Vibration als Feedback.
+- [x] (Relay, 2026-11-08, Go-Tests + Smoke; Docker-Image nur in CI gebaut) Kleines Go-Relay im Docker-Image: Räume mit Code, wss, Pad → Bildschirm, Ablauf nach Inaktivität, Tests mit Fake-Pads.
+- [x] (Spiele, 2026-11-08) `MotionLink` um Quelle `phone` und Relay-Modus erweitern, Header-Badge «Handy».
+- [x] (Spiele, 2026-11-08, als Panel unten rechts mit `?relay=`) QR-Code und Raum-Code im Menü von Ski und Tennis anzeigen.
 - [ ] (Ski) Achsen-Mapping und Kalibrierprofil fürs Handy, live mit iPhone und Android testen.
 - [ ] (Tennis) Prüfen, ob 60 Hz vom Handy für den Schwung reichen.
 - [ ] (Latenz) Latenz Handy → Bildschirm messen und anzeigen, Ziel unter 50 ms.
@@ -39,8 +39,8 @@ Status aller Punkte: **offen**.
 - [ ] (Skicross) Mehrspieler-Skicross bis 20 Handys: Lobby, Simulation auf dem Bildschirm, Strecke, Rangliste, optional Turnier.
 - [ ] (Umbau) Eigene Domain für Pages, dann Repo in `disroop-playground` umbenennen (Checkliste in `docs/KONZEPT_PLAYGROUND.md`).
 - [x] (Umbau) Ordner umgebaut (Tabelle alt → neu in `docs/KONZEPT_PLAYGROUND.md`), 2026-11-08, PR `umbau/playground-struktur`. Offen: `game.json` pro Spiel.
-- [ ] (Präsentation) Neue README und Konsolen-Startseite nach `docs/KONZEPT_PLAYGROUND.md`.
-- [ ] (Story) Animierte Übersichtszeichnung (Leiter + Architektur) für die Landingpage.
+- [x] (Präsentation, 2026-11-08) Neue README und Konsolen-Startseite nach `docs/KONZEPT_PLAYGROUND.md`.
+- [x] (Story, 2026-11-08, auf der Startseite) Animierte Übersichtszeichnung (Leiter + Architektur) für die Landingpage.
 - [ ] (Hosting) Relay-Hosting entscheiden (offene Frage im Konzept), Deployment in CI.
 
 ### Motion One (siehe `hardware/motion-one/management/RESUME.md`)

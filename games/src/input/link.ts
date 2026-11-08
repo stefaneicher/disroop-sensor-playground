@@ -1,8 +1,22 @@
-/** Connection to the bridge (or, inside the Android app, to the native BLE bridge `window.ThingyNative`): /api/motion (WebSocket), /api/state (source), /api/beep (hit feedback). */
+/**
+ * Connection to the motion source:
+ * - the bridge (thingy.exe): /api/motion (WebSocket), /api/state (source), /api/beep (hit feedback);
+ * - inside the Android app: the native BLE bridge `window.ThingyNative`;
+ * - with `?relay=` in the URL: phones via the relay server (QR code on screen, relay/README.md).
+ */
 import { parseFrame, type MotionFrame } from './motion.ts';
+import { relayOrigin, RelayScreen, type PadInfo } from './relay.ts';
 
 export type LinkStatus = 'connecting' | 'open' | 'closed';
-export type Source = 'ble' | 'sim' | null;
+export type Source = 'ble' | 'sim' | 'phone' | null;
+
+/** State of the phone mode, for the QR panel. */
+export interface RelayState {
+  origin: string;
+  room: string | null;
+  pads: PadInfo[];
+  active: number | null; // pad that controls the player (first one that joined)
+}
 
 /** Injected by the Android app (TennisActivity); it pushes frames and link state into the page. */
 interface NativeBridge { beep(kind: string): void }
@@ -26,6 +40,11 @@ export class MotionLink {
   private retry = 500;
   private lastBeep = 0;
 
+  relay: RelayState | null = null;
+  /** Called when room or players change (phone mode). */
+  onRelayChange: (() => void) | null = null;
+  private relayScreen: RelayScreen | null = null;
+
   private readonly onFrame: (f: MotionFrame) => void;
 
   constructor(onFrame: (f: MotionFrame) => void) {
@@ -34,6 +53,8 @@ export class MotionLink {
 
   start(): void {
     if (isNative()) return this.startNative();
+    const relay = new URLSearchParams(location.search).get('relay');
+    if (relay !== null) return this.startRelay(relay);
     if (location.protocol === 'file:') {
       this.status = 'closed';
       return;
@@ -55,6 +76,50 @@ export class MotionLink {
     window.__thingyLink = (source) => {
       this.source = source;
     };
+  }
+
+  private startRelay(param: string): void {
+    let origin: string;
+    try {
+      origin = relayOrigin(param, location.origin);
+    } catch {
+      this.status = 'closed';
+      return;
+    }
+    const st: RelayState = { origin, room: null, pads: [], active: null };
+    this.relay = st;
+    const changed = (): void => {
+      this.source = st.active !== null ? 'phone' : null;
+      this.onRelayChange?.();
+    };
+    this.relayScreen = new RelayScreen(origin, {
+      room: (code) => {
+        Object.assign(st, { room: code, pads: [], active: null });
+        this.status = 'open';
+        changed();
+      },
+      join: (p) => {
+        st.pads.push(p);
+        if (st.active === null) st.active = p.pad;
+        changed();
+      },
+      leave: (pad) => {
+        st.pads = st.pads.filter((p) => p.pad !== pad);
+        if (st.active === pad) st.active = st.pads[0]?.pad ?? null;
+        changed();
+      },
+      frame: (pad, f) => {
+        if (pad !== st.active) return;
+        this.frames++;
+        this.onFrame(f);
+      },
+      closed: () => {
+        this.status = 'connecting';
+        Object.assign(st, { room: null, pads: [], active: null });
+        changed();
+      },
+    });
+    this.relayScreen.start();
   }
 
   private connect(): void {
@@ -97,6 +162,10 @@ export class MotionLink {
     const now = performance.now();
     if (this.status !== 'open' || now - this.lastBeep < 120) return;
     this.lastBeep = now;
+    if (this.relayScreen) {
+      if (this.relay?.active != null) this.relayScreen.feedback(this.relay.active, kind);
+      return;
+    }
     if (window.ThingyNative) {
       window.ThingyNative.beep(kind);
       return;

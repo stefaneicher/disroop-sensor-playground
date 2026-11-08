@@ -7,6 +7,7 @@ import { Sfx } from './audio.ts';
 import { Hud, type Badge } from './hud.ts';
 import { showFps } from '../common/fps.ts';
 import { MotionLink } from '../input/link.ts';
+import { mountRelayPanel } from '../input/relayui.ts';
 import { LimitMonitor } from './limitsui.ts';
 import { Arena, CAMERAS, CAMERA_LABEL, type CameraMode } from './scene.ts';
 
@@ -59,6 +60,7 @@ const limits = new LimitMonitor(stage, ctrl, () => sfx.alarm(), () => calibrateN
 const link = new MotionLink(onFrame);
 showFps();
 link.start();
+mountRelayPanel(link);
 
 function live(): boolean {
   return link.status === 'open' && performance.now() - lastFrameAt < 1000;
@@ -66,7 +68,7 @@ function live(): boolean {
 
 function badge(): Badge {
   if (!live()) return 'off';
-  return link.source === 'sim' ? 'sim' : 'live';
+  return link.source === 'sim' ? 'sim' : link.source === 'phone' ? 'phone' : 'live';
 }
 
 // ---- menu ---------------------------------------------------------------
@@ -211,7 +213,7 @@ function frame(now: number): void {
   hud.hint(mode === 'play' ? hint : '');
   if (mode === 'calibrate') $('cal-live').textContent = ctrl.latest ? `Neigung: ${ctrl.roll().toFixed(0)}°` : 'Kein Thingy verbunden';
   $('m-status').textContent =
-    b === 'live' ? 'Thingy verbunden (LIVE)' : b === 'sim' ? 'Simulator verbunden (SIM)' : 'Kein Thingy – Tastatur: Leertaste schlägt, ←/→ laufen';
+    b === 'live' ? 'Thingy verbunden (LIVE)' : b === 'sim' ? 'Simulator verbunden (SIM)' : b === 'phone' ? 'Handy verbunden (HANDY)' : 'Kein Thingy – Tastatur: Leertaste schlägt, ←/→ laufen';
   if (game.phase === 'over' && mode === 'play') hud.update(game, now, 'Leertaste/Knopf = neues Match');
   else hud.update(game, now, mode === 'demo' ? 'Demo' : 'Bereit');
 
