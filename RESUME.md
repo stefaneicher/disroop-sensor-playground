@@ -9,7 +9,7 @@
 > der V1-Integration, die offenen Schritte und die Verifikationsgrenzen. Der folgende Resume-Text dokumentiert den
 > ursprünglichen Thingy:52-/Spielprojekt-Kontext und ist nicht der aktuelle Motion-One-Arbeitsstand.
 
-Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
+Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`. Danach [`TODO.md`](TODO.md) (offene Aufgaben) und [`IDEEN.md`](IDEEN.md) (unentschiedene Ideen) durchsehen und nachführen.
 
 ## Rolle und Arbeitsweise (Vorgaben des Users)
 - Die AI ist **Projektmanager**. Sie legt die nötigen Subagents an und hält den Haupt-Chat frei.
@@ -17,6 +17,8 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 - **Keine Fragen stellen**, ausser die Hardware ist nicht erreichbar (keine BLE-Verbindung).
 - **Alles wird im Devcontainer-Image gebaut** (`.devcontainer/`), auch von `./project` und der CI. Lokal wird nichts installiert.
 - Nach jedem sinnvollen Schritt JOURNAL.md, PROGRESS.md und RESUME.md nachführen, dann **direkt auf `main` committen und pushen** (keine Branches, keine PRs). Commit-Trailer: `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`.
+- **Synchron bleiben:** Zu Beginn jeder Session `git pull --rebase` (auf den Arbeits-Branch). Während der Arbeit nach jedem abgeschlossenen Schritt committen und pushen, mindestens alle paar Schritte, damit der User Änderungen laufend im Repo sieht. Vor dem Push erneut `git pull --rebase`; bei Konflikten nie überschreiben, sondern sauber auflösen.
+- `TODO.md` und `IDEEN.md` bei jeder neuen Aufgabe oder Idee des Users nachführen.
 - Antworten an den User kurz und auf Deutsch.
 
 ## Status-Board
