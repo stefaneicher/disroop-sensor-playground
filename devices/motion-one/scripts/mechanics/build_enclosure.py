@@ -14,7 +14,8 @@ OUT = os.environ.get("MO_OUT", DEV)   # F-08: Ausgabe nach /tmp moeglich (danach
 CAD, PRN = f"{OUT}/mechanics/cad", f"{OUT}/mechanics/print"
 V = cq.Vector
 FAST = "--fast" in sys.argv          # F-08: nur Vorschau (grobe Tessellierung, kein STEP); Release unveraendert
-BATCH = os.environ.get("MO_BATCH", "0") == "1"   # F-08: Booleans gesammelt (eine Operation, Fuzzy) statt Schleife
+BATCH_ENV = os.environ.get("MO_BATCH", "0") == "1"   # F-08/r4: Booleans gesammelt NUR fuer Unterschalen (Oberschale +9 % Fehler)
+BATCH = False                                         # aktiv je Teil, gesetzt in _build_part
 FUZZY = float(os.environ.get("MO_FUZZY", "0"))   # mm, OCC-Fuzzy-Wert (0 = aus, Baseline)
 NPROC = int(os.environ.get("MO_NPROC", "1"))     # F-08: Prozesse fuer Teile (7 GB RAM -> max. 4)
 TIMES = []
@@ -255,6 +256,25 @@ def usb_cuts():
             box(-2, rd, -rw / 2, rw / 2, USB_Z - rh / 2, USB_Z + rh / 2)]
 
 
+J5 = dev(P.J5_XY)        # r4 Erweiterungsstecker (Geraet x 63.1, y -9.15), Kante y=-BCY
+
+
+def j5_cuts():
+    """r4: Kabeldurchfuehrung J5 (Stecker bleibt innen): Schlitz durch die Wand, Steckertasche innen, 45-Grad-Fase aussen."""
+    x = J5[0]; w, z0, z1 = P.J5_SLOT
+    pw, pz0, pz1, pd = P.J5_POCKET
+    c = P.J5_CHAMF[0]
+    yo = -dims(x)[0]                       # Aussenkontur Trennebene (B)
+    zc, hz = (z0 + z1) / 2, (z1 - z0) / 2
+    slot = box(x - w / 2, x + w / 2, yo - 3, -BCY + 0.5, z0, z1)
+    pocket = box(x - pw / 2, x + pw / 2, -BCY - pd + 0.5, -BCY + 0.5, pz0, pz1)
+    def rect(y, e):
+        return cq.Wire.makePolygon([V(x - w / 2 - e, y, zc - hz - e), V(x + w / 2 + e, y, zc - hz - e),
+                                    V(x + w / 2 + e, y, zc + hz + e), V(x - w / 2 - e, y, zc + hz + e)], close=True)
+    fase = cq.Solid.makeLoft([rect(yo - 1.0, c + 1.0), rect(yo + c, 0.0)], True)
+    return [slot, pocket, fase]
+
+
 def cap_geom():
     """Tastenkappe in Geraetekoordinaten: Stoessel, 45-Grad-Kegel + Kragen (Verliersicherung), Koerper, Kuppe."""
     x, y = BTN
@@ -366,7 +386,7 @@ def top_shell(shell):
     sp = P.SOUND_PITCH
     for dx, dy in [(0, 0), (sp, 0), (-sp, 0), (0, sp), (0, -sp)]:
         cuts.append(cyl(BUZ[0] + dx, BUZ[1] + dy, 0, 40, P.SOUND_HOLES_D))
-    cuts += usb_cuts()
+    cuts += usb_cuts() + j5_cuts()
     sx, sy = dev(P.SW1_XY)   # r3: seitlicher Durchbruch SW1-Hebel (+y)
     wl, wz0, wz1 = P.SW1_WIN
     cuts.append(box(sx - wl / 2, sx + wl / 2, BCY - P.BOARD_EDGE_KEEPOUT + 0.5, 30, wz0, wz1))
@@ -389,10 +409,13 @@ def bottom_shell(shell, variant):
     adds += [box(bx0, bx1, cy - t / 2, cy + t / 2, -40, P.Z_BAT) for cy in P.CRADLE_Y]   # Wiegerippen
     for sx in P.BOARD_SUPPORT_X[:1]:
         adds.append(box(sx, P.BOARD_SUPPORT_X[1], -BCY, BCY, -40, zb_top))
-    # Muenzmotor: ebenes Podest + Ring (Motor unter dem Akku)
-    zm0 = MOTOR_Z0
-    adds.append(box(P.MOTOR_X - 6.2, P.MOTOR_X + 6.2, -6.2, 6.2, -40, zm0))
-    adds.append(cyl(P.MOTOR_X, 0, -40, zm0 + P.MOTOR_H - 0.4, P.MOTOR_D + 0.3 + 2 * P.RING_T))
+    # r4 Muenzmotor LCM0827: Sockel bis Akku-Unterseite - 0.3, Mulde D8.6 x 3.2 (F-10)
+    mx, my, mt = P.MOTOR_X, P.MOTOR_Y, P.MOTOR_POCKET_TOP
+    adds.append(box(mx - 6.0, mx + 6.0, my - 6.0, my + 6.0, -40, mt))
+    # r4 Board-Dom H2 (selbstschneidend M2, ADR-0004), Oberkante = Board-Unterseite
+    for hx, hy in P.H_DOME:
+        dx, dy = dev((hx, hy))
+        adds.append(cyl(dx, dy, -40, P.Z_BB, P.H_DOME_D))
     # Lanyard-Block
     ly = P.LANYARD
     adds.append(box(P.IN_END - 0.5, ly["x"] + 2.6, -6.5, 6.5, -40, ly["z_tunnel"] + 3.0))
@@ -417,12 +440,19 @@ def bottom_shell(shell, variant):
         cuts.append(cyl(sx, sy, -40, 1, P.D_THROUGH))
         cuts.append(cyl(sx, sy, -40, P.Z_CB, P.D_CBORE))
     cuts.append(box(bx0 + 0.013, bx1 - 0.017, -by + 0.011, by - 0.019, P.Z_BAT + 0.011, P.Z_S - 0.013))   # Akkufach freihalten (r3: nicht koplanar zu Wiegerippen, nicht in Lippe)
-    cuts.append(cyl(P.MOTOR_X, 0, zm0, 1, P.MOTOR_D + 0.3))
+    pd_, ph_ = P.MOTOR_POCKET
+    cuts.append(cyl(mx, my, mt - ph_, mt + 0.5, pd_))                       # Mulde
+    lw, ld = P.MOTOR_LEAD_CH                                                # Litzenkanal -y bis Akkurahmen, dann hoch zum Board
+    cuts.append(box(mx - lw / 2, mx + lw / 2, -by - t - 0.2, my, mt - ld, mt + 0.5))
+    cuts.append(box(mx - lw / 2, mx + lw / 2, -by - t - 0.2, -by + 0.3, mt - ld, P.Z_S - 0.013))
+    for hx, hy in P.H_DOME:
+        dx, dy = dev((hx, hy))
+        cuts.append(cyl(dx, dy, P.Z_BB - P.H_PILOT[1], 0.3, P.H_PILOT[0]))
     cuts.append(box(P.CABLE_NOTCH[0], P.CABLE_NOTCH[1], -by - t - 0.3, -by + 0.5, P.Z_BAT + 1.0, 0.5))   # r3 Kabelschlitz Akku -> J2
     for sy in (-ly["y"], ly["y"]):
         cuts.append(cyl(ly["x"], sy, -40, ly["z_tunnel"], ly["d"]))
     cuts.append(cq.Solid.makeCylinder(ly["d"] / 2, 2 * ly["y"] + ly["d"], V(ly["x"], -ly["y"] - ly["d"] / 2, ly["z_tunnel"]), V(0, 1, 0)))
-    cuts += usb_cuts()
+    cuts += usb_cuts() + j5_cuts()
     sx, sy = dev(P.SW1_XY)   # Lippe im SW1-Fenster unterbrechen
     hl = P.SW1_WIN[0] / 2 + P.SW1_LIP_GAP
     cuts.append(box(sx - hl, sx + hl, BCY - P.BOARD_EDGE_KEEPOUT + 0.5, 30, -0.3, P.LIP_H + 1))
@@ -431,9 +461,8 @@ def bottom_shell(shell, variant):
 
 
 def motor_z0():
-    # Podest-Oberkante: 0.8 mm ueber dem hoechsten Innenboden im Motorbereich, max. Akku-Unterseite - Motor - 1.0
-    zf = max(z_bot_out(x, y) + P.W for x in np.linspace(P.MOTOR_X - 6, P.MOTOR_X + 6, 13) for y in np.linspace(-6, 6, 7))
-    return min(zf + 0.8, P.Z_BAT - P.MOTOR_H - 1.0)
+    # r4: Motor-Unterseite = Muldengrund + 0.15 Klebepad (QUELLE Datenblatt 3M-Pad 0.15)
+    return P.MOTOR_POCKET_TOP - P.MOTOR_POCKET[1] + 0.15
 
 
 def components():
@@ -455,7 +484,10 @@ def components():
         ble=box(BLE[0] - 9, BLE[0] + 9, -6.5, 6.5, 0, P.BLE_SZ[2]),
         akku=box(P.BAT_X0, P.BAT_X0 + bl, -bw / 2, bw / 2, P.Z_BAT, P.Z_BAT + bh),
         schaum=box(P.BAT_X0, P.BAT_X0 + bl, -bw / 2, bw / 2, P.Z_BAT + bh, P.Z_BB),
-        motor=cyl(P.MOTOR_X, 0, MOTOR_Z0, MOTOR_Z0 + P.MOTOR_H, P.MOTOR_D),
+        motor=cyl(P.MOTOR_X, P.MOTOR_Y, MOTOR_Z0, MOTOR_Z0 + P.MOTOR_H, P.MOTOR_D),
+        j5=box(J5[0] - P.J5_ENV[0] / 2, J5[0] + P.J5_ENV[0] / 2, -BCY, -BCY + P.J5_ENV[1], 0, P.J5_ENV[2]),
+        j5_stecker=box(J5[0] - P.J5_PLUG[0] / 2, J5[0] + P.J5_PLUG[0] / 2, -BCY - P.J5_PLUG[1], -BCY, 0, P.J5_PLUG[2]),
+        schraube_h2=cyl(*dev(P.H_DOME[0]), P.Z_BB - P.H_PILOT[1] + 0.5, P.SCREW_HEAD_K, P.SCREW_HEAD_D),
         akku_stecker=box(dev(P.J2_XY)[0] - P.J2_PLUG[0] / 2, dev(P.J2_XY)[0] + P.J2_PLUG[0] / 2,
                          dev((0, 1.77))[1] - P.J2_PLUG[1], dev((0, 1.77))[1], 0, P.J2_PLUG[2]),
         kabelkanal=box(P.BAT_X0 + bl + 0.1, BX + P.BOARD_L - 9.0 - 2, -5, 5, P.Z_BAT + 1, P.Z_BB - 0.1),
@@ -463,9 +495,10 @@ def components():
     return c
 
 
-def board_r3():
-    """Board-STEP r3 (pcb-engineer) in Geraetekoordinaten: x+BX, y-BCY, z-1 (Board-Unterseite z=-1)."""
-    return load_board().translate(V(BX, -BCY, P.Z_BB))
+def board_r4():
+    """Board-STEP r4 (pcb-engineer) in Geraetekoordinaten. r4-STEP liegt bei y -25..0 (y_if = y_step + 25)
+    -> Geraet: x+BX, y+BCY, z-1 (Board-Unterseite z=-1). r3 lag bei y 0..25 (Verschiebung -BCY)."""
+    return load_board().translate(V(BX, BCY, P.Z_BB))
 
 
 def to_print(shape, flip):
@@ -495,6 +528,8 @@ _SHELL = None
 
 
 def _build_part(job):
+    global BATCH
+    BATCH = BATCH_ENV and job != "top"   # r4: Oberschale immer Baseline-Schleife
     t = time.perf_counter()
     r = top_shell(_SHELL) if job == "top" else bottom_shell(_SHELL, job)
     tick(f"Teil {job} {time.perf_counter() - t:.1f}s")
@@ -524,7 +559,7 @@ def main():
     tick("Schale+Fuegeband")
     global _SHELL
     _SHELL = shell
-    jobs = ["top"] + list(P.VARIANTS)
+    jobs = ["top"] + [v for v in P.VARIANTS if v in os.environ.get("MO_VARIANTS", ",".join(P.VARIANTS)).split(",")]
     if NPROC > 1:   # F-08: je Teil ein Prozess (fork erbt Schale), Rueckgabe als BREP-Datei
         import multiprocessing as mp
         with mp.get_context("fork").Pool(min(NPROC, len(jobs))) as pool:
@@ -534,7 +569,7 @@ def main():
         res_parts = {j: _build_part(j) for j in jobs}
     top = res_parts["top"]
     print(f"Oberschale V={top.Volume():.0f} valid={top.isValid()} ({time.time()-t0:.1f}s)")
-    bots = {v: res_parts[v] for v in P.VARIANTS}
+    bots = {v: res_parts[v] for v in jobs[1:]}
     tick("Teile fertig")
     if os.environ.get("MO_NOEXPORT") == "1":   # F-08 Messlaeufe: nur Geometrie + Volumen, kein Export
         vol = {"oberschale": top.Volume(), **{f"unterschale_{v}": b.Volume() for v, b in bots.items()}}
@@ -576,9 +611,9 @@ def main():
     asm.add(bots[P.CHOSEN], name="unterschale", color=cq.Color(*col["unterschale"]))
     asm.add(cap, name="tastenkappe", color=cq.Color(*col["tastenkappe"]))
     asm.add(lp, name="lichtleiter", color=cq.Color(*col["lichtleiter"]))
-    for n in ("akku", "motor", "akku_stecker"):
+    for n in ("akku", "motor", "akku_stecker", "j5_stecker"):
         asm.add(comps[n], name=n, color=cq.Color(0.6, 0.6, 0.6))
-    asm.add(board_r3(), name="board_r3", color=cq.Color(0.1, 0.5, 0.2))
+    asm.add(board_r4(), name="board_r4", color=cq.Color(0.1, 0.5, 0.2))
     for name, (s, flip) in parts.items():   # BREP exakt (fuer FEM/Kollision; STEP-Reimport der Schalen ungueltig)
         s.exportBrep(f"{CAD}/{name}.brep")
     tick("Export STL/3MF/BREP")

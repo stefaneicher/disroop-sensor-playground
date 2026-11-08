@@ -24,6 +24,7 @@ Wichtige Entscheide werden je Disziplin als ADR festgehalten, **mit Bild** (Skiz
 | [systems/ADR-0002](systems/ADR-0002-ble-bedienplatine.md) | BLE-Format Bedienplatine EF680380 | Angenommen | 2026-11-08 |
 | [mechanics/ADR-0002](mechanics/ADR-0002-sls-pa12.md) | Gehäuse SLS PA12, Lichtleiter SLA | Angenommen | 2026-11-08 |
 | [mechanics/ADR-0003](mechanics/ADR-0003-fem-pausiert.md) | FEM pausiert | Angenommen | 2026-11-08 |
+| [mechanics/ADR-0004](mechanics/ADR-0004-board-befestigung-r4.md) | Board-Befestigung r4 (M2 nur H2), J5-Schlitz, Motor-Mulde | Angenommen | 2026-11-08 |
 | [electronics/ADR-0001](electronics/ADR-0001-vibrationsmotor.md) | Vibrationsmotor LCM0827A3038F | Angenommen | 2026-11-08 |
 | [electronics/ADR-0002](electronics/ADR-0002-erweiterungsstecker-bedienplatine.md) | Erweiterungsstecker + Bedienplatine (r4) | Angenommen | 2026-11-08 |
 | [firmware/ADR-0001](firmware/ADR-0001-bootloader-v1.md) | USB-Bootloader in V1 | Angenommen | 2026-11-08 |

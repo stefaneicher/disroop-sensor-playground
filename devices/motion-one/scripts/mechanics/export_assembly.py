@@ -17,13 +17,17 @@ def mesh_of(shape, tol=0.05, ang=0.3):
 
 parts = {n: cq.Shape.importBrep(f"{CAD}/{n}.brep") for n in ("oberschale", f"unterschale_{P.CHOSEN}", "tastenkappe", "lichtleiter")}
 board = cq.importers.importStep(f"{DEV}/{P.BOARD_STEP}").solids().vals()
-parts["pcb_r3"] = cq.Compound.makeCompound(board).translate(V(P.BOARD_X0, -P.BOARD_W / 2, P.Z_BB))
+parts["pcb_r4"] = cq.Compound.makeCompound(board).translate(V(P.BOARD_X0, +P.BOARD_W / 2, P.Z_BB))  # r4-STEP liegt bei y -25..0
 bl, bw, bh = P.BAT
 parts["akku"] = cq.Solid.makeBox(bl, bw, bh, V(P.BAT_X0, -bw / 2, P.Z_BAT))
+import json as _j
+import build_enclosure as B
+B.MOTOR_Z0 = _j.load(open(f"{CAD}/cad_results.json"))["motor_z0"]
+parts["motor"] = B.components()["motor"]
 explode = {"oberschale": [0, 0, 30], f"unterschale_{P.CHOSEN}": [0, 0, -30], "tastenkappe": [0, 0, 55],
-           "lichtleiter": [0, 0, 50], "pcb_r3": [0, 0, 10], "akku": [0, 0, -12]}
+           "lichtleiter": [0, 0, 50], "pcb_r4": [0, 0, 10], "akku": [0, 0, -12], "motor": [0, 0, -20]}
 res = dict(coordinate_system="Geraetekoordinaten mm: x laengs (0=Griffende/USB-C, +x Kopf), y quer (Symmetrie y=0), z hoch (Daumenseite +z), Trennebene z=0",
-           source="BREP aus build_enclosure.py (r3), Board-STEP r3 (pcb-engineer, Quader-Bauteile), Akku-Huellkoerper 503040 (ANNAHME)",
+           source="BREP aus build_enclosure.py (r4), Board-STEP r4 (pcb-engineer, Quader-Bauteile), Akku-Huellkoerper 503040 (ANNAHME)",
            explode_unit="mm", explode_note="Explosionsvektor relativ zur Einbaulage (ANNAHME, Darstellung)", parts={})
 for n, s in parts.items():
     tol = 0.05

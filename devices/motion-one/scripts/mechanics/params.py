@@ -43,9 +43,9 @@ BAND_Z = (-3.0, 3.4)      # A Hoehe des Fuegebands (unten Lippenwurzel, oben Nut
 SHADOW = 0.5              # Q ADR-0001 Schattenfuge 0.5 x 0.5 = 45-Grad-Fase je Schale
 SW1_LIP_GAP = 0.2         # A Lippe im SW1-Fenster unterbrochen (Fensterlaenge + 2 x 0.2)
 IN_TAPER = (0.85, 4.0)    # A Innenkontur an den Stirnwaenden auf 85 % verjuengt, Uebergang 4 mm
-CLAMP_X = (40.0, 66.0)          # A Klemmrippen beidseitig (|y| 11..12.5, Unterkante = Boardoberseite)
-CLAMP_X_POS = (33.0,)           # A r3: nur +y (SW1-Hebel Board x 15.5-24.5 = Geraet 20.1-29.1 frei, Rippe unterbrochen)
-CLAMP_X_NEG = (26.5,)           # A r3: nur -y (JST-SH-Stecker Board x 12-17 = Geraet 16.6-21.6 frei)
+CLAMP_X = (40.0,)               # A r4: Klemmrippe beidseitig (|y| 11..12.5, Unterkante = Boardoberseite); x=66 -y kollidiert mit J5
+CLAMP_X_POS = (33.0, 67.0)      # A r3: nur +y (SW1-Hebel frei); r4: 67 statt 66 (Abstand Kopf H2-Schraube)
+CLAMP_X_NEG = (26.5, 53.0)      # A r3: nur -y (J2 frei); r4: 53 statt 66 (J5 Geraet x ~57-69 frei, zwischen J4 und C8)
 BOARD_SUPPORT_X = (72.0, 74.0)  # A Querrippe Board-Auflage hinten (zusaetzlich Akkurahmen-Stirnwaende)
 
 # --- Verbindungselemente (Q: ruthex RX-M2x4, 3djake.com/ruthex/threaded-insert-m2-70-pieces, Abruf 2026-11-07)
@@ -72,7 +72,7 @@ BOARD_HOLES_I = [(4.0, 12.5), (66.0, 12.5)]   # I r1 (Konflikt USB-C-Ausschnitt 
 BOARD_NOTCH = (10.0, 5.0)  # A Aenderungswunsch: Ausklinkung x 0..10, y 0..5 und 20..25 (Boardkoordinaten) fuer Gehaeusedome
 BOARD_EDGE_KEEPOUT = 1.5  # A Aenderungswunsch: bauteilfreier Randstreifen laengs (Klemmrippen oben, Auflage unten)
 COMP_H = 3.5              # I r3 max. Bauhoehe oben (SW1)
-BOARD_STEP = "electronics/kicad/motion-one/export/motion-one-board.step"   # I r3 (z=0 Board-Unterseite, y wie INTERFACES)
+BOARD_STEP = "electronics/kicad/motion-one/export/motion-one-board.step"   # I r4 (14:40) (z=0 Board-Unterseite, y wie INTERFACES)
 SW1_XY = (20.0, 23.2)     # I r3 Schiebeschalter MSK12C02, Hebel +y
 SW1_WIN = (7.0, 0.02, 3.8)  # A seitlicher Durchbruch Oberschale: Laenge x, z0, z1 (Hebelweg +-1.5 + Spiel)
 J2_XY = (14.5, 5.1)       # I r3 JST-SH SM02B-SRSS-TB, Steckrichtung -y
@@ -99,8 +99,23 @@ BAT_X0 = 15.5             # B Schraube x=10.5 (Senkung r=2.2 -> 12.7): Abstand 2
 BAT_GAP = 0.25            # A Spiel Akkurahmen
 Z_BAT = -7.5              # B Akku-Unterseite (Oberseite -2.5, 1.5 mm Schaum zum Board)
 FOAM_T = 1.5              # A PU-Schaum zwischen Akku und Boardunterseite (verpresst)
-MOTOR_D, MOTOR_H = 10.0, 2.7    # I Muenzmotor
-MOTOR_X = 34.0            # A Muenzmotor unter dem Akku auf dem Boden (Griffmitte, fern Antenne)
+MOTOR_D, MOTOR_H = 8.0, 2.7     # Q r4 LCM0827A3038F (INTERFACES positions.motor, Datenblatt S.9)
+MOTOR_POCKET = (8.6, 3.2)       # I r4 Mulde D x Tiefe (INTERFACES: Spiel 0.3 radial, ANNAHME)
+MOTOR_POCKET_TOP = -7.8         # A Podest-Oberkante = Akku-Unterseite Z_BAT - 0.3 (Akku liegt auf Wiegerippen)
+MOTOR_LEAD_CH = (3.2, 2.0)      # A Litzenkanal Breite x Tiefe (Zunge 3.0 breit, 2x AWG32), Richtung -y zum J3 (Board 29.5;2.7)
+# r4 Board-Befestigung (ADR-0004): H2 Dom selbstschneidend, H1 kein Dom (Akku x 15.5..55.5 unter H1)
+H_DOME = [(58.5, 22.8)]         # I r4 H2 (Boardkoordinaten); H1 (42.4;12.7) liegt ueber dem Akku -> kein Dom
+H_DOME_D = 5.0                  # A Dom-Aussen-D (>= 2.5 x Kernloch)
+H_PILOT = (1.7, 6.0)            # A Kernloch D x Tiefe fuer M2-Kunststoff-Gewindeformer (PA12), Schraube M2x6
+# r4 J5 Kabeldurchfuehrung (Erweiterung JST-SH 8p, Stecker bleibt innen)
+J5_XY = (58.5, 3.35)            # I r4
+J5_SLOT = (9.5, -0.2, 2.8)      # A Schlitz Breite x, z0, z1 = 9.5 x 3.0 (8 Adern AWG32 Teilung 1.0 -> 8.0 breit; >= 1.5 x 4 erfuellt)
+J5_POCKET = (11.0, -0.4, 3.4, 3.8)   # A Steckertasche innen: Breite, z0, z1, Tiefe ab Boardkante (Stecker SHR-08V-S 10.0 breit, ANNAHME)
+J5_ENV = (11.0, 4.25, 2.9)      # Q Huellkoerper SM08B-SRSS-TB (LCSC C160407, JST SH 8-pol. seitlich): A=11.0, Tiefe 4.25, Hoehe 2.9 (QUELLE Datenblatt JST SH)
+J5_PLUG = (10.0, 3.0, 2.9)      # A Stecker SHR-08V-S Ueberstand ueber Boardkante (-y)
+J5_CHAMF = (0.6, 0.6)           # A Fase aussen / innen (45 Grad)
+MOTOR_X = 34.0            # A Muenzmotor unter dem Akku in Mulde (Griffmitte, Antenne-Abstand >= 30 mm)
+MOTOR_Y = -5.0            # A r4 aus Mitte Richtung J3 (Litze 27 mm reicht: 6.7 + 10 + 6 = 23 mm, BERECHNUNG)
 RING_T = 1.0              # A Motorring-Wand
 CRADLE_Y = (-10.0, 10.0)  # A Laengsrippen unter dem Akku (Mitte frei fuer Motor)
 RIB_T = 1.2               # A Rippenstaerke (~3 Linien)
