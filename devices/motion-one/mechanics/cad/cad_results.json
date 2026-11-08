@@ -1,123 +1,123 @@
 {
- "params_file": "scripts/mechanics/params.py",
- "motor_z0": -12.155656737648142,
- "cap": {
-  "z_switch_gap": 3.8,
-  "z_flange_top": 7.400000000000001,
-  "z_top": 11.100000000000001,
-  "z_inner_ceiling": 7.600000000000001
- },
- "lightpipe": {
-  "z_bottom": 0.8,
-  "z_top": 10.703921601786258
- },
- "outer_volume": 149873.32453472298,
- "inner_volume": 110421.64951452092,
- "parts": {
-  "oberschale": {
-   "volume_mm3": 19321.599229362793,
-   "valid": true,
-   "print_bbox": [
-    170.23268837567252,
-    43.72377952746218,
-    14.20270123821622
-   ],
-   "com": [
-    88.61089577880595,
-    0.004866888603128098,
-    7.21589734890234
-   ],
-   "print_flip_about_x": false,
-   "print_file": "devices/motion-one/mechanics/print/oberschale"
+  "params_file": "scripts/mechanics/params.py",
+  "motor_z0": -12.155656737648142,
+  "cap": {
+    "z_switch_gap": 1.8,
+    "z_flange_top": 7.400000000000001,
+    "z_top": 11.100000000000001,
+    "z_inner_ceiling": 7.600000000000001
   },
-  "tastenkappe": {
-   "volume_mm3": 531.0878140395045,
-   "valid": true,
-   "print_bbox": [
-    13.008581697957238,
-    13.00454728032784,
-    7.302321495884462
-   ],
-   "com": [
-    52.599999999999994,
-    5.902957708245493e-17,
-    7.802932385091257
-   ],
-   "print_flip_about_x": true,
-   "print_file": "devices/motion-one/mechanics/print/tastenkappe"
+  "lightpipe": {
+    "z_bottom": 0.75,
+    "z_top": 10.703921601786258
   },
-  "lichtleiter": {
-   "volume_mm3": 85.82016390231165,
-   "valid": true,
-   "print_bbox": [
-    5.001554289995921,
-    5.000000200000003,
-    9.904854255783809
-   ],
-   "com": [
-    42.599999999999994,
-    -2.569406465803394e-17,
-    5.994000621780417
-   ],
-   "print_flip_about_x": true,
-   "print_file": "devices/motion-one/mechanics/print/lichtleiter"
+  "outer_volume": 149873.32453472298,
+  "inner_volume": 110421.64951452092,
+  "parts": {
+    "oberschale": {
+      "volume_mm3": 19281.46486995023,
+      "valid": true,
+      "print_bbox": [
+        170.23732893015898,
+        43.72842008194862,
+        14.205021515459439
+      ],
+      "com": [
+        88.7804337386881,
+        -0.046562266644400656,
+        7.231490685774475
+      ],
+      "print_flip_about_x": false,
+      "print_file": "devices/motion-one/mechanics/print/oberschale"
+    },
+    "tastenkappe": {
+      "volume_mm3": 545.2249809806584,
+      "valid": true,
+      "print_bbox": [
+        13.008581697957238,
+        13.00454728032784,
+        9.302321495884462
+      ],
+      "com": [
+        52.6,
+        7.075082064482085e-17,
+        7.67321109059714
+      ],
+      "print_flip_about_x": true,
+      "print_file": "devices/motion-one/mechanics/print/tastenkappe"
+    },
+    "lichtleiter": {
+      "volume_mm3": 86.17359307584049,
+      "valid": true,
+      "print_bbox": [
+        5.001554289995921,
+        5.000000200000003,
+        9.95485425578381
+      ],
+      "com": [
+        42.6,
+        -4.421164375244145e-18,
+        5.972595606501794
+      ],
+      "print_flip_about_x": true,
+      "print_file": "devices/motion-one/mechanics/print/lichtleiter"
+    },
+    "unterschale_glatt": {
+      "volume_mm3": 25013.628308573338,
+      "valid": true,
+      "print_bbox": [
+        170.23799991383152,
+        43.78934828900522,
+        17.403894770319365
+      ],
+      "com": [
+        79.48474631757729,
+        0.03230062425381299,
+        -8.740560915934013
+      ],
+      "print_flip_about_x": true,
+      "print_file": "devices/motion-one/mechanics/print/unterschale_glatt"
+    },
+    "unterschale_verrippt": {
+      "volume_mm3": 27573.23428947664,
+      "valid": true,
+      "print_bbox": [
+        170.21286239759573,
+        43.825820413365236,
+        17.520626038692317
+      ],
+      "com": [
+        83.84738438012413,
+        0.024238809184790096,
+        -8.495429480360709
+      ],
+      "print_flip_about_x": true,
+      "print_file": "devices/motion-one/mechanics/print/varianten/unterschale_verrippt"
+    },
+    "unterschale_verrippt_ausgespart": {
+      "volume_mm3": 26073.190277297592,
+      "valid": true,
+      "print_bbox": [
+        170.21286239759573,
+        43.82582041336521,
+        17.520626038692317
+      ],
+      "com": [
+        81.45186569160914,
+        0.02577727726085943,
+        -8.731051059044695
+      ],
+      "print_flip_about_x": true,
+      "print_file": "devices/motion-one/mechanics/print/varianten/unterschale_verrippt_ausgespart"
+    }
   },
-  "unterschale_glatt": {
-   "volume_mm3": 25060.29515059527,
-   "valid": true,
-   "print_bbox": [
-    170.23799991383152,
-    43.78934828900522,
-    17.331631010902516
-   ],
-   "com": [
-    79.36963353247485,
-    0.0028212863397582295,
-    -8.731281002721644
-   ],
-   "print_flip_about_x": true,
-   "print_file": "devices/motion-one/mechanics/print/varianten/unterschale_glatt"
-  },
-  "unterschale_verrippt": {
-   "volume_mm3": 27620.848124186843,
-   "valid": true,
-   "print_bbox": [
-    170.21286239759573,
-    43.825820413365236,
-    17.520626038692317
-   ],
-   "com": [
-    83.73603378819075,
-    -0.003262870929414747,
-    -8.487316842982349
-   ],
-   "print_flip_about_x": true,
-   "print_file": "devices/motion-one/mechanics/print/unterschale_verrippt"
-  },
-  "unterschale_verrippt_ausgespart": {
-   "volume_mm3": 26120.814661552646,
-   "valid": true,
-   "print_bbox": [
-    170.21286239759573,
-    43.82582041336521,
-    17.520626038692317
-   ],
-   "com": [
-    81.3384598088418,
-    -0.0033091354623848573,
-    -8.722043633368576
-   ],
-   "print_flip_about_x": true,
-   "print_file": "devices/motion-one/mechanics/print/varianten/unterschale_verrippt_ausgespart"
-  }
- },
- "section_r_min": 7.483106511697922,
- "section_r_min_at": [
-  85.0,
-  -17.269624616468477,
-  3.9848273059254975
- ],
- "end_ellipse_r_min": 4.437763776155193,
- "chosen_variant": "glatt",
- "runtime_s": 637.191392660141
+  "section_r_min": 7.483106511697922,
+  "section_r_min_at": [
+    85.0,
+    -17.269624616468477,
+    3.9848273059254975
+  ],
+  "end_ellipse_r_min": 4.437763776155193,
+  "chosen_variant": "glatt",
+  "runtime_s": 662.6124811172485
 }

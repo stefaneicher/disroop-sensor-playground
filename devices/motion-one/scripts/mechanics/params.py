@@ -31,10 +31,21 @@ Z_S = 0.0                 # A Trennebene = breiteste Stelle jedes Querschnitts -
 W_T = 2.0                 # A Wandstaerke Oberschale (FDM >= 4 Linien a 0.42)
 W_B = 2.0                 # A Wandstaerke Unterschale (alle Varianten gleich -> gleiche Schnittstellen)
 W = 2.0                   # A gemeinsame Wandstaerke (Innenkontur = Aussenkontur - W)
-# Keine umlaufende Zentrierlippe: sie wuerde ueber die Trennebene ragen und die Druckauflage beider Schalen zerstoeren.
-# Zentrierung ueber 4 Schrauben/Dome + Board-Klemmung (Versatz an der Fuge <= Lochspiel 0.2, A).
+# Fuegestelle nach ADR-0001 (User-Entscheid): Lippe an der Unterschale, Nut in der Oberschale, Schattenfuge aussen.
+# Abstaende d in mm von der Aussenkontur der Trennebene (Draufsicht) nach innen.
+LIP_D0 = 1.2              # A Lippe Aussenkante ab Aussenkontur (Unterschalen-Auflage 0.5..1.2 bleibt als Anlageflaeche)
+LIP_W = 1.2               # Q ADR-0001 Lippenbreite
+LIP_H = 2.0               # Q ADR-0001 Lippenhoehe ueber Trennebene
+GROOVE_CLR = 0.25         # A ADR-0001 nennt 0.2; r3 auf 0.25 erhoeht wegen SLS PA12 JLC3DP (+-0.2 mm) und FDM-Eigendruck; Toleranzkoerper MESSUNG NOT RUN
+GROOVE_TOP = 0.2          # A Luft Lippenstirn -> Nutgrund (Anlage nur auf der Trennebene)
+BAND_T = 1.2              # A Nut-Innenwand (lokale Verdickung innen, nur Fuegeband; Nennwand W bleibt 2.0)
+BAND_Z = (-3.0, 3.4)      # A Hoehe des Fuegebands (unten Lippenwurzel, oben Nutgrund + 1.2)
+SHADOW = 0.5              # Q ADR-0001 Schattenfuge 0.5 x 0.5 = 45-Grad-Fase je Schale
+SW1_LIP_GAP = 0.2         # A Lippe im SW1-Fenster unterbrochen (Fensterlaenge + 2 x 0.2)
 IN_TAPER = (0.85, 4.0)    # A Innenkontur an den Stirnwaenden auf 85 % verjuengt, Uebergang 4 mm
-CLAMP_X = (22.0, 40.0, 66.0)    # A Klemmrippen Oberschale (|y| 11..12.5, Unterkante = Boardoberseite)
+CLAMP_X = (40.0, 66.0)          # A Klemmrippen beidseitig (|y| 11..12.5, Unterkante = Boardoberseite)
+CLAMP_X_POS = (33.0,)           # A r3: nur +y (SW1-Hebel Board x 15.5-24.5 = Geraet 20.1-29.1 frei, Rippe unterbrochen)
+CLAMP_X_NEG = (26.5,)           # A r3: nur -y (JST-SH-Stecker Board x 12-17 = Geraet 16.6-21.6 frei)
 BOARD_SUPPORT_X = (72.0, 74.0)  # A Querrippe Board-Auflage hinten (zusaetzlich Akkurahmen-Stirnwaende)
 
 # --- Verbindungselemente (Q: ruthex RX-M2x4, 3djake.com/ruthex/threaded-insert-m2-70-pieces, Abruf 2026-11-07)
@@ -60,19 +71,26 @@ Z_BB = -1.0               # A Board-Unterseite; Board-Oberseite = Trennebene (Kl
 BOARD_HOLES_I = [(4.0, 12.5), (66.0, 12.5)]   # I r1 (Konflikt USB-C-Ausschnitt bzw. BLE-Modul, s. Aenderungswunsch)
 BOARD_NOTCH = (10.0, 5.0)  # A Aenderungswunsch: Ausklinkung x 0..10, y 0..5 und 20..25 (Boardkoordinaten) fuer Gehaeusedome
 BOARD_EDGE_KEEPOUT = 1.5  # A Aenderungswunsch: bauteilfreier Randstreifen laengs (Klemmrippen oben, Auflage unten)
-COMP_H = 3.5              # I max. Bauhoehe oben
-USB_OVERHANG = 1.1        # A Receptacle ueberragt Boardkante
+COMP_H = 3.5              # I r3 max. Bauhoehe oben (SW1)
+BOARD_STEP = "electronics/kicad/motion-one/export/motion-one-board.step"   # I r3 (z=0 Board-Unterseite, y wie INTERFACES)
+SW1_XY = (20.0, 23.2)     # I r3 Schiebeschalter MSK12C02, Hebel +y
+SW1_WIN = (7.0, 0.02, 3.8)  # A seitlicher Durchbruch Oberschale: Laenge x, z0, z1 (Hebelweg +-1.5 + Spiel)
+J2_XY = (14.5, 5.1)       # I r3 JST-SH SM02B-SRSS-TB, Steckrichtung -y
+J2_PLUG = (5.0, 4.5, 3.0)   # A SHR-02V-S-Stecker + Biegeradius Litze: Breite x, Laenge -y ab Receptacle-Front, Hoehe
+CABLE_NOTCH = (16.0, 23.0)  # A Kabelschlitz im Akkurahmen -y (Geraet x) fuer Akku-Litze zum J2
+USB_OVERHANG = 0.7        # Q r3 Board-STEP J1 x -0.69
 USB_W, USB_H, USB_D = 8.94, 3.26, 7.35      # Q typ. USB-C-Receptacle (GCT USB4085 Datenblatt-Masse, A Bauform)
-USB_SLOT = (9.6, 4.0)     # A Durchbruch Receptacle (0.3 Spiel je Seite)
+USB_ZTOP = 4.26           # Q r3 Board-STEP: J1-Oberkante z=4.26 (Geraetekoordinaten) > USB_H -> Kollision r3 (2.2 mm3)
+USB_SLOT = (11.4, USB_ZTOP + 0.6)   # A r3: Board-STEP J1-Schale 10.74 breit (y +-5.37) + 0.3 Spiel je Seite; z -0.3 .. USB_ZTOP+0.3
 USB_RECESS = (12.8, 7.0, 3.2)   # A Aussparung Steckerumspritzung (B x H x Tiefe), Steckerfront <= 1 mm vor Receptacle
 BUTTON_XY = (48.0, 12.5)  # I Haupttaster (Boardkoordinaten)
-BUTTON_SW = (6.0, 6.0, 3.5)     # I/A Taster 6x6, Hoehe 3.5
-LED_XY = (38.0, 12.5)     # A ABWEICHUNG zu I (52): siehe Aenderungswunsch, sonst Kollision mit Tastenkappe
-LED_SZ = (1.6, 0.8, 0.6)  # A 0603-RGB
-BUZZER_XY = (22.0, 12.5)  # I
-BUZZER_SZ = (9.0, 9.0, 4.0)     # I (ANNAHME dort)
-BLE_XY = (60.0, 12.5)     # I E73 Mittelpunkt (A: x=Mitte)
-BLE_SZ = (18.0, 13.0, 2.2)
+BUTTON_SW = (5.1, 5.1, 1.5)     # I r3 TS-1187A 5.1x5.1, Hoehe 1.5 (ANNAHME pcb)
+LED_XY = (38.0, 12.5)     # I r3
+LED_SZ = (1.6, 1.5, 0.55) # I r3 XL-1615RGBC
+BUZZER_XY = (27.2, 12.4)  # I r3
+BUZZER_SZ = (5.0, 5.0, 2.0)     # I r3 MLT-5020
+BLE_XY = (60.6, 12.5)     # I r3
+BLE_SZ = (18.0, 13.0, 3.0)   # I r3 Hoehe 3.0
 ANT_KEEPOUT = 5.0         # I
 
 # --- Akku / Motor (I: 503040 5x30x40, 10 g) ----------------------------------------------------
@@ -98,7 +116,8 @@ LP_D = 3.0                # A Lichtleiter-Stab
 LP_CLR = 0.1              # A
 LP_COLLAR_D = 5.0
 LP_PROUD = 0.3
-SOUND_HOLES_D = 1.6       # A 5 Loecher ueber Summer
+SOUND_HOLES_D = 1.2       # A 5 Loecher ueber Summer (r3 5x5 -> Teilung 2.0)
+SOUND_PITCH = 2.0
 LANYARD = dict(x=6.9, y=3.5, d=2.6, z_tunnel=-8.0)   # A Oese Griffende unten: zwei Bohrungen + Quertunnel
 
 # --- Varianten tragendes Teil (Unterschale) -----------------------------------------------------

@@ -4,58 +4,58 @@
   "oberschale": {
    "watertight": true,
    "winding": true,
-   "volume_mm3": 19384.01564966164,
+   "volume_mm3": 19345.764816906736,
    "extent_mm": [
     170.0,
     43.49,
     13.6
    ],
    "fits_a1mini": true,
-   "overhang_area_mm2": 5171.5,
-   "bed_contact_mm2": 1053.1,
-   "mass_petg_g": 24.23001956207705
+   "overhang_area_mm2": 5192.1,
+   "bed_contact_mm2": 1053.5,
+   "mass_petg_g": 24.18220602113342
   },
   "unterschale_glatt": {
    "watertight": true,
    "winding": true,
-   "volume_mm3": 24966.73216834066,
+   "volume_mm3": 24920.45426867486,
    "extent_mm": [
     170.0,
     43.55,
     16.79
    ],
    "fits_a1mini": true,
-   "overhang_area_mm2": 5059.3,
+   "overhang_area_mm2": 5061.4,
    "bed_contact_mm2": 1047.4,
-   "mass_petg_g": 31.208415210425823
+   "mass_petg_g": 31.150567835843578
   },
   "tastenkappe": {
    "watertight": true,
    "winding": true,
-   "volume_mm3": 530.7518040019122,
+   "volume_mm3": 544.8831121821395,
    "extent_mm": [
     13.0,
     13.0,
-    7.3
+    9.3
    ],
    "fits_a1mini": true,
    "overhang_area_mm2": 13.7,
    "bed_contact_mm2": 54.0,
-   "mass_petg_g": 0.6634397550023903
+   "mass_petg_g": 0.6811038902276744
   },
   "lichtleiter": {
    "watertight": true,
    "winding": true,
-   "volume_mm3": 85.77426655584964,
+   "volume_mm3": 86.12755061664213,
    "extent_mm": [
     5.0,
     5.0,
-    9.9
+    9.95
    ],
    "fits_a1mini": true,
    "overhang_area_mm2": 2.6,
    "bed_contact_mm2": 7.1,
-   "mass_petg_g": 0.10721783319481204
+   "mass_petg_g": 0.10765943827080265
   }
  },
  "collisions": {
@@ -93,7 +93,7 @@
    }
   },
   "taster": {
-   "points": 2025,
+   "points": 900,
    "oberschale": {
     "points_inside": 0,
     "volume_mm3": 0.0
@@ -115,7 +115,7 @@
    }
   },
   "summer": {
-   "points": 5290,
+   "points": 2645,
    "oberschale": {
     "points_inside": 0,
     "volume_mm3": 0.0
@@ -126,7 +126,7 @@
    }
   },
   "ble": {
-   "points": 8910,
+   "points": 11880,
    "oberschale": {
     "points_inside": 0,
     "volume_mm3": 0.0
@@ -174,17 +174,17 @@
   "items": [
    {
     "name": "oberschale",
-    "g": 24.23,
+    "g": 24.18,
     "basis": "SIMULATION Volumen STL x rho PETG"
    },
    {
     "name": "unterschale",
-    "g": 31.21,
+    "g": 31.15,
     "basis": "SIMULATION"
    },
    {
     "name": "tastenkappe",
-    "g": 0.66,
+    "g": 0.68,
     "basis": "SIMULATION"
    },
    {
@@ -218,9 +218,9 @@
     "basis": "ANNAHME"
    }
   ],
-  "total_g": 80.8,
+  "total_g": 80.7,
   "cg_mm": [
-   70.6,
+   70.7,
    0.0,
    -1.9
   ],

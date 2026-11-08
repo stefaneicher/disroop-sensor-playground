@@ -147,6 +147,21 @@ def cut_all(base, parts):
         except ValueError as e:
             print("WARNUNG Schnitt fehlgeschlagen:", p.Center(), e)
             continue
+        if not (r.isValid() and 1 < r.Volume() <= base.Volume() + 1e-3):
+            print(f"  Diagnose Schnitt {p.Center()}: valid={r.isValid()} V={r.Volume():.1f} base={base.Volume():.1f}")
+            bb = p.BoundingBox(); xs = np.linspace(bb.xmin - 0.01, bb.xmax + 0.01, 5); rr = base; ok = True
+            for i in range(4):   # Fallback: Schnittkoerper in 4 x-Scheiben (OCC-Tangentialfaelle)
+                try:
+                    t = rr.cut(p.intersect(box(xs[i], xs[i + 1] + 0.0013, -50, 50, -50, 50)))
+                    t = t if t.isValid() else t.fix()
+                except ValueError:
+                    ok = False; break
+                if t.isValid() and 1 < t.Volume() <= rr.Volume() + 1e-3:
+                    rr = t
+                else:
+                    ok = False; break
+            if ok:
+                r = rr; print("  Schnitt in Scheiben OK:", p.Center())
         if r.isValid() and 1 < r.Volume() <= base.Volume() + 1e-3:
             base = r
         else:
@@ -163,7 +178,7 @@ def dev(bxy):
 
 
 BTN, LED, BUZ, BLE = dev(P.BUTTON_XY), dev(P.LED_XY), dev(P.BUZZER_XY), dev(P.BLE_XY)
-USB_Z = P.USB_H / 2   # Receptacle auf Board-Oberseite (z 0..USB_H)
+USB_Z = P.USB_ZTOP / 2   # r3: Durchbruch mittig zwischen z=0 und J1-Oberkante (Board-STEP)
 
 
 def usb_cuts():
@@ -203,21 +218,92 @@ def lightpipe_geom():
     return fuse_all(rod, [cone, col]), dict(z_bottom=z0, z_top=z_top)
 
 
+def plan_pts(off, n=240):
+    """Draufsicht-Umriss der Trennebene (y = +-a(x)), CCW, um 'off' nach innen versetzt."""
+    t = np.linspace(0, math.pi, n)
+    xs = P.L / 2 - P.L / 2 * np.cos(t)
+    lo = [(x, -dims(x)[0]) for x in xs]
+    up = [(x, dims(x)[0]) for x in xs[::-1]]
+    a0, a1 = dims(0.0)[0], dims(P.L)[0]
+    e1 = [(P.L, y) for y in np.linspace(-a1, a1, 9)[1:-1]]
+    e0 = [(0.0, y) for y in np.linspace(a0, -a0, 9)[1:-1]]
+    p = np.array(lo + e1 + up + e0)
+    d = np.roll(p, -1, 0) - np.roll(p, 1, 0)
+    nrm = np.stack([d[:, 1], -d[:, 0]], 1)
+    nrm /= np.linalg.norm(nrm, axis=1)[:, None]
+    return p - off * nrm
+
+
+_PLAN_W0 = None
+
+
+def plan_wire(off, z, kind="arc"):
+    """Exakter Trennebenen-Umriss (Schnitt OUTER z=0, Spline-Kanten) per offset2D; schneller als Polygon."""
+    global _PLAN_W0
+    if _PLAN_W0 is None:
+        o = OUTER if OUTER is not None else outer_solid()
+        sec = o.intersect(box(-5, P.L + 5, -40, 40, -0.001, 0.001))
+        f = [fa for fa in sec.Faces() if abs(fa.Center().z - 0.001) < 1e-3 and fa.normalAt().z > 0.5]
+        _PLAN_W0 = f[0].outerWire().translate(V(0, 0, -0.001))
+    w = _PLAN_W0.offset2D(-off, kind)[0] if abs(off) > 1e-9 else _PLAN_W0
+    return w.translate(V(0, 0, z))
+
+
+def plan_prism(off, z0, z1):
+    return cq.Solid.extrudeLinear(cq.Face.makeFromWires(plan_wire(off, z0)), V(0, 0, z1 - z0))
+
+
+def plan_ring(d0, d1, z0, z1):
+    return plan_prism(d0, z0, z1).cut(plan_prism(d1, z0 - 0.1, z1 + 0.1))
+
+
+def shadow_cutter(sgn):
+    """Schattenfuge: Ring ausserhalb der 45-Grad-Linie d = SHADOW - |z| (sgn=+1 Oberschale, -1 Unterschale).
+    Trennebene liegt im breitesten Schnitt (Aussenwand dort senkrecht) -> Fase SHADOW x SHADOW.
+    Prisma z-Bereich liegt strikt innerhalb des Loft-Bereichs (keine koplanaren Deckflaechen)."""
+    s = P.SHADOW
+    ws = [plan_wire(s + 0.01, -0.01 * sgn), plan_wire(0.0, s * sgn)]
+    fr = cq.Solid.makeLoft(ws if sgn > 0 else ws[::-1], ruled=True)   # immer von unten nach oben (Orientierung)
+    za, zb = -0.005 * sgn, (s - 0.005) * sgn
+    return plan_prism(-3.0, min(za, zb), max(za, zb)).cut(fr)
+
+
+def joint_band():
+    """Fuegeband (lokale Innenverdickung) beidseits der Trennebene; wird vor der Teilung in die Schale fusioniert."""
+    d1 = P.LIP_D0 + P.LIP_W + P.GROOVE_CLR + P.BAND_T
+    return plan_ring(1.0, d1, *P.BAND_Z)
+
+
+def lip():
+    return plan_ring(P.LIP_D0, P.LIP_D0 + P.LIP_W, -0.5, P.LIP_H)
+
+
+def groove():
+    c = P.GROOVE_CLR
+    return plan_ring(P.LIP_D0 - c, P.LIP_D0 + P.LIP_W + c, -0.5, P.LIP_H + P.GROOVE_TOP)
+
+
 def top_shell(shell):
     top = shell.intersect(box(-5, P.L + 5, -40, 40, P.Z_S, 40))
     o = OUTER
     adds = [cyl(sx, sy, 0, 40, P.BOSS_D_INS).intersect(o) for sx, sy in P.SCREWS]
-    for cx in P.CLAMP_X:   # Klemmrippen: Unterkante auf Board-Oberseite (Randstreifen |y| 11..12.5)
-        for sgn in (-1, 1):
+    ribs = [(cx, sg) for cx in P.CLAMP_X for sg in (-1, 1)] + [(cx, 1) for cx in P.CLAMP_X_POS] + [(cx, -1) for cx in P.CLAMP_X_NEG]
+    for cx, sgn in ribs:   # Klemmrippen: Unterkante auf Board-Oberseite (Randstreifen |y| 11..12.5)
+        if True:
             y0, y1 = (BCY - P.BOARD_EDGE_KEEPOUT, 30) if sgn > 0 else (-30, -(BCY - P.BOARD_EDGE_KEEPOUT))
             adds.append(box(cx - P.RIB_T / 2, cx + P.RIB_T / 2, y0, y1, 0.02, 40).intersect(o))   # 0.02: vermeidet koplanare Flaeche (OCC-Fehler)
     top = fuse_all(top, adds)
     cuts = [cyl(sx, sy, -1, P.INS_HOLE_DEPTH, P.INS_D_HOLE) for sx, sy in P.SCREWS]
     cuts.append(cyl(BTN[0], BTN[1], 0, 40, P.CAP_D + 2 * P.CAP_CLR))
     cuts.append(cyl(LED[0], LED[1], 0, 40, P.LP_D + 2 * P.LP_CLR))
-    for dx, dy in [(0, 0), (2.6, 0), (-2.6, 0), (0, 2.6), (0, -2.6)]:
+    sp = P.SOUND_PITCH
+    for dx, dy in [(0, 0), (sp, 0), (-sp, 0), (0, sp), (0, -sp)]:
         cuts.append(cyl(BUZ[0] + dx, BUZ[1] + dy, 0, 40, P.SOUND_HOLES_D))
     cuts += usb_cuts()
+    sx, sy = dev(P.SW1_XY)   # r3: seitlicher Durchbruch SW1-Hebel (+y)
+    wl, wz0, wz1 = P.SW1_WIN
+    cuts.append(box(sx - wl / 2, sx + wl / 2, BCY - P.BOARD_EDGE_KEEPOUT + 0.5, 30, wz0, wz1))
+    cuts += [groove(), shadow_cutter(+1)]   # ADR-0001
     return cut_all(top, cuts)
 
 
@@ -257,17 +343,23 @@ def bottom_shell(shell, variant):
     clip = o
     bot = fuse_all(bot, [a.intersect(clip) for a in adds])
     bot = safe_clean(bot.intersect(box(-5, P.L + 5, -40, 40, -40, P.Z_S)))
+    bot = fuse_all(bot, [lip().intersect(clip)])   # ADR-0001 Lippe (ragt bis +LIP_H ueber die Trennebene)
     print(f'  {variant}: nach Fusion V={bot.Volume():.0f} valid={bot.isValid()}')
     cuts = []
     for sx, sy in P.SCREWS:
         cuts.append(cyl(sx, sy, -40, 1, P.D_THROUGH))
         cuts.append(cyl(sx, sy, -40, P.Z_CB, P.D_CBORE))
-    cuts.append(box(bx0 + 0.013, bx1 - 0.017, -by + 0.011, by - 0.019, P.Z_BAT, 0.7))   # Akkufach freihalten
+    cuts.append(box(bx0 + 0.013, bx1 - 0.017, -by + 0.011, by - 0.019, P.Z_BAT + 0.011, P.Z_S - 0.013))   # Akkufach freihalten (r3: nicht koplanar zu Wiegerippen, nicht in Lippe)
     cuts.append(cyl(P.MOTOR_X, 0, zm0, 1, P.MOTOR_D + 0.3))
+    cuts.append(box(P.CABLE_NOTCH[0], P.CABLE_NOTCH[1], -by - t - 0.3, -by + 0.5, P.Z_BAT + 1.0, 0.5))   # r3 Kabelschlitz Akku -> J2
     for sy in (-ly["y"], ly["y"]):
         cuts.append(cyl(ly["x"], sy, -40, ly["z_tunnel"], ly["d"]))
     cuts.append(cq.Solid.makeCylinder(ly["d"] / 2, 2 * ly["y"] + ly["d"], V(ly["x"], -ly["y"] - ly["d"] / 2, ly["z_tunnel"]), V(0, 1, 0)))
     cuts += usb_cuts()
+    sx, sy = dev(P.SW1_XY)   # Lippe im SW1-Fenster unterbrechen
+    hl = P.SW1_WIN[0] / 2 + P.SW1_LIP_GAP
+    cuts.append(box(sx - hl, sx + hl, BCY - P.BOARD_EDGE_KEEPOUT + 0.5, 30, -0.3, P.LIP_H + 1))
+    cuts.append(shadow_cutter(-1))
     return cut_all(bot, cuts)
 
 
@@ -297,9 +389,17 @@ def components():
         akku=box(P.BAT_X0, P.BAT_X0 + bl, -bw / 2, bw / 2, P.Z_BAT, P.Z_BAT + bh),
         schaum=box(P.BAT_X0, P.BAT_X0 + bl, -bw / 2, bw / 2, P.Z_BAT + bh, P.Z_BB),
         motor=cyl(P.MOTOR_X, 0, MOTOR_Z0, MOTOR_Z0 + P.MOTOR_H, P.MOTOR_D),
+        akku_stecker=box(dev(P.J2_XY)[0] - P.J2_PLUG[0] / 2, dev(P.J2_XY)[0] + P.J2_PLUG[0] / 2,
+                         dev((0, 1.77))[1] - P.J2_PLUG[1], dev((0, 1.77))[1], 0, P.J2_PLUG[2]),
         kabelkanal=box(P.BAT_X0 + bl + 0.1, BX + P.BOARD_L - 9.0 - 2, -5, 5, P.Z_BAT + 1, P.Z_BB - 0.1),
     )
     return c
+
+
+def board_r3():
+    """Board-STEP r3 (pcb-engineer) in Geraetekoordinaten: x+BX, y-BCY, z-1 (Board-Unterseite z=-1)."""
+    s = cq.importers.importStep(P.BOARD_STEP if os.path.exists(P.BOARD_STEP) else f"{DEV}/{P.BOARD_STEP}")
+    return cq.Compound.makeCompound(s.solids().vals()).translate(V(BX, -BCY, P.Z_BB))
 
 
 def to_print(shape, flip):
@@ -334,6 +434,9 @@ def main():
     MOTOR_Z0 = motor_z0()
     print(f"Loft aussen V={OUTER.Volume():.0f} mm3 valid={OUTER.isValid()}, innen V={inner.Volume():.0f} ({time.time()-t0:.1f}s)")
     shell = OUTER.cut(inner)
+    jb = joint_band().intersect(OUTER)
+    print(f"Fuegeband V={jb.Volume():.0f} valid={jb.isValid()}")
+    shell = fuse_all(shell, [jb])
     top = top_shell(shell)
     print(f"Oberschale V={top.Volume():.0f} valid={top.isValid()} ({time.time()-t0:.1f}s)")
     bots = {v: bottom_shell(shell, v) for v in P.VARIANTS}
@@ -347,7 +450,7 @@ def main():
     res.update(min_section_radius())
     parts = {"oberschale": (top, False), "tastenkappe": (cap, True), "lichtleiter": (lp, True)}
     for v, b in bots.items():
-        parts[f"unterschale_{v}"] = (b, True)
+        parts[f"unterschale_{v}"] = (b, False)   # ADR-0001: Lippe muss nach oben zeigen -> Aussenboden aufs Bett (Support aussen)
     for name, (s, flip) in parts.items():
         cq.exporters.export(cq.Workplane().add(s), f"{CAD}/{name}.step")
         ps = to_print(s, flip)
@@ -367,8 +470,11 @@ def main():
     asm.add(bots[P.CHOSEN], name="unterschale", color=cq.Color(*col["unterschale"]))
     asm.add(cap, name="tastenkappe", color=cq.Color(*col["tastenkappe"]))
     asm.add(lp, name="lichtleiter", color=cq.Color(*col["lichtleiter"]))
-    for n in ("board", "usb_c", "taster", "led", "summer", "ble", "akku", "motor"):
-        asm.add(comps[n], name=n, color=cq.Color(0.1, 0.5, 0.2) if n == "board" else cq.Color(0.6, 0.6, 0.6))
+    for n in ("akku", "motor", "akku_stecker"):
+        asm.add(comps[n], name=n, color=cq.Color(0.6, 0.6, 0.6))
+    asm.add(board_r3(), name="board_r3", color=cq.Color(0.1, 0.5, 0.2))
+    for name, (s, flip) in parts.items():   # BREP exakt (fuer FEM/Kollision; STEP-Reimport der Schalen ungueltig)
+        s.exportBrep(f"{CAD}/{name}.brep")
     asm.save(f"{CAD}/motion-one_baugruppe.step")
     res["chosen_variant"] = P.CHOSEN
     res["runtime_s"] = time.time() - t0

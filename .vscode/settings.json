@@ -1,6 +1,6 @@
 {
   // Disroop-Farben für dieses Projekt (gleiche Palette wie bridge/web/static/styles.css).
-  "workbench.colorTheme": "Default Dark Modern",
+  "workbench.colorTheme": "Dark Modern",
   "workbench.colorCustomizations": {
     "[Default Dark Modern]": {
       "focusBorder": "#a3e635",

@@ -28,6 +28,14 @@ CASES = {
 
 def mesh(step, h, level="tet10"):
     gmsh.initialize(); gmsh.option.setNumber("General.Terminal", 0)
+    if step.endswith(".brep"):   # r3: exakte BREP-Geometrie (Geraetekoordinaten) direkt an OCC-Kernel von gmsh
+        gmsh.model.occ.importShapes(step); gmsh.model.occ.synchronize()
+        gmsh.option.setNumber("Mesh.MeshSizeFromCurvature", 12)
+        gmsh.option.setNumber("Mesh.MeshSizeMin", h * 0.25); gmsh.option.setNumber("Mesh.MeshSizeMax", h)
+        gmsh.option.setNumber("Mesh.Algorithm", 6); gmsh.option.setNumber("Mesh.Algorithm3D", 1)
+        gmsh.option.setNumber("Mesh.SecondOrderLinear", 0)
+        gmsh.model.mesh.generate(3); gmsh.model.mesh.optimize("Netgen")
+        return _extract(level)
     # STL (wasserdicht geprueft) zurueck in Geraetekoordinaten: Druckorientierung = Rotation 180 deg um x
     import trimesh
     m = trimesh.load(step)
@@ -45,6 +53,10 @@ def mesh(step, h, level="tet10"):
     gmsh.option.setNumber("Mesh.MeshSizeMin", h * 0.4); gmsh.option.setNumber("Mesh.MeshSizeMax", h)
     gmsh.option.setNumber("Mesh.Algorithm3D", 1); gmsh.option.setNumber("Geometry.Tolerance", 1e-4)
     gmsh.option.setNumber("Mesh.SecondOrderLinear", 1); gmsh.model.mesh.generate(3); gmsh.model.mesh.optimize("Netgen")
+    return _extract(level)
+
+
+def _extract(level):
     if level.endswith("r"):
         gmsh.model.mesh.refine()
     if not level.startswith("tet4"):
@@ -87,7 +99,7 @@ def surf_loads(pos, tets, tris, case):
 
 def run(variant, h, outroot, level="tet10"):
     sub = "" if variant == json.load(open(f"{DEV}/mechanics/cad/cad_results.json"))["chosen_variant"] else "varianten/"
-    step = f"{DEV}/mechanics/print/{sub}unterschale_{variant}.stl"
+    step = f"{DEV}/mechanics/cad/unterschale_{variant}.brep"   # r3: BREP direkt (v1: STL)
     tag = f"{variant}_h{h:g}" + ("" if level == "tet10" else f"_{level}")
     out = f"{outroot}/{tag}"; os.makedirs(out, exist_ok=True)
     t0 = time.time()
