@@ -3,11 +3,10 @@
 Ein geplanter Einhand-Motion-Controller für Tennis und Ski. Das Gerät soll das Thingy:52-BLE-Profil nachbilden, damit
 Bridge, Spiele und Android-App ohne Codeänderungen funktionieren.
 
-[![Motion One – zusammengebaut und Explosion](media/presentation/preview.png)](media/presentation/ZWISCHENBERICHT_2026-11-08_r3.html)
+[![Motion One – zusammengebaut und Explosion](media/presentation/preview.png)](https://stefaneicher.github.io/disroop-sensor-playground/devices/motion-one/media/presentation/ZWISCHENBERICHT_2026-11-08_r3.html)
 
-> **▶ Überblick in 5 Minuten:** [Technische Präsentation – Zwischenbericht r3](media/presentation/ZWISCHENBERICHT_2026-11-08_r3.html)
-> (Funktionen, 3D-Ansicht zusammengebaut und als Explosion, Komponenten, Preis, Design-Herleitung). Datei herunterladen
-> bzw. lokal im Browser öffnen – GitHub zeigt HTML nur als Quelltext.
+> **▶ Überblick in 5 Minuten:** [Technische Präsentation – Zwischenbericht r3](https://stefaneicher.github.io/disroop-sensor-playground/devices/motion-one/media/presentation/ZWISCHENBERICHT_2026-11-08_r3.html)
+> (Funktionen, 3D-Ansicht zusammengebaut und als Explosion, Komponenten, Preis, Design-Herleitung). Läuft direkt im Browser (GitHub Pages).
 
 ## Aktueller Stand
 
@@ -29,7 +28,7 @@ Schritte stehen im [Motion-One-Resume](management/RESUME.md).
 ## Projektdateien
 
 - [Entwicklungsprompt](PROMPT_1_ENTWICKLUNG.md) und [Marktauftritt-Prompt](PROMPT_2_MARKTAUFTRITT.md)
-- [Technische Präsentation (Zwischenbericht r3)](media/presentation/ZWISCHENBERICHT_2026-11-08_r3.html)
+- [Technische Präsentation (Zwischenbericht r3)](https://stefaneicher.github.io/disroop-sensor-playground/devices/motion-one/media/presentation/ZWISCHENBERICHT_2026-11-08_r3.html)
 - [Vorab-Check](PREFLIGHT.md) und [Vorbildanalyse](ANALYSE.md)
 - [Hauptprotokoll](../../docs/protocol.md)
 
