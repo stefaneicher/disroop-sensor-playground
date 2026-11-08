@@ -1,6 +1,6 @@
 {
  "project": "disroop-sensor-playground",
- "updated": "2026-11-08T09:40+01:00",
+ "updated": "2026-11-08T11:20+01:00",
  "threads": [
   {
    "id": "T-01",
@@ -40,7 +40,8 @@
    "kind": "task",
    "owner": "mech-r3",
    "status": "running",
-   "agent_id": "6e74f5e5-3cac-4c5c-be5f-aadb3eb5f50a"
+   "agent_id": "6e74f5e5-3cac-4c5c-be5f-aadb3eb5f50a",
+   "note": "CAD r3 PASS, STL wasserdicht, Assembly-STL exportiert (uncommitted). Kollision Board-STEP läuft; FEM, Slice, Handoff offen. Stand 11:20."
   },
   {
    "id": "F-01",
@@ -108,7 +109,7 @@
    "topic": "Beschaffung",
    "owner": "pcb-engineer",
    "status": "open",
-   "note": "Regel erfasst (062ba05); Angebot wartet auf Gehäuse r3"
+   "note": "Wartet auf User-Freigabe zum Start."
   },
   {
    "id": "T-03",
@@ -165,6 +166,10 @@
   {
    "t": "09:40",
    "msg": "Board: Typ-Marken, Session-ID, Agent-IDs ergänzt (34d9b99)"
+  },
+  {
+   "t": "11:20",
+   "msg": "Status 11:20: mech-r3 läuft (Kollision/FEM/Slice offen); Q-01, Q-02, T-02-Start warten auf User"
   }
  ],
  "session": "2161f388-0bc4-4170-b315-b3a7921669eb"
