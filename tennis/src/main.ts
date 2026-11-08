@@ -7,6 +7,7 @@ import { Sfx } from './audio.ts';
 import { Hud, type Badge } from './hud.ts';
 import { showFps } from './fps.ts';
 import { MotionLink } from './link.ts';
+import { LimitMonitor } from './limitsui.ts';
 import { Arena, CAMERAS, CAMERA_LABEL, type CameraMode } from './scene.ts';
 
 type Mode = 'menu' | 'calibrate' | 'play' | 'demo';
@@ -54,6 +55,7 @@ function onFrame(f: MotionFrame): void {
   }
 }
 
+const limits = new LimitMonitor(stage, ctrl, () => sfx.alarm(), () => calibrateNow());
 const link = new MotionLink(onFrame);
 showFps();
 link.start();
@@ -109,6 +111,10 @@ $('m-diff').addEventListener('click', () => {
   $('m-diff-v').textContent = difficulty;
 });
 $('m-cam').addEventListener('click', cycleCamera);
+$('m-test').addEventListener('click', () => {
+  sfx.unlock();
+  limits.open(true);
+});
 $('m-cal').addEventListener('click', () => setMode('calibrate'));
 $('cal-ok').addEventListener('click', () => calibrateNow(true));
 $('cal-back').addEventListener('click', () => setMode('menu'));
@@ -178,6 +184,7 @@ function frame(now: number): void {
   serveRequest = false;
   if (pilot && game.phase === 'over') game = new Game({ difficulty, seed: Math.floor(Math.random() * 1e9) });
 
+  limits.update(now, mode === 'play');
   const b = badge();
   hud.badge(b);
   hud.camera(CAMERA_LABEL[arena.camera_mode]);

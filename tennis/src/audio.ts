@@ -69,6 +69,11 @@ export class Sfx {
     this.tone(520 + 200 * power, 0.25, 0.06, 'triangle', 300);
   }
 
+  /** Warning tone for movement beyond the human range. */
+  alarm(): void {
+    this.tone(880, 0.3, 0.12, 'square', 660);
+  }
+
   bounce(): void {
     this.tone(170, 0.35, 0.09, 'sine', 90);
     this.burst(0.12, 0.04, 'lowpass', 900);
