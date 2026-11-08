@@ -1,5 +1,14 @@
 # Resume: hier weitermachen, falls die Session abbricht
 
+> **Resume-Hierarchie:** Das Root-`RESUME.md` enthält Repo-weite Regeln und verweist auf spezialisierte Resumes. Bei einer
+> Aufgabe in einem Teilprojekt ist das `RESUME.md` im tiefsten passenden Projektordner massgeblich; lies es zusätzlich
+> zu den Root-Regeln. Bei Konflikten gilt der spezifischere Projektstand für dessen Teilprojekt.
+>
+> **Motion One Prompt 1:** Bei Arbeiten an `devices/motion-one/` zuerst
+> [`devices/motion-one/management/RESUME.md`](devices/motion-one/management/RESUME.md) lesen. Dort stehen der aktuelle Stand
+> der V1-Integration, die offenen Schritte und die Verifikationsgrenzen. Der folgende Resume-Text dokumentiert den
+> ursprünglichen Thingy:52-/Spielprojekt-Kontext und ist nicht der aktuelle Motion-One-Arbeitsstand.
+
 Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 
 ## Rolle und Arbeitsweise (Vorgaben des Users)

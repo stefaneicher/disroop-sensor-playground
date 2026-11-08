@@ -1,6 +1,6 @@
 # Motion One – Resume
 
-Stand 2026-11-08 06:35 CET. Root-`RESUME.md` describes an older Thingy:52 task; this file is the current Motion One handoff.
+Stand 2026-11-08 06:35 CET. This is the authoritative task resume for Motion One. Read the repo-wide rules and resume hierarchy in [`../../RESUME.md`](../../RESUME.md) as well; root RESUME preserves older Thingy:52 context.
 
 ## Current state
 - §1–§7: project structure, 5 Custom-Agent profiles, 9 Skills, toolchain setup, smoke tests, V1 requirements, architecture and calculated budgets are documented.
