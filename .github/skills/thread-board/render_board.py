@@ -41,10 +41,14 @@ def node(t, kids, depth=0, idx=0, path=()):
              f'{{tag:\'choice\',text:\'{e(t["id"])} → \'+v,element:this,data:{{thread:\'{e(t["id"])}\',answer:v}}}});">'
              + "".join(f'<label><input type="radio" name="a" value="{e(o)}"> {e(o)}</label> ' for o in opts)
              + '<button>Antwort vormerken</button></form>')
+    arch = t.get("archived", False)
+    act = "Wiederherstellen" if arch else "Archivieren"
+    q += (f' <button type="button" class="ab" onclick="window.lavish?.queuePrompt(\'{act} {e(t["id"])}\','
+          f'{{tag:\'archive\',text:\'{act} {e(t["id"])}\',element:this,data:{{thread:\'{e(t["id"])}\',archive:{str(not arch).lower()}}}}})">{act}</button>')
     inner = "".join(node(c, kids, depth + 1, i, path + (t["id"],)) for i, c in enumerate(kids.get(t["id"], [])))
-    return (f'<details open {style}><summary title="{e(crumb)}"><span class="lv" style="color:hsl({h},75%,70%)">L{depth}</span> '
+    return (f'<details open class="{"arch" if arch else ""}" {style}><summary title="{e(crumb)}"><span class="lv" style="color:hsl({h},75%,70%)">L{depth}</span> '
             f'<span class="cr">{e(crumb)}</span><br><b>{e(t["id"])}</b> {e(t["title"])} {badge(rollup(t, kids))}'
-            f' <span class="o">{e(t.get("owner", ""))}</span></summary>'
+            f' <span class="o">{e(t.get("owner", ""))}</span>{" <span class=\"b\">📦 archiviert</span>" if arch else ""}</summary>'
             f'<div class="m">{e(t.get("note", ""))} <span class="r">{refs}</span>{q}</div>{inner}</details>')
 
 
@@ -63,9 +67,10 @@ def main(src, dst):
             fb.setdefault(t.get("topic", "Allgemein"), []).append(t)
     e = html.escape
     topics = "".join(f'<div class="c"><b>{e(k)}</b><ul>' + "".join(
-        f'<li>{e(t["id"])} {e(t["title"])} {badge(t["status"])}</li>' for t in v) + "</ul></div>"
+        f'<li class="{"arch" if t.get("archived") else ""}">{e(t["id"])} {e(t["title"])} {badge(t["status"])}</li>' for t in v) + "</ul></div>"
         for k, v in fb.items())
-    qs = [t for t in ts if t["status"] == "needs-user"]
+    qs = [t for t in ts if t["status"] == "needs-user" and not t.get("archived")]
+    narch = sum(1 for t in ts if t.get("archived"))
     page = f"""<!doctype html><html lang="de" data-lavish-annotate="on"><head><meta charset="utf-8">
 <title>{e(d.get('project', 'Projekt'))} – Thread-Board</title><style>
 body{{margin:0;padding:20px;font-family:system-ui,sans-serif;background:#111827;color:#e5e7eb}}
@@ -75,13 +80,28 @@ details{{margin:6px 0 6px 12px;padding:4px 8px;border-radius:6px}}summary{{curso
 .b{{font-size:11px;padding:1px 6px;border-radius:6px;white-space:nowrap}}.o{{color:#93c5fd;font-size:12px}}
 .m{{font-size:12px;color:#9ca3af;margin:0 0 4px 14px}}.r{{color:#6b7280}}.c{{background:#1f2937;border-radius:8px;padding:10px;margin-bottom:10px;font-size:13px}}
 .bar{{height:8px;background:#374151;border-radius:9px;overflow:hidden}}.bar i{{display:block;height:100%;background:#22c55e}}
+body.hide .arch{{display:none}}.arch{{opacity:.55}}.ab{{background:#4b5563;margin-left:6px}}.tg{{float:right;font-size:13px;color:#9ca3af;text-align:right}}.kh{{font-size:11px;margin-top:4px}}summary:focus{{outline:2px solid #fbbf24;outline-offset:2px;border-radius:4px}}
 form{{margin-top:6px}}button{{font:inherit;font-size:12px;background:#2563eb;color:#fff;border:0;border-radius:5px;padding:3px 8px}}
-</style></head><body><h1>{e(d.get('project', 'Projekt'))} – Thread-Board</h1>
+</style></head><body><div class="tg"><button type="button" id="exA" title="E">⊞ Alle auf</button> <button type="button" id="coA" title="C">⊟ Alle zu</button> <button type="button" id="opA" title="O">Nur offene</button> <label><input type="checkbox" id="hideArch" checked> Archivierte ausblenden ({narch})</label><div class="kh">Tasten: J/K oder ↑/↓ bewegen · ←/→ zu/auf · Enter umschalten · E/C alle auf/zu · O nur offene · A Archiv · Doppelklick: Teilbaum auf/zu</div></div><h1>{e(d.get('project', 'Projekt'))} – Thread-Board</h1>
 <p style="color:#9ca3af;font-size:13px">Stand {e(d.get('updated', ''))} · {done}/{total} Threads fertig</p>
 <div class="bar"><i style="width:{int(100 * done / max(total, 1))}%"></i></div>
 <div class="g"><div><h2>Threads</h2>{''.join(node(t, kids, 0, i) for i, t in enumerate(roots))}</div>
 <div><h2>Fragen an dich ({len(qs)})</h2>{''.join(node(t, {}) for t in qs) or '<p>keine</p>'}
-<h2>Dein Feedback nach Topics</h2>{topics or '<p>keins</p>'}</div></div></body></html>"""
+<h2>Dein Feedback nach Topics</h2>{topics or '<p>keins</p>'}</div></div><script>
+const cb=document.getElementById('hideArch');cb.checked=localStorage.getItem('tb-hide')!=='0';
+const ap=()=>{{document.body.classList.toggle('hide',cb.checked);localStorage.setItem('tb-hide',cb.checked?'1':'0')}};cb.onchange=ap;ap();
+const D=()=>[...document.querySelectorAll('.g details')],V=()=>[...document.querySelectorAll('.g summary')].filter(x=>x.offsetParent);
+const all=o=>D().forEach(d=>d.open=o);
+const onlyOpen=()=>D().forEach(d=>d.open=!d.querySelector(':scope>summary .b')?.textContent.includes('done'));
+document.getElementById('exA').onclick=()=>all(true);document.getElementById('coA').onclick=()=>all(false);document.getElementById('opA').onclick=onlyOpen;
+document.querySelectorAll('.g summary').forEach(s=>{{s.tabIndex=0;s.addEventListener('dblclick',ev=>{{ev.preventDefault();const d=s.parentElement,o=!d.open;d.open=o;d.querySelectorAll('details').forEach(x=>x.open=o)}})}});
+document.addEventListener('keydown',ev=>{{if(ev.target.closest('input,textarea,select')||ev.ctrlKey||ev.metaKey||ev.altKey)return;
+const k=ev.key.toLowerCase(),v=V(),i=v.indexOf(document.activeElement),f=document.activeElement?.tagName==='SUMMARY'?document.activeElement.parentElement:null;
+const mv=n=>{{const t=v[Math.max(0,Math.min(v.length-1,n))];if(t){{t.focus();t.scrollIntoView({{block:'nearest'}})}}}};
+if(k==='j'||k==='arrowdown')mv(i+1);else if(k==='k'||k==='arrowup')mv(i<0?0:i-1);
+else if(k==='arrowright'&&f)f.open=true;else if(k==='arrowleft'&&f){{if(f.open)f.open=false;else f.parentElement.closest('details')?.querySelector(':scope>summary').focus()}}
+else if(k==='e')all(true);else if(k==='c')all(false);else if(k==='o')onlyOpen();else if(k==='a'){{cb.checked=!cb.checked;ap()}}else return;ev.preventDefault()}});
+</script></body></html>"""
     open(dst, "w", encoding="utf-8").write(page)
     print(f"board: {dst} ({total} threads, {done} done, {len(qs)} questions)", flush=True)
 

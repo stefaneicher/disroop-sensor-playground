@@ -12,10 +12,12 @@ Der Manager führt wie ein Team-Manager **Threads**: ein Thread ist ein Faden ei
 {"project":"…","updated":"ISO-Zeit","threads":[
  {"id":"T-01","parent":null,"title":"…","kind":"task|feedback|question|decision","topic":"…",
   "owner":"manager|<agent-name>|user","status":"open|running|done|blocked|needs-user",
-  "source":"F-01 / Auftrag / Frage","refs":["commit abc1234","adr/…","handoff …"],"note":"…"}]}
+  "source":"F-01 / Auftrag / Frage","refs":["commit abc1234","adr/…","handoff …"],"note":"…","archived":false}]}
 ```
 - Status rollt nach oben: Eltern-Thread ist erst `done`, wenn alle Kinder `done` sind (der Generator berechnet das).
 - Sub-Thread mit `owner` = Agent/Sub-Agent entspricht einem delegierten Auftrag.
+- Bedienung: Knöpfe „Alle auf/zu“, „Nur offene“; Tasten J/K bzw. ↑/↓, ←/→, Enter, E, C, O, A; Doppelklick klappt einen ganzen Teilbaum.
+- `archived:true` blendet einen Thread aus (Schalter „Archivierte ausblenden“, Standard an; Kinder werden mit ausgeblendet). Archivieren/Wiederherstellen per Knopf am Thread → Lavish-Prompt `tag:"archive"`, `data:{thread,archive}`.
 - Fragen an den User: `kind:"question"`, `status:"needs-user"`, optional `options:[…]`.
 
 ## Regeln für den Manager
@@ -23,7 +25,7 @@ Der Manager führt wie ein Team-Manager **Threads**: ein Thread ist ein Faden ei
 2. Agent starten/fertig, Commit, ADR, Blocker → Thread aktualisieren (`refs`, `status`).
 3. **Vorschlagen:** Bei Meilensteinen oder wenn der User nach Stand fragt, das Board neu erzeugen und anbieten:
    `python3 .github/skills/thread-board/render_board.py THREADS.json .lavish/board.html && lavish-axi .lavish/board.html`
-4. Antworten aus dem Board (Lavish-Prompts mit `data.thread`) in den Thread übernehmen.
+4. Antworten aus dem Board (Lavish-Prompts mit `data.thread`) in den Thread übernehmen; `tag:"archive"` → `archived` setzen.
 5. `THREADS.json` mit den übrigen Statusdateien committen.
 
 ## Export in andere Repos
