@@ -60,6 +60,11 @@ Kritisch (Bestand < 10x Bedarf): keine. E73 C356849 hat 319 Stk (QUELLE 2026-11-
 
 Ein/Aus: Schiebeschalter MSK12C02 schaltet Gate des P-FET Q2 (Soft-Switch). Begruendung: Aus-Zustand 0 uA ueber R10 (Gate=Source), kein Firmware-Risiko, Schalter traegt keinen Laststrom; Soft-Latch per Taster spart den Schalter, braucht aber Firmware-Halteleitung und hat ~1 uA Leckage -> V2-Option.
 
+## Stand 2026-11-08 (Q-03, JLCPCB + JLC3DP) – Gesamt-BOM r4
+Hauptboard r4: 35 Pos. r3 + J5 C160407 (13 Extended). Teile/Geraet Hauptboard 20.24 + 0.32 = **20.56 USD** (BERECHNUNG). Bedienplatine motion-one-ui: **1.65 USD** (BERECHNUNG), Extended 3 (SW1 C146170, U1 C2890349, J1 C160407). Motor M1 C2759981 0.63 USD (Handbestueckung). J2 = C160402 (Hauptboard, oben). **Summe 22.84 USD/Geraet** (BERECHNUNG).
+Nicht-elektronische Positionen (JLC3DP, Details `ANGEBOTE_V1.md` §0): Oberschale, Unterschale, Tastenkappe = SLS PA12 (3201 PA-F); Lichtleiter = SLA transparent (Harz 8001); Preis ANNAHME 8–25 USD/Satz, Sofortpreis NOT RUN. STL `mechanics/print/VORLAEUFIG_*` bis Gehaeuse-r4 final.
+Offen (NOT RUN): C25076/C11702 Neuabfrage, E73 C356849 Lager vor Bestellung, TVS fuer J5 (PCB offen).
+
 ## r4-Ergaenzung (Q-04, Stand 2026-11-08, Abfrage 12:42 UTC, Rohdaten `logs/pcb-r4/sourcing/jlc_r4.json`, URL `https://jlcpcb.com/partdetail/<LCSC>`, USD Stufe 1, QUELLE)
 
 Hauptboard r4: neu J5; TP3/TP4 entfallen; H1/H2 NPTH (keine BOM-Position).
