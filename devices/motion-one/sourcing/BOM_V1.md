@@ -1,4 +1,6 @@
-# BOM V1 Motion One (Stand 2026-11-08)
+# BOM V1 Motion One – Board r3 (Stand 2026-11-08 11:45 CET)
+
+r3-Aenderung: J2 JST-PH C295747 -> JST-SH C160402 (Hoehe 2.9 mm). Akku-Gegenstecker: JST SHR-02V-S (nicht ueber JLC bestueckt). Neuabfrage J2/E73/ICM-45686 am 2026-11-08 10:39 UTC (Rohdaten `logs/sourcing-2026-11-08/`).
 
 Quelle Lager/Preis: oeffentliche JLCPCB-Teile-API via `scripts/electronics/jlc_query.py`, Rohdaten `logs/pcb-v1/sourcing/jlc_q*.json` (UTC-Zeit je Zeile), Gegenprobe Teileseiten per Playwright `playwright_stock_2.json`. Teileseite: `https://jlcpcb.com/partdetail/<LCSC>`. Preise USD, Stufe 1 (QUELLE).
 
@@ -17,7 +19,7 @@ Bedarf fuer Bestand-Kriterium: 10 Geraete (ANNAHME) -> Bestand >= 10x Bedarf = 1
 | C965840 | XL-1615RGBC-RF | XL-1615RGBC | LED_XL-1615RGBC | D4 | 1 | Extended | 715111 | PASS | 0.0197 | 0.020 | 2026-11-07T22:59Z jlc_q1.json | 3 Einzel-LEDs 0603 Basic |
 | C2286 | KT-0603R | rot CHRG | LED_0603_1608Metric | D5 | 1 | Basic | 6594087 | PASS | 0.0077 | 0.008 | 2026-11-07T23:39Z jlc_q3.json | Basic-Aequivalent |
 | C165948 | TYPE-C-31-M-12 | USB-C TYPE-C-31-M-12 | USB_C_Receptacle_HRO_TYPE-C-31-M-12 | J1 | 1 | Extended | 320167 | PASS | 0.1868 | 0.187 | 2026-11-07T22:59Z jlc_q1.json | TYPE-C-31-M-12 andere Listings (ANNAHME) |
-| C295747 | S2B-PH-SM4-TB(LF)(SN) | BATT JST-PH | JST_PH_S2B-PH-SM4-TB_1x02-1MP_P2.00mm_Horizontal | J2 | 1 | Extended | 7786 | PASS | 0.2262 | 0.226 | 2026-11-07T22:59Z jlc_q1.json | JST-SH C160402 |
+| C160402 | SM02B-SRSS-TB(LF)(SN) | BATT JST-SH | JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal | J2 | 1 | Extended | 69101 | PASS | 0.1322 | 0.132 | 2026-11-08T10:39Z logs/sourcing-2026-11-08/jlc_j2_alt.json | ZX-SH1.0-2PWT C7430444 (40004 Stk, 0.0493 USD, Hoehe 3.15 mm laut LCSC; Footprint-Kompatibilitaet ANNAHME, Datenblatt pruefen) |
 | C15127 | AO3401A | AO3401A | SOT-23-3 | Q1,Q2,Q4 | 3 | Basic | 1677120 | PASS | 0.0828 | 0.248 | 2026-11-07T22:59Z jlc_q1.json | Basic-Aequivalent |
 | C2830320 | FS8205A | FS8205A | SOT-23-6 | Q3 | 1 | Extended | 194714 | PASS | 0.0499 | 0.050 | 2026-11-07T23:04Z jlc_q2.json | FS8205A C908265 (q2) |
 | C8545 | 2N7002 | 2N7002 | SOT-23-3 | Q5 | 1 | Basic | 5965426 | PASS | 0.0167 | 0.017 | 2026-11-07T22:59Z jlc_q1.json | Basic-Aequivalent |
@@ -34,20 +36,20 @@ Bedarf fuer Bestand-Kriterium: 10 Geraete (ANNAHME) -> Bestand >= 10x Bedarf = 1
 | C431540 | MSK12C02 | MSK12C02 | SW_SPDT_Shouhan_MSK12C02 | SW1 | 1 | Extended | 179615 | PASS | 0.0543 | 0.054 | 2026-11-07T23:04Z jlc_q2.json | SK12D07 (ANNAHME) |
 | C318884 | TS-1187A-B-A-B | TS-1187A | SW_Push_1P1T_XKB_TS-1187A | SW2 | 1 | Basic | 873144 | PASS | 0.0207 | 0.021 | 2026-11-07T22:59Z jlc_q1.json | Basic-Aequivalent |
 | C77131 | NCP15XH103F03RC | 10k B3380 | R_0402_1005Metric | TH1 | 1 | Extended | 304942 | PASS | 0.0167 | 0.017 | 2026-11-07T22:59Z jlc_q1.json | 0402 10k B3950 Basic (ANNAHME) |
-| C356849 | E73-2G4M08S1C | E73-2G4M08S1C | E73-2G4M08S1C | U1 | 1 | Extended | 322 | PASS | 7.69 | 7.690 | 2026-11-07T22:59Z jlc_q1.json | C2764963 (E73-2G4M08S1C Alternativlisting) bzw. Modulwechsel; Bestand knapp |
+| C356849 | E73-2G4M08S1C | E73-2G4M08S1C | E73-2G4M08S1C | U1 | 1 | Extended | 319 | PASS | 7.69 | 7.690 | 2026-11-08T10:39Z jlc_j2_alt.json | C2764963 (E73-2G4M08S1C Alternativlisting) bzw. Modulwechsel; Bestand knapp |
 | C7519 | USBLC6-2SC6 | USBLC6-2SC6 | SOT-23-6 | U2 | 1 | Extended | 25258 | PASS | 0.1623 | 0.162 | 2026-11-07T22:59Z jlc_q1.json | USBLC6-2P6 / SRV05-4 (ANNAHME) |
 | C16581 | TP4056-42-ESOP8 | TP4056 | SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm | U3 | 1 | Extended | 110382 | PASS | 0.1852 | 0.185 | 2026-11-07T22:59Z jlc_q1.json | BQ24074 C54313 (Power-Path integriert) |
 | C351410 | DW01A | DW01A | SOT-23-6 | U4 | 1 | Extended | 95352 | PASS | 0.0532 | 0.053 | 2026-11-07T22:59Z jlc_q1.json | DW01A anderer Hersteller (JLC-Suche q2) |
 | C5446 | XC6206P332MR-G | XC6206P332MR | SOT-23-3 | U5 | 1 | Basic | 493191 | PASS | 0.1477 | 0.148 | 2026-11-07T22:59Z jlc_q1.json | ME6211C33 C82942 / AP2112K-3.3 C51118 (pinkompatibel SOT-23 nur ME6211-SOT23) |
-| C22459454 | ICM-45686 | ICM-45686 | LGA-14_3x2.5mm_P0.5mm_LayoutBorder3x4y | U6 | 1 | Extended | 3091 | PASS | 10.2118 | 10.212 | 2026-11-07T22:59Z jlc_q1.json | LSM6DSV16X C5267406 (Footprint-Wechsel) |
+| C22459454 | ICM-45686 | ICM-45686 | LGA-14_3x2.5mm_P0.5mm_LayoutBorder3x4y | U6 | 1 | Extended | 3061 | PASS | 10.2118 | 10.212 | 2026-11-08T10:39Z jlc_j2_alt.json | LSM6DSV16X C5267406 (Footprint-Wechsel) |
 | C32346 | Q13FC13500004 | 32.768kHz | Crystal_SMD_3215-2Pin_3.2x1.5mm | Y1 | 1 | Basic | 432670 | PASS | 0.1713 | 0.171 | 2026-11-07T23:04Z jlc_q2.json | Basic-Aequivalent |
 
 Nicht ueber JLC: J3 Motorpads (Litzen, Motor separat), J4 TC2030-NL (Tag-Connect Kabel, nur Footprint), TP1-6, H1-2 (keine Teile).
 
-**Summe Teile/Geraet (Stufe 1): 20.33 USD** (BERECHNUNG). Extended-Positionen: 12 (Extended-Gebuehr pro Auftrag, siehe ANGEBOTE_V1.md). Davon E73 7.69 + ICM-45686 10.21 = 17.90 USD (QUELLE).
+**Summe Teile/Geraet (Stufe 1): 20.24 USD** (r3: 20.33 − 0.2262 + 0.1322) (BERECHNUNG). Extended-Positionen: 12 (Extended-Gebuehr pro Auftrag, siehe ANGEBOTE_V1.md). Davon E73 7.69 + ICM-45686 10.21 = 17.90 USD (QUELLE).
 
 Bewertung Basic vor Extended: alle Passiven, FETs, Dioden, Regler, Quarz, Taster = Basic; Extended nur wo kein Basic-Aequivalent (Modul, IMU, Lader, Schutz, USB-C, ESD, Summer, RGB, Schiebeschalter, JST, NTC).
 
-Kritisch (Bestand < 10x Bedarf): keine. E73 C356849 hat 322 Stk (QUELLE q1): fuer 10 Geraete PASS, fuer Serie >32 Geraete Risiko -> vor Bestellung erneut pruefen, Alternative Modul-Listing C2764963.
+Kritisch (Bestand < 10x Bedarf): keine. E73 C356849 hat 319 Stk (QUELLE 2026-11-08T10:39Z): fuer 10 Geraete PASS, fuer Serie >32 Geraete Risiko -> vor Bestellung erneut pruefen, Alternative Modul-Listing C2764963.
 
 Ein/Aus: Schiebeschalter MSK12C02 schaltet Gate des P-FET Q2 (Soft-Switch). Begruendung: Aus-Zustand 0 uA ueber R10 (Gate=Source), kein Firmware-Risiko, Schalter traegt keinen Laststrom; Soft-Latch per Taster spart den Schalter, braucht aber Firmware-Halteleitung und hat ~1 uA Leckage -> V2-Option.

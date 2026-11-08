@@ -1,0 +1,184 @@
+[
+ {
+  "query": "C160402",
+  "utc": "2026-11-08T10:39:48+00:00",
+  "lcsc": "C160402",
+  "mpn": "SM02B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 69101,
+  "price": [
+   [
+    1,
+    0.1322
+   ],
+   [
+    50,
+    0.1088
+   ],
+   [
+    150,
+    0.0969
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2.9mm 2P 4.32mm 4mm 50V Auxiliary Solder Pin Copper alloy PA SH ",
+  "url": "https://jlcpcb.com/partdetail/C160402",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-SM02B-SRSS-TB-LF-SN_C160402.pdf"
+ },
+ {
+  "query": "SM02B-SRSS",
+  "utc": "2026-11-08T10:39:49+00:00",
+  "lcsc": "C18337480",
+  "mpn": "SM02B-SRSS-TB",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.1847
+   ],
+   [
+    10,
+    0.1847
+   ],
+   [
+    30,
+    0.1847
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2.9mm 2P 4.32mm 4mm 50V Auxiliary Solder Pin Copper alloy PA SH ",
+  "url": "https://jlcpcb.com/partdetail/C18337480",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2403271619_JST-SM02B-SRSS-TB_C18337480.pdf"
+ },
+ {
+  "query": "SM02B-SRSS",
+  "utc": "2026-11-08T10:39:49+00:00",
+  "lcsc": "C54110153",
+  "mpn": "XY-SM02B-SRSS-WB",
+  "type": "expand",
+  "stock": 406,
+  "price": [
+   [
+    1,
+    0.0396
+   ],
+   [
+    200,
+    0.031
+   ],
+   [
+    600,
+    0.0262
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "SMD,P=1mm,\u5367\u8d34 Wire To Board Connector ROHS",
+  "url": "https://jlcpcb.com/partdetail/C54110153",
+  "datasheet": null
+ },
+ {
+  "query": "SM02B-SRSS",
+  "utc": "2026-11-08T10:39:49+00:00",
+  "lcsc": "C160402",
+  "mpn": "SM02B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 69101,
+  "price": [
+   [
+    1,
+    0.1322
+   ],
+   [
+    50,
+    0.1088
+   ],
+   [
+    150,
+    0.0969
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2.9mm 2P 4.32mm 4mm 50V Auxiliary Solder Pin Copper alloy PA SH ",
+  "url": "https://jlcpcb.com/partdetail/C160402",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-SM02B-SRSS-TB-LF-SN_C160402.pdf"
+ },
+ {
+  "query": "SM02B-SRSS",
+  "utc": "2026-11-08T10:39:49+00:00",
+  "lcsc": "C5306062",
+  "mpn": "SM02B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0664
+   ],
+   [
+    50,
+    0.054
+   ],
+   [
+    150,
+    0.0478
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm Copper alloy Surface Mount, Right Angle Tin SMD,P=1mm,Surface Mount\uff0cRig",
+  "url": "https://jlcpcb.com/partdetail/C5306062",
+  "datasheet": null
+ },
+ {
+  "query": "C356849",
+  "utc": "2026-11-08T10:39:49+00:00",
+  "lcsc": "C356849",
+  "mpn": "E73-2G4M08S1C",
+  "type": "expand",
+  "stock": 319,
+  "price": [
+   [
+    1,
+    7.69
+   ],
+   [
+    10,
+    7.5215
+   ],
+   [
+    12,
+    7.5215
+   ]
+  ],
+  "pkg": "SMD,18x13mm",
+  "desc": "-103dBm\u3001-95dBm -40\u2103~+85\u2103 120m 17.05mA 3.3V 8.27mA 8dBm Bluetooth 5.0\u3001Bluetooth 4.2 PWM\u3001SPI",
+  "url": "https://jlcpcb.com/partdetail/C356849",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2504101957_Chengdu-Ebyte-Elec-Tech-E73-2G4M08S1C_C356849.pdf"
+ },
+ {
+  "query": "C22459454",
+  "utc": "2026-11-08T10:39:50+00:00",
+  "lcsc": "C22459454",
+  "mpn": "ICM-45686",
+  "type": "expand",
+  "stock": 3061,
+  "price": [
+   [
+    1,
+    10.2118
+   ],
+   [
+    10,
+    8.7121
+   ],
+   [
+    30,
+    7.7995
+   ]
+  ],
+  "pkg": "LGA-14(3x2.5)",
+  "desc": "-40\u2103~+85\u2103 1.71V~3.6V 16bit 2.2uA 8KB IMU (accelerometer + gyroscope) Motion event detectio",
+  "url": "https://jlcpcb.com/partdetail/C22459454",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2411220643_TDK-InvenSense-ICM-45686_C22459454.pdf"
+ }
+]

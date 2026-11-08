@@ -1,0 +1,280 @@
+[
+ {
+  "query": "SH1.0-2P",
+  "utc": "2026-11-08T10:40:08+00:00",
+  "lcsc": "C9900150532",
+  "mpn": "SH1.0-2P",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "FL",
+  "desc": "FL New Arrivals ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900150532",
+  "datasheet": null
+ },
+ {
+  "query": "SH1.0-2P",
+  "utc": "2026-11-08T10:40:08+00:00",
+  "lcsc": "C9900019065",
+  "mpn": "SH1.0-2PIN",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "CONN-SMD_HC-1.0-2PWT",
+  "desc": "CONN-SMD_HC-1.0-2PWT SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900019065",
+  "datasheet": null
+ },
+ {
+  "query": "SH1.0-2P",
+  "utc": "2026-11-08T10:40:08+00:00",
+  "lcsc": "C7430444",
+  "mpn": "ZX-SH1.0-2PWT",
+  "type": "expand",
+  "stock": 40004,
+  "price": [
+   [
+    1,
+    0.0493
+   ],
+   [
+    100,
+    0.0411
+   ],
+   [
+    300,
+    0.037
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-40\u2103~+85\u2103 1 1A 1mm 1x2P 2 2P 3.15mm 4.35mm 4.3mm 50V Auxiliary Solder Pin Beige Brass LCP ",
+  "url": "https://jlcpcb.com/partdetail/C7430444",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2306191203_Megastar-ZX-SH1-0-2PWT_C7430444.pdf"
+ },
+ {
+  "query": "SH1.0-2P",
+  "utc": "2026-11-08T10:40:08+00:00",
+  "lcsc": "C7430451",
+  "mpn": "ZX-SH1.0-2PLT",
+  "type": "expand",
+  "stock": 55622,
+  "price": [
+   [
+    1,
+    0.0609
+   ],
+   [
+    50,
+    0.0512
+   ],
+   [
+    150,
+    0.0465
+   ]
+  ],
+  "pkg": "SMD,P=1mm",
+  "desc": "-40\u2103~+85\u2103 1 1A 1mm 1x2P 2 2P 3.05mm 4.35mm 4.4mm 50V Auxiliary Solder Pin Beige Brass LCP ",
+  "url": "https://jlcpcb.com/partdetail/C7430451",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2306191201_Megastar-ZX-SH1-0-2PLT_C7430451.pdf"
+ },
+ {
+  "query": "SH1.0 2P WT",
+  "utc": "2026-11-08T10:40:08+00:00",
+  "lcsc": "C53055318",
+  "mpn": "SH1.0mm-2P-WT",
+  "type": "expand",
+  "stock": 8127,
+  "price": [
+   [
+    1,
+    0.0385
+   ],
+   [
+    200,
+    0.0306
+   ],
+   [
+    600,
+    0.0267
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "1mm 1x2P 2P SH Surface Mount, Right Angle SMD,P=1mm,\u5367\u8d34 Wire To Board Connector ROHS",
+  "url": "https://jlcpcb.com/partdetail/C53055318",
+  "datasheet": null
+ },
+ {
+  "query": "1.0-2P LT",
+  "utc": "2026-11-08T10:40:08+00:00",
+  "lcsc": "C2906273",
+  "mpn": "1.0-2P LT",
+  "type": "expand",
+  "stock": 10564,
+  "price": [
+   [
+    1,
+    0.0524
+   ],
+   [
+    100,
+    0.0418
+   ],
+   [
+    300,
+    0.0365
+   ]
+  ],
+  "pkg": "SMD,P=1mm",
+  "desc": "-25\u2103~+85\u2103 1 125V 1A 1mm 1x2P 2 2P Beige LCP Phosphor bronze SH Surface Mount,Vertical Tin ",
+  "url": "https://jlcpcb.com/partdetail/C2906273",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2110190930_SHOU-HAN-1-0-2P-LT_C2906273.pdf"
+ },
+ {
+  "query": "1.0-2P LT",
+  "utc": "2026-11-08T10:40:08+00:00",
+  "lcsc": "C5142057",
+  "mpn": "HX 1.0-2P LT",
+  "type": "expand",
+  "stock": 1155,
+  "price": [
+   [
+    1,
+    0.0478
+   ],
+   [
+    100,
+    0.038
+   ],
+   [
+    300,
+    0.0331
+   ]
+  ],
+  "pkg": "SMD,P=1mm",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2P Surface Mount,Vertical SMD,P=1mm Wire To Board Connector ROHS",
+  "url": "https://jlcpcb.com/partdetail/C5142057",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2208181800_hanxia-HX-1-0-2P-LT_C5142057.pdf"
+ },
+ {
+  "query": "1.0-2P LT",
+  "utc": "2026-11-08T10:40:08+00:00",
+  "lcsc": "C54905892",
+  "mpn": "LAIL-PHC1.0-2P-01-SH-LT",
+  "type": "expand",
+  "stock": 10179,
+  "price": [
+   [
+    1,
+    0.1283
+   ],
+   [
+    50,
+    0.1021
+   ],
+   [
+    150,
+    0.0889
+   ]
+  ],
+  "pkg": "SMD,P=1mm",
+  "desc": "SMD,P=1mm Wire To Board Connector ROHS",
+  "url": "https://jlcpcb.com/partdetail/C54905892",
+  "datasheet": null
+ },
+ {
+  "query": "BM02B-SRSS",
+  "utc": "2026-11-08T10:40:09+00:00",
+  "lcsc": "C160388",
+  "mpn": "BM02B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 15394,
+  "price": [
+   [
+    1,
+    0.1631
+   ],
+   [
+    50,
+    0.133
+   ],
+   [
+    150,
+    0.118
+   ]
+  ],
+  "pkg": "SMD,P=1mm",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2P 3.6mm 4.25mm 4mm 50V Auxiliary Solder Pin Copper alloy PA SH ",
+  "url": "https://jlcpcb.com/partdetail/C160388",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-BM02B-SRSS-TB-LF-SN_C160388.pdf"
+ },
+ {
+  "query": "BM02B-SRSS",
+  "utc": "2026-11-08T10:40:09+00:00",
+  "lcsc": "C495537",
+  "mpn": "BM02B-SRSS-TBT(LF)(SN)",
+  "type": "expand",
+  "stock": 13401,
+  "price": [
+   [
+    1,
+    0.3209
+   ],
+   [
+    50,
+    0.2607
+   ],
+   [
+    150,
+    0.2349
+   ]
+  ],
+  "pkg": "SMD,P=1mm",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2P 3.6mm 4.25mm 4mm 50V Auxiliary Solder Pin Copper alloy PA SH ",
+  "url": "https://jlcpcb.com/partdetail/C495537",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-BM02B-SRSS-TBT-LF-SN_C495537.pdf"
+ },
+ {
+  "query": "BM02B-SRSS",
+  "utc": "2026-11-08T10:40:09+00:00",
+  "lcsc": "C594372",
+  "mpn": "BM02B-SRSS-G-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.2699
+   ],
+   [
+    10,
+    0.2699
+   ],
+   [
+    12,
+    0.2699
+   ]
+  ],
+  "pkg": "Plugin",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2P 3.6mm 4.25mm 4mm 50V Auxiliary Solder Pin Copper alloy Gold P",
+  "url": "https://jlcpcb.com/partdetail/C594372",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2402261208_JST-BM02B-SRSS-G-TB-LF-SN_C594372.pdf"
+ }
+]

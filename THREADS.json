@@ -1,232 +1,234 @@
 {
- "project": "disroop-sensor-playground",
- "updated": "2026-11-08T11:43+01:00",
- "threads": [
-  {
-   "id": "T-01",
-   "parent": null,
-   "title": "Motion One: Integration r3",
-   "kind": "task",
-   "owner": "manager",
-   "status": "running"
-  },
-  {
-   "id": "T-01.1",
-   "parent": "T-01",
-   "title": "PCB r3 nach Mechanik-Forderungen",
-   "kind": "task",
-   "owner": "pcb-engineer",
-   "status": "done",
-   "refs": [
-    "e7411cc",
-    "71af3dd"
-   ]
-  },
-  {
-   "id": "T-01.2",
-   "parent": "T-01",
-   "title": "Firmware: PINOUT → DTS, 36/36 Tests",
-   "kind": "task",
-   "owner": "firmware-engineer",
-   "status": "done",
-   "refs": [
-    "1abc002"
-   ]
-  },
-  {
-   "id": "T-01.3",
-   "parent": "T-01",
-   "title": "Gehäuse r3: Kollision, Fügestelle, Slice (FEM pausiert)",
-   "kind": "task",
-   "owner": "mech-r3",
-   "status": "running",
-   "agent_id": "6e74f5e5-3cac-4c5c-be5f-aadb3eb5f50a",
-   "note": "CAD r3 PASS, STL wasserdicht, Assembly-STL exportiert (uncommitted). Kollision Board-STEP läuft; FEM, Slice, Handoff offen. Stand 11:20."
-  },
-  {
-   "id": "F-01",
-   "parent": "T-01.3",
-   "title": "Fügestelle Lippe + Nut + Schattenfuge",
-   "kind": "feedback",
-   "topic": "Gehäuse & Gestaltung",
-   "owner": "mech-r3",
-   "status": "running",
-   "refs": [
-    "ADR-0001"
-   ],
-   "agent_id": "6e74f5e5-3cac-4c5c-be5f-aadb3eb5f50a"
-  },
-  {
-   "id": "F-02",
-   "parent": "T-01",
-   "title": "Viewer in Einbaulage mit Explosion",
-   "kind": "feedback",
-   "topic": "Gehäuse & Gestaltung",
-   "owner": "manager",
-   "status": "done"
-  },
-  {
-   "id": "Q-01",
-   "parent": "T-01",
-   "title": "Bootloader: eigene Board-Definition (Status-LED, Update-Taster) für V1?",
-   "kind": "question",
-   "owner": "user",
-   "status": "done",
-   "options": [
-    "Ja, V1",
-    "Später (V2)"
-   ],
-   "question": "Taster und LED sitzen auf dem Board an anderen Pins als beim nRF52840-DK. Damit der Bootloader (Firmware-Update per Bluetooth) funktioniert, braucht er eine eigene Board-Definition. Soll ich die erstellen lassen, oder bleibt es vorerst bei Programmierung nur per SWD?",
-   "recommendation": "Ja – eigene Board-Definition. Updates dann per Bluetooth ohne Gehäuse öffnen; reine Firmware-Arbeit, kein Hardware-Eingriff. Erstes Flashen bleibt per SWD.",
-   "archived": true,
-   "note": "Antwort 11:43: Ja, V1. Firmware-Agent beauftragt (Bootloader-Board-Definition)."
-  },
-  {
-   "id": "Q-02",
-   "parent": "T-01",
-   "title": "TX-Testpad für Debug-Ausgabe in r4 ergänzen?",
-   "kind": "question",
-   "owner": "user",
-   "status": "done",
-   "options": [
-    "Ja",
-    "Nein"
-   ],
-   "question": "Der UART ist in r3 entfallen. Debug-Ausgaben gehen trotzdem per SWD mit Segger RTT. Soll in r4 trotzdem ein TX-Testpad an einem freien Pin dazukommen?",
-   "recommendation": "Ja – ein Pad ohne Bauteil, ohne Mehrkosten; Reserve, falls RTT nicht verfügbar ist (z. B. Programmieradapter ohne RTT).",
-   "archived": true,
-   "note": "Antwort 11:43: kein UART, kein TX-Testpad; Debug nur SWD/RTT."
-  },
-  {
-   "id": "T-02",
-   "parent": null,
-   "title": "Beschaffung V1",
-   "kind": "task",
-   "owner": "manager",
-   "status": "running"
-  },
-  {
-   "id": "F-03",
-   "parent": "T-02",
-   "title": "PCBA + 3D-Druck, gleicher Hersteller",
-   "kind": "feedback",
-   "topic": "Beschaffung",
-   "owner": "pcb-engineer",
-   "status": "running",
-   "note": "Gestartet 11:39: Angebote PCBA+3D-Druck (JLC/JLC3DP, PCBWay, EU, Schweiz), J2 JST-SH in BOM, Upload-Pakete + Anleitung für User-Upload (kein Login durch Agent)."
-  },
-  {
-   "id": "T-03",
-   "parent": null,
-   "title": "Motion One: Media, Bericht, Baseline (§11–§13)",
-   "kind": "task",
-   "owner": "manager",
-   "status": "open"
-  },
-  {
-   "id": "T-04",
-   "parent": null,
-   "title": "Prozess & Doku",
-   "kind": "task",
-   "owner": "manager",
-   "status": "running"
-  },
-  {
-   "id": "F-04",
-   "parent": "T-04",
-   "title": "Entscheide als ADR mit Bild",
-   "kind": "feedback",
-   "topic": "Prozess & Doku",
-   "owner": "manager",
-   "status": "done",
-   "refs": [
-    "2ba1cf9"
-   ]
-  },
-  {
-   "id": "F-05",
-   "parent": "T-04",
-   "title": "Commit, wenn sinnvoll",
-   "kind": "feedback",
-   "topic": "Prozess & Doku",
-   "owner": "manager",
-   "status": "done",
-   "archived": true
-  },
-  {
-   "id": "F-06",
-   "parent": "T-04",
-   "title": "Thread-Board (Skill thread-board, repo-weit, exportierbar)",
-   "kind": "feedback",
-   "topic": "Prozess & Doku",
-   "owner": "manager",
-   "status": "done",
-   "archived": true
-  },
-  {
-   "id": "F-07",
-   "parent": "T-01.3",
-   "title": "FEM pausiert (für das Gerät nicht wichtig)",
-   "kind": "feedback",
-   "topic": "Gehäuse & Gestaltung",
-   "owner": "user",
-   "status": "done",
-   "source": "Chat 11:24",
-   "refs": [],
-   "note": "Stand: fem/fem_results.json 03:43, alte Geometrie v1; keine r3-Netzstudie. Wiederaufnahme nur auf Wunsch."
-  },
-  {
-   "id": "T-01.4",
-   "parent": "T-01",
-   "title": "Bootloader-Board-Definition (Q-01)",
-   "kind": "task",
-   "owner": "firmware-engineer",
-   "status": "running",
-   "refs": [],
-   "note": "Gestartet 11:44; Debug nur RTT."
-  }
- ],
- "log": [
-  {
-   "t": "09:39",
-   "msg": "Cockpit-Feed eingerichtet (Live-Ansicht, Auto-Reload 10 s)"
-  },
-  {
-   "t": "09:40",
-   "msg": "Board: Typ-Marken, Session-ID, Agent-IDs ergänzt (34d9b99)"
-  },
-  {
-   "t": "11:20",
-   "msg": "Status 11:20: mech-r3 läuft (Kollision/FEM/Slice offen); Q-01, Q-02, T-02-Start warten auf User"
-  },
-  {
-   "t": "11:20",
-   "msg": "Gehäuse: Kollision FAIL (J1 USB-C ↔ Oberschale 2.2 mm³); Neubau mit Fügeband läuft seit 24 min; Warnung 'Schnitt verworfen' bei x=35.5"
-  },
-  {
-   "t": "11:24",
-   "msg": "Q-01, Q-02 archiviert (vom User im Board); Antwort weiterhin offen"
-  },
-  {
-   "t": "11:24",
-   "msg": "FEM pausiert (User); mech-r3 informiert"
-  },
-  {
-   "t": "11:25",
-   "msg": "F-05, F-06 archiviert (User im Board)"
-  },
-  {
-   "t": "11:32",
-   "msg": "Präsentation Zwischenbericht r3 eingecheckt (media/presentation)"
-  },
-  {
-   "t": "11:39",
-   "msg": "T-02 gestartet: pcb-engineer holt Angebote inkl. Schweizer Optionen, baut Upload-Pakete"
-  },
-  {
-   "t": "11:43",
-   "msg": "Q-01 V1 / Q-02 kein UART entschieden; fw-bootloader gestartet"
-  }
- ],
- "session": "2161f388-0bc4-4170-b315-b3a7921669eb"
+  "project": "disroop-sensor-playground",
+  "updated": "2026-11-08T11:43+01:00",
+  "threads": [
+    {
+      "id": "T-01",
+      "parent": null,
+      "title": "Motion One: Integration r3",
+      "kind": "task",
+      "owner": "manager",
+      "status": "running"
+    },
+    {
+      "id": "T-01.1",
+      "parent": "T-01",
+      "title": "PCB r3 nach Mechanik-Forderungen",
+      "kind": "task",
+      "owner": "pcb-engineer",
+      "status": "done",
+      "refs": [
+        "e7411cc",
+        "71af3dd"
+      ]
+    },
+    {
+      "id": "T-01.2",
+      "parent": "T-01",
+      "title": "Firmware: PINOUT → DTS, 36/36 Tests",
+      "kind": "task",
+      "owner": "firmware-engineer",
+      "status": "done",
+      "refs": [
+        "1abc002"
+      ]
+    },
+    {
+      "id": "T-01.3",
+      "parent": "T-01",
+      "title": "Gehäuse r3: Kollision, Fügestelle, Slice (FEM pausiert)",
+      "kind": "task",
+      "owner": "mech-r3",
+      "status": "running",
+      "agent_id": "6e74f5e5-3cac-4c5c-be5f-aadb3eb5f50a",
+      "note": "CAD r3 PASS, STL wasserdicht, Assembly-STL exportiert (uncommitted). Kollision Board-STEP läuft; FEM, Slice, Handoff offen. Stand 11:20."
+    },
+    {
+      "id": "F-01",
+      "parent": "T-01.3",
+      "title": "Fügestelle Lippe + Nut + Schattenfuge",
+      "kind": "feedback",
+      "topic": "Gehäuse & Gestaltung",
+      "owner": "mech-r3",
+      "status": "running",
+      "refs": [
+        "ADR-0001"
+      ],
+      "agent_id": "6e74f5e5-3cac-4c5c-be5f-aadb3eb5f50a"
+    },
+    {
+      "id": "F-02",
+      "parent": "T-01",
+      "title": "Viewer in Einbaulage mit Explosion",
+      "kind": "feedback",
+      "topic": "Gehäuse & Gestaltung",
+      "owner": "manager",
+      "status": "done"
+    },
+    {
+      "id": "Q-01",
+      "parent": "T-01",
+      "title": "Bootloader: eigene Board-Definition (Status-LED, Update-Taster) für V1?",
+      "kind": "question",
+      "owner": "user",
+      "status": "done",
+      "options": [
+        "Ja, V1",
+        "Später (V2)"
+      ],
+      "question": "Taster und LED sitzen auf dem Board an anderen Pins als beim nRF52840-DK. Damit der Bootloader (Firmware-Update per Bluetooth) funktioniert, braucht er eine eigene Board-Definition. Soll ich die erstellen lassen, oder bleibt es vorerst bei Programmierung nur per SWD?",
+      "recommendation": "Ja – eigene Board-Definition. Updates dann per Bluetooth ohne Gehäuse öffnen; reine Firmware-Arbeit, kein Hardware-Eingriff. Erstes Flashen bleibt per SWD.",
+      "archived": true,
+      "note": "Antwort 11:43: Ja, V1. Firmware-Agent beauftragt (Bootloader-Board-Definition)."
+    },
+    {
+      "id": "Q-02",
+      "parent": "T-01",
+      "title": "TX-Testpad für Debug-Ausgabe in r4 ergänzen?",
+      "kind": "question",
+      "owner": "user",
+      "status": "done",
+      "options": [
+        "Ja",
+        "Nein"
+      ],
+      "question": "Der UART ist in r3 entfallen. Debug-Ausgaben gehen trotzdem per SWD mit Segger RTT. Soll in r4 trotzdem ein TX-Testpad an einem freien Pin dazukommen?",
+      "recommendation": "Ja – ein Pad ohne Bauteil, ohne Mehrkosten; Reserve, falls RTT nicht verfügbar ist (z. B. Programmieradapter ohne RTT).",
+      "archived": true,
+      "note": "Antwort 11:43: kein UART, kein TX-Testpad; Debug nur SWD/RTT."
+    },
+    {
+      "id": "T-02",
+      "parent": null,
+      "title": "Beschaffung V1",
+      "kind": "task",
+      "owner": "manager",
+      "status": "review",
+      "question": "Material: PA12 bei JLC3DP (alles ein Hersteller, ~48 CHF/Gerät bei 5 Stk) oder PETG bei Swiss3D + Schaffner (CH, Preis auf Anfrage)?",
+      "recommendation": "JLC (PA12 + SLA-Lichtleiter); Druckteile erst nach Gehäuse r3 final ersetzen."
+    },
+    {
+      "id": "F-03",
+      "parent": "T-02",
+      "title": "PCBA + 3D-Druck, gleicher Hersteller",
+      "kind": "feedback",
+      "topic": "Beschaffung",
+      "owner": "pcb-engineer",
+      "status": "running",
+      "note": "Gestartet 11:39: Angebote PCBA+3D-Druck (JLC/JLC3DP, PCBWay, EU, Schweiz), J2 JST-SH in BOM, Upload-Pakete + Anleitung für User-Upload (kein Login durch Agent)."
+    },
+    {
+      "id": "T-03",
+      "parent": null,
+      "title": "Motion One: Media, Bericht, Baseline (§11–§13)",
+      "kind": "task",
+      "owner": "manager",
+      "status": "open"
+    },
+    {
+      "id": "T-04",
+      "parent": null,
+      "title": "Prozess & Doku",
+      "kind": "task",
+      "owner": "manager",
+      "status": "running"
+    },
+    {
+      "id": "F-04",
+      "parent": "T-04",
+      "title": "Entscheide als ADR mit Bild",
+      "kind": "feedback",
+      "topic": "Prozess & Doku",
+      "owner": "manager",
+      "status": "done",
+      "refs": [
+        "2ba1cf9"
+      ]
+    },
+    {
+      "id": "F-05",
+      "parent": "T-04",
+      "title": "Commit, wenn sinnvoll",
+      "kind": "feedback",
+      "topic": "Prozess & Doku",
+      "owner": "manager",
+      "status": "done",
+      "archived": true
+    },
+    {
+      "id": "F-06",
+      "parent": "T-04",
+      "title": "Thread-Board (Skill thread-board, repo-weit, exportierbar)",
+      "kind": "feedback",
+      "topic": "Prozess & Doku",
+      "owner": "manager",
+      "status": "done",
+      "archived": true
+    },
+    {
+      "id": "F-07",
+      "parent": "T-01.3",
+      "title": "FEM pausiert (für das Gerät nicht wichtig)",
+      "kind": "feedback",
+      "topic": "Gehäuse & Gestaltung",
+      "owner": "user",
+      "status": "done",
+      "source": "Chat 11:24",
+      "refs": [],
+      "note": "Stand: fem/fem_results.json 03:43, alte Geometrie v1; keine r3-Netzstudie. Wiederaufnahme nur auf Wunsch."
+    },
+    {
+      "id": "T-01.4",
+      "parent": "T-01",
+      "title": "Bootloader-Board-Definition (Q-01)",
+      "kind": "task",
+      "owner": "firmware-engineer",
+      "status": "running",
+      "refs": [],
+      "note": "Gestartet 11:44; Debug nur RTT."
+    }
+  ],
+  "log": [
+    {
+      "t": "09:39",
+      "msg": "Cockpit-Feed eingerichtet (Live-Ansicht, Auto-Reload 10 s)"
+    },
+    {
+      "t": "09:40",
+      "msg": "Board: Typ-Marken, Session-ID, Agent-IDs ergänzt (34d9b99)"
+    },
+    {
+      "t": "11:20",
+      "msg": "Status 11:20: mech-r3 läuft (Kollision/FEM/Slice offen); Q-01, Q-02, T-02-Start warten auf User"
+    },
+    {
+      "t": "11:20",
+      "msg": "Gehäuse: Kollision FAIL (J1 USB-C ↔ Oberschale 2.2 mm³); Neubau mit Fügeband läuft seit 24 min; Warnung 'Schnitt verworfen' bei x=35.5"
+    },
+    {
+      "t": "11:24",
+      "msg": "Q-01, Q-02 archiviert (vom User im Board); Antwort weiterhin offen"
+    },
+    {
+      "t": "11:24",
+      "msg": "FEM pausiert (User); mech-r3 informiert"
+    },
+    {
+      "t": "11:25",
+      "msg": "F-05, F-06 archiviert (User im Board)"
+    },
+    {
+      "t": "11:32",
+      "msg": "Präsentation Zwischenbericht r3 eingecheckt (media/presentation)"
+    },
+    {
+      "t": "11:39",
+      "msg": "T-02 gestartet: pcb-engineer holt Angebote inkl. Schweizer Optionen, baut Upload-Pakete"
+    },
+    {
+      "t": "11:43",
+      "msg": "Q-01 V1 / Q-02 kein UART entschieden; fw-bootloader gestartet"
+    }
+  ],
+  "session": "2161f388-0bc4-4170-b315-b3a7921669eb"
 }
