@@ -24,7 +24,7 @@ Status aller Punkte: **offen**.
 - [ ] (Tennis/Ski) Menü-Screens im Querformat auf dem Handy sind schlecht bedienbar, Auswahl verbessern.
 - [ ] (Tennis/Ski) Kalibriermodus und Testmodus: zeigt live, wie die Bewegung des Geräts auf den Spieler wirkt.
 - [ ] (Tennis/Ski) Bewegungsgrenzen: Dreht man das Gerät in einer Weise, die der Spieler (Mensch) nicht machen kann, gibt es Alarm oder Ton. So lernt man den möglichen Bewegungsradius.
-- [ ] (Verbindung) Klären, ob die Verbindung bei jedem Wechsel zwischen Ansichten abbrechen und neu aufgebaut werden muss (heute trennt `TennisActivity.onStop`). Alternative: eine dauerhafte Verbindung (z. B. Service oder gemeinsamer Halter), die alle Ansichten nutzen.
+- [ ] (Verbindung, teilweise 2026-11-08: ConnectionHub + Tests, Tennis/Ski migriert, MainActivity/ViewModel offen, ungebaut) Klären, ob die Verbindung bei jedem Wechsel zwischen Ansichten abbrechen und neu aufgebaut werden muss (heute trennt `TennisActivity.onStop`). Alternative: eine dauerhafte Verbindung (z. B. Service oder gemeinsamer Halter), die alle Ansichten nutzen.
 
 ### Motion One (siehe `devices/motion-one/management/RESUME.md`)
 - [ ] (Elektronik/Mechanik/Firmware) Iteration abschliessen: Board an Mechanik-Handoff anpassen, CAD und Kollision neu prüfen, DTS-Pinmap aus `PINOUT_V1.json`.

@@ -50,3 +50,8 @@
 - Mechanik: ergonomisches Gehäuse, STL/3MF, Toleranzkörper und PETG-Slices vorhanden. FEM-Netzkonvergenz PARTIAL; Kollision mit finalem Board-STEP und Schnittstellenrevision werden erneut geprüft.
 - Resume für Motion One auf `devices/motion-one/management/RESUME.md` berichtigt; Root-RESUME.md gehört zu älteren Thingy-Aufgaben.
 - Integrationsrunde: pcb-engineer richtet PCB an mechanischen Änderungswünschen aus; mechanical-engineer integriert Board-STEP; firmware-engineer mappt das echte Pinout. Keine Bestellung, kein Flashen, kein Druck auf Hardware.
+
+## 2026-11-08 Android: Verbindungs-Halter
+- `ConnectionHub` + `SensorApp` + `ConnectionHubTest` (FakeConnection) neu; `TennisActivity` nutzt den Hub. Siehe android/README.md.
+- NICHT gebaut/getestet: kein Android SDK/Gradle-Cache (~/.gradle fehlt). Tests nicht gelaufen.
+- Offen: B (Sensorseite als HTML), C (Header als header.js/css), ViewModel auf Hub umstellen.

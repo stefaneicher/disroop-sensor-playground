@@ -14,6 +14,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import ch.disroop.sensorplayground.connection.AndroidConnectionFactory
 import ch.disroop.sensorplayground.connection.ConnectionEvent
+import ch.disroop.sensorplayground.connection.ConnectionHub
 import ch.disroop.sensorplayground.connection.LinkState
 import ch.disroop.sensorplayground.connection.ThingyConnection
 import ch.disroop.sensorplayground.protocol.MotionFrames
@@ -59,7 +60,7 @@ class TennisActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        val next = if (connections.bleAvailable) connections.game() else connections.simulator()
+        val next = SensorApp.hub(applicationContext).acquire(ConnectionHub.Profile.GAME)
         connection = next
         val frames = MotionFrames()
         job = lifecycleScope.launch {
@@ -71,14 +72,14 @@ class TennisActivity : ComponentActivity() {
                     frames.accept(telemetry)?.let { web.evaluateJavascript("window.__thingyFrame&&window.__thingyFrame($it)", null) }
                 }
             }
-            next.run()
         }
     }
 
     override fun onStop() {
         super.onStop()
-        // Free the Thingy (single connection) for the other app screen and the PC bridge.
+        // Only stop listening; the shared hub keeps the link and drops it after the background timeout.
         job?.cancel()
+        SensorApp.hub(applicationContext).release()
         job = null
         connection = null
     }

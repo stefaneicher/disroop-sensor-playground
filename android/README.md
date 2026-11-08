@@ -64,3 +64,11 @@ Architekturdiagramm: [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md#android-app)
 - TODO (in Arbeit): Test auf echter Hardware (BLE-Verbindung, NFC-Tap)
 - TODO (in Arbeit): Release-APK über GitHub Actions / GitHub Release
 - TODO (in Arbeit): Screenshot der App
+
+## Verbindung bei Ansichtswechsel (2026-11-08)
+Ein Abbruch beim Wechsel zwischen Ansichten ist nicht nötig. Der Thingy akzeptiert nur eine GATT-Verbindung, aber
+die Ansichten laufen nacheinander. `ConnectionHub` (Application-Scope, `SensorApp`) hält die eine Verbindung;
+Ansichten rufen `acquire` (onStart) und `release` (onStop). Getrennt wird nur explizit oder nach 60 s ohne
+sichtbare Ansicht (gibt den Thingy für die PC-Bridge frei). Ein anderes Profil (Spiel 100 Hz statt voller Start-
+sequenz) baut die Verbindung einmal neu auf. Stand: `TennisActivity` (Tennis/Ski) nutzt den Hub; `MainActivity`/
+`ThingyViewModel` besitzen noch eine eigene Verbindung (offen).
