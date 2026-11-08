@@ -1,26 +1,31 @@
 # Disroop Motion One
 
-Ein eigener Handcontroller für Tennis und Ski, der den Nordic Thingy:52 als Bewegungssensor ersetzt.
-Er spricht dasselbe BLE-Profil (siehe [docs/protocol.md](../../docs/protocol.md)), damit Bridge, Web-Spiele und Android-App
-ohne Änderung funktionieren. Er wird mit USB-C geladen.
+Ein geplanter Einhand-Motion-Controller für Tennis und Ski. Das Gerät soll das Thingy:52-BLE-Profil nachbilden, damit
+Bridge, Spiele und Android-App ohne Codeänderungen funktionieren.
 
-Das Gerät soll vollständig von einer KI entwickelt werden: Anforderungen, Elektronik mit elektrischer Analyse, Firmware,
-3D-druckbares Gehäuse, Bestellung der bestückten Leiterplatte, Montage- und Bedienungsanleitung, Marketingvideo und
-eine Produktseite mit Live-Demo der Spiele, Kauf und Warteliste.
+## Aktueller Stand
 
-| Datei | Inhalt |
-|---|---|
-| [PREFLIGHT.md](PREFLIGHT.md) | Vorab-Smoke-Test (`preflight.sh`): Programme, Container, MCP-Server, Konten |
-| [PROMPT_1_ENTWICKLUNG.md](PROMPT_1_ENTWICKLUNG.md) | Prompt 1: Gerät entwickeln (Elektronik, Firmware, Gehäuse, Bestellpaket, Anleitungen) |
-| [PROMPT_2_MARKTAUFTRITT.md](PROMPT_2_MARKTAUFTRITT.md) | Prompt 2: Marketingvideo und Produktseite (DE/EN/FR/IT, Live-Demo, Kauf im Testmodus, Warteliste) |
-| [ANALYSE.md](ANALYSE.md) | Analyse des Vorbilds „Master Prompt Vacuum“ (203x Uplink): Struktur, Stärken, Lücken, was wir übernehmen |
+V1 ist ein **digitaler Entwicklungsstand**, noch kein fertiges oder geprüftes Produkt: PCB, Firmware und ergonomisches
+Gehäuse liegen als Entwürfe vor. Die Schnittstellen werden gerade integriert. Es wurde nichts bestellt, bezahlt,
+gedruckt, geflasht oder unter Spannung gesetzt; Hardwaretests sind NOT RUN. Der detaillierte Status und die nächsten
+Schritte stehen im [Motion-One-Resume](management/RESUME.md).
 
-## Name
+## Themen
 
-**Motion One**: Er zeigt den Zweck (Bewegung als Eingabe) und dass weitere Generationen folgen können.
-Weitere Ideen: Disroop Swing, Disroop Carve, Disroop Rally.
+| Bereich | Kurzfassung | Status |
+|---|---|---|
+| [Elektronik / PCB](electronics/README.md) | KiCad-Board, Schaltplan, SPICE-Analyse und Pinout | Entwurf; finale Mechanik-Abstimmung offen |
+| [Firmware](firmware/README.md) | Zephyr-Firmware mit Thingy-Profil, Bewegungserfassung und UF2-Programmierweg | 32/32 Host-Tests; echtes Pinout wird integriert |
+| [Mechanik](mechanics/README.md) | Parametrisches, beidhändig nutzbares Griffgehäuse, FEM und 3D-Druck | CAD und Slicer-Daten vorhanden; PCB-Abgleich offen |
+| [Fertigung](manufacturing/README.md) | PCBA-Uploadpaket und Slicer-Ausgaben | Dateien vorbereitet; noch kein Auftrag oder Druck |
+| [Beschaffung](sourcing/README.md) | BOM, Lagerabfragen und Bestücker-Vergleich | Momentaufnahme; finale Versand- und PCBA-Angebote offen |
 
-## Status
+## Projektdateien
 
-Prompts und Vorab-Test sind fertig. Die Entwicklung selbst ist NOT RUN.
-Ablauf: `preflight.sh` → Prompt 1 → Prompt 2.
+- [Entwicklungsprompt](PROMPT_1_ENTWICKLUNG.md) und [Marktauftritt-Prompt](PROMPT_2_MARKTAUFTRITT.md)
+- [Vorab-Check](PREFLIGHT.md) und [Vorbildanalyse](ANALYSE.md)
+- [Hauptprotokoll](../../docs/protocol.md)
+
+Alle Masse, Preise und Leistungswerte sind Quellenangaben, Berechnungen, Simulationen oder Annahmen; Details und
+Belegpfade stehen in den jeweiligen Bereichs-README-Dateien und Handoffs. CE/RED, FCC, UN38.3, EMV und physische
+Sicherheit sind nicht validiert.

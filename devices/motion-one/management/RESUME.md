@@ -1,6 +1,6 @@
 # Motion One – Resume
 
-Stand 2026-11-08 06:40 CET. This is the authoritative task resume for Motion One. Read the repo-wide rules and resume hierarchy in [`../../../RESUME.md`](../../../RESUME.md) as well; root RESUME preserves older Thingy:52 context.
+Stand 2026-11-08 06:45 CET. This is the authoritative task resume for Motion One. Read the repo-wide rules and resume hierarchy in [`../../../RESUME.md`](../../../RESUME.md) as well; root RESUME preserves older Thingy:52 context.
 
 ## Current state
 - §1–§7: project structure, 5 Custom-Agent profiles, 9 Skills, toolchain setup, smoke tests, V1 requirements, architecture and calculated budgets are documented.
@@ -9,6 +9,7 @@ Stand 2026-11-08 06:40 CET. This is the authoritative task resume for Motion One
 - §10 Mechanics: ergonomic enclosure CAD, five printable parts, 3MF/STL, tolerance part, PETG slices and render exist. Status PARTIAL: the first FEM mesh-convergence study and collision validation against the final board STEP need repair/reverification.
 - §11 Media/docs, §12 integration review, §13 immutable release baseline are NOT RUN.
 - Assembly/user-guide text drafts have been delegated; they must remain DRAFT until final board/enclosure revisions are integrated.
+- A German technical-report source draft exists at `docs/report/TECHNISCHER_BERICHT_V1.md`; build the PDF only after final integration review.
 - Energy models differ: systems estimate 65 h and PCB estimate 49 h (both BERECHNUNG with differing ANNAHMEN). Use 49 h as the conservative planning estimate; physical runtime remains NOT RUN.
 - No hardware has been ordered, printed, flashed, or powered. No hardware-dependent test is a PASS.
 - WSL memory setting `C:\Users\stefa\.wslconfig` is 12 GB but takes effect only after `wsl --shutdown`; no restart should be initiated by an agent.
