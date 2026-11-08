@@ -10,3 +10,4 @@ description: "Belege für alle Disziplinen: Anforderungs-IDs, Revisionen, Zahlen
 - Ausgabedateien mit `sha256sum` im Handoff aufführen. Revisionen als `<teil>-r<N>`.
 - Lock: `devices/motion-one/management/locks/<datei>.lock` mit Agent und Zeit, nach dem Schreiben löschen.
 - Handoff-Format siehe Agent-Datei; Ablage `management/handoffs/<agent>/`.
+- Wichtige Entscheide (Architektur, Bauteilwahl, Gestaltung, Schnittstellen) als ADR mit Bild festhalten: `devices/motion-one/adr/<disziplin>/ADR-NNNN-<kurzname>.md` nach `adr/TEMPLATE.md`, Lavish-Entscheidungsseite + PNG in `adr/<disziplin>/media/`, Index in `adr/README.md` nachführen, ADR im Handoff referenzieren.

@@ -372,6 +372,9 @@ Prüfe Bewegungs- und Werkzeugzugänglichkeit. Die Animation ist kein Montagetes
   Ausgabedateien, tatsächlich durchgeführte Prüfungen, Zahlen, Annahmen, Fehler, offene Entscheide, nächste Schritte.
 - Mindestens eine echte fachübergreifende Iteration: z. B. Mechanik verlangt über dich eine Änderung am Board-Umriss oder an
   der Steckerposition, Elektronik liefert eine neue Revision, Mechanik prüft erneut.
+- Wichtige Entscheide als Architecture Decision Record (ADR) je Disziplin mit Bild festhalten: Optionen als Lavish-Seite
+  mit beschrifteten Skizzen zeigen, nach meinem Entscheid ADR in `adr/<disziplin>/` nach `adr/TEMPLATE.md` ablegen
+  (HTML + PNG in `media/`), Index `adr/README.md` nachführen.
 - Berichte der Spezialisten sind Review-Eingaben, keine Freigaben. Öffne Stichproben und Rohdaten selbst.
 - Nach drei erfolglosen Reparaturversuchen ohne neue Information: Diagnose sichern, Ansatz wechseln oder Blocker melden.
 - Melde dich bei Meilensteinen und echten Problemen, nicht nach jedem Tool-Aufruf.

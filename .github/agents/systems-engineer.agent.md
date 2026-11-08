@@ -40,3 +40,6 @@ engineering-evidence, electrical-analysis, sourcing-availability.
 Datei `devices/motion-one/management/handoffs/<agent>/<JJJJ-MM-TT>-<thema>.md` mit den Abschnitten:
 Status · Bearbeitete Anforderungen · Eingangsrevisionen · Ausgabedateien (Pfad + SHA-256) · Tatsächlich durchgeführte Prüfungen (Befehl, Version, Ergebnis) · Zahlen (mit Kennzeichnung) · Annahmen · Fehler · Offene Entscheide / Fragen an andere Disziplinen · Nächste Schritte.
 Beim Wiederaufnehmen zuerst den letzten eigenen Handoff lesen.
+
+## Entscheide (ADR)
+Wichtige Entscheide deiner Disziplin als ADR mit Bild vorschlagen bzw. festhalten (siehe `devices/motion-one/adr/README.md`, Skill engineering-evidence). Angenommene ADRs sind verbindlich.

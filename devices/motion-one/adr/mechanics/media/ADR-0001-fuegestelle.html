@@ -1,0 +1,49 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><title>Motion One – Fügestelle Schalen</title>
+<style>body{font-family:system-ui,sans-serif;background:#f6f7f9;color:#1f2937;margin:0;padding:24px}
+h1{font-size:20px;margin:0 0 4px}p{margin:4px 0 16px;color:#4b5563}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:20px}
+.card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 3px #0002;min-width:0}
+.card h2{font-size:16px;margin:0 0 8px}.bad{color:#b91c1c}.good{color:#15803d}
+svg{width:100%;height:auto}ul{margin:8px 0 0;padding-left:18px;font-size:14px}
+table{border-collapse:collapse;font-size:14px;margin-top:20px;background:#fff}td,th{border:1px solid #ddd;padding:6px 10px;text-align:left}</style></head><body>
+<h1>Fügestelle Ober-/Unterschale – Querschnitt durch die Wand</h1>
+<p>Schematisch, nicht massstäblich. Aussen = links, innen = rechts.</p>
+<div class="grid">
+<div class="card"><h2 class="bad">Heute (v1): stumpfer Stoss</h2>
+<svg viewBox="0 0 360 300">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#374151"/></marker></defs>
+<text x="20" y="20" font-size="12" fill="#6b7280">aussen</text><text x="280" y="20" font-size="12" fill="#6b7280">innen</text>
+<rect x="120" y="30" width="60" height="118" fill="#93c5fd" stroke="#1e3a8a"/>
+<rect x="120" y="150" width="60" height="120" fill="#cbd5e1" stroke="#334155"/>
+<text x="190" y="90" font-size="13">Oberschale</text><text x="190" y="215" font-size="13">Unterschale</text>
+<line x1="60" y1="149" x2="118" y2="149" stroke="#b91c1c" stroke-width="2" marker-end="url(#a)"/>
+<text x="10" y="140" font-size="12" fill="#b91c1c">2 flache Flächen</text>
+<path d="M300 120 L240 148" stroke="#374151" fill="none" marker-end="url(#a)"/>
+<text x="250" y="110" font-size="12">kann seitlich</text><text x="250" y="124" font-size="12">verrutschen</text>
+</svg>
+<ul><li>Versatz aussen sofort sichtbar und fühlbar</li><li>Keine Selbstzentrierung, Spalt variiert</li><li>Kein Staub-/Spritzschutz</li></ul></div>
+
+<div class="card"><h2 class="good">Vorschlag: Lippe + Nut + Schattenfuge</h2>
+<svg viewBox="0 0 360 300">
+<defs><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#374151"/></marker></defs>
+<text x="20" y="20" font-size="12" fill="#6b7280">aussen</text><text x="280" y="20" font-size="12" fill="#6b7280">innen</text>
+<!-- Oberschale mit Nut unten (Nut zwischen x 145..160) -->
+<path d="M124 30 H180 V150 H162 V128 H143 V150 H128 V146 H124 Z" fill="#93c5fd" stroke="#1e3a8a"/>
+<!-- Unterschale mit Lippe -->
+<path d="M124 270 H180 V152 H160 V126 H145 V152 H128 V156 H124 Z" fill="#cbd5e1" stroke="#334155"/>
+<text x="190" y="80" font-size="13">Oberschale</text><text x="190" y="230" font-size="13">Unterschale</text>
+<path d="M60 151 L122 151" stroke="#15803d" stroke-width="2" marker-end="url(#b)"/>
+<text x="4" y="138" font-size="12" fill="#15803d">① Schattenfuge</text><text x="4" y="168" font-size="12" fill="#15803d">0.5 × 0.5 mm Fase</text>
+<path d="M260 100 L161 128" stroke="#374151" marker-end="url(#b)"/>
+<text x="232" y="94" font-size="12">② Lippe (Feder)</text>
+<path d="M270 190 L162 140" stroke="#374151" marker-end="url(#b)"/>
+<text x="230" y="205" font-size="12">③ Nut, 0.2 mm Spiel</text><text x="230" y="219" font-size="12">je Seite (FDM)</text>
+</svg>
+<ul><li>① Bewusste Rille kaschiert Versatz/Toleranzen optisch</li><li>② Lippe ~1.2 mm breit, ~2 mm hoch, an der Unterschale</li><li>③ Zentriert die Schalen, steift die Wand aus, hält Staub/Spritzer ab</li></ul></div>
+</div>
+<table><tr><th>Parameter (Vorschlag)</th><th>Wert</th></tr>
+<tr><td>Wandstärke</td><td>unverändert (v1)</td></tr><tr><td>Lippe B × H</td><td>1.2 × 2.0 mm</td></tr>
+<tr><td>Spiel Nut/Lippe</td><td>0.2 mm je Seite (aus Toleranzkörper verifizieren)</td></tr>
+<tr><td>Schattenfuge</td><td>0.5 × 0.5 mm umlaufend, 45° Fase je Schale</td></tr>
+<tr><td>Druck</td><td>Lippe nach oben → kein Support nötig</td></tr></table>
+</body></html>

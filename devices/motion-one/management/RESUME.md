@@ -24,6 +24,10 @@ Stand 2026-11-08 06:45 CET. This is the authoritative task resume for Motion One
 ## Sourcing rule (user, 2026-11-08)
 - Offers must cover PCBA **and** 3D printing of the enclosure parts, ideally from the same manufacturer (one order, one shipment). `sourcing/ANGEBOTE_V1.md` still needs this update and the r3 J2 connector (JST-SH C160402).
 
+## Decisions (ADR)
+- Important decisions are recorded per discipline as ADR with image in `adr/` (see `adr/README.md`). ADR-0001 (mechanics): shell joint with lip + groove + shadow gap, accepted 2026-11-08; mechanical engineer implements it in r3.
+- Assembly viewer: STLs in assembly position in `mechanics/assembly_stl/` + `explode.json`.
+
 ## Key files
 - Overall requirements: `PROMPT_1_ENTWICKLUNG.md`
 - Current project state: `management/PROJECT_STATE.md`, `management/TASK_BOARD.md`
