@@ -67,3 +67,9 @@ Ski: kompakte Querformat-HUD, zweispaltiges Menü mit grossen Touch-Zielen, Test
 - ThingyViewModel/MainActivity nutzen ConnectionHub (Profil SIMULATOR neu); Tests angepasst.
 - tennis/static/header.js/.css (Status, Gerät, Akku) in index.html und ski/index.html eingebunden; TennisActivity sendet __thingyHeader.
 - NICHT gebaut/getestet (kein SDK). B (Sensorseite als HTML) offen, Compose bleibt.
+
+## 2026-11-08 Konsistenz-Konzept (Vorschlag)
+- Neu: `devices/motion-one/management/KONSISTENZ.md` (eine Master-Datei pro Fakt, Revisionskette, Lebenszyklus, Traceability, Review-Ritual, vorgeschlagene automatische Prüfungen), `requirements/CHECKLIST_consistency.md`, Skill `.github/skills/consistency-review/`.
+- Ergänzt: Master-Prompt §2, §4, §12/§12a, §13; Skill engineering-evidence; Handoff-Format aller Agents (Abschnitt «Veraltete Dateien»); Änderungsprozess.
+- Stichproben-Befund K-01…K-08 (z. B. Bericht/Anleitung zitieren INTERFACES r2, BOM auf Board r3). Nichts gelöscht oder korrigiert.
+

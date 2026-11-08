@@ -34,6 +34,7 @@ Stand 2026-11-08 06:45 CET. This is the authoritative task resume for Motion One
 - Interfaces / board contract: `management/INTERFACES.json` (current PCB revision r2; do not assume mechanical acceptance)
 - Pin map: `electronics/PINOUT_V1.json`
 - Specialist handoffs: `management/handoffs/{pcb-engineer,mechanical-engineer,firmware-engineer}/`
+- Konsistenz (VORSCHLAG 2026-11-08): `management/KONSISTENZ.md` (Wahrheitsquellen, Lebenszyklus, Review, erster Befund K-01…K-08), Checkliste `requirements/CHECKLIST_consistency.md`, Skill `consistency-review`. Nach Freigabe: Review vor jedem Upload/Release; diese Datei dann auf den aktuellen Stand kürzen, Verlauf nach `JOURNAL.md`.
 
 ## Boundaries
 - Agents use the roles in `.github/agents/` as instructions but are general-purpose subagents until the user restarts Copilot CLI; do not claim the Custom-Agent runtime was verified.

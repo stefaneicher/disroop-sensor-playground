@@ -139,6 +139,8 @@ Halte dich an die Regeln dieses Repos:
   - Erscheinung: ansprechendes, stimmiges Design in Disroop-Farben (`bridge/web/static/styles.css`), saubere Oberflächen,
     Renderings, die den Anspruch zeigen.
   - Dokumentation und Marketing: richtig, verständlich, konsistent mit dem gebauten Stand; keine Behauptung ohne Beleg.
+  - Konsistenz über alle Disziplinen: eine Master-Datei pro Fakt, gleiche Schnittstellenrevision überall, keine toten
+    Artefakte (Checkliste `requirements/CHECKLIST_consistency.md`, Konzept `management/KONSISTENZ.md`).
 - Nach jedem sinnvollen Schritt `JOURNAL.md`, `PROGRESS.md`, `RESUME.md` nachführen, direkt auf `main` committen und pushen.
   Commit-Trailer: `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`.
 
@@ -155,6 +157,13 @@ Lege mindestens an: `management/PROJECT_STATE.md`, `TASK_BOARD.md`, `REQUIREMENT
 
 Eine einzige Quelle der Wahrheit: Die editierbaren Dateien liegen im Repo. Was zwischen Windows und WSL oder in einen Container
 wandert, wird mit Revisions-ID und SHA-256 übertragen.
+
+Eine Quelle pro Fakt: Jeder Fakt (Anforderung, Schnittstelle, Pin, Bauteil, Lagerstand, Zahl, Entscheid, Arbeitsstand) hat
+genau eine Master-Datei laut Tabelle in `management/KONSISTENZ.md`. Andere Dateien verweisen mit Revision darauf oder werden
+daraus erzeugt (z. B. BOM, CPL und Gerber aus KiCad, nie von Hand). Wer einen Fakt ändert, führt die abhängigen Dateien
+im selben Schritt nach oder meldet sie als Nachführauftrag.
+Keine Konkurrenzkopien: keine Dateien wie `_v2`, `_neu`, `_alt`, `_backup`; ersetzte Arbeitsdateien im selben Commit
+löschen (Git ist das Archiv). `VORLAEUFIG_*` nur mit Eintrag in `TODO.md` und Ablösebedingung.
 
 ## 3. Software und MCP-Verbindungen herstellen
 
@@ -208,6 +217,7 @@ Lege lokale Projekt-Skills an (`.github/skills/<name>/SKILL.md` oder das Format 
 - `cad-print-workflow`: parametrisches CAD, Toleranzen für FDM, Slicer-CLI, 3MF/STL-Export, Druckzeit und Material.
 - `blender-media-workflow`: Import echter Geometrie, Renderings, Explosionsansicht, Animation, Video mit ffmpeg.
 - `docs-reporting`: Montageanleitung, Bedienungsanleitung, technischer Bericht (Markdown → PDF mit Pandoc/LaTeX).
+- `consistency-review` (Manager): Konsistenz-Review und Aufräumen nach `management/KONSISTENZ.md`.
 
 Prüfe zuerst offizielle bzw. bestehende Skills (z. B. https://github.com/anthropics/skills, GitHub-Dokumentation zu Copilot-Skills),
 beachte Lizenzen und dokumentiere die Herkunft. Wo nichts passt, schreibe ein kurzes Verfahren aus Primärdokumentation mit
@@ -370,6 +380,8 @@ Prüfe Bewegungs- und Werkzeugzugänglichkeit. Die Animation ist kein Montagetes
 - Schwere Läufe (FEM, Renderings, Firmware-Builds) nach der gemessenen Hardware planen, nicht alle gleichzeitig.
 - Jeder Handoff in `management/handoffs/<agent>/` enthält: Status, bearbeitete Anforderungen, Eingangsrevisionen,
   Ausgabedateien, tatsächlich durchgeführte Prüfungen, Zahlen, Annahmen, Fehler, offene Entscheide, nächste Schritte.
+- Jeder Artefakt-Kopf nennt die eigene Revision und die Eingangsrevisionen (z. B. `Gehäuse r4 · INTERFACES r4, Board r4c`).
+  Jeder Handoff listet zusätzlich die Dateien, die durch die Änderung veraltet sind, und ob sie nachgeführt wurden.
 - Mindestens eine echte fachübergreifende Iteration: z. B. Mechanik verlangt über dich eine Änderung am Board-Umriss oder an
   der Steckerposition, Elektronik liefert eine neue Revision, Mechanik prüft erneut.
 - Wichtige Entscheide als Architecture Decision Record (ADR) je Disziplin mit Bild festhalten: Optionen als Lavish-Seite
@@ -378,6 +390,17 @@ Prüfe Bewegungs- und Werkzeugzugänglichkeit. Die Animation ist kein Montagetes
 - Berichte der Spezialisten sind Review-Eingaben, keine Freigaben. Öffne Stichproben und Rohdaten selbst.
 - Nach drei erfolglosen Reparaturversuchen ohne neue Information: Diagnose sichern, Ansatz wechseln oder Blocker melden.
 - Melde dich bei Meilensteinen und echten Problemen, nicht nach jedem Tool-Aufruf.
+
+### 12a. Konsistenz-Review und Aufräumen
+- Nach jeder neuen Schnittstellen- bzw. Board-Revision, vor jedem Upload oder jeder Bestellung, vor jedem Release und vor
+  einem Session-Wechsel führst du den Skill `consistency-review` aus. Möglichst prüft eine frische Session bzw. ein Agent,
+  der den Stand nicht selbst erzeugt hat.
+- Befunde zuerst als Liste in `management/reviews/<JJJJ-MM-TT>-konsistenz.md` (Fundstelle, Master-Datei, Vorschlag).
+  Gelöscht wird erst nach meinem Entscheid; Nachführen delegierst du an den zuständigen Spezialisten.
+- Statusdateien (`management/RESUME.md`, `PROJECT_STATE.md`, `TASK_BOARD.md`, Root-`PROGRESS.md`, `TODO.md`) zeigen danach
+  denselben Stand. `RESUME.md` enthält nur den aktuellen Stand; Verlauf gehört in `JOURNAL.md`.
+- Automatische Prüfungen (Revisionsverweise, BOM ↔ Schaltplan, Pinout ↔ DTS, Lager-Frische, tote Dateien, Links,
+  REQ-Abdeckung) als Skript im Container und in der CI; das Skript meldet nur und ändert nichts.
 
 ## 13. Bericht und unveränderliche Baseline
 
@@ -397,7 +420,9 @@ Veröffentliche `releases/V1_BASELINE/` mit:
 - `firmware/`: Image, Prüfsumme, Programmieranleitung,
 - `docs/`: Montageanleitung, Bedienungsanleitung, Bericht (PDF),
 - `media/`: Renderings, Explosionsansicht, `HANDOFF_MARKETING.md`,
-- ein SHA-256-Manifest und den Verifikationsstatus jeder Anforderung.
+- ein SHA-256-Manifest und den Verifikationsstatus jeder Anforderung als Traceability-Matrix
+  (`management/TRACEABILITY.md`: REQ → Designelement mit Revision → Nachweis → Status; leere Zellen sind Befunde),
+- einen bestandenen Konsistenz-Review (§12a) ohne offene Befunde der Schwere «Release-blockierend».
 Releases sind unveränderlich; spätere Arbeit bekommt eine neue Revision. Unfertiges bleibt PARTIAL, FAIL oder BLOCKED.
 Schreibe zusätzlich `REPRODUCE.md` und ein kurzes `DEMO_RUNBOOK.md`. Verlinke das Gerät im Haupt-`README.md`.
 

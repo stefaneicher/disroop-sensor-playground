@@ -11,3 +11,5 @@ description: "Belege für alle Disziplinen: Anforderungs-IDs, Revisionen, Zahlen
 - Lock: `devices/motion-one/management/locks/<datei>.lock` mit Agent und Zeit, nach dem Schreiben löschen.
 - Handoff-Format siehe Agent-Datei; Ablage `management/handoffs/<agent>/`.
 - Wichtige Entscheide (Architektur, Bauteilwahl, Gestaltung, Schnittstellen) als ADR mit Bild festhalten: `devices/motion-one/adr/<disziplin>/ADR-NNNN-<kurzname>.md` nach `adr/TEMPLATE.md`, Lavish-Entscheidungsseite + PNG in `adr/<disziplin>/media/`, Index in `adr/README.md` nachführen, ADR im Handoff referenzieren.
+- Konsistenz (siehe `devices/motion-one/management/KONSISTENZ.md`): Fakten nur in ihrer Master-Datei ändern, sonst mit Revision verweisen. Artefakt-Kopf nennt eigene Revision und Eingangsrevisionen. Abgeleitete Dateien (BOM, CPL, Gerber, Exporte) neu erzeugen, nicht von Hand ändern.
+- Keine Konkurrenzkopien (`_v2`, `_neu`, `_alt`, `_backup`). Ersetzte Arbeitsdateien löschen oder im Handoff zum Löschen melden; ersetzte ADRs und Handoffs mit `Ersetzt durch …` markieren. `VORLAEUFIG_*` nur mit Ablösebedingung in `TODO.md`.

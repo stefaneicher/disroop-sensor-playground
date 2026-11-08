@@ -40,7 +40,7 @@ engineering-evidence, kicad-pcb-workflow, electrical-analysis, sourcing-availabi
 
 ## Handoff-Format
 Datei `devices/motion-one/management/handoffs/<agent>/<JJJJ-MM-TT>-<thema>.md` mit den Abschnitten:
-Status · Bearbeitete Anforderungen · Eingangsrevisionen · Ausgabedateien (Pfad + SHA-256) · Tatsächlich durchgeführte Prüfungen (Befehl, Version, Ergebnis) · Zahlen (mit Kennzeichnung) · Annahmen · Fehler · Offene Entscheide / Fragen an andere Disziplinen · Nächste Schritte.
+Status · Bearbeitete Anforderungen · Eingangsrevisionen · Ausgabedateien (Pfad + SHA-256) · Tatsächlich durchgeführte Prüfungen (Befehl, Version, Ergebnis) · Zahlen (mit Kennzeichnung) · Annahmen · Fehler · Veraltete Dateien (durch diese Änderung, nachgeführt ja/nein, Zuständigkeit) · Offene Entscheide / Fragen an andere Disziplinen · Nächste Schritte.
 Beim Wiederaufnehmen zuerst den letzten eigenen Handoff lesen.
 
 ## Entscheide (ADR)

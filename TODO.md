@@ -31,5 +31,7 @@ Status aller Punkte: **offen**.
 - [ ] (Docs/Media) §11 Montage- und Benutzeranleitung, Renderings.
 - [ ] (Sourcing) Angebote für PCBA und 3D-Druck beim selben Hersteller, J2 JST-SH C160402 nachführen.
 - [ ] (Release) §12 Integrationsreview, §13 `releases/V1_BASELINE/`.
+- [ ] (Konsistenz) Vorschlag `devices/motion-one/management/KONSISTENZ.md` prüfen und freigeben; danach Befunde K-01…K-08 abarbeiten, `TRACEABILITY.md` anlegen, `check_consistency.py` umsetzen.
+- [ ] (Konsistenz) `VORLAEUFIG_*`-Druckdateien in `manufacturing/upload/*/` nach Gehäuse r4 ersetzen und löschen.
 
 ## Erledigt
