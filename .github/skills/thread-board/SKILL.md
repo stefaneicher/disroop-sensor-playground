@@ -9,10 +9,10 @@ Der Manager führt wie ein Team-Manager **Threads**: ein Thread ist ein Faden ei
 
 ## Daten: `THREADS.json` (Repo-Root)
 ```json
-{"project":"…","updated":"ISO-Zeit","threads":[
+{"project":"…","updated":"ISO-Zeit","session":"<Copilot-Session-ID>","threads":[
  {"id":"T-01","parent":null,"title":"…","kind":"task|feedback|question|decision","topic":"…",
   "owner":"manager|<agent-name>|user","status":"open|running|done|blocked|needs-user",
-  "source":"F-01 / Auftrag / Frage","refs":["commit abc1234","adr/…","handoff …"],"note":"…","archived":false}]}
+  "source":"F-01 / Auftrag / Frage","refs":["commit abc1234","adr/…","handoff …"],"note":"…","archived":false,"agent_id":"<Sub-Agent-ID, optional>"}]}
 ```
 - Status rollt nach oben: Eltern-Thread ist erst `done`, wenn alle Kinder `done` sind (der Generator berechnet das).
 - Sub-Thread mit `owner` = Agent/Sub-Agent entspricht einem delegierten Auftrag.

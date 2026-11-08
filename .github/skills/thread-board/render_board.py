@@ -63,7 +63,7 @@ def node(t, kids, depth=0, idx=0, path=()):
     inner = "".join(node(c, kids, depth + 1, i, path + (t["id"],)) for i, c in enumerate(kids.get(t["id"], [])))
     return (f'<details open class="{"arch" if arch else ""}" {style}><summary title="{e(crumb)}"><span class="lv" style="color:hsl({h},75%,70%)">L{depth}</span> '
             f'<span class="cr">{e(crumb)}</span><br><b>{e(t["id"])}</b> {e(t["title"])} {kind_badge(t)} {badge(rollup(t, kids))}'
-            f' <span class="o">{e(t.get("owner", ""))}</span>{" <span class=\"b\">📦 archiviert</span>" if arch else ""}</summary>'
+            f' <span class="o">{e(t.get("owner", ""))}</span>{f' <code class="sid">{e(t["agent_id"][:8])}</code>' if t.get("agent_id") else ""}{" <span class=\"b\">📦 archiviert</span>" if arch else ""}</summary>'
             f'<div class="m">{e(t.get("note", ""))} <span class="r">{refs}</span>{q}</div>{inner}</details>')
 
 
@@ -97,10 +97,10 @@ details{{margin:6px 0 6px 12px;padding:4px 8px;border-radius:6px}}summary{{curso
 .b{{font-size:11px;padding:1px 6px;border-radius:6px;white-space:nowrap}}.o{{color:#93c5fd;font-size:12px}}
 .m{{font-size:12px;color:#9ca3af;margin:0 0 4px 14px}}.r{{color:#6b7280}}.c{{background:#1f2937;border-radius:8px;padding:10px;margin-bottom:10px;font-size:13px}}
 .bar{{height:8px;background:#374151;border-radius:9px;overflow:hidden}}.bar i{{display:block;height:100%;background:#22c55e}}
-body.hide .arch{{display:none}}.arch{{opacity:.55}}.ab{{background:#4b5563;margin-left:6px}}.tg{{float:right;font-size:13px;color:#9ca3af;text-align:right}}.feed ul{{margin:0;padding-left:16px;max-height:260px;overflow:auto}}.feed li{{margin:2px 0}}.k{{color:#e5e7eb;margin-right:2px}}.live{{animation:pl 1.4s infinite}}@keyframes pl{{50%{{box-shadow:0 0 0 3px #10b98155}}}}.kh{{font-size:11px;margin-top:4px}}summary:focus{{outline:2px solid #fbbf24;outline-offset:2px;border-radius:4px}}
+body.hide .arch{{display:none}}.arch{{opacity:.55}}.ab{{background:#4b5563;margin-left:6px}}.tg{{float:right;font-size:13px;color:#9ca3af;text-align:right}}.feed ul{{margin:0;padding-left:16px;max-height:260px;overflow:auto}}.feed li{{margin:2px 0}}.sid{{font-size:11px;color:#fbbf24}}.k{{color:#e5e7eb;margin-right:2px}}.live{{animation:pl 1.4s infinite}}@keyframes pl{{50%{{box-shadow:0 0 0 3px #10b98155}}}}.kh{{font-size:11px;margin-top:4px}}summary:focus{{outline:2px solid #fbbf24;outline-offset:2px;border-radius:4px}}
 form{{margin-top:6px}}button{{font:inherit;font-size:12px;background:#2563eb;color:#fff;border:0;border-radius:5px;padding:3px 8px}}
 </style></head><body><div class="tg"><button type="button" id="exA" title="E">⊞ Alle auf</button> <button type="button" id="coA" title="C">⊟ Alle zu</button> <button type="button" id="opA" title="O">Nur offene</button> <label><input type="checkbox" id="hideArch" checked> Archivierte ausblenden ({narch})</label> <label><input type="checkbox" id="live" checked> Live (10 s)</label><div class="kh">Tasten: J/K oder ↑/↓ bewegen · ←/→ zu/auf · Enter umschalten · E/C alle auf/zu · O nur offene · A Archiv · Doppelklick: Teilbaum auf/zu</div></div><h1>{e(d.get('project', 'Projekt'))} – Thread-Board</h1>
-<p style="color:#9ca3af;font-size:13px">Stand {e(d.get('updated', ''))} · {done}/{total} Threads fertig</p>
+<p style="color:#9ca3af;font-size:13px">Stand {e(d.get('updated', ''))} · {done}/{total} Threads fertig · Session <code class="sid" title="{e(d.get('session', ''))}">{e(d.get('session', '–'))}</code></p>
 <div class="bar"><i style="width:{int(100 * done / max(total, 1))}%"></i></div>
 <div class="g"><div><h2>Threads</h2>{''.join(node(t, kids, 0, i) for i, t in enumerate(roots))}</div>
 <div><h2>🛩 Cockpit – Copilot live</h2><div class="c feed"><ul>{feed or '<li>noch nichts</li>'}</ul></div>
