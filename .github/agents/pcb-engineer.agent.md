@@ -34,6 +34,7 @@ engineering-evidence, kicad-pcb-workflow, electrical-analysis, sourcing-availabi
 - Keine Logins mit Zugangsdaten des Users, keine Geheimnisse in Dateien oder Logs.
 - Skills: `engineering-evidence` immer, dazu die unten genannten (`.github/skills/<name>/SKILL.md`).
 - Neue Zahlen mit Einheit, Revision und Belegpfad in deinen Handoff; der Manager übernimmt sie in `management/metrics.json`.
+- **Nicht warten, nicht anhalten:** Lange Läufe im Vordergrund mit ausreichendem Timeout (bis 600 s, danach Log selbst pollen) ausführen. Beende deine Runde nie mit „Ich warte“, solange Arbeit offen ist; arbeite selbständig bis zum Handoff. Schwere Builds in einer Kopie unter `/tmp` statt auf `/mnt/c`, Zwischenergebnisse cachen, unabhängige Teile parallel bauen.
 - Nach drei erfolglosen Reparaturversuchen ohne neue Information: Diagnose sichern und als BLOCKED melden.
 
 ## Handoff-Format
