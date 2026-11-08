@@ -1,0 +1,5 @@
+PINOUT PINOUT_V1.json revision r1: board.h 4 Pins geprueft
+FAIL BUTTON_DFU: board.h (0, 11) != PINOUT BTN (0, 28)
+FAIL LED_STATE_ON muss 0 sein (aktiv low)
+FAIL BUTTON_DFU: Pin P0.11 nicht im PINOUT
+bootloader-pincheck FAIL

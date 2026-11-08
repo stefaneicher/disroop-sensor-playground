@@ -1,0 +1,77 @@
+mkdir -p build/host
+cc -std=c11 -Wall -Wextra -Werror -O2 -Icodec/include -Ifusion/include -Iicm/include -Ipower/include -I/opt/unity/src -o build/host/test_thingy_codec tests/test_thingy_codec.c codec/src/thingy_codec.c /opt/unity/src/unity.c -lm
+mkdir -p build/host
+cc -std=c11 -Wall -Wextra -Werror -O2 -Icodec/include -Ifusion/include -Iicm/include -Ipower/include -I/opt/unity/src -o build/host/test_thingy_profile tests/test_thingy_profile.c codec/src/thingy_codec.c /opt/unity/src/unity.c -lm
+mkdir -p build/host
+cc -std=c11 -Wall -Wextra -Werror -O2 -Icodec/include -Ifusion/include -Iicm/include -Ipower/include -I/opt/unity/src -o build/host/test_motion_fusion tests/test_motion_fusion.c fusion/src/motion_fusion.c /opt/unity/src/unity.c -lm
+mkdir -p build/host
+cc -std=c11 -Wall -Wextra -Werror -O2 -Icodec/include -Ifusion/include -Iicm/include -Ipower/include -I/opt/unity/src -o build/host/test_icm45686 tests/test_icm45686.c icm/src/icm45686.c /opt/unity/src/unity.c -lm
+mkdir -p build/host
+cc -std=c11 -Wall -Wextra -Werror -O2 -Icodec/include -Ifusion/include -Iicm/include -Ipower/include -I/opt/unity/src -o build/host/test_vbat tests/test_vbat.c power/src/vbat.c /opt/unity/src/unity.c -lm
+== pincheck
+PINOUT PINOUT_V1.json revision r1: 14 GPIO-Signale, 14 DTS-Tags
+pincheck PASS
+== bootloader-pincheck
+PINOUT PINOUT_V1.json revision r1: board.h 4 Pins geprueft
+bootloader-pincheck PASS
+== test_thingy_codec
+tests/test_thingy_codec.c:60:test_bridge_vector_encodes_to_same_bytes:PASS
+tests/test_thingy_codec.c:61:test_saturates_at_i16_limits:PASS
+tests/test_thingy_codec.c:62:test_rounds_to_nearest:PASS
+tests/test_thingy_codec.c:63:test_rejects_short_buffer_and_null:PASS
+
+-----------------------
+4 Tests 0 Failures 0 Ignored 
+OK
+== test_thingy_profile
+tests/test_thingy_profile.c:210:test_quaternion_bridge_vector:PASS
+tests/test_thingy_profile.c:211:test_quaternion_saturates:PASS
+tests/test_thingy_profile.c:212:test_euler_bridge_vector:PASS
+tests/test_thingy_profile.c:213:test_heading_bridge_vector_and_normalised:PASS
+tests/test_thingy_profile.c:214:test_button:PASS
+tests/test_thingy_profile.c:215:test_motion_config_bridge_vector:PASS
+tests/test_thingy_profile.c:216:test_motion_config_rejects_freq_and_len:PASS
+tests/test_thingy_profile.c:217:test_env_config_read_default_then_echo_written:PASS
+tests/test_thingy_profile.c:218:test_sound_config:PASS
+tests/test_thingy_profile.c:219:test_speaker_tone_bridge_vector_and_volume_clamp:PASS
+tests/test_thingy_profile.c:220:test_led_modes:PASS
+tests/test_thingy_profile.c:221:test_led_rejects_bad_input:PASS
+tests/test_thingy_profile.c:222:test_battery_curve:PASS
+tests/test_thingy_profile.c:223:test_raw_hr_layout_and_flags:PASS
+tests/test_thingy_profile.c:224:test_button_short_and_long:PASS
+
+-----------------------
+15 Tests 0 Failures 0 Ignored 
+OK
+== test_motion_fusion
+tests/test_motion_fusion.c:125:test_static_tilt_converges:PASS
+tests/test_motion_fusion.c:126:test_rotation_about_z_integrates:PASS
+tests/test_motion_fusion.c:127:test_rest_detection_estimates_and_removes_bias:PASS
+tests/test_motion_fusion.c:128:test_motion_resets_window:PASS
+tests/test_motion_fusion.c:129:test_button_request_ignores_accel_criterion:PASS
+tests/test_motion_fusion.c:130:test_bias_corrected_static_has_no_yaw_drift:PASS
+
+-----------------------
+6 Tests 0 Failures 0 Ignored 
+OK
+== test_icm45686
+tests/test_icm45686.c:182:test_parse_frame_scales_and_timestamp:PASS
+tests/test_icm45686.c:183:test_parse_frame_flags_saturation:PASS
+tests/test_icm45686.c:184:test_parse_frame_rejects_invalid:PASS
+tests/test_icm45686.c:185:test_init_sequence:PASS
+tests/test_icm45686.c:186:test_init_wrong_whoami_and_bus_error:PASS
+tests/test_icm45686.c:187:test_fifo_count:PASS
+tests/test_icm45686.c:188:test_ireg_write_and_wom:PASS
+
+-----------------------
+7 Tests 0 Failures 0 Ignored 
+OK
+== test_vbat
+tests/test_vbat.c:68:test_settle_constant_at_least_25ms:PASS
+tests/test_vbat.c:69:test_sequence_enable_wait_read_disable:PASS
+tests/test_vbat.c:70:test_divider_factor_two:PASS
+tests/test_vbat.c:71:test_adc_error_still_disables:PASS
+
+-----------------------
+4 Tests 0 Failures 0 Ignored 
+OK

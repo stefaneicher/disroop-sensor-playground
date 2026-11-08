@@ -18,27 +18,28 @@ Preise wurden am 2026-11-08 per Abruf auf bastelgarage.ch ermittelt (QUELLE: Suc
 Die Debug Probe ist auch bei pi-shop.ch gelistet; dort wurde kein Preis ausgelesen.
 
 ## Anschluss
-Benötigt werden SWDIO, SWCLK, GND und VTref/3V3 am E73 (Testpads laut PINOUT_V1.json; Stand: Platzhalter).
+Benötigt werden SWDIO, SWCLK, GND und VTref/3V3 am E73 (TC2030 laut PINOUT_V1.json). Logs der App über Segger RTT (`CONFIG_LOG_BACKEND_RTT`), kein UART.
 Das Board wird über den eigenen Akku/USB versorgt. Die Probe speist das Board nicht.
 
 ## 1. Bootloader einmalig (SWD)
-Verwendet wird Adafruit nRF52 Bootloader **0.11.0** (github.com/adafruit/Adafruit_nRF52_Bootloader/releases), Asset `pca10056_bootloader-0.11.0_s140_6.1.1.hex`.
-Diese Variante enthält SoftDevice S140 6.1.1 und den Bootloader ab 0xF4000.
-Die Platzhalter-Pins für LED/Taster in `boards/disroop/motion_one/motion_one-pins.dtsi` sind so gewählt wie beim PCA10056: LED P0.13–15, Taster P0.11.
-Weicht das finale Pinout ab, muss eine eigene Bootloader-Board-Definition erstellt werden (offener Punkt).
+Verwendet wird Adafruit nRF52 Bootloader **0.11.0** (Tag-SHA c67f0bcf) mit **eigener Board-Definition** `bootloader/motion_one/` (Q-01).
+Die Pins stammen aus `../electronics/PINOUT_V1.json`: Status-LED RGB D4 (R P0.30, G P0.31, B P0.29, aktiv low) und Update-Taster SW2 an P0.28 mit internem Pull-up. `make pincheck` prüft die Pins (`scripts/check_bootloader_board.py`).
+Bauen im Container: `./project hw fw "bash devices/motion-one/firmware/build-bootloader.sh"`. Ergebnis `motion_one_bootloader-0.11.0_s140_6.1.1.hex` (S140 6.1.1 + Bootloader ab 0xF4000).
+Debug ausschliesslich über SWD/Segger RTT (Q-02, kein UART). Die Variante `build-bootloader.sh DEBUG=1` loggt über RTT und liegt ab 0xEA000, überlappt also App/Storage. Sie ist nur für Bootloader-Diagnose gedacht.
+USB-VID/PID vorläufig 0x239A/0x00DA wie pca10056, nur für Prototypen (offener Punkt). Das Laufwerk heisst `MOTION1BOOT`.
 
 ```
 # Raspberry Pi Debug Probe / Pico-debugprobe (CMSIS-DAP)
 openocd -f interface/cmsis-dap.cfg -c "transport select swd" -f target/nrf52.cfg \
-  -c "init; nrf5 mass_erase; program pca10056_bootloader-0.11.0_s140_6.1.1.hex verify; reset; exit"
+  -c "init; nrf5 mass_erase; program motion_one_bootloader-0.11.0_s140_6.1.1.hex verify; reset; exit"
 # alternativ pyOCD
-pyocd erase -t nrf52840 --chip && pyocd flash -t nrf52840 pca10056_bootloader-0.11.0_s140_6.1.1.hex
+pyocd erase -t nrf52840 --chip && pyocd flash -t nrf52840 motion_one_bootloader-0.11.0_s140_6.1.1.hex
 ```
 `mass_erase` löscht auch UICR/APPROTECT. Neue nRF52840-Revisionen (ab Build Code F) haben APPROTECT ab Werk aktiv; ein Mass-Erase per CTRL-AP ist dann nötig (ANNAHME).
 
 ## 2. Firmware per UF2
 1. Bauen: `./project hw fw "bash devices/motion-one/firmware/build-app.sh"`. Das ergibt `build/app/zephyr/zephyr.uf2`, Startadresse 0x26000, Familie nRF52840.
-2. Bootloader starten: Reset zweimal kurz drücken, oder Taster beim Reset halten. Es erscheint ein USB-Laufwerk `NRF52BOOT`.
+2. Bootloader starten: Reset zweimal kurz drücken, oder Taster SW2 (P0.28) beim Reset halten. Es erscheint ein USB-Laufwerk `MOTION1BOOT`, die RGB-LED zeigt den Bootloader-Zustand.
 3. `zephyr.uf2` auf das Laufwerk kopieren. Das Gerät startet danach neu.
 
 Alternativ ohne Bootloader per SWD: `zephyr.hex` mit `openocd ... program zephyr.hex` flashen.

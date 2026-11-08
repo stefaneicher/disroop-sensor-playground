@@ -1,0 +1,83 @@
+arm-none-eabi-gcc (15:14.2.rel1-1) 14.2.1 20241119
+CC dfu_ble_svc.c
+CC dfu_init.c
+CC flash_nrf5x.c
+CC main.c
+CC screen.c
+CC images.c
+CC boards.c
+CC nrfx_power.c
+CC nrfx_nvmc.c
+CC system_nrf52840.c
+CC bootloader.c
+CC bootloader_settings.c
+CC bootloader_util.c
+CC dfu_transport_serial.c
+CC dfu_transport_ble.c
+CC dfu_single_bank.c
+CC ble_dfu.c
+CC ble_dis.c
+CC pstorage_raw.c
+CC app_timer.c
+CC app_scheduler.c
+CC app_error.c
+CC app_util_platform.c
+CC crc16.c
+CC hci_mem_pool.c
+CC hci_slip.c
+CC hci_transport.c
+CC nrf_assert.c
+CC pinconfig.c
+CC usb_desc.c
+CC msc_uf2.c
+CC ghostfat.c
+CC usb.c
+CC dcd_nrf5x.c
+CC tusb_fifo.c
+CC usbd.c
+CC usbd_control.c
+CC cdc_device.c
+CC msc_device.c
+CC tusb.c
+CC SEGGER_RTT.c
+AS gcc_startup_nrf52840.S
+LD motion_one_bootloader-0.11.0.out
+/usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-closer.o): in function `_close_r':
+/build/reproducible-path/newlib-4.5.0.20241231/build_nano/arm-none-eabi/thumb/v7e-m+fp/hard/newlib/../../../../../../newlib/libc/reent/closer.c:47:(.text+0xc): warning: _close is not implemented and will always fail
+/usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-fstatr.o): in function `_fstat_r':
+/build/reproducible-path/newlib-4.5.0.20241231/build_nano/arm-none-eabi/thumb/v7e-m+fp/hard/newlib/../../../../../../newlib/libc/reent/fstatr.c:55:(.text+0x12): warning: _fstat is not implemented and will always fail
+/usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-isattyr.o): in function `_isatty_r':
+/build/reproducible-path/newlib-4.5.0.20241231/build_nano/arm-none-eabi/thumb/v7e-m+fp/hard/newlib/../../../../../../newlib/libc/reent/isattyr.c:52:(.text+0xc): warning: _isatty is not implemented and will always fail
+/usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-lseekr.o): in function `_lseek_r':
+/build/reproducible-path/newlib-4.5.0.20241231/build_nano/arm-none-eabi/thumb/v7e-m+fp/hard/newlib/../../../../../../newlib/libc/reent/lseekr.c:49:(.text+0x14): warning: _lseek is not implemented and will always fail
+/usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-readr.o): in function `_read_r':
+/build/reproducible-path/newlib-4.5.0.20241231/build_nano/arm-none-eabi/thumb/v7e-m+fp/hard/newlib/../../../../../../newlib/libc/reent/readr.c:49:(.text+0x14): warning: _read is not implemented and will always fail
+/usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-closer.o): note: the message above does not take linker garbage collection into account
+/usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-fstatr.o): note: the message above does not take linker garbage collection into account
+/usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-isattyr.o): note: the message above does not take linker garbage collection into account
+/usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-lseekr.o): note: the message above does not take linker garbage collection into account
+/usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-readr.o): note: the message above does not take linker garbage collection into account
+Memory region         Used Size  Region Size  %age Used
+           FLASH:       40656 B        78 KB     50.90%
+BOOTLOADER_CONFIG:          88 B         2 KB      4.30%
+ MBR_PARAMS_PAGE:           0 B         4 KB      0.00%
+BOOTLOADER_SETTINGS:          4 KB         4 KB    100.00%
+             RAM:       26032 B       224 KB     11.35%
+       DBL_RESET:           0 B          4 B      0.00%
+          NOINIT:          62 B        128 B     48.44%
+ UICR_BOOTLOADER:           4 B          4 B    100.00%
+UICR_MBR_PARAM_PAGE:           4 B          4 B    100.00%
+   text	   data	    bss	    dec	    hex	filename
+  40744	    764	  29434	  70942	  1151e	_build/build-motion_one/motion_one_bootloader-0.11.0.out
+Create motion_one_bootloader-0.11.0.hex
+Create motion_one_bootloader-0.11.0_nosd.hex
+Create motion_one_bootloader-0.11.0_s140_6.1.1.hex
+Create update-motion_one_bootloader-0.11.0_nosd.uf2
+python3 lib/uf2/utils/uf2conv.py -f 0xd663823c -c -o _build/build-motion_one/update-motion_one_bootloader-0.11.0_nosd.uf2 _build/build-motion_one/motion_one_bootloader-0.11.0_nosd.hex
+Converted to uf2, output size: 89600, start address: 0x0
+Wrote 89600 bytes to _build/build-motion_one/update-motion_one_bootloader-0.11.0_nosd.uf2
+-rwxrwxrwx 1 1000 1000 116892 Nov  8 11:23 _build/build-motion_one/motion_one_bootloader-0.11.0.hex
+-rwxrwxrwx 1 1000 1000 772652 Nov  8 11:23 _build/build-motion_one/motion_one_bootloader-0.11.0.out
+-rwxrwxrwx 1 1000 1000 122008 Nov  8 11:23 _build/build-motion_one/motion_one_bootloader-0.11.0_nosd.hex
+-rwxrwxrwx 1 1000 1000 537340 Nov  8 11:23 _build/build-motion_one/motion_one_bootloader-0.11.0_s140_6.1.1.hex
+-rwxrwxrwx 1 1000 1000  89600 Nov  8 11:23 _build/build-motion_one/update-motion_one_bootloader-0.11.0_nosd.uf2

@@ -16,7 +16,8 @@ nicht auf echter Hardware getestet (NOT RUN).
 - `app/`: Zephyr-GATT- und Board-Anwendung
 - `boards/disroop/motion_one/`: Board-Definition; Pinmux-Overlay nach Abgleich mit PCB
 - `tests/`: Host-Unit-Tests
-- `PROGRAMMING.md`: vorgesehener SWD-Bootloader-/UF2-Weg
+- `bootloader/motion_one/`: Board-Definition für den Adafruit-UF2-Bootloader (Pins aus PINOUT_V1), Build `build-bootloader.sh`
+- `PROGRAMMING.md`: vorgesehener SWD-Bootloader-/UF2-Weg; Debug nur SWD/RTT, kein UART
 - `docs/EXTENDED_CHANNEL.md`: Raw-HR-Erweiterung `EF680480`
 
 ## Bauen und prüfen
@@ -24,6 +25,7 @@ nicht auf echter Hardware getestet (NOT RUN).
 ```sh
 ./project hw fw-image
 ./project hw fw "bash devices/motion-one/firmware/smoke.sh"
+./project hw fw "bash devices/motion-one/firmware/build-bootloader.sh"
 ```
 
 Kein Flashen und kein Betrieb an einer Stromquelle ohne ausdrückliche Freigabe. Datenblattwerte und Registerkonfiguration

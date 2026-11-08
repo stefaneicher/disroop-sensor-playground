@@ -19,12 +19,13 @@ $(BUILD)/%: tests/%.c $$(SRC_%) $(HDRS)
 
 # Alle Tests laufen, auch wenn einer fehlschlaegt; Exit != 0, wenn einer fehlschlaegt.
 test: $(addprefix $(BUILD)/,$(TESTS))
-	@rc=0; echo "== pincheck"; python3 scripts/check_pinout.py || rc=1; for t in $(TESTS); do echo "== $$t"; ./$(BUILD)/$$t || rc=1; done; exit $$rc
+	@rc=0; echo "== pincheck"; python3 scripts/check_pinout.py || rc=1; echo "== bootloader-pincheck"; python3 scripts/check_bootloader_board.py || rc=1; for t in $(TESTS); do echo "== $$t"; ./$(BUILD)/$$t || rc=1; done; exit $$rc
 
 clean:
 	rm -rf $(BUILD)
 
 pincheck:
 	python3 scripts/check_pinout.py
+	python3 scripts/check_bootloader_board.py
 
 .PHONY: test clean pincheck

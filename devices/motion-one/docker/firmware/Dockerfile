@@ -49,3 +49,13 @@ ENV ZEPHYR_BASE=/opt/zephyrproject/zephyr \
     CMAKE_PREFIX_PATH=/opt/zephyr-sdk-${SDK_VERSION}/cmake \
     HOME=/tmp
 WORKDIR /workspace
+
+# Segger RTT (Q-02: Debug nur SWD/RTT, kein UART) – eigene Schicht, damit der Cache oben erhalten bleibt
+RUN cd /opt/zephyrproject && west config manifest.project-filter -- '-.*,+hal_nordic,+cmsis,+cmsis_6,+mbedtls,+tf-psa-crypto,+segger' \
+    && west update --narrow -o=--depth=1 segger \
+    && find /opt/zephyrproject/modules/debug -name .git -type d -prune -exec rm -rf {} + \
+    && test -f modules/debug/segger/SEGGER/SEGGER_RTT.c && chmod -R a+rwX /opt/zephyrproject/.west
+
+# Adafruit nRF52 Bootloader (Q-01) braucht newlib-nano (nosys/nano.specs); Zephyr-SDK hat nur picolibc
+RUN apt-get update && apt-get install -y --no-install-recommends gcc-arm-none-eabi libnewlib-arm-none-eabi \
+    && rm -rf /var/lib/apt/lists/*
