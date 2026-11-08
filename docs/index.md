@@ -10,6 +10,7 @@
 | [protocol.md](protocol.md) | **Vertrag:** GATT-Characteristics, Startsequenz, Lied, NFC-AAR, Bridge-HTTP-API |
 | [telemetry.schema.json](telemetry.schema.json) | **Vertrag:** JSON-Schema des Telemetrie-Snapshots |
 | [TENNIS.md](TENNIS.md) | Tennis: starten, spielen, Sensor-Mapping, Architektur |
+| [KONZEPT_HANDY_CONTROLLER.md](KONZEPT_HANDY_CONTROLLER.md) | Konzept: Handy per QR-Code als Controller (Relay, Stand-Modus) |
 | [ENGINEERING.md](ENGINEERING.md) | Engineering-Regeln (TDD, Clean Code, Simulator first) |
 | [plan.html](plan.html) | ursprünglicher Projektplan (Lavish) |
 

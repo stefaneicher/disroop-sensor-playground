@@ -67,3 +67,6 @@ Ski: kompakte Querformat-HUD, zweispaltiges Menü mit grossen Touch-Zielen, Test
 - ThingyViewModel/MainActivity nutzen ConnectionHub (Profil SIMULATOR neu); Tests angepasst.
 - tennis/static/header.js/.css (Status, Gerät, Akku) in index.html und ski/index.html eingebunden; TennisActivity sendet __thingyHeader.
 - NICHT gebaut/getestet (kein SDK). B (Sensorseite als HTML) offen, Compose bleibt.
+
+## 2026-11-08 Konzept Handy-Controller
+- Neu: `docs/KONZEPT_HANDY_CONTROLLER.md` (QR-Code → Handy als Controller per Gyro, Relay, Stand-Modus). Aufgaben in `TODO.md` unter «Handy-Controller». Noch kein Code.
