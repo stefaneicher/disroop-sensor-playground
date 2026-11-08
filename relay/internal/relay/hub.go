@@ -24,7 +24,7 @@ type Peer interface {
 // Errors returned to joining pads.
 var (
 	ErrNoRoom   = errors.New("unbekannter Raum")
-	ErrRoomFull = errors.New("Raum ist voll")
+	ErrRoomFull = errors.New("zu viele Handys in diesem Raum")
 )
 
 // codeAlphabet has no easily confused characters (0/O, 1/I/L).
