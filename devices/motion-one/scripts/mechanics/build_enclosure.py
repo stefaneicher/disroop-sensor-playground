@@ -488,7 +488,11 @@ def components():
         motor=cyl(P.MOTOR_X, P.MOTOR_Y, MOTOR_Z0, MOTOR_Z0 + P.MOTOR_H, P.MOTOR_D),
         j5=box(J5[0] - P.J5_ENV[0] / 2, J5[0] + P.J5_ENV[0] / 2, -BCY, -BCY + P.J5_ENV[1], 0, P.J5_ENV[2]),
         j5_stecker=box(J5[0] - P.J5_PLUG[0] / 2, J5[0] + P.J5_PLUG[0] / 2, -BCY - P.J5_PLUG[1], -BCY, 0, P.J5_PLUG[2]),
-        schraube_h2=cyl(*dev(P.H_DOME[0]), P.Z_BB - P.H_PILOT[1] + 0.5, P.SCREW_HEAD_K, P.SCREW_HEAD_D),
+        # Fix r4: vorher ein Zylinder D4 (Kopf-D) ueber die ganze Laenge -> Kollision mit Kernloch D1.7.
+        # Jetzt Schaft = Kernlochdurchmesser (Gewindegrund, Ueberdeckung des Formgewindes bewusst nicht modelliert) + Kopf D4 auf Board-Oberseite.
+        schraube_h2=cq.Compound.makeCompound([
+            cyl(*dev(P.H_DOME[0]), P.Z_BB - P.H_PILOT[1] + 0.5, 0.0, P.H_PILOT[0]),
+            cyl(*dev(P.H_DOME[0]), 0.0, P.SCREW_HEAD_K, P.SCREW_HEAD_D)]),
         akku_stecker=box(dev(P.J2_XY)[0] - P.J2_PLUG[0] / 2, dev(P.J2_XY)[0] + P.J2_PLUG[0] / 2,
                          dev((0, 1.77))[1] - P.J2_PLUG[1], dev((0, 1.77))[1], 0, P.J2_PLUG[2]),
         kabelkanal=box(P.BAT_X0 + bl + 0.1, BX + P.BOARD_L - 9.0 - 2, -5, 5, P.Z_BAT + 1, P.Z_BB - 0.1),

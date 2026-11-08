@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" font-family="sans-serif" font-size="11">
+<title>Schematische Schnittskizze H2 (nicht massstaeblich), Masse aus params.py</title>
+<g transform="translate(20,20)">
+<text x="0" y="0" font-weight="bold">VORHER: Schraubenmodell Zylinder D4.0 ueber ganze Laenge</text>
+<rect x="60" y="90" width="80" height="150" fill="#ddd" stroke="#333"/><text x="150" y="230">Dom D5.0 (Unterschale)</text>
+<rect x="105" y="150" width="10" height="90" fill="#fff" stroke="#333"/><text x="150" y="190">Kernloch D1.7 x 6</text>
+<rect x="80" y="40" width="40" height="190" fill="#e55" fill-opacity=".6" stroke="#a00"/><text x="150" y="70" fill="#a00">Schraube D4.0 durchdringt Dom: 56.6 mm3 (SIMULATION)</text>
+</g>
+<g transform="translate(340,20)">
+<text x="0" y="0" font-weight="bold">NACHHER: Schaft D1.7 + Kopf D4.0 x 1.6</text>
+<rect x="30" y="90" width="80" height="150" fill="#ddd" stroke="#333"/>
+<rect x="65" y="150" width="10" height="90" fill="#5a5" stroke="#252"/>
+<rect x="50" y="40" width="40" height="30" fill="#5a5" stroke="#252"/><text x="100" y="60">Kopf auf Board-Oberseite</text>
+<text x="0" y="270" fill="#a60">Kollisionslauf mit Fix: NOT RUN (nicht beendet)</text>
+</g></svg>
