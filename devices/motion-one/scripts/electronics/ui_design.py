@@ -8,6 +8,7 @@ P = {
  'U1': ('ui', 'TTP233H-BA6', 'TTP233H-BA6', 'ui:SOT-23-6_L2.9-W1.7-P0.95-LS2.8-BL', 'C2890349', 24.5, 9.0, 0),
  'J1': ('Connector_Generic_MountingPin', 'Conn_01x08_MountingPin', 'EXT JST-SH 8p', 'Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal', 'C160407', 33.0, 23.4, 0),
  'E1': ('Connector_Generic', 'Conn_01x01', 'TouchPad', 'ui:TouchPad_10x10', '', 32.0, 8.0, 0),
+ 'U2': ('Power_Protection', 'SRV05-4', 'SRV05-4', 'Package_TO_SOT_SMD:SOT-23-6', 'C13612',  23.2, 16.8, 0),
  'R1': ('Device', 'R', '100', R04, 'C25076', 28.5, 17.0, 90), 'R2': ('Device', 'R', '100', R04, 'C25076', 29.7, 17.0, 90),
  'R3': ('Device', 'R', '100', R04, 'C25076', 30.9, 17.0, 90), 'R4': ('Device', 'R', '100', R04, 'C25076', 32.1, 17.0, 90),
  'R5': ('Device', 'R', '1k', R04, 'C11702', 24.5, 12.6, 0),
@@ -16,10 +17,10 @@ P = {
  'H2': ('Mechanical', 'MountingHole', 'M2', 'MountingHole:MountingHole_2.2mm_M2', '', 24.0, 23.5, 0),
 }
 N = {
- '3V3': 'J1.1 SW1.3 SW1.4 U1.5 C1.1',
- 'GND': 'J1.8 J1.MP SW1.1 SW1.6 SW1.7 SW1.8 SW1.9 SW1.10 SW1.b SW1.d U1.2 U1.4 U1.6 C1.2',
- 'EXT1': 'J1.2 R1.1', 'STICK_X': 'R1.2 SW1.2', 'EXT2': 'J1.3 R2.1', 'STICK_Y': 'R2.2 SW1.5',
- 'EXT4': 'J1.5 R3.1', 'STICK_BTN': 'R3.2 SW1.a SW1.c', 'EXT5': 'J1.6 R4.1', 'TOUCH_Q': 'R4.2 U1.1',
+ '3V3': 'J1.1 SW1.3 SW1.4 U1.5 C1.1 U2.5',
+ 'GND': 'J1.8 J1.MP SW1.1 SW1.6 SW1.7 SW1.8 SW1.9 SW1.10 SW1.b SW1.d U1.2 U1.4 U1.6 C1.2 U2.2',
+ 'EXT1': 'J1.2 R1.1 U2.1', 'STICK_X': 'R1.2 SW1.2', 'EXT2': 'J1.3 R2.1 U2.3', 'STICK_Y': 'R2.2 SW1.5',
+ 'EXT4': 'J1.5 R3.1 U2.4', 'STICK_BTN': 'R3.2 SW1.a SW1.c', 'EXT5': 'J1.6 R4.1 U2.6', 'TOUCH_Q': 'R4.2 U1.1',
  'TOUCH_PAD': 'E1.1 R5.1', 'TOUCH_I': 'R5.2 U1.3',
 }
 N = {k: [tuple(t.rsplit('.', 1)) for t in v.split()] for k, v in N.items()}

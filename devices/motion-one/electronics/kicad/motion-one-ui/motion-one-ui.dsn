@@ -1,4 +1,4 @@
-(pcb "electronics/kicad/motion-one-ui/motion-one-ui.dsn"
+(pcb "../../electronics/kicad/motion-one-ui/motion-one-ui.dsn"
   (parser
     (string_quote ")
     (space_in_quoted_tokens on)
@@ -60,6 +60,9 @@
       (place R3 30900 -17000 front 90 (PN 100))
       (place R2 29700 -17000 front 90 (PN 100))
       (place R1 28500 -17000 front 90 (PN 100))
+    )
+    (component "Package_TO_SOT_SMD:SOT-23-6"
+      (place U2 23200 -16800 front 0 (PN "SRV05-4"))
     )
     (component ui:TouchPad_10x10
       (place E1 32000 -8000 front 0 (PN TouchPad))
@@ -127,6 +130,23 @@
       (outline (path signal 100  -525 270  -525 -270  525 -270  525 270  -525 270))
       (pin RoundRect[T]Pad_540.000000x640.000000_135.514000_um_0.000000_0 1 -510 0)
       (pin RoundRect[T]Pad_540.000000x640.000000_135.514000_um_0.000000_0 2 510 0)
+    )
+    (image "Package_TO_SOT_SMD:SOT-23-6"
+      (outline (polygon signal 0  1045 1495  2045 1495  2045 -1495  1045 -1495  1045 -1695
+            -1045 -1695  -1045 -1495  -2045 -1495  -2045 1495  -1045 1495
+            -1045 1695  1045 1695))
+      (outline (path signal 120  -910 1560  910 1560))
+      (outline (path signal 120  -910 1510  -910 1560))
+      (outline (path signal 120  -910 -1560  -910 -1510))
+      (outline (path signal 120  910 1560  910 1510))
+      (outline (path signal 120  910 -1510  910 -1560))
+      (outline (path signal 120  910 -1560  -910 -1560))
+      (pin RoundRect[T]Pad_1325.000000x600.000000_150.571000_um_0.000000_0 1 -1137.5 950)
+      (pin RoundRect[T]Pad_1325.000000x600.000000_150.571000_um_0.000000_0 2 -1137.5 0)
+      (pin RoundRect[T]Pad_1325.000000x600.000000_150.571000_um_0.000000_0 3 -1137.5 -950)
+      (pin RoundRect[T]Pad_1325.000000x600.000000_150.571000_um_0.000000_0 4 1137.5 -950)
+      (pin RoundRect[T]Pad_1325.000000x600.000000_150.571000_um_0.000000_0 5 1137.5 0)
+      (pin RoundRect[T]Pad_1325.000000x600.000000_150.571000_um_0.000000_0 6 1137.5 950)
     )
     (image ui:TouchPad_10x10
       (outline (polygon signal 0  5245 -5245  -5245 -5245  -5245 5245  5245 5245))
@@ -362,6 +382,15 @@
             -600.951 650))
       (attach off)
     )
+    (padstack RoundRect[T]Pad_1325.000000x600.000000_150.571000_um_0.000000_0
+      (shape (polygon F.Cu 0  -663.071 150  -651.609 207.621  -618.97 256.47  -570.121 289.109
+            -512.499 300.57  512.5 300.571  570.121 289.109  618.97 256.47
+            651.609 207.621  663.07 149.999  663.071 -150  651.609 -207.621
+            618.97 -256.47  570.121 -289.109  512.499 -300.57  -512.5 -300.571
+            -570.121 -289.109  -618.97 -256.47  -651.609 -207.621  -663.07 -149.999
+            -663.071 150))
+      (attach off)
+    )
     (padstack Rect[T]Pad_532.000000x990.000000_um
       (shape (rect F.Cu -266 -495 266 495))
       (attach off)
@@ -378,14 +407,14 @@
   )
   (network
     (net /GND
-      (pins C1-2 J1-8 J1-MP J1-MP@1 U1-2 U1-4 U1-6 SW1-1 SW1-6 SW1-7 SW1-8 SW1-9 SW1-10
-        SW1-b SW1-d)
+      (pins C1-2 U2-2 J1-8 J1-MP J1-MP@1 U1-2 U1-4 U1-6 SW1-1 SW1-6 SW1-7 SW1-8 SW1-9
+        SW1-10 SW1-b SW1-d)
     )
     (net /STICK_X
       (pins R1-2 SW1-2)
     )
     (net /3V3
-      (pins C1-1 J1-1 U1-5 SW1-3 SW1-4)
+      (pins C1-1 U2-5 J1-1 U1-5 SW1-3 SW1-4)
     )
     (net /STICK_Y
       (pins R2-2 SW1-5)
@@ -400,19 +429,19 @@
       (pins R5-2 U1-3)
     )
     (net /EXT1
-      (pins R1-1 J1-2)
+      (pins R1-1 U2-1 J1-2)
     )
     (net /EXT2
-      (pins R2-1 J1-3)
+      (pins R2-1 U2-3 J1-3)
     )
     (net "unconnected-(J1-Pin_4-Pad4)"
       (pins J1-4)
     )
     (net /EXT4
-      (pins R3-1 J1-5)
+      (pins R3-1 U2-4 J1-5)
     )
     (net /EXT5
-      (pins R4-1 J1-6)
+      (pins R4-1 U2-6 J1-6)
     )
     (net "unconnected-(J1-Pin_7-Pad7)"
       (pins J1-7)

@@ -15482,6 +15482,16 @@
 		(layer "Edge.Cuts")
 		(uuid "dc93cfb9-b285-4e79-9487-f2dad172d94d")
 	)
+	(gr_text "J5-1"
+		(at 55 17.45 0)
+		(layer "F.Fab")
+		(uuid "fd6bc965-315e-4072-8ef9-78d7286e2cbe")
+		(effects
+			(font
+				(size 0.8 0.8)
+			)
+		)
+	)
 	(segment
 		(start 29.5887 9.8598)
 		(end 29.8467 10.1178)

@@ -1,17 +1,18 @@
 {
  "uuid": {
-  "U1": "1cf63b37-6ddb-4944-87a6-9868c974b7ba",
-  "SW1": "acbbdbc5-fc6c-4cb1-836b-c9c6ea8cdc7e",
-  "J1": "fbfc4afd-8a3c-4d82-bd53-2483a01642c8",
-  "E1": "c01e4343-8131-44fe-a152-97e7e82460cd",
-  "R1": "3d9bf664-5b43-4a8f-a1e3-7f7f22b48171",
-  "R2": "ceef8cee-7336-4d54-bdb5-8be7d075353d",
-  "R3": "5e87b739-ee6e-4cc2-99f6-be9b2581e75c",
-  "R4": "a054ab5b-60eb-4d2f-ac52-2bbe05a730fb",
-  "R5": "fbda323f-a3b5-47cf-9c81-19569d97b539",
-  "C1": "e3e4e148-2837-4b44-9828-fd52d6ce60f4",
-  "H1": "dac00f3c-be7c-4ec0-b3c8-90c9622f24ea",
-  "H2": "24922c67-c38b-4c08-9571-b17e8cd6e2b2"
+  "U1": "db9e0379-f56e-4f83-bcab-67eda97ecd40",
+  "SW1": "c1088d89-033b-4bb2-b821-441e2f90b1ec",
+  "J1": "b1e45754-f81b-47ef-9da3-1a4b846340bb",
+  "E1": "6b932c76-dd5e-4c7e-a208-3e301f902fa6",
+  "U2": "16eff1d7-2b15-4e35-bca4-bd4e31371268",
+  "R1": "ec547733-3ceb-4cc6-ae0c-d39041afa3a5",
+  "R2": "fd04a991-7d56-4cc6-8e4f-93fb1bfff648",
+  "R3": "0b598194-9ba3-4bb0-8ac5-3c4317a4a22d",
+  "R4": "57f4f1cc-409f-4604-8801-a28e281c8eb8",
+  "R5": "48f7b2e3-38e0-4fb3-b464-79ea7eb11228",
+  "C1": "3101bfd8-0f4f-474d-8f61-39d618374103",
+  "H1": "b9568159-24a6-455e-950c-46196e6a7eb4",
+  "H2": "072434ad-3a04-4cf5-b717-453b78b5f6cc"
  },
  "pinname": {
   "U1.1": "Q",
@@ -44,6 +45,12 @@
   "J1.8": "Pin_8",
   "J1.MP": "MountPin",
   "E1.1": "Pin_1",
+  "U2.1": "IO1",
+  "U2.2": "VN",
+  "U2.3": "IO2",
+  "U2.4": "IO3",
+  "U2.5": "VP",
+  "U2.6": "IO4",
   "R1.1": "",
   "R1.2": "",
   "R2.1": "",
@@ -92,6 +99,14 @@
    "Footprint": "ui:TouchPad_10x10",
    "Datasheet": "",
    "Description": "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+  },
+  "U2": {
+   "Reference": "U2",
+   "Value": "SRV05-4",
+   "Footprint": "Package_TO_SOT_SMD:SOT-23-6",
+   "Datasheet": "http://www.onsemi.com/pub/Collateral/SRV05-4-D.PDF",
+   "Description": "ESD Protection Diodes with Low Clamping Voltage, SOT-23-6",
+   "LCSC": "C13612"
   },
   "R1": {
    "Reference": "R1",

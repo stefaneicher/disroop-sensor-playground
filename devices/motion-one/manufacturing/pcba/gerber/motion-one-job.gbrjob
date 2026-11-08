@@ -5,7 +5,7 @@
       "Application": "Pcbnew",
       "Version": "10.0.8-10.0.8~ubuntu24.04.1"
     },
-    "CreationDate": "2026-11-08T13:40:45+00:00"
+    "CreationDate": "2026-11-08T20:28:44+00:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
@@ -18,7 +18,7 @@
       "Y": 25.1
     },
     "LayerNumber": 4,
-    "BoardThickness": 1.6,
+    "BoardThickness": 1.0,
     "Finish": "None"
   },
   "DesignRules": [
@@ -63,16 +63,6 @@
       "FilePolarity": "Positive"
     },
     {
-      "Path": "motion-one-F_Adhesive.gta",
-      "FileFunction": "Glue,Top",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "motion-one-B_Adhesive.gba",
-      "FileFunction": "Glue,Bot",
-      "FilePolarity": "Positive"
-    },
-    {
       "Path": "motion-one-F_Paste.gtp",
       "FileFunction": "SolderPaste,Top",
       "FilePolarity": "Positive"
@@ -103,26 +93,6 @@
       "FilePolarity": "Negative"
     },
     {
-      "Path": "motion-one-User_Drawings.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "motion-one-User_Comments.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "motion-one-User_Eco1.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "motion-one-User_Eco2.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
       "Path": "motion-one-Edge_Cuts.gm1",
       "FileFunction": "Profile",
       "FilePolarity": "Positive"
@@ -135,26 +105,6 @@
     {
       "Path": "motion-one-B_Fab.gbr",
       "FileFunction": "AssemblyDrawing,Bot",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "motion-one-User_1.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "motion-one-User_2.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "motion-one-User_3.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "motion-one-User_4.gbr",
-      "FileFunction": "Other,User",
       "FilePolarity": "Positive"
     }
   ],
@@ -179,7 +129,7 @@
     },
     {
       "Type": "Dielectric",
-      "Thickness": 0.48,
+      "Thickness": 0.28,
       "Material": "FR4",
       "Name": "F.Cu/In1.Cu",
       "Notes": "Type: dielectric layer 1 (from F.Cu to In1.Cu)"
@@ -191,7 +141,7 @@
     },
     {
       "Type": "Dielectric",
-      "Thickness": 0.48,
+      "Thickness": 0.28,
       "Material": "FR4",
       "Name": "In1.Cu/In2.Cu",
       "Notes": "Type: dielectric layer 2 (from In1.Cu to In2.Cu)"
@@ -203,7 +153,7 @@
     },
     {
       "Type": "Dielectric",
-      "Thickness": 0.48,
+      "Thickness": 0.28,
       "Material": "FR4",
       "Name": "In2.Cu/B.Cu",
       "Notes": "Type: dielectric layer 3 (from In2.Cu to B.Cu)"

@@ -37,7 +37,7 @@ with open(M + 'CPL_motion-one_JLC.csv', 'w', newline='') as f:
 with open(M + 'BOM_motion-one_JLC.csv', 'w', newline='') as f:
     w = csv.writer(f); w.writerow(['Comment', 'Designator', 'Footprint', 'LCSC Part #'])
     for v in sorted(rows.values(), key=lambda r: r[2][0]): w.writerow([v[0], ','.join(sorted(v[2])), v[1], v[3]])
-z = zipfile.ZipFile(M + 'motion-one_gerber_jlc.zip', 'w', zipfile.ZIP_DEFLATED)
+z = zipfile.ZipFile(M + 'motion-one_gerber_r4.zip', 'w', zipfile.ZIP_DEFLATED)
 for g in sorted(glob.glob(M + 'gerber/*')): z.write(g, os.path.basename(g))
 z.close()
 json.dump(sorted(hts), open(K + 'export/heights.json', 'w'), indent=1)

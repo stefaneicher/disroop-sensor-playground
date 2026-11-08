@@ -63,7 +63,7 @@ Ein/Aus: Schiebeschalter MSK12C02 schaltet Gate des P-FET Q2 (Soft-Switch). Begr
 ## Stand 2026-11-08 (Q-03, JLCPCB + JLC3DP) – Gesamt-BOM r4
 Hauptboard r4: 35 Pos. r3 + J5 C160407 (13 Extended). Teile/Geraet Hauptboard 20.24 + 0.32 = **20.56 USD** (BERECHNUNG). Bedienplatine motion-one-ui: **1.65 USD** (BERECHNUNG), Extended 3 (SW1 C146170, U1 C2890349, J1 C160407). Motor M1 C2759981 0.63 USD (Handbestueckung). J2 = C160402 (Hauptboard, oben). **Summe 22.84 USD/Geraet** (BERECHNUNG).
 Nicht-elektronische Positionen (JLC3DP, Details `ANGEBOTE_V1.md` §0): Oberschale, Unterschale, Tastenkappe = SLS PA12 (3201 PA-F); Lichtleiter = SLA transparent (Harz 8001); Preis ANNAHME 8–25 USD/Satz, Sofortpreis NOT RUN. STL `mechanics/print/VORLAEUFIG_*` bis Gehaeuse-r4 final.
-Offen (NOT RUN): C25076/C11702 Neuabfrage, E73 C356849 Lager vor Bestellung, TVS fuer J5 (PCB offen).
+Offen (NOT RUN): C25076/C11702 Neuabfrage, E73 C356849 Lager vor Bestellung, (TVS J5: erledigt in r4, U2 C13612, Entscheid D2).
 
 ## r4-Ergaenzung (Q-04, Stand 2026-11-08, Abfrage 12:42 UTC, Rohdaten `logs/pcb-r4/sourcing/jlc_r4.json`, URL `https://jlcpcb.com/partdetail/<LCSC>`, USD Stufe 1, QUELLE)
 
@@ -83,5 +83,8 @@ Bedienplatine motion-one-ui (BOM `manufacturing/pcba/ui/BOM_motion-one-ui_JLC.cs
 | C25076 | 0402 100R | 100 | R1-R4 | 4 | Basic | PASS (ANNAHME, Basic) | ~0.001 | 0.004 | Basic-Aequivalent |
 | C11702 | 0402 1k | 1k | R5 | 1 | Basic | PASS (ANNAHME, Basic) | ~0.001 | 0.001 | Basic-Aequivalent |
 | C1525 | CL05B104KO5NNNC | 100nF | C1 | 1 | 34320311 | PASS | 0.0031 | 0.003 | Basic-Aequivalent |
+| C13612 | SRV05-4.TCT | SRV05-4 (4-Kanal-TVS, J5-Leitungen) | U2 | 1 | 66758 (Extended) | PASS | 0.1567 | 0.157 | C107351 SRV05-4L-TP (814 Stk), C111212 USBLC6-4SC6 (16745 Stk). QUELLE: JLC-API 2026-11-08T20:12Z, logs/pcb-r4c/jlc_tvs.json, https://jlcpcb.com/partdetail/C13612 |
 
 Summe UI-Teile ca. 1.65 USD/Geraet (BERECHNUNG, ohne PCB/Setup/Extended-Gebuehr). Hauptboard +0.32 USD (J5). C25076/C11702 nicht neu abgefragt (Basic, NOT RUN).
+
+r4 (2026-11-08, D2): Bedienplatine +U2 SRV05-4 (SOT-23-6, C13612) an EXT1/2/4/5, Pins 2=GND, 5=3V3. Gerber-Pakete: manufacturing/pcba/motion-one_gerber_r4.zip, manufacturing/pcba/ui/motion-one-ui_gerber_r4.zip.

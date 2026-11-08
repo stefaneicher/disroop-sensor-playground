@@ -1,0 +1,262 @@
+[
+ {
+  "query": "SRV05-4",
+  "utc": "2026-11-08T20:12:36+00:00",
+  "lcsc": "C13612",
+  "mpn": "SRV05-4.TCT",
+  "type": "expand",
+  "stock": 66758,
+  "price": [
+   [
+    1,
+    0.1567
+   ],
+   [
+    50,
+    0.1237
+   ],
+   [
+    150,
+    0.1095
+   ]
+  ],
+  "pkg": "SOT-23-6L",
+  "desc": "-55\u2103~+125\u2103 12A@8/20us 17.5V 300W@8/20us 3pF 5V 5uA 6V Four channels IEC 61000-4-2\u3001IEC 6100",
+  "url": "https://jlcpcb.com/partdetail/C13612",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1809212114_SEMTECH-SRV05-4-TCT_C13612.pdf"
+ },
+ {
+  "query": "SRV05-4",
+  "utc": "2026-11-08T20:12:36+00:00",
+  "lcsc": "C85364",
+  "mpn": "SRV05-4-P-T7",
+  "type": "expand",
+  "stock": 9349,
+  "price": [
+   [
+    1,
+    0.2671
+   ],
+   [
+    50,
+    0.2187
+   ],
+   [
+    150,
+    0.1979
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "12V 1A@8/20us 3.5pF 500W@8/20us 5V 5uA 6V ESD Four channels IEC 61000-4-2\u3001IEC 61000-4-5\u3001IE",
+  "url": "https://jlcpcb.com/partdetail/C85364",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1809192313_ProTek-Devices-SRV05-4-P-T7_C85364.pdf"
+ },
+ {
+  "query": "SRV05-4",
+  "utc": "2026-11-08T20:12:36+00:00",
+  "lcsc": "C107351",
+  "mpn": "SRV05-4L-TP",
+  "type": "expand",
+  "stock": 814,
+  "price": [
+   [
+    1,
+    0.1691
+   ],
+   [
+    50,
+    0.1338
+   ],
+   [
+    150,
+    0.1186
+   ]
+  ],
+  "pkg": "SOT-23-6L",
+  "desc": "-55\u2103~+150\u2103 1.5pF 12A@8/20us 17.5V 1uA 350W@8/20us 5V 9V ESD Four channels IEC 61000-4-2\u3001IE",
+  "url": "https://jlcpcb.com/partdetail/C107351",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2008251103_MCC-Micro-Commercial-Components-SRV05-4L-TP_C107351.pdf"
+ },
+ {
+  "query": "SRV05-4",
+  "utc": "2026-11-08T20:12:36+00:00",
+  "lcsc": "C118757",
+  "mpn": "CDSOT23-SRV05-4",
+  "type": "expand",
+  "stock": 2829,
+  "price": [
+   [
+    1,
+    0.9421
+   ],
+   [
+    10,
+    0.772
+   ],
+   [
+    30,
+    0.6869
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "-55\u2103~+150\u2103 15V 3.5pF 30A@8/20us 500W@8/20us 5V 5uA 6V Four channels IEC 61000-4-2\u3001IEC 6100",
+  "url": "https://jlcpcb.com/partdetail/C118757",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2009211103_BOURNS-CDSOT23-SRV05-4_C118757.pdf"
+ },
+ {
+  "query": "USBLC6-4SC6",
+  "utc": "2026-11-08T20:12:36+00:00",
+  "lcsc": "C111212",
+  "mpn": "USBLC6-4SC6",
+  "type": "expand",
+  "stock": 16745,
+  "price": [
+   [
+    1,
+    0.2447
+   ],
+   [
+    50,
+    0.1945
+   ],
+   [
+    150,
+    0.173
+   ]
+  ],
+  "pkg": "SOT-23-6L",
+  "desc": "-40\u2103~+125\u2103@(Tj) 10V 10nA 130W@8/20us 17V 3pF 5.25V 5A ESD Four channels IEC 61000-4-2 Unid",
+  "url": "https://jlcpcb.com/partdetail/C111212",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1810130920_STMicroelectronics-USBLC6-4SC6_C111212.pdf"
+ },
+ {
+  "query": "USBLC6-4SC6",
+  "utc": "2026-11-08T20:12:36+00:00",
+  "lcsc": "C435848",
+  "mpn": "USBLC6-4SC6Y",
+  "type": "expand",
+  "stock": 7636,
+  "price": [
+   [
+    1,
+    0.3193
+   ],
+   [
+    50,
+    0.264
+   ],
+   [
+    150,
+    0.2403
+   ]
+  ],
+  "pkg": "SOT-23-6L",
+  "desc": "-40\u2103~+150\u2103 10nA 17V 3pF 5.25V 6V ESD Four channels SOT-23-6L ESD and Surge Protection (TVS",
+  "url": "https://jlcpcb.com/partdetail/C435848",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1912111437_STMicroelectronics-USBLC6-4SC6Y_C435848.pdf"
+ },
+ {
+  "query": "USBLC6-4SC6",
+  "utc": "2026-11-08T20:12:36+00:00",
+  "lcsc": "C558419",
+  "mpn": "TPUSBLC6-4SC6",
+  "type": "expand",
+  "stock": 7519,
+  "price": [
+   [
+    1,
+    0.0437
+   ],
+   [
+    100,
+    0.0352
+   ],
+   [
+    300,
+    0.0308
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "0.35pF\u30010.8pF 20V 300nA 3A@8/20us 5V ESD IEC 61000-4-2\u3001IEC 61000-4-4 SOT-23-6 ESD and Surge",
+  "url": "https://jlcpcb.com/partdetail/C558419",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2108131930_TECH-PUBLIC-TPUSBLC6-4SC6_C558419.pdf"
+ },
+ {
+  "query": "USBLC6-4SC6",
+  "utc": "2026-11-08T20:12:36+00:00",
+  "lcsc": "C5140052",
+  "mpn": "USBLC6-4SC6-MS",
+  "type": "expand",
+  "stock": 290,
+  "price": [
+   [
+    1,
+    0.0494
+   ],
+   [
+    100,
+    0.0401
+   ],
+   [
+    300,
+    0.0354
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "0.6pF 16V 1uA 5V 6V 80W@8/20us ESD IEC 61000-4-2\u3001IEC 61000-4-5\u3001IEC 61000-4-4 Unidirectiona",
+  "url": "https://jlcpcb.com/partdetail/C5140052",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2210271600_MSKSEMI-USBLC6-4SC6-MS_C5140052.pdf"
+ },
+ {
+  "query": "C7519",
+  "utc": "2026-11-08T20:12:37+00:00",
+  "lcsc": "C7519",
+  "mpn": "USBLC6-2SC6",
+  "type": "expand",
+  "stock": 40648,
+  "price": [
+   [
+    1,
+    0.1623
+   ],
+   [
+    50,
+    0.1242
+   ],
+   [
+    150,
+    0.1055
+   ]
+  ],
+  "pkg": "SOT-23-6L",
+  "desc": "-40\u2103~+125\u2103 150nA 17V 2 3.5pF 5.25V 5A 6V ESD IEC 61000-4-2 Unidirectional SOT-23-6L ESD an",
+  "url": "https://jlcpcb.com/partdetail/C7519",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2410121836_STMicroelectronics-USBLC6-2SC6_C7519.pdf"
+ },
+ {
+  "query": "C85364",
+  "utc": "2026-11-08T20:12:37+00:00",
+  "lcsc": "C85364",
+  "mpn": "SRV05-4-P-T7",
+  "type": "expand",
+  "stock": 9349,
+  "price": [
+   [
+    1,
+    0.2671
+   ],
+   [
+    50,
+    0.2187
+   ],
+   [
+    150,
+    0.1979
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "12V 1A@8/20us 3.5pF 500W@8/20us 5V 5uA 6V ESD Four channels IEC 61000-4-2\u3001IEC 61000-4-5\u3001IE",
+  "url": "https://jlcpcb.com/partdetail/C85364",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1809192313_ProTek-Devices-SRV05-4-P-T7_C85364.pdf"
+ }
+]

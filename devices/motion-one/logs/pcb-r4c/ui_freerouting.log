@@ -1,0 +1,32 @@
+2026-11-08 21:24:05.198 INFO   Freerouting v2.5.0 (build-date: 2026-10-05)
+2026-11-08 21:24:10.301 INFO   Hardware: 12 CPU cores, 4 CPU score, 1910 MB RAM
+2026-11-08 21:24:10.366 WARN   Deprecated settings path '-mp / --router.max_passes'; use '--router.autorouter.max_passes' instead. The old path will be removed in a future release.
+2026-11-08 21:24:16.418 WARN   Deprecated settings path 'router.max_passes'; use 'router.autorouter.max_passes' instead. The old path will be removed in a future release.
+2026-11-08 21:24:18.463 INFO   Opening 'electronics/kicad/motion-one-ui/motion-one-ui.dsn'...
+2026-11-08 21:24:34.972 INFO   [8862DF\19EC40] Loading board file 'motion-one-ui.dsn'...
+2026-11-08 21:25:06.699 INFO   [8862DF\19EC40] Starting routing of 'motion-one-ui' on 11 threads...
+2026-11-08 21:25:07.020 INFO   [8862DF\19EC40] Pipeline thread limits: autorouter pass is single-threaded, optimizer.max_threads=11.
+2026-11-08 21:25:07.244 INFO   [8862DF\19EC40] Fanout stage started on board '75d2f51ddd22155ebc551ba95e6001fb' with 33 of 35 SMD pins needing fanout (2 already connected, 0 netless).
+2026-11-08 21:25:18.388 INFO   [8862DF\19EC40] Fanout pass #1 on board 'c43d38bfac089a64250d85ace9d11c96' completed in 11.01 seconds with 31 SMD pins fanouted, 0 not routed, 0 insert errors, +13 extra vias (0 SMD pins still to check in pass, ripup costs=100).
+2026-11-08 21:25:19.269 INFO   [8862DF\19EC40] Fanout pass #2 on board '9e48aae49ada294bc6ff3475f0492953' completed in 0.83 seconds with 2 SMD pins fanouted, 1 not routed, 0 insert errors, +3 extra vias (0 SMD pins still to check in pass, ripup costs=200).
+2026-11-08 21:25:19.360 INFO   [8862DF\19EC40] Fanout pass #3 on board '9e48aae49ada294bc6ff3475f0492953' completed in 0.06 seconds with 0 SMD pins fanouted, 0 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=300).
+2026-11-08 21:25:19.385 INFO   [8862DF\19EC40] Fanout stage completed: started with 35 total SMD pins, completed in 12.09 seconds, escaped pins: 32/35 (91.4%), using 5.05 total CPU seconds, 0.28 GB total allocated, and 118.1 MB peak heap usage.
+2026-11-08 21:25:19.541 INFO   [8862DF\19EC40] Auto-routing stage started on board '9e48aae49ada294bc6ff3475f0492953' with baseline score 285.71 for 20 unrouted items.
+2026-11-08 21:25:26.227 INFO   [8862DF\19EC40] Auto-routing pass #1 on board '9e48aae49ada294bc6ff3475f0492953' was completed in 6.41 seconds with score 1000.00 (0 unrouted and 0 violations), using 8.54 CPU seconds and the job allocated 0.60 GB of memory so far.
+2026-11-08 21:25:26.328 INFO   [8862DF\19EC40] Auto-routing pass #2 on board 'c42d18cee1428cfc6b555abda18b872f' was completed in 0.03 seconds with score 1000.00 (0 unrouted and 0 violations), using 8.54 CPU seconds and the job allocated 0.60 GB of memory so far.
+2026-11-08 21:25:26.617 INFO   [8862DF\19EC40] Auto-routing stage completed: started with 35 unrouted nets, completed in 19.91 seconds, final score: 1000.00 (0 unrouted and 0 violations), using 8.54 total CPU seconds, 0.60 GB total allocated, and 107.6 MB peak heap usage.
+2026-11-08 21:25:26.757 INFO   [8862DF\19EC40] Starting optimization on 11 threads...
+2026-11-08 21:25:27.333 INFO   [8862DF\19EC40] Optimization stage started on board '1098cd0d4578bb9a63a338186fc8a982'. Baseline router score: 1000.00, optimizer score: 594.94, incomplete connections: 0, clearance violations: 0.
+2026-11-08 21:25:36.872 INFO   [8862DF\19EC40] Optimizer pass #1 on board '42a2c16c3de8c8c81da72362cbfec0be' was completed in 9.19 seconds with the score of 552.00 (0 unrouted and 0 violations).
+2026-11-08 21:25:36.929 INFO   [8862DF\19EC40] Optimizer pass #1 candidate rejected: OPTIMIZER_SCORE_NOT_IMPROVED. Restoring incumbent (optimizer score 594.94, incomplete connections: 0, clearance violations: 0).
+2026-11-08 21:25:37.046 INFO   [8862DF\19EC40] Optimizer pass #1: optimizer score 594.94 -> 552.00 (REGRESSED, -7.2187%), router score: 1000.00, incomplete connections: 0, clearance violations: 0.
+2026-11-08 21:25:49.960 INFO   [8862DF\19EC40] Optimizer pass #2 on board 'd00fed9020e8f1e1173b3c9fab6bb7c7' was completed in 12.53 seconds with the score of 673.47 (0 unrouted and 0 violations).
+2026-11-08 21:25:50.068 INFO   [8862DF\19EC40] Optimizer pass #2: optimizer score 594.94 -> 673.47 (IMPROVED, 13.1988%), router score: 1000.00, incomplete connections: 0, clearance violations: 0.
+2026-11-08 21:26:03.600 INFO   [8862DF\19EC40] Optimizer pass #3 on board 'b90d0e050270b56ae815a06e799253f6' was completed in 13.37 seconds with the score of 664.93 (0 unrouted and 0 violations).
+2026-11-08 21:26:03.672 INFO   [8862DF\19EC40] Optimizer pass #3 candidate rejected: OPTIMIZER_SCORE_NOT_IMPROVED. Restoring incumbent (optimizer score 673.47, incomplete connections: 0, clearance violations: 0).
+2026-11-08 21:26:03.787 INFO   [8862DF\19EC40] Optimizer pass #3: optimizer score 673.47 -> 664.93 (REGRESSED, -1.2685%), router score: 1000.00, incomplete connections: 0, clearance violations: 0.
+2026-11-08 21:26:03.789 INFO   [8862DF\19EC40] Stopping optimizer because the improvement in this pass (-1.2685%) is below the threshold (2.50%).
+2026-11-08 21:26:03.910 INFO   [8862DF\19EC40] Optimization stage completed:. Baseline router score: 1000.00, baseline optimizer score: 594.94, final router score: 1000.00, final optimizer score: 673.47, completed in 36.52 seconds, using 65.95 total CPU seconds, 8.27 GB total allocated, and 389.5 MB peak heap usage.
+2026-11-08 21:26:03.948 INFO   [8862DF\19EC40] Optimization was completed in 37.19 seconds with the score of 1000.00 (0 unrouted and 0 violations).
+2026-11-08 21:26:04.226 INFO   Saving 'electronics/kicad/motion-one-ui/motion-one-ui.ses'...
+2026-11-08 21:26:04.304 INFO   Saved 12095 bytes to 'electronics/kicad/motion-one-ui/motion-one-ui.ses'.

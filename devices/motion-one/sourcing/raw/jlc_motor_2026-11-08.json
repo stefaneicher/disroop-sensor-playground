@@ -1,0 +1,210 @@
+[
+ {
+  "query": "vibration motor 1027",
+  "utc": "2026-11-08T12:28:28+00:00",
+  "lcsc": "C2836604",
+  "mpn": "C1027B603F",
+  "type": "expand",
+  "stock": 129,
+  "price": [
+   [
+    1,
+    0.9993
+   ],
+   [
+    10,
+    0.8096
+   ],
+   [
+    30,
+    0.7147
+   ]
+  ],
+  "pkg": "-",
+  "desc": "-20\u2103~+60\u2103 3V 9000rpm 90mA 9mm CW\u3001CCW Flat Vibration Motor Lead - Vibration Motors ROHS",
+  "url": "https://jlcpcb.com/partdetail/C2836604",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2106021033_KOTL-C1027B603F_C2836604.pdf"
+ },
+ {
+  "query": "vibration motor 1027",
+  "utc": "2026-11-08T12:28:28+00:00",
+  "lcsc": "C22386130",
+  "mpn": "C1027B1015F",
+  "type": "expand",
+  "stock": 180,
+  "price": [
+   [
+    1,
+    0.7278
+   ],
+   [
+    10,
+    0.5872
+   ],
+   [
+    30,
+    0.5152
+   ]
+  ],
+  "pkg": "-",
+  "desc": "-20\u2103~+60\u2103 16000rpm 3V 90mA 9mm CW,CCW Flat Vibration Motor Lead - Vibration Motors ROHS",
+  "url": "https://jlcpcb.com/partdetail/C22386130",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2409271933_KOTL-C1027B1015F_C22386130.pdf"
+ },
+ {
+  "query": "vibration motor 1027",
+  "utc": "2026-11-08T12:28:28+00:00",
+  "lcsc": "C17230149",
+  "mpn": "VC1027B077L",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    4.7167
+   ],
+   [
+    10,
+    4.7167
+   ],
+   [
+    12,
+    4.7167
+   ]
+  ],
+  "pkg": "-",
+  "desc": "-30\u2103~+70\u2103 13500rpm 3V Eccentric Rotating Mass (ERM) - Vibration Motors ROHS",
+  "url": "https://jlcpcb.com/partdetail/C17230149",
+  "datasheet": ""
+ },
+ {
+  "query": "vibration motor 1027",
+  "utc": "2026-11-08T12:28:28+00:00",
+  "lcsc": "C17404549",
+  "mpn": "VC1027B200N",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    4.7167
+   ],
+   [
+    10,
+    4.7167
+   ],
+   [
+    12,
+    4.7167
+   ]
+  ],
+  "pkg": "-",
+  "desc": "-30\u2103~+70\u2103 3V 9000rpm Eccentric Rotating Mass (ERM) - Vibration Motors ROHS",
+  "url": "https://jlcpcb.com/partdetail/C17404549",
+  "datasheet": ""
+ },
+ {
+  "query": "vibration motor 0827",
+  "utc": "2026-11-08T12:28:29+00:00",
+  "lcsc": "C2759981",
+  "mpn": "LCM0827A3038F",
+  "type": "expand",
+  "stock": 2284,
+  "price": [
+   [
+    1,
+    0.6297
+   ],
+   [
+    10,
+    0.5087
+   ],
+   [
+    30,
+    0.4563
+   ]
+  ],
+  "pkg": "-",
+  "desc": "-20\u2103~+60\u2103 14000rpm 3V 80mA 8mm CW\u3001CCW Flat Vibration Motor Lead - Vibration Motors ROHS",
+  "url": "https://jlcpcb.com/partdetail/C2759981",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2103261932_LEADER-LCM0827A3038F_C2759981.pdf"
+ },
+ {
+  "query": "vibration motor 0827",
+  "utc": "2026-11-08T12:28:29+00:00",
+  "lcsc": "C2894726",
+  "mpn": "C0827B135F",
+  "type": "expand",
+  "stock": 3,
+  "price": [
+   [
+    1,
+    0.9601
+   ],
+   [
+    10,
+    0.7704
+   ],
+   [
+    30,
+    0.6755
+   ]
+  ],
+  "pkg": "-",
+  "desc": "-20\u2103~+60\u2103 100mA 12000rpm 3V 6.75mm CW\u3001CCW Flat Vibration Motor - Vibration Motors ROHS",
+  "url": "https://jlcpcb.com/partdetail/C2894726",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2109082030_KOTL-C0827B135F_C2894726.pdf"
+ },
+ {
+  "query": "vibration motor 0827",
+  "utc": "2026-11-08T12:28:29+00:00",
+  "lcsc": "C2685990",
+  "mpn": "C0827L-066330026-1001",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.4089
+   ],
+   [
+    10,
+    0.3991
+   ],
+   [
+    30,
+    0.3926
+   ]
+  ],
+  "pkg": "-",
+  "desc": "-20\u2103~+60\u2103 10000rpm 3V 85mA CW Flat Vibration Motor - Vibration Motors ROHS",
+  "url": "https://jlcpcb.com/partdetail/C2685990",
+  "datasheet": "https://datasheet.lcsc.com/lcsc/2101211837_LNLON-C0827L-066330026-1001_C2685990.pdf"
+ },
+ {
+  "query": "vibration motor 0827",
+  "utc": "2026-11-08T12:28:29+00:00",
+  "lcsc": "C3811695",
+  "mpn": "SMTB-0827-TW-R",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.8767
+   ],
+   [
+    10,
+    0.8767
+   ],
+   [
+    12,
+    0.8767
+   ]
+  ],
+  "pkg": "-",
+  "desc": "-40\u2103~+105\u2103 2.5V~4.5V 2.7kHz 3.2mm 8.5mm 8.5mm 85dB Electromagnetic Passive (Externally Dri",
+  "url": "https://jlcpcb.com/partdetail/C3811695",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2401161325_PUI-Audio--Inc--SMTB-0827-TW-R_C3811695.pdf"
+ }
+]

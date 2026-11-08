@@ -17,7 +17,7 @@ for line in (P / "sourcing/BOM_V1.md").read_text(encoding="utf-8").splitlines():
 
 def copy_common(d: Path, stl_dir: str):
     d.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(PCBA / "motion-one_gerber_jlc.zip", d / "motion-one_gerber_r3.zip")
+    shutil.copy2(PCBA / "motion-one_gerber_r4.zip", d / "motion-one_gerber_r3.zip")
     s = d / stl_dir
     s.mkdir(exist_ok=True)
     for p in PARTS:
