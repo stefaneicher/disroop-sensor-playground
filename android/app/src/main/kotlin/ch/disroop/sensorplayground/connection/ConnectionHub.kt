@@ -15,7 +15,7 @@ class ConnectionHub(
     private val backgroundTimeoutMs: Long = BACKGROUND_TIMEOUT_MS,
     private val create: (Profile) -> ThingyConnection,
 ) {
-    enum class Profile { FULL, GAME }
+    enum class Profile { FULL, GAME, SIMULATOR }
 
     private var current: ThingyConnection? = null
     private var profile: Profile? = null

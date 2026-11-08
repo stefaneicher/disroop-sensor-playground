@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performScrollToNode
 import androidx.test.core.app.ApplicationProvider
 import ch.disroop.sensorplayground.connection.ConnectionFactory
+import ch.disroop.sensorplayground.connection.ConnectionHub
 import ch.disroop.sensorplayground.connection.LinkState
 import ch.disroop.sensorplayground.connection.SimulatedThingy
 import ch.disroop.sensorplayground.connection.ThingyConnection
@@ -77,7 +78,7 @@ class ScreenshotTest {
         try {
             var state = UiState()
             runTest(dispatcher) {
-                val vm = ThingyViewModel(SimulatorOnly, clock = { testScheduler.currentTime }, song = { Song.highwayToHell() })
+                val vm = ThingyViewModel(SimulatorOnly, ConnectionHub(backgroundScope) { SimulatorOnly.simulator() }, clock = { testScheduler.currentTime }, song = { Song.highwayToHell() })
                 vm.setSimulator(true)
                 advanceTimeBy(1_000)
                 vm.setMicrophone(true)

@@ -69,6 +69,7 @@ class TennisActivity : ComponentActivity() {
                 next.events.collect { event ->
                     if (event !is ConnectionEvent.Data) return@collect
                     val telemetry: TelemetryEvent = NotificationDecoder.decode(event.uuid, event.value) ?: return@collect
+                    if (telemetry is TelemetryEvent.Battery) web.evaluateJavascript("window.__thingyHeader&&window.__thingyHeader({battery:${telemetry.percent}})", null)
                     frames.accept(telemetry)?.let { web.evaluateJavascript("window.__thingyFrame&&window.__thingyFrame($it)", null) }
                 }
             }
@@ -96,6 +97,7 @@ class TennisActivity : ComponentActivity() {
             is LinkState.Unavailable -> if (link.reason == LinkState.Reason.NO_PERMISSION) "Bluetooth-Berechtigung fehlt" else "Bluetooth nicht verfügbar"
             else -> "suche Thingy …"
         }
+        if (link is LinkState.Connected) web.evaluateJavascript("window.__thingyHeader&&window.__thingyHeader({name:'${link.name.replace("'", "")}'})", null)
         web.evaluateJavascript("window.__thingyLink&&window.__thingyLink(${if (source == "null") source else "'$source'"},'$text')", null)
     }
 

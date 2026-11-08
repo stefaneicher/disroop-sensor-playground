@@ -1,6 +1,7 @@
 package ch.disroop.sensorplayground.ui
 
 import ch.disroop.sensorplayground.connection.ConnectionFactory
+import ch.disroop.sensorplayground.connection.ConnectionHub
 import ch.disroop.sensorplayground.connection.SimulatedThingy
 import ch.disroop.sensorplayground.connection.ThingyConnection
 import ch.disroop.sensorplayground.protocol.BatteryTrend
@@ -36,7 +37,7 @@ class SimulatorSmokeTest {
             override fun ble(): ThingyConnection = error("no ble in this test")
             override fun simulator(): ThingyConnection = SimulatedThingy()
         }
-        val vm = ThingyViewModel(factory, clock = { testScheduler.currentTime }, song = { Song.highwayToHell() })
+        val vm = ThingyViewModel(factory, ConnectionHub(backgroundScope) { factory.simulator() }, clock = { testScheduler.currentTime }, song = { Song.highwayToHell() })
         vm.start()
         advanceTimeBy(1_000)
         vm.setMicrophone(true)

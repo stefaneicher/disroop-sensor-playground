@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import ch.disroop.sensorplayground.connection.ConnectionEvent
 import ch.disroop.sensorplayground.connection.ConnectionFactory
+import ch.disroop.sensorplayground.connection.ConnectionHub
 import ch.disroop.sensorplayground.connection.LinkState
 import ch.disroop.sensorplayground.connection.ThingyConnection
 import ch.disroop.sensorplayground.protocol.BatteryTrend
@@ -46,6 +47,7 @@ data class UiState(
 /** Owns the active [ThingyConnection] and folds its raw events into a [UiState]. */
 class ThingyViewModel(
     private val connections: ConnectionFactory,
+    private val hub: ConnectionHub,
     private val clock: () -> Long = System::currentTimeMillis,
     song: () -> Song = Song::highwayToHell,
 ) : ViewModel() {
@@ -66,15 +68,22 @@ class ThingyViewModel(
         connect(simulator = _state.value.simulator || !connections.bleAvailable)
     }
 
+    /** Leaves the view: the shared hub keeps the link until its background timeout. */
     fun stop() {
         songJob?.cancel()
+        if (connectionJob != null) hub.release()
         connectionJob?.cancel()
         connectionJob = null
     }
 
+    private fun disconnect() {
+        stop()
+        hub.disconnect()
+    }
+
     fun setSimulator(enabled: Boolean) {
         if (!enabled && !connections.bleAvailable) return
-        stop()
+        disconnect()
         connect(simulator = enabled)
     }
 
@@ -84,7 +93,7 @@ class ThingyViewModel(
         val connected = active != null && connectionJob?.isActive == true && active.link.value is LinkState.Connected
         if (connected && !_state.value.simulator) return
         if (!connections.bleAvailable) return start()
-        stop()
+        disconnect()
         connect(simulator = false)
     }
 
@@ -135,7 +144,7 @@ class ThingyViewModel(
     override fun onCleared() = stop()
 
     private fun connect(simulator: Boolean) {
-        val next = if (simulator) connections.simulator() else connections.ble()
+        val next = hub.acquire(if (simulator) ConnectionHub.Profile.SIMULATOR else ConnectionHub.Profile.FULL)
         connection = next
         battery.reset()
         _state.value = UiState(
@@ -148,7 +157,6 @@ class ThingyViewModel(
         connectionJob = viewModelScope.launch {
             launch(start = CoroutineStart.UNDISPATCHED) { next.link.collect(::onLink) }
             launch(start = CoroutineStart.UNDISPATCHED) { next.events.collect(::onEvent) }
-            next.run()
         }
     }
 
@@ -239,8 +247,8 @@ class ThingyViewModel(
 
         const val BATTERY_CHECK_MS = 10_000L
 
-        fun factory(connections: ConnectionFactory): ViewModelProvider.Factory = viewModelFactory {
-            initializer { ThingyViewModel(connections) }
+        fun factory(connections: ConnectionFactory, hub: ConnectionHub): ViewModelProvider.Factory = viewModelFactory {
+            initializer { ThingyViewModel(connections, hub) }
         }
     }
 }

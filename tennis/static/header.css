@@ -1,0 +1,7 @@
+#thingy-header{position:fixed;top:0;left:0;right:0;height:28px;z-index:1000;display:flex;align-items:center;gap:12px;padding:0 10px;background:#0b1220;color:#e5e7eb;font:12px/1 system-ui,sans-serif;border-bottom:1px solid #1f2937;box-sizing:border-box}
+#thingy-header .dot{width:9px;height:9px;border-radius:50%;background:#ef4444}
+#thingy-header.on .dot{background:#a3e635}
+#thingy-header .grow{flex:1}
+#thingy-header .bat{font-variant-numeric:tabular-nums}
+#thingy-header .bat.low{color:#f87171}
+body.has-thingy-header{padding-top:28px}

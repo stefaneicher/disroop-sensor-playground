@@ -29,7 +29,7 @@ import ch.disroop.sensorplayground.ui.ThingyViewModel
  */
 class MainActivity : ComponentActivity(), ScreenActions {
     private val connections by lazy { AndroidConnectionFactory(applicationContext) }
-    private val viewModel: ThingyViewModel by viewModels { ThingyViewModel.factory(connections) }
+    private val viewModel: ThingyViewModel by viewModels { ThingyViewModel.factory(connections, SensorApp.hub(applicationContext)) }
     private var permissionsRequested = false
 
     private val permissionRequest =

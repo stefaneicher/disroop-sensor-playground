@@ -14,7 +14,7 @@ class SensorApp : Application() {
         val factory = AndroidConnectionFactory(this)
         ConnectionHub(CoroutineScope(SupervisorJob() + Dispatchers.Main)) { profile ->
             when {
-                !factory.bleAvailable -> factory.simulator()
+                !factory.bleAvailable || profile == ConnectionHub.Profile.SIMULATOR -> factory.simulator()
                 profile == ConnectionHub.Profile.GAME -> factory.game()
                 else -> factory.ble()
             }

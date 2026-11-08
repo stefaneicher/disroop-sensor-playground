@@ -1,6 +1,7 @@
 package ch.disroop.sensorplayground.ui
 
 import ch.disroop.sensorplayground.connection.ConnectionFactory
+import ch.disroop.sensorplayground.connection.ConnectionHub
 import ch.disroop.sensorplayground.connection.FakeConnection
 import ch.disroop.sensorplayground.connection.LinkState
 import ch.disroop.sensorplayground.connection.ThingyConnection
@@ -45,7 +46,9 @@ class ThingyViewModelTest {
 
     private fun TestScope.viewModel(bleAvailable: Boolean = true): ThingyViewModel {
         ble.now = { testScheduler.currentTime }
-        return ThingyViewModel(factory(bleAvailable), clock = { testScheduler.currentTime }, song = { song })
+        val f = factory(bleAvailable)
+        val hub = ConnectionHub(backgroundScope) { p -> if (p == ConnectionHub.Profile.SIMULATOR) f.simulator() else f.ble() }
+        return ThingyViewModel(f, hub, clock = { testScheduler.currentTime }, song = { song })
     }
 
     @Before fun setUp() = Dispatchers.setMain(dispatcher)
