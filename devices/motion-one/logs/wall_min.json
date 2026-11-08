@@ -1,0 +1,12 @@
+{
+ "oberschale": {
+  "min_mm": 0.45,
+  "p1_mm": 0.9,
+  "n": 653575
+ },
+ "unterschale_glatt": {
+  "min_mm": 1.14,
+  "p1_mm": 1.2,
+  "n": 481654
+ }
+}
