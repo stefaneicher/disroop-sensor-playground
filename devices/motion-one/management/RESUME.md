@@ -55,3 +55,9 @@ PAUSIERT auf User-Entscheid („für das Gerät nicht so wichtig“). Letzter St
 - Motor war nur als Lötpads J3 („Motor separat“) geführt: kein Modell, nicht in BOM, kein Platz im Gehäuse. Ursache: kein Abgleich „Bauteil ↔ Gehäuseplatz“ für Teile ausserhalb der SMT-BOM.
 - F-09 (pcb-engineer, läuft): Modell wählen, BOM, INTERFACES, plus STEP-Modelle E73/USB-C/Taster/Schalter.
 - F-10 (mechanical-engineer, nach r3): Mulde in Unterschale + neue Regel: jedes Teil aus BOM/INTERFACES braucht 3D-Modell und Platz in der Kollisionsprüfung.
+
+### User-Entscheid 2026-11-08 (Q-04 Bedienelemente / Wiederverwendung)
+- Ziel: Elektronik in eigenen, selbst gedruckten Gehäusen wiederverwendbar.
+- PCB r4: 8-pol. JST-SH-Erweiterungsstecker (3V3, GND, EXT1–EXT5, mind. 2 ADC), 2× M2-Befestigungslöcher, LED-Pins auf Nicht-ADC-Pins umlegen.
+- Bedienplatine (Tochterplatine, per Kabel): **Analog-Daumenstick** (X/Y + Druck) und **Touch-Fläche** (kapazitiv).
+- Gehäuse-Starterkit (Massblatt + CadQuery-Vorlage) folgt. Bestellung verschiebt sich entsprechend.

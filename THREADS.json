@@ -218,6 +218,32 @@
       "summary": "Nach Gehäuse r3 + F-09: Mulde beim Akku mit Klebefläche und Litzenkanal; Kollision/Masse neu. Zusätzlich Vollständigkeitsprüfung: jedes Bauteil in BOM/INTERFACES muss Modell + Platz im Gehäuse haben."
     },
     {
+      "parent": "T-01.3",
+      "kind": "feedback",
+      "topic": "Gehäuse & Gestaltung",
+      "source": "Chat 11:24",
+      "refs": [],
+      "note": "Stand: fem/fem_results.json 03:43, alte Geometrie v1; keine r3-Netzstudie. Wiederaufnahme nur auf Wunsch.",
+      "id": "F-11",
+      "title": "PCB r4: Erweiterungsstecker + Bedienplatine (Daumenstick, Touch)",
+      "status": "running",
+      "owner": "pcb-engineer",
+      "summary": "User-Entscheid Q-04: Elektronik wiederverwendbar. JST-SH 8-pol., M2-Löcher, LED-Remap für ADC; Tochterplatine mit Analog-Stick + Touch."
+    },
+    {
+      "parent": "T-01.3",
+      "kind": "feedback",
+      "topic": "Gehäuse & Gestaltung",
+      "source": "Chat 11:24",
+      "refs": [],
+      "note": "Stand: fem/fem_results.json 03:43, alte Geometrie v1; keine r3-Netzstudie. Wiederaufnahme nur auf Wunsch.",
+      "id": "F-12",
+      "title": "Firmware: Motor-PWM ≤3.0 V, nicht mit Summer gleichzeitig; EXT-Pins, Stick/Touch",
+      "status": "open",
+      "owner": "firmware-engineer",
+      "summary": "USB-Budget 500 mA (Analyse F-09); Pinmap r4 nach F-11."
+    },
+    {
       "id": "T-01.4",
       "parent": "T-01",
       "title": "Bootloader-Board-Definition (Q-01)",
