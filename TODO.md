@@ -20,7 +20,7 @@ Status aller Punkte: **offen**.
 - [ ] (Android/Architektur) Die ganze App mit HTML-WebViews bauen, auch die Sensordatenansicht (heute nativ mit Compose). BLE bleibt nativ in Kotlin, das HTML bekommt die Daten wie bei Tennis und Ski per `evaluateJavascript` und `ThingyNative`.
 - [ ] (Android/UI) Einen konstanten Header über alle Ansichten, am besten der Header der Sensordatenansicht, auch bei Tennis und Ski.
 - [x] (Ski, 2026-11-08, Layout per Screenshot 844x390 geprüft, nicht auf echtem Handy) Auf dem Handy im Querformat verbessern: Anzeigen sind zu gross, man sieht nicht gut, wo der Skifahrer ist.
-- [ ] (Tennis) Grafik deutlich verbessern, vor allem den Spieler mit dem Arm. Auch das Spielen auf dem Handy ist schwierig.
+- [ ] (Tennis) Grafik deutlich verbessern, vor allem den Spieler mit dem Arm. Auch das Spielen auf dem Handy ist schwierig. — Teilweise 2026-11-08: Touch-Bedienung (Aussenfünftel = laufen, Mitte = Schlag), grössere Touch-Ziele. Grafik/Arm NICHT verbessert; nicht im Browser getestet.
 - [~] (Ski erledigt 2026-11-08, per Screenshot; Tennis offen) (Tennis/Ski) Menü-Screens im Querformat auf dem Handy sind schlecht bedienbar, Auswahl verbessern.
 - [~] (Ski erledigt 2026-11-08, ohne Gerät nicht live geprüft; Tennis offen) (Tennis/Ski) Kalibriermodus und Testmodus: zeigt live, wie die Bewegung des Geräts auf den Spieler wirkt.
 - [~] (Ski erledigt 2026-11-08, Alarm/Ton nur per Unit-Test, nicht mit echtem Gerät; Tennis offen) (Tennis/Ski) Bewegungsgrenzen: Dreht man das Gerät in einer Weise, die der Spieler (Mensch) nicht machen kann, gibt es Alarm oder Ton. So lernt man den möglichen Bewegungsradius.

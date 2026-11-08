@@ -152,7 +152,20 @@ window.addEventListener('keydown', (e) => {
 window.addEventListener('keyup', (e) => keys.delete(e.key));
 stage.addEventListener('pointerdown', (e) => {
   sfx.unlock();
-  if (e.target instanceof HTMLCanvasElement) keySwing();
+  if (!(e.target instanceof HTMLCanvasElement)) return;
+  // touch: outer fifths run left/right while held, the middle swings
+  const x = e.clientX / window.innerWidth;
+  if (e.pointerType === 'touch' && (x < 0.2 || x > 0.8)) {
+    const k = x < 0.2 ? 'ArrowLeft' : 'ArrowRight';
+    keys.add(k);
+    const up = () => {
+      keys.delete(k);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+    };
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+  } else keySwing();
 });
 
 // ---- loop ----------------------------------------------------------------

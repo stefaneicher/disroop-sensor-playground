@@ -58,3 +58,7 @@
 
 ## 2026-11-08 Ski Querformat
 Ski: kompakte Querformat-HUD, zweispaltiges Menü mit grossen Touch-Zielen, Testmodus mit Live-Anzeigen, Bewegungsgrenzen (src/ski/limits.ts) mit Alarmrahmen und Ton. Unit-Tests grün, Menü-Screenshot 844x390 geprüft (Software-GL, 1 FPS); echtes Gerät nicht getestet.
+
+## 2026-11-08 Tennis: Bewegungsgrenzen, Testmodus, Handy
+- `tennis/src/core/limits.ts` (Konstanten, `checkLimits`, `AlarmGate`) + `test/limits.test.ts`; `limitsui.ts` (roter Rand + Ton `Sfx.alarm`, Testmodus-Panel, Menüknopf «Testmodus»), Querformat-CSS, Touch-Steuerung.
+- Typecheck und 55 Unit-Tests grün. Nicht per Playwright/844x390 geprüft. Grafik/Spieler-Arm nicht angefasst. Ski nicht angefasst.
