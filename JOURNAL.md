@@ -70,3 +70,6 @@ Ski: kompakte Querformat-HUD, zweispaltiges Menü mit grossen Touch-Zielen, Test
 
 ## 2026-11-08 Konzept Handy-Controller
 - Neu: `docs/KONZEPT_HANDY_CONTROLLER.md` (QR-Code → Handy als Controller per Gyro, Relay, Stand-Modus). Aufgaben in `TODO.md` unter «Handy-Controller». Noch kein Code.
+
+## 2026-11-08 Konzept Playground
+- Neu: `docs/KONZEPT_PLAYGROUND.md` (Framing, Publikum, Leiter, Zielstruktur, Umbauschritte). Skicross für bis zu 20 Handys im Handy-Konzept ergänzt. TODO erweitert. Noch kein Code.

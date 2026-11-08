@@ -59,6 +59,18 @@ Warum das wichtig ist:
 - **Zweiter Bildschirm (optional):** CI-Pipeline, Agenten-Journal und «so wurde das gebaut».
 - **Upgrade-Moment:** Neben dem Bildschirm liegen Thingy und Motion One. «Jetzt mit echter Embedded-Sensorik probieren.»
 
+## Skicross mit vielen Spielern (Idee User, 2026-11-08)
+
+Bei 20 Leuten im Raum fahren alle gleichzeitig in einem Skicross-Rennen auf dem grossen Bildschirm.
+
+- **Eine Simulation, auf dem Bildschirm:** Der Bildschirm rechnet die Physik für alle Fahrer und ist damit die einzige Wahrheit. Die Handys sind reine Eingabegeräte. Es gibt nichts zu synchronisieren und keinen Netcode, weil alle auf denselben Bildschirm schauen.
+- **Schlanke Eingabe:** Für Skicross schickt das Handy statt voller Frames nur `{lenken, hocke, sprung}` mit 30 Hz. 20 × 30 = 600 kleine Nachrichten pro Sekunde, das ist für das Go-Relay trivial.
+- **Ablauf:** Lobby mit QR (Spitzname, automatisch zugeteilte Farbe), Countdown, Rennen 60–90 s, Resultat. Wer zu spät kommt, wartet auf die nächste Runde.
+- **Bild:** 20 Low-Poly-Fahrer (three.js Instancing) mit Farbe und Namensschild. Die Kamera folgt der Spitzengruppe. Wer zurückfällt, bekommt einen Windschatten-Boost oder wird am Rudel neu eingesetzt.
+- **Strecke:** breiter als die Abfahrt, mit Steilkurven, Wellen und Sprüngen. Fahrer kollidieren einfach als Kreise.
+- **Auf dem Handy:** eigene Farbe gross, aktueller Rang, Vibration bei Kollision und Sprung.
+- **Variante Turnier:** wie echtes Skicross in Läufen zu 4–6 Fahrern mit K.-o.-Tableau. Gut für Vortrag und Stand.
+
 ## Datenschutz und Robustheit
 
 - Keine Konten, keine Cookies ausser dem Raum. Raum-Codes laufen nach 30 Minuten ohne Aktivität ab.
