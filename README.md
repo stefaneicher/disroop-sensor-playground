@@ -108,7 +108,7 @@ tennis/                 Tennis: eigenes Spiel (TypeScript + three.js, kein Bundl
 android/                Android-App (Kotlin, Compose) + reines Kotlin-Modul :protocol
 shared/                 chorus.json (Lied), telemetry.example.json (Beispiel-Snapshot)
 docs/                   Protokoll-Vertrag, Schema, Architektur, Anleitungen
-devices/motion-one/     Eigener Controller „Disroop Motion One“: Vorab-Test und zwei Master-Prompts (Entwicklung, Marktauftritt)
+devices/motion-one/     Eigener Controller „Disroop Motion One“: V1-Entwurf in Entwicklung (PCB, Firmware, ergonomisches Gehäuse); Status und nächste Schritte: [Resume](devices/motion-one/management/RESUME.md)
 build/                  Build-Ausgaben (nicht im Git)
 ```
 
