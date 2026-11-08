@@ -19,6 +19,9 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`.
 - Nach jedem sinnvollen Schritt JOURNAL.md, PROGRESS.md und RESUME.md nachführen, dann **direkt auf `main` committen und pushen** (keine Branches, keine PRs). Commit-Trailer: `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`.
 - Antworten an den User kurz und auf Deutsch.
 
+## Status-Board
+- Team-Status als Threads in `THREADS.json` (Skill `.github/skills/thread-board/`). Jedes Feedback `F-nn` einem Topic/Thread zuordnen, bei Meilensteinen Board anbieten: `python3 .github/skills/thread-board/render_board.py THREADS.json .lavish/board.html && lavish-axi .lavish/board.html`.
+
 ## Entscheide (vom User freigegeben im Lavish-Plan)
 - **Zweck (intern, nicht in README/Texte übernehmen):** Showcase der Disroop AG. Das Repo ist ein Playground für Sensoren und Spiele; geplant ist später ein eigenes Spiel-Device.
 - **Datenquelle:** Thingy:52-**Werksfirmware per BLE**, kein Flashen. Es ist keine SWD-Probe vorhanden.

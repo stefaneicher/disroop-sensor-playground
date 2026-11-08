@@ -1,0 +1,17 @@
+{"project":"disroop-sensor-playground","updated":"2026-11-08T09:40+01:00","threads":[
+{"id":"T-01","parent":null,"title":"Motion One: Integration r3","kind":"task","owner":"manager","status":"running"},
+{"id":"T-01.1","parent":"T-01","title":"PCB r3 nach Mechanik-Forderungen","kind":"task","owner":"pcb-engineer","status":"done","refs":["e7411cc","71af3dd"]},
+{"id":"T-01.2","parent":"T-01","title":"Firmware: PINOUT → DTS, 36/36 Tests","kind":"task","owner":"firmware-engineer","status":"done","refs":["1abc002"]},
+{"id":"T-01.3","parent":"T-01","title":"Gehäuse r3: Kollision, FEM-Netzstudie, Slice","kind":"task","owner":"mech-r3","status":"running"},
+{"id":"F-01","parent":"T-01.3","title":"Fügestelle Lippe + Nut + Schattenfuge","kind":"feedback","topic":"Gehäuse & Gestaltung","owner":"mech-r3","status":"running","refs":["ADR-0001"]},
+{"id":"F-02","parent":"T-01","title":"Viewer in Einbaulage mit Explosion","kind":"feedback","topic":"Gehäuse & Gestaltung","owner":"manager","status":"done"},
+{"id":"Q-01","parent":"T-01","title":"Bootloader: eigene Board-Definition (Status-LED, Update-Taster) für V1?","kind":"question","owner":"user","status":"needs-user","options":["Ja, V1","Später (V2)"]},
+{"id":"Q-02","parent":"T-01","title":"TX-Testpad für Debug-Ausgabe in r4 ergänzen?","kind":"question","owner":"user","status":"needs-user","options":["Ja","Nein"]},
+{"id":"T-02","parent":null,"title":"Beschaffung V1","kind":"task","owner":"manager","status":"open"},
+{"id":"F-03","parent":"T-02","title":"PCBA + 3D-Druck, gleicher Hersteller","kind":"feedback","topic":"Beschaffung","owner":"pcb-engineer","status":"open","note":"Regel erfasst (062ba05); Angebot wartet auf Gehäuse r3"},
+{"id":"T-03","parent":null,"title":"Motion One: Media, Bericht, Baseline (§11–§13)","kind":"task","owner":"manager","status":"open"},
+{"id":"T-04","parent":null,"title":"Prozess & Doku","kind":"task","owner":"manager","status":"running"},
+{"id":"F-04","parent":"T-04","title":"Entscheide als ADR mit Bild","kind":"feedback","topic":"Prozess & Doku","owner":"manager","status":"done","refs":["2ba1cf9"]},
+{"id":"F-05","parent":"T-04","title":"Commit, wenn sinnvoll","kind":"feedback","topic":"Prozess & Doku","owner":"manager","status":"done"},
+{"id":"F-06","parent":"T-04","title":"Thread-Board (Skill thread-board, repo-weit, exportierbar)","kind":"feedback","topic":"Prozess & Doku","owner":"manager","status":"done"}
+]}
