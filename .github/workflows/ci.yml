@@ -15,13 +15,74 @@ permissions:
   contents: read
 
 jobs:
+  # Welche Bereiche hat die Änderung berührt? Tags und manuelle Läufe bauen immer alles.
+  changes:
+    name: changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      dev: ${{ steps.matrix.outputs.dev }}
+      firmware: ${{ steps.matrix.outputs.firmware }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dorny/paths-filter@v3.0.2
+        id: filter
+        with:
+          filters: |
+            common:
+              - '.devcontainer/**'
+              - 'project'
+              - 'scripts/**'
+              - 'shared/**'
+              - '.github/workflows/ci.yml'
+            bridge:
+              - 'bridge/**'
+              - 'tennis/**'
+            web:
+              - 'bridge/web/**'
+            tennis:
+              - 'tennis/**'
+            android:
+              - 'android/**'
+              - 'tennis/**'
+            firmware:
+              - 'devices/motion-one/firmware/**'
+              - 'devices/motion-one/docker/firmware/**'
+              - 'devices/motion-one/electronics/PINOUT_V1.json'
+              - '.github/workflows/ci.yml'
+      - name: Matrix bauen
+        id: matrix
+        env:
+          ALL: ${{ github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/') }}
+          COMMON: ${{ steps.filter.outputs.common }}
+          BRIDGE: ${{ steps.filter.outputs.bridge }}
+          WEB: ${{ steps.filter.outputs.web }}
+          TENNIS: ${{ steps.filter.outputs.tennis }}
+          ANDROID: ${{ steps.filter.outputs.android }}
+          FIRMWARE: ${{ steps.filter.outputs.firmware }}
+        run: |
+          areas=()
+          for a in bridge web tennis android; do
+            v=$(echo "${a^^}"); v="${!v}"
+            if [[ "$ALL" == true || "$COMMON" == true || "$v" == true ]]; then areas+=("\"$a\""); fi
+          done
+          dev="[$(IFS=,; echo "${areas[*]}")]"
+          fw=false; [[ "$ALL" == true || "$FIRMWARE" == true ]] && fw=true
+          echo "dev=$dev" >> "$GITHUB_OUTPUT"
+          echo "firmware=$fw" >> "$GITHUB_OUTPUT"
+          echo "dev=$dev firmware=$fw"
+
   test:
     name: ${{ matrix.area }}
+    needs: changes
+    if: needs.changes.outputs.dev != '[]'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        area: [bridge, web, tennis, android]
+        area: ${{ fromJSON(needs.changes.outputs.dev) }}
     steps:
       - uses: actions/checkout@v5
 
@@ -52,10 +113,51 @@ jobs:
             build/disroop-sensor-playground-debug.apk
           if-no-files-found: error
 
+  # Motion One Firmware: eigenes Image (Zephyr + SDK), Host-Unit-Tests, Pin-Check und App-Build ohne Warnungen.
+  firmware:
+    name: firmware
+    needs: changes
+    if: needs.changes.outputs.firmware == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-buildx-action@v3
+      - name: Firmware-Image bauen (gecacht)
+        uses: docker/build-push-action@v6
+        with:
+          context: devices/motion-one/docker/firmware
+          tags: disroop-motion-one-fw
+          load: true
+          cache-from: type=gha,scope=firmware
+          cache-to: type=gha,scope=firmware,mode=max
+      - name: Firmware testen und bauen (smoke.sh)
+        run: ./project hw fw "bash devices/motion-one/firmware/smoke.sh"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: firmware
+          path: devices/motion-one/logs/fw-v1/
+          if-no-files-found: warn
+
+  # Einziger "Required check" für den Branch-Schutz: übersprungene Bereiche sind in Ordnung, Fehler nicht.
+  ci-ok:
+    name: ci-ok
+    if: always()
+    needs: [changes, test, firmware]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ergebnis prüfen
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "Ergebnisse: $RESULTS"
+          if [[ " $RESULTS " == *" failure "* || " $RESULTS " == *" cancelled "* ]]; then exit 1; fi
+
   release:
     name: Release
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: test
+    needs: [test, ci-ok]
     runs-on: ubuntu-latest
     permissions:
       contents: write

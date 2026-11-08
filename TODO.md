@@ -26,6 +26,13 @@ Status aller Punkte: **offen**.
 - [ ] (Tennis/Ski) Bewegungsgrenzen: Dreht man das Gerät in einer Weise, die der Spieler (Mensch) nicht machen kann, gibt es Alarm oder Ton. So lernt man den möglichen Bewegungsradius.
 - [ ] (Verbindung) Klären, ob die Verbindung bei jedem Wechsel zwischen Ansichten abbrechen und neu aufgebaut werden muss (heute trennt `TennisActivity.onStop`). Alternative: eine dauerhafte Verbindung (z. B. Service oder gemeinsamer Halter), die alle Ansichten nutzen.
 
+### CI / Qualität (User, 2026-11-08)
+- [x] (CI) Pfadbasierte Pipeline mit Sammel-Check `ci-ok` für bridge, web, tennis, android und firmware, 2026-11-08. **Noch nicht auf GitHub gelaufen**, erster Lauf prüfen.
+- [x] (CI) Firmware-Job: baut das Image `docker/firmware/Dockerfile` und führt `firmware/smoke.sh` aus (Host-Tests, Pin-Check, Zephyr-Build), 2026-11-08.
+- [ ] (CI) `ci-ok` als einzigen Required Check im Branch-Schutz eintragen (nach dem ersten grünen Lauf).
+- [ ] (CI) Eigene Pipelines für Elektronik (ERC/DRC), Mechanik (CAD, Kollision) und Doku mit dem Tools-Image `disroop-motion-one-tools` (7.5 GB, nachts oder manuell).
+- [ ] (CI) Entscheid: Pull-Request-Pflicht auf `main` statt direkter Pushes, und ob ein beratender KI-Review dazukommt.
+
 ### Motion One (siehe `devices/motion-one/management/RESUME.md`)
 - [ ] (Elektronik/Mechanik/Firmware) Iteration abschliessen: Board an Mechanik-Handoff anpassen, CAD und Kollision neu prüfen, DTS-Pinmap aus `PINOUT_V1.json`.
 - [ ] (Docs/Media) §11 Montage- und Benutzeranleitung, Renderings.
