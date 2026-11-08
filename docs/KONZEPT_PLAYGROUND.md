@@ -1,6 +1,6 @@
 # disroop Playground – Konzept
 
-Status: **Richtung entschieden, Umsetzung später** (User, 2026-11-08). Weitere Konzepte: [`KONZEPT_HANDY_CONTROLLER.md`](KONZEPT_HANDY_CONTROLLER.md), [`KONZEPT_LANDSCHAFT.md`](KONZEPT_LANDSCHAFT.md).
+Status: **Richtung entschieden** (User, 2026-11-08). Ordner-Umbau umgesetzt (Branch `umbau/playground-struktur`), Rest offen. Weitere Konzepte: [`KONZEPT_HANDY_CONTROLLER.md`](KONZEPT_HANDY_CONTROLLER.md), [`KONZEPT_LANDSCHAFT.md`](KONZEPT_LANDSCHAFT.md).
 
 ## Was es ist
 
@@ -24,7 +24,7 @@ Jeder findet sich auf seiner Stufe wieder. Breite Spielfreude vorne, technische 
 |---|---|
 | Konsole (Gehäuse, Menü) | `console/`: Startseite, Spielauswahl, gemeinsamer Header |
 | Spielkassetten | `games/*`: je ein Ordner mit `game.json` |
-| Controller | `input/`: Gesten-SDK mit Adaptern (Tastatur, Touch, Handy, Thingy, Motion One, Simulator) |
+| Controller | `games/src/input/`: gemeinsame Eingabe mit Adaptern (heute Bridge/Android-App und Tastatur, später Handy, Motion One) |
 | Zubehör / Hardware | `hardware/`: Thingy-Bridge, Android-App, Motion One |
 | Online-Dienst | `relay/`: Handy-Controller und Mehrspieler |
 | «Making-of» auf der Packung | `docs/story/`: wie KI-Agenten das gebaut haben |
@@ -41,16 +41,17 @@ Jeder findet sich auf seiner Stufe wieder. Breite Spielfreude vorne, technische 
 Alle Eingabegeräte liefern dieselben Gesten (`tilt`, `swing`, `tuck`, `jump`, `button`). Die Spiele wissen nicht, woher sie kommen.
 
 ```
-console/     Startseite (Konsole), Spielauswahl aus game.json, Header
-games/       tennis, ski, skicross, kids-*        (je game.json: Name, Gesten, Alter, Spielerzahl)
-input/       Gesten-SDK + Adapter: keyboard, touch, phone, thingy, motion-one, sim
-hardware/    thingy-bridge (Go), android, motion-one
+console/     Startseite (Konsole), Spielauswahl
+games/       Browser-Paket: src/input (Controller), src/tennis, src/ski, src/common; später skicross, kids-*
+hardware/    thingy-bridge (Go), android, shared (Lied, Telemetrie-Beispiel), motion-one
 relay/       Go-Relay für Handys und Mehrspieler (Docker)
 docs/        Verträge, Anleitungen, Konzepte; docs/story/ = Making-of
 .devcontainer/ .github/ scripts/ tasks/ project t   bleiben im Root (Werkzeuge erwarten das)
 ```
 
-Hinweis: Ein eigener Ordner `pipeline/` ist nicht sinnvoll. Devcontainer, GitHub Actions und das CLI müssen im Root liegen. In der Präsentation heisst diese Ebene trotzdem «Entwicklung» (siehe Landschaft).
+Hinweis zur Umsetzung: `input/` liegt in `games/src/input/` und nicht im Root, weil die Eingabe mit den Spielen in einem TypeScript-Build entsteht (kein Bundler). Ein Spiel pro Ordner mit `game.json` folgt, sobald es mehr als zwei Spiele gibt.
+
+Ein eigener Ordner `pipeline/` ist nicht sinnvoll. Devcontainer, GitHub Actions und das CLI müssen im Root liegen. In der Präsentation heisst diese Ebene trotzdem «Entwicklung» (siehe Landschaft).
 
 ## Ordner: alt → neu
 
@@ -66,6 +67,8 @@ Hinweis: Ein eigener Ordner `pipeline/` ist nicht sinnvoll. Devcontainer, GitHub
 | `devices/motion-one/` | `hardware/motion-one/` | Rund 94 Dateien verweisen auf den Pfad, deshalb zuletzt |
 | `shared/` | `hardware/thingy-bridge/shared/` | Lied und Telemetrie-Beispiel gehören zur Bridge |
 | JOURNAL, PROGRESS, RESUME, GOAL | bleiben im Root | Historische Einträge nicht umschreiben |
+
+**Umgesetzt** am 2026-11-08 ausser `game.json` und getrennten Spiel-Paketen: `games/src/{input,tennis,ski,common}`, `console/`, `hardware/{thingy-bridge,android,shared,motion-one}`. Die URLs bleiben (`/tennis/`, `/tennis/ski/` in Bridge und App). Auf GitHub Pages liegen die Spiele neu unter `/games/` und Motion One unter `/hardware/motion-one/`.
 
 **Vorgehen:** Ein Schritt pro Commit, immer mit `git mv` (die Historie bleibt erhalten). Nach jedem Schritt laufen `./project <bereich> test` und die CI grün. Reihenfolge: `input/` → `games/` → `console/` → `hardware/thingy-bridge` und `hardware/android` → `relay/` neu → `hardware/motion-one` zuletzt.
 

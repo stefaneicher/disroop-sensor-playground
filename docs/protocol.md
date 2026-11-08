@@ -35,7 +35,7 @@ Gefundenes Gerät: `E3:58:08:1B:53:5F`.
 | `2A19` (Service `180F`) | Akku | read/notify | u8 % (aus der Akkuspannung; Notify nur bei Änderung) |
 
 ### Motion One: Bedienplatine `EF680380` (Erweiterung, nicht Thingy)
-Nur Motion One (devices/motion-one, ADR `adr/systems/ADR-0002`). Zusatz-Characteristic im UI-Service `EF680300`, read/notify, 8 B LE.
+Nur Motion One (hardware/motion-one, ADR `adr/systems/ADR-0002`). Zusatz-Characteristic im UI-Service `EF680300`, read/notify, 8 B LE.
 Die Thingy-Characteristics bleiben unverändert; `EF680302` meldet nur den Taster der Hauptplatine. Clients ohne Kenntnis ignorieren die UUID.
 
 | Byte | Typ | Inhalt |
@@ -54,7 +54,7 @@ Ohne Bedienplatine: `present` = 0, x = y = 0, alle Bits 0; genau ein Notify nach
 Die Werksfirmware kennt USB-Versorgung und Ladezustand intern (`m_batt_meas`: Pins USB_DETECT und CSO des Ladereglers),
 veröffentlicht sie aber **nicht** über BLE. Über BLE kommt nur der Akkustand in % (Service `180F`), berechnet aus der Spannung.
 Ob der Thingy lädt, wird deshalb aus dem **Verlauf des Akkustands geschätzt**. Es ist kein Firmware-Flag.
-Bridge (`bridge/internal/battery`) und App (`BatteryTrendTracker`) verwenden dieselbe Regel:
+Bridge (`hardware/thingy-bridge/internal/battery`) und App (`BatteryTrendTracker`) verwenden dieselbe Regel:
 
 1. Jeder Akkuwert wird mit Zeitstempel gespeichert. Zwischen zwei Werten gilt der letzte Wert weiter, denn die Firmware meldet nur Änderungen.
 2. Über die letzten **5 Minuten** wird der Wert alle **15 s** abgetastet und mit einem **Median über 5 Werte** (≈ 1 min) geglättet.
@@ -86,7 +86,7 @@ Frame IMA-ADPCM-dekodieren, RMS über den Frame bilden, `level_dbfs = 20*log10(r
 Geglättet (EMA α=0.3) mit ~10 Hz publizieren.
 
 ### Lied
-`shared/chorus.json` ist die einzige Quelle: `notes[] {on_ms, off_ms, hz}`, `pause_ms`.
+`hardware/shared/chorus.json` ist die einzige Quelle: `notes[] {on_ms, off_ms, hz}`, `pause_ms`.
 Pro Note `[hz u16, on_ms u16, volume u8]` an `EF680502` schreiben und `on_ms + off_ms` warten. Volume Default 100.
 Parallel die LED setzen: Note an = Farbe je Tonhöhe, Note aus = LED aus.
 Ein Tastendruck am Thingy startet oder stoppt das Lied.
@@ -100,7 +100,7 @@ Bytes: `D4 0F 1B` + ASCII `android.com:pkg` + ASCII `ch.disroop.sensorplayground
 
 | Methode | Pfad | Beschreibung |
 |---|---|---|
-| GET | `/` | Dashboard (eingebettet aus `bridge/web/`) |
+| GET | `/` | Dashboard (eingebettet aus `hardware/thingy-bridge/web/`) |
 | GET | `/api/state` | aktueller Snapshot (JSON) |
 | GET | `/api/stream` | Server-Sent Events: `event: telemetry` + `data: <Snapshot>` mit ≤ 10 Hz; `event: log` + `data: {"msg": "..."}` |
 | POST | `/api/song` | Body `{"action":"play"\|"stop","volume":0..100}` → 202 |
@@ -108,7 +108,7 @@ Bytes: `D4 0F 1B` + ASCII `android.com:pkg` + ASCII `ch.disroop.sensorplayground
 | POST | `/api/mic` | Body `{"enabled":true\|false}` → 202, Mikrofon/Lautstärke ein/aus; im Spielmodus `enabled:true` → 409 `{"error":"Mikrofon ist im Spielmodus gesperrt (Bluetooth-Bandbreite)"}` |
 | GET | `/api/motion` | WebSocket, schneller Motion-Kanal für Spiele (siehe „Motion-Kanal“) |
 | POST | `/api/beep` | Body `{"kind":"hit"\|"point"\|"miss"}` (leer = `hit`) → 204: kurzer Ton + LED-Farbe, max. 1 pro 100 ms (sonst 429) |
-| GET | `/tennis/` | Tennis (eingebettet aus `bridge/internal/tennisapp/dist`, gebaut aus `tennis/`), 404 mit Bauhinweis, wenn nicht eingebaut |
+| GET | `/tennis/` | Tennis (eingebettet aus `hardware/thingy-bridge/internal/tennisapp/dist`, gebaut aus `games/`), 404 mit Bauhinweis, wenn nicht eingebaut |
 | GET | `/healthz` | `ok` |
 
 Fehler: 400 ungültige Eingabe, 405 falsche Methode, 409 im Spielmodus gesperrt, 502 Schreibfehler am Gerät, 503 nicht verbunden. CORS `*`.
@@ -154,7 +154,7 @@ als JSON-Textnachricht (ein Frame pro Raw-Motion-Notification `EF680406`, ohne R
 `http://127.0.0.1:<port>/tennis/` im Standardbrowser. Spielanleitung und Sensor-Mapping: [TENNIS.md](TENNIS.md).
 
 ### Snapshot
-Schema: `docs/telemetry.schema.json`, Beispiel: `shared/telemetry.example.json`.
+Schema: `docs/telemetry.schema.json`, Beispiel: `hardware/shared/telemetry.example.json`.
 Noch nicht empfangene Werte sind `null`. `device.source` ist `"ble"` oder `"sim"` (Simulator).
 `device.battery_trend` ist immer vorhanden: `"charging"`, `"discharging"` oder `"unknown"`. Es ist eine Schätzung, siehe „Akku-Trend“ oben.
 Im Simulator lädt der Akku von 60 auf 70 % (1 % pro Minute) und entlädt dann wieder auf 60 %.

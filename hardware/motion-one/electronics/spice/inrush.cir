@@ -1,0 +1,30 @@
+* Einschaltstrom: SW1 schaltet Gate Q2 auf GND bei 0.1 ms (Gate R10 1M + Cgs)
+
+.model PMOS_AO3401 PMOS (LEVEL=1 VTO=-0.9 KP=20 RD=0.02 RS=0.02 CGSO=1n CGDO=0.3n IS=1e-12)
+.model NMOS_AO3400 NMOS (LEVEL=1 VTO=1.0 KP=30 RD=0.01 RS=0.01 CGSO=0.8n CGDO=0.2n)
+.model DSCH D (IS=3e-6 RS=0.08 N=1.05 CJO=100p)   ; B5819W angenaehert (Vf ~0.35 V @ 200 mA)
+.model DSIG D (IS=2.5e-9 RS=0.6 N=1.9 CJO=2p)     ; 1N4148W
+.model DBODY D (IS=1e-10 RS=0.05 N=1.2)
+
+Vbat vbatc 0 4.2
+Rbat vbatc vsys 0.15
+C4 vsys 0 10u IC=4.2
+R10 vsys g 1Meg
+Sg g 0 sctl 0 SW1
+Vsc sctl 0 PWL(0 0 0.1m 0 0.1001m 1)
+.model SW1 SW(VT=0.5 RON=50 ROFF=1e9)
+M2 vsw g vsys vsys PMOS_AO3401
+C5 vsw 0 4.7u
+B_LDO 3v3i 0 V = min(3.3, max(0, V(vsw) - 0.15 - 2.5*I(Vsense)))
+R_LDOo 3v3i 3v3s 0.05
+Vsense 3v3s 3v3 0
+C7 3v3 0 16.8u
+Iload 3v3 0 10m
+.tran 0.2u 1m UIC
+.control
+run
+wrdata /workspace/hardware/motion-one/scripts/electronics/../../electronics/spice/inrush.csv v(vsw) v(3v3) i(Vbat)
+meas tran i_peak MIN i(Vbat) from=0.1m to=1m
+meas tran t_3v3 WHEN v(3v3)=3.0 RISE=1
+.endc
+.end

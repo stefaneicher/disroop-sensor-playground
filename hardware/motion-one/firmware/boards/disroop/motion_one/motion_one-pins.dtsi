@@ -1,0 +1,212 @@
+/*
+ * EINZIGE Datei mit Pinbelegung fuer Motion One V1.
+ * QUELLE: hardware/motion-one/electronics/PINOUT_V1.json (revision r4,
+ *         sha256 132ac85436ab8b2bb6b5bffa5dbf85fc9524f2b3eff0b1ed6bde9a1ddc3e8e28).
+ * Jede Pinzeile traegt ein Tag "PINOUT:<signal>"; firmware/scripts/check_pinout.py
+ * gleicht Tag, Port/Pin und Polaritaet gegen PINOUT_V1.json ab (make pincheck).
+ * Nicht als GPIO genutzt: XL1/XL2 (32k-Quarz, lfclk), NRESET P0.18 (uicr gpio-as-nreset),
+ * VBUS/USB D+/D- (USBD), SWDIO/SWCLK. Kein UART-Pin herausgefuehrt -> uart0 aus.
+ */
+
+&pinctrl {
+	spi3_default: spi3_default {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 6)>,  /* PINOUT:IMU_SCK */
+				<NRF_PSEL(SPIM_MOSI, 0, 8)>, /* PINOUT:IMU_MOSI */
+				<NRF_PSEL(SPIM_MISO, 1, 9)>; /* PINOUT:IMU_MISO */
+		};
+	};
+	spi3_sleep: spi3_sleep {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 6)>, <NRF_PSEL(SPIM_MOSI, 0, 8)>,
+				<NRF_PSEL(SPIM_MISO, 1, 9)>;
+			low-power-enable;
+		};
+	};
+	/* LEDs Common-Anode an 3V3, aktiv low: nordic,invert -> Ruhepegel high (aus) */
+	pwm0_default: pwm0_default {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 0, 15)>, /* PINOUT:LED_R */
+				<NRF_PSEL(PWM_OUT1, 0, 17)>, /* PINOUT:LED_G */
+				<NRF_PSEL(PWM_OUT2, 1, 10)>; /* PINOUT:LED_B */
+			nordic,invert;
+		};
+	};
+	pwm0_sleep: pwm0_sleep {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 0, 15)>, <NRF_PSEL(PWM_OUT1, 0, 17)>,
+				<NRF_PSEL(PWM_OUT2, 1, 10)>;
+			low-power-enable;
+		};
+	};
+	pwm1_default: pwm1_default {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 0, 2)>; /* PINOUT:BUZ_PWM */
+		};
+	};
+	pwm1_sleep: pwm1_sleep {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 0, 2)>;
+			low-power-enable;
+		};
+	};
+	/* F-12: Motor per PWM (eigene Instanz, da Summer die Periode von pwm1 aendert) */
+	pwm2_default: pwm2_default {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 1, 13)>; /* PINOUT:MOT_EN */
+		};
+	};
+	pwm2_sleep: pwm2_sleep {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 1, 13)>;
+			low-power-enable;
+		};
+	};
+};
+
+&spi3 {
+	compatible = "nordic,nrf-spim";
+	status = "okay";
+	pinctrl-0 = <&spi3_default>;
+	pinctrl-1 = <&spi3_sleep>;
+	pinctrl-names = "default", "sleep";
+	cs-gpios = <&gpio0 12 GPIO_ACTIVE_LOW>; /* PINOUT:IMU_CS (Boot: sofort high, app/src/board_early.c) */
+
+	imu: icm45686@0 {
+		compatible = "disroop,icm45686";
+		reg = <0>;
+		spi-max-frequency = <8000000>; /* PCB-Hinweis: 8 MHz (ICM max. 24 MHz, QUELLE hal_tdk) */
+		int1-gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>; /* PINOUT:IMU_INT1 push-pull */
+		int2-gpios = <&gpio0 26 GPIO_ACTIVE_HIGH>; /* PINOUT:IMU_INT2 push-pull, derzeit ungenutzt */
+	};
+};
+
+&pwm0 {
+	status = "okay";
+	pinctrl-0 = <&pwm0_default>;
+	pinctrl-1 = <&pwm0_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&pwm1 {
+	status = "okay";
+	pinctrl-0 = <&pwm1_default>;
+	pinctrl-1 = <&pwm1_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&pwm2 {
+	status = "okay";
+	pinctrl-0 = <&pwm2_default>;
+	pinctrl-1 = <&pwm2_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&uart0 {
+	status = "disabled";
+};
+
+&adc {
+	status = "okay";
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	channel@0 {
+		reg = <0>;
+		zephyr,gain = "ADC_GAIN_1_6";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		/* Quelle 100k||100k = 50 kOhm -> 40 us (Nordic-Tabelle: 40 us bis 800 kOhm) */
+		zephyr,acquisition-time = <ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 40)>;
+		zephyr,input-positive = <NRF_SAADC_AIN2>; /* PINOUT:VBAT_ADC */
+		zephyr,resolution = <12>;
+		zephyr,oversampling = <4>;
+	};
+	/* J5 EXT1 Stick X (r4), Quelle <= 2.5 kOhm + 100 Ohm -> 10 us */
+	channel@1 {
+		reg = <1>;
+		zephyr,gain = "ADC_GAIN_1_6";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 10)>;
+		zephyr,input-positive = <NRF_SAADC_AIN5>; /* PINOUT:EXT1 */
+		zephyr,resolution = <12>;
+	};
+	/* J5 EXT2 Stick Y */
+	channel@2 {
+		reg = <2>;
+		zephyr,gain = "ADC_GAIN_1_6";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 10)>;
+		zephyr,input-positive = <NRF_SAADC_AIN6>; /* PINOUT:EXT2 */
+		zephyr,resolution = <12>;
+	};
+	/* J5 EXT3 frei/analog */
+	channel@3 {
+		reg = <3>;
+		zephyr,gain = "ADC_GAIN_1_6";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 10)>;
+		zephyr,input-positive = <NRF_SAADC_AIN7>; /* PINOUT:EXT3 */
+		zephyr,resolution = <12>;
+	};
+	/* J5 EXT4 Stick-Taste analog (AIN1), Tag-Pin siehe zephyr,user */
+	channel@4 {
+		reg = <4>;
+		zephyr,gain = "ADC_GAIN_1_6";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 10)>;
+		zephyr,input-positive = <NRF_SAADC_AIN1>; /* EXT4 AIN1 */
+		zephyr,resolution = <12>;
+	};
+};
+
+/ {
+	pwmleds {
+		compatible = "pwm-leds";
+		led_red: led_red {
+			pwms = <&pwm0 0 PWM_MSEC(1) PWM_POLARITY_INVERTED>; /* aktiv low */
+		};
+		led_green: led_green {
+			pwms = <&pwm0 1 PWM_MSEC(1) PWM_POLARITY_INVERTED>; /* aktiv low */
+		};
+		led_blue: led_blue {
+			pwms = <&pwm0 2 PWM_MSEC(1) PWM_POLARITY_INVERTED>; /* aktiv low */
+		};
+		buzzer: buzzer {
+			pwms = <&pwm1 0 PWM_USEC(2273) PWM_POLARITY_NORMAL>; /* FET-Gate, high = an */
+		};
+		motor: motor {
+			/* MOT_EN FET-Gate high = an (100k Pull-down); 20 kHz ANNAHME (unhoerbar) */
+			pwms = <&pwm2 0 PWM_USEC(50) PWM_POLARITY_NORMAL>;
+		};
+	};
+
+	buttons {
+		compatible = "gpio-keys";
+		button0: button_0 {
+			gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; /* PINOUT:BTN */
+			zephyr,code = <INPUT_KEY_0>;
+		};
+	};
+
+	zephyr,user {
+		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>;
+		/* r4 J5: EXT4 Stick-Taste aktiv low mit internem Pull-up; EXT5 Touch TTP233H aktiv high,
+		 * Pull-down haelt den Eingang ohne Bedienplatine definiert low (kein Ereignisspam) */
+		ext4-gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; /* PINOUT:EXT4 */
+		ext5-gpios = <&gpio1 11 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>; /* PINOUT:EXT5 */
+		vbat-en-gpios = <&gpio0 5 GPIO_ACTIVE_HIGH>; /* PINOUT:VBAT_EN */
+		/* QUELLE PINOUT_V1 notes: VBAT_ADC = VBAT * 100k/(100k+100k) -> Faktor 2 */
+		vbat-divider-num = <2>;
+		vbat-divider-den = <1>;
+	};
+
+	aliases {
+		led-red = &led_red;
+		led-green = &led_green;
+		led-blue = &led_blue;
+		buzzer = &buzzer;
+		sw0 = &button0;
+		motor0 = &motor;
+		imu0 = &imu;
+	};
+};

@@ -5,7 +5,7 @@ Der Thingy wird wie ein Lenker flach in der Hand gehalten, Ladebuchse zu dir.
 
 - Bridge: `http://127.0.0.1:8052/ski` (leitet auf `/tennis/ski/` um)
 - Android: Pill „⛷ Ski“ im Header
-- Quellcode: `tennis/src/ski/*` und `tennis/static/ski/`
+- Quellcode: `games/src/ski/*` und `games/static/ski/`
 
 ## Steuerung
 
@@ -34,8 +34,8 @@ Quellen: Wikipedia (Lauberhornrennen, Streif), Kitzbüheler Ski Club (Rennstreck
 
 ## Technik
 
-- Physik (`physics.ts`): Hangabtrieb, Gleitreibung `MU = 0.02`, Luftwiderstand stehend/Hocke, Schwung kostet Tempo, Sprünge an Kanten. Kalibriert auf Siegerzeiten (Autopilot-Test in `tennis/test/ski.test.ts`).
+- Physik (`physics.ts`): Hangabtrieb, Gleitreibung `MU = 0.02`, Luftwiderstand stehend/Hocke, Schwung kostet Tempo, Sprünge an Kanten. Kalibriert auf Siegerzeiten (Autopilot-Test in `games/test/ski.test.ts`).
 - Welt (`world.ts`): Gelände entlang der Mittellinie, Bäume, Netze, Tore, Zuschauer, Lifte, Tunnel, Panorama.
   Bäume, Netzpfosten und Randstangen sind in Abschnitte von 160 m geteilt, damit Frustum-Culling (auch im Schattenpass) wirkt; alles hinter dem Nebel (2400 m) wird nicht gezeichnet.
 - Bildrate (`main.ts`): Die Physik läuft in Teilschritten ≤ 1/60 s, die genau die Bildzeit ergeben (kein Ruckeln bei 75–144 Hz). Fällt die Bildrate unter ca. 50 FPS, sinkt die Render-Auflösung schrittweise (bis 60 %), mit Reserve steigt sie wieder. `?q=1` fixiert die Auflösung.
-- Smoke (`tennis/dev/ski-smoke.js`): rendert beide Strecken headless, prüft JS-Fehler, Fortschritt und ein Budget von höchstens 900 000 Dreiecken pro Bild.
+- Smoke (`games/dev/ski-smoke.js`): rendert beide Strecken headless, prüft JS-Fehler, Fortschritt und ein Budget von höchstens 900 000 Dreiecken pro Bild.

@@ -5,14 +5,14 @@ ROOT="${ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 EXE="$ROOT/build/thingy.exe"
 
 # Go env for every container run: module cache on the persistent cache volume.
-GOENV='export GOMODCACHE=/opt/cache/gomod GOFLAGS=-buildvcs=false; cd bridge'
+GOENV='export GOMODCACHE=/opt/cache/gomod GOFLAGS=-buildvcs=false; cd hardware/thingy-bridge'
 
-# shared/chorus.json is the single source of the song; go:embed needs a copy inside the module (gitignored).
-sync_chorus() { cp "$ROOT/shared/chorus.json" "$ROOT/bridge/internal/song/chorus.json"; }
-# The embedded dashboard is TypeScript; compile it to bridge/web/static/js before go test/build.
+# hardware/shared/chorus.json is the single source of the song; go:embed needs a copy inside the module (gitignored).
+sync_chorus() { cp "$ROOT/hardware/shared/chorus.json" "$ROOT/hardware/thingy-bridge/internal/song/chorus.json"; }
+# The embedded dashboard is TypeScript; compile it to hardware/thingy-bridge/web/static/js before go test/build.
 build_web() { "$ROOT/scripts/web.sh" build; }
-# Tennis is embedded under /tennis/: build it into bridge/internal/tennisapp/dist.
-build_tennis() { "$ROOT/scripts/tennis.sh" build; }
+# Tennis is embedded under /tennis/: build it into hardware/thingy-bridge/internal/tennisapp/dist.
+build_games() { "$ROOT/scripts/games.sh" build; }
 
 usage() {
   cat <<U
@@ -32,7 +32,7 @@ U
 do_test() {
   sync_chorus
   build_web
-  build_tennis
+  build_games
   indev "$GOENV
     set -e
     unformatted=\$(gofmt -l .); if [ -n \"\$unformatted\" ]; then echo \"gofmt needed:\"; echo \"\$unformatted\"; exit 1; fi
@@ -48,18 +48,18 @@ do_test() {
 do_build() {
   sync_chorus
   build_web
-  build_tennis
+  build_games
   mkdir -p "$ROOT/build"
   indev "$GOENV
     set -e
-    GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -o ../build/thingy.exe ./cmd/thingy
-    GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -o ../build/thingy-linux ./cmd/thingy"
+    GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -o ../../build/thingy.exe ./cmd/thingy
+    GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -o ../../build/thingy-linux ./cmd/thingy"
   echo "built build/thingy.exe and build/thingy-linux"
 }
 
 do_smoke() {
   [[ -x "$ROOT/build/thingy-linux" ]] || do_build
-  indev "bash bridge/scripts/smoke.sh build/thingy-linux"
+  indev "bash hardware/thingy-bridge/scripts/smoke.sh build/thingy-linux"
 }
 
 # Runs the Windows exe through WSL interop from the repo root (relative paths like build/ resolve there).

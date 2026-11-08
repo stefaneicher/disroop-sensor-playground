@@ -1,6 +1,6 @@
 # Messgrössen erklärt
 
-Was das Dashboard anzeigt: physikalische Bedeutung, Einheit, Sensor im Thingy:52 und typische Werte. Dieselben Texte erscheinen im Dashboard hinter den **ⓘ**-Symbolen und im aufklappbaren Abschnitt „Messgrössen erklärt“ am Ende der Seite. Quelle der Texte: [`bridge/web/src/glossary.ts`](../bridge/web/src/glossary.ts). Ein Unit-Test prüft, dass jede Grösse hier und im Dashboard erklärt ist.
+Was das Dashboard anzeigt: physikalische Bedeutung, Einheit, Sensor im Thingy:52 und typische Werte. Dieselben Texte erscheinen im Dashboard hinter den **ⓘ**-Symbolen und im aufklappbaren Abschnitt „Messgrössen erklärt“ am Ende der Seite. Quelle der Texte: [`hardware/thingy-bridge/web/src/glossary.ts`](../hardware/thingy-bridge/web/src/glossary.ts). Ein Unit-Test prüft, dass jede Grösse hier und im Dashboard erklärt ist.
 
 | Grösse | Einheit | Sensor | Erklärung | Typisch |
 |---|---|---|---|---|

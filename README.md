@@ -50,7 +50,7 @@ Alle Sensorwerte laufen per Bluetooth LE live ins Terminal, in ein Web-Dashboard
 - **Lied:** „Highway to Hell“ (Refrain, 24 Noten) über den Thingy-Lautsprecher. Die LED-Farbe folgt der Tonhöhe. Starten und stoppen geht per Taster am Thingy, im Dashboard oder in der App.
 - **NFC:** `thingy.exe nfc` schreibt einen Android Application Record auf den NFC-Tag des Thingy. Hältst du das Handy an den Thingy, öffnet sich die App.
 - **Android-App** `ch.disroop.sensorplayground`: verbindet sich direkt per BLE und zeigt dieselben Werte. Sie hat einen eingebauten Simulator.
-- **Tennis** (`tennis/`, eigenes Programm): Tennis-Spiel mit three.js, der Thingy ist der Schläger. Schwung = Schlag, Neigen = laufen. Die Bridge liefert die Bewegung mit 100 Hz per WebSocket und spielt das Spiel unter `/tennis/` aus. Ohne Thingy mit Tastatur oder im Simulator spielbar. Dazu **Ski** (`tennis/src/ski/`): Lauberhorn und Streif in 3D, siehe [docs/SKI.md](docs/SKI.md).
+- **Tennis** (`games/src/tennis/`, eigenes Programm): Tennis-Spiel mit three.js, der Thingy ist der Schläger. Schwung = Schlag, Neigen = laufen. Die Bridge liefert die Bewegung mit 100 Hz per WebSocket und spielt das Spiel unter `/tennis/` aus. Ohne Thingy mit Tastatur oder im Simulator spielbar. Dazu **Ski** (`games/src/ski/`): Lauberhorn und Streif in 3D, siehe [docs/SKI.md](docs/SKI.md).
 - **Simulator** (`--sim`) für Demos, Tests und CI ohne Hardware.
 - **Alles im Docker-Devcontainer:** Lokal wird ausser Docker nichts installiert.
 
@@ -99,16 +99,20 @@ Der Thingy nimmt nur **eine** BLE-Verbindung an. Während `nfc` läuft, müssen 
 ## Projektstruktur
 
 ```
-project                 CLI: ./project <befehl>, ruft scripts/<bereich>.sh auf
-scripts/                bridge.sh, web.sh, tennis.sh, android.sh (Builds und Tests im Devcontainer)
+console/                Startseite (Landingpage auf GitHub Pages)
+games/                  Spiele im Browser (TypeScript + three.js, kein Bundler); die exe liefert sie unter /tennis/ aus
+  src/input/            Eingabe: Verbindung zur Bridge/App, Bewegungsframes, Kalibrierung, Gesten (Schwung)
+  src/tennis/           Tennis
+  src/ski/              Ski (Lauberhorn, Streif)
+  src/common/           Gemeinsames (FPS-Anzeige, Texturen)
+hardware/
+  thingy-bridge/        Go: thingy.exe (BLE, Decoder, Telemetrie, TUI, HTTP/SSE, Lied, NFC); web/ = Dashboard
+  android/              Android-App (Kotlin, Compose) + reines Kotlin-Modul :protocol
+  shared/               chorus.json (Lied), telemetry.example.json (Beispiel-Snapshot)
+  motion-one/           Eigener Controller „Disroop Motion One“ (PCB, Firmware, Gehäuse); Stand: [Resume](hardware/motion-one/management/RESUME.md)
+project, scripts/       CLI: ./project <befehl>, ruft scripts/<bereich>.sh auf (bridge, web, games, android)
 .devcontainer/          Toolchain-Image (Go, Node, JDK 21, Android SDK, Chromium)
-bridge/                 Go: thingy.exe (BLE, Decoder, Telemetrie, TUI, HTTP/SSE, Lied, NFC)
-bridge/web/             Web-Dashboard (ES-Module ohne Build-Step), Tests, Mock-Server
-tennis/                 Tennis: eigenes Spiel (TypeScript + three.js, kein Bundler), von der exe unter /tennis/ ausgeliefert
-android/                Android-App (Kotlin, Compose) + reines Kotlin-Modul :protocol
-shared/                 chorus.json (Lied), telemetry.example.json (Beispiel-Snapshot)
-docs/                   Protokoll-Vertrag, Schema, Architektur, Anleitungen
-devices/motion-one/     Eigener Controller „Disroop Motion One“: V1-Entwurf in Entwicklung (PCB, Firmware, ergonomisches Gehäuse); Status und nächste Schritte: [Resume](devices/motion-one/management/RESUME.md)
+docs/                   Protokoll-Vertrag, Schema, Architektur, Anleitungen, Konzepte
 build/                  Build-Ausgaben (nicht im Git)
 ```
 
@@ -122,8 +126,8 @@ Die Übersicht findest du in [docs/index.md](docs/index.md):
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 - [Protokoll-Vertrag](docs/protocol.md)
 - [Tennis](docs/TENNIS.md)
-- READMEs der Bereiche: [bridge](bridge/README.md), [web](bridge/web/README.md), [tennis](tennis/README.md), [android](android/README.md)
+- READMEs der Bereiche: [bridge](hardware/thingy-bridge/README.md), [web](hardware/thingy-bridge/web/README.md), [tennis](games/README.md), [android](hardware/android/README.md)
 
 ## Lizenz
 
-© 2026 Stefan Eicher. Alle Rechte vorbehalten, siehe [LICENSE](LICENSE). „Highway to Hell“ ist hier nur als grobe Tonfolge des Refrains enthalten (`shared/chorus.json`).
+© 2026 Stefan Eicher. Alle Rechte vorbehalten, siehe [LICENSE](LICENSE). „Highway to Hell“ ist hier nur als grobe Tonfolge des Refrains enthalten (`hardware/shared/chorus.json`).

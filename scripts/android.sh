@@ -11,8 +11,8 @@ if ! declare -F indev >/dev/null; then
   export ROOT
 fi
 
-GRADLE="cd /workspace/android && ./gradlew --no-daemon --console=plain"
-APK_SRC="/workspace/android/app/build/outputs/apk/debug/app-debug.apk"
+GRADLE="cd /workspace/hardware/android && ./gradlew --no-daemon --console=plain"
+APK_SRC="/workspace/hardware/android/app/build/outputs/apk/debug/app-debug.apk"
 APK_DST="build/disroop-sensor-playground-debug.apk"
 
 usage() {
@@ -27,22 +27,22 @@ Usage: ./project android <command>
 U
 }
 
-# The Tennis game is bundled into the APK as assets (tennis/dist).
-tennis_dist() { "$ROOT/scripts/tennis.sh" build; }
+# The Tennis game is bundled into the APK as assets (games/dist).
+games_dist() { "$ROOT/scripts/games.sh" build; }
 
 cmd="${1:-help}"
 case "$cmd" in
   test)
-    tennis_dist
+    games_dist
     indev "$GRADLE test :app:lintDebug"
     ;;
   build)
-    tennis_dist
+    games_dist
     indev "$GRADLE :app:assembleDebug && mkdir -p /workspace/build && cp $APK_SRC /workspace/$APK_DST"
     ls -l "$ROOT/$APK_DST"
     ;;
   screenshots)
-    rm -rf "$ROOT/android/app/build/screenshots"
+    rm -rf "$ROOT/hardware/android/app/build/screenshots"
     indev "$GRADLE -Pscreenshots :app:testDebugUnitTest && cp app/build/screenshots/android-*.png /workspace/docs/img/"
     ls -l "$ROOT"/docs/img/android-*.png
     ;;

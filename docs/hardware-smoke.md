@@ -24,7 +24,7 @@ Exit-Code 0 = alle Schritte PASS (WARN zählt nicht als Fehler), sonst 1.
 ## Was geprüft wird
 | Schritt | Prüfung |
 |---|---|
-| build | `./project bridge build`, wenn `thingy.exe` fehlt oder älter als `bridge/`/`shared/` ist |
+| build | `./project bridge build`, wenn `thingy.exe` fehlt oder älter als `hardware/thingy-bridge/`/`hardware/shared/` ist |
 | scan | `thingy.exe scan` findet die Adresse. Scans à 15 s, dazwischen 15 s Pause, bis `--wait` abgelaufen ist („Thingy schläft? Taste drücken“) |
 | connect | `thingy.exe --no-tui` im Hintergrund. `/healthz` = ok, dann `/api/state` mit `connected:true` und `device.source:"ble"` (max. 120 s) |
 | values | \|accel\| 0,8–1,2 g, Gyro und Kompass vorhanden, Heading 0–360°, Temperatur 5–45 °C, Feuchte 5–95 %, Druck 850–1100 hPa, eCO₂ ≥ 400 ppm (bis 60 s Aufwärmzeit), Akku 1–100 %, Mikrofon −100..0 dBFS, RSSI vorhanden |

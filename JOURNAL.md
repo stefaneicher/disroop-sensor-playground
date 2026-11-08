@@ -79,3 +79,9 @@ Ski: kompakte Querformat-HUD, zweispaltiges Menü mit grossen Touch-Zielen, Test
 
 ## 2026-11-08 Konzept Playground erweitert
 - `docs/KONZEPT_PLAYGROUND.md`: Konsolen-Bild, Ordner-Tabelle alt → neu, Checkliste Repo-Umbenennung (Pages-Domain zuerst, applicationId bleibt), Aufbau Startseite und README. TODO ergänzt. Umsetzung später.
+
+## 2026-11-08 Ordner-Umbau Playground
+- `tennis/` → `games/` mit `src/input/` (link, motion, quat, calibration, wizard, swing, controller), `src/tennis/`, `src/ski/`, `src/common/`; Importe automatisch umgeschrieben.
+- `bridge/` → `hardware/thingy-bridge/` (Go-Modulpfad angepasst), `android/` → `hardware/android/`, `shared/` → `hardware/shared/`, `devices/motion-one/` → `hardware/motion-one/`, `index.html` → `console/index.html`.
+- `./project games` (Alias `tennis`), CI-Matrix `games`, Pages: Spiele unter `/games/`, Motion One unter `/hardware/motion-one/`. URLs der Bridge und App unverändert.
+- Lokal geprüft: games (typecheck, 55 Unit-Tests, Ski-Smoke), web (132 Unit-Tests, Smoke), Go (gofmt, alle Pakete getestet, Linux-Build, Bridge-Smoke bis auf den Tennis-Canvas-Check, der hier auch auf main scheitert: Chrome ohne passende Software-GL). Android nicht gebaut (kein SDK), Windows-exe nicht gebaut (Abhängigkeiten nicht erreichbar) – CI prüft.

@@ -1,4 +1,4 @@
-"""Tennis (tennis/): play with the Thingy as racket, build, test, screenshot."""
+"""Games (games/: Tennis, Ski): play with the Thingy as racket, build, test, screenshot."""
 from __future__ import annotations
 
 from invoke import Exit, task
@@ -39,18 +39,18 @@ def open_(c, port=LIVE_PORT):
 
 @task
 def build(c):
-    """Baut tennis/dist (tsc + three.js lokal) und kopiert es für thingy.exe nach bridge/internal/tennisapp/dist."""
-    project(c, "tennis", "build")
+    """Baut games/dist (tsc + three.js lokal) und kopiert es für thingy.exe nach hardware/thingy-bridge/internal/tennisapp/dist."""
+    project(c, "games", "build")
 
 
 @task
 def test(c):
     """Typecheck, Unit-Tests des Spielkerns und Smoke-Test mit headless Chromium."""
-    project(c, "tennis", "test")
+    project(c, "games", "test")
 
 
 @task
 def screenshot(c):
     """Screenshot einer Demo-Rally nach docs/img/tennis.png."""
-    project(c, "tennis", "screenshot")
+    project(c, "games", "screenshot")
     say("🖼  docs/img/tennis.png")

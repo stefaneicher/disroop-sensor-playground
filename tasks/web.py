@@ -1,4 +1,4 @@
-"""Web dashboard (bridge/web): mock server, browser, screenshots, tests."""
+"""Web dashboard (hardware/thingy-bridge/web): mock server, browser, screenshots, tests."""
 from invoke import task
 
 from ._lib import LIVE_PORT, MOCK_PORT, ROOT, open_browser, project, say, url

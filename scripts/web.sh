@@ -9,7 +9,7 @@ if ! declare -F indev >/dev/null; then
       -w /workspace "$IMAGE" bash -c "$*"
   }
 fi
-WEB=bridge/web
+WEB=hardware/thingy-bridge/web
 PORT="${PORT:-8053}"
 
 # TypeScript build (src/*.ts -> static/js/*.js) + vendored three.js (static/vendor), both generated, not committed.

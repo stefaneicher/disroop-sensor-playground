@@ -1,6 +1,6 @@
 # Tennis
 
-Tennis im Browser, der **Thingy:52 ist der Schläger**. Ein eigenes Programm im Repo (`tennis/`). Die Bridge liefert es unter
+Tennis im Browser, der **Thingy:52 ist der Schläger**. Ein eigenes Programm im Repo (`games/`). Die Bridge liefert es unter
 http://127.0.0.1:8052/tennis/ aus, die Bewegungsdaten kommen über den schnellen WebSocket `/api/motion` (100 Hz).
 Ohne Thingy spielst du mit der Tastatur, und der Simulator schwingt für Demos.
 
@@ -69,33 +69,34 @@ Thingy-Achsen: Z nach oben, für three.js wird `(w,x,y,z)` zu `(w,x,z,−y)`.
 ## Architektur
 
 ```
-Thingy ──BLE 100 Hz──▶ thingy.exe ──WebSocket /api/motion──▶ link.ts ──▶ core/controller.ts (Kalibrierung, Schwung, Taster)
+Thingy ──BLE 100 Hz──▶ thingy.exe ──WebSocket /api/motion──▶ input/link.ts ──▶ input/controller.ts (Kalibrierung, Schwung, Taster)
                                   ◀──POST /api/beep──────────           │
                                   ──GET /tennis/ (embed)──▶ Browser     ▼
-                                                              core/game.ts (Physik, Regeln, CPU)  ──▶ scene.ts (three.js) + hud.ts + audio.ts
+                                                              tennis/core/game.ts (Physik, Regeln, CPU)  ──▶ scene.ts (three.js) + hud.ts + audio.ts
 ```
 
-- **`tennis/src/core/`**: reiner, deterministischer TypeScript-Spielkern ohne three.js (Unit-Tests in `tennis/test/`):
-  `quat` · `motion` (Frame-Parser) · `calibration` · `swing` (Schwungdetektor) · `controller` · `physics`
+- **`games/src/input/`**: Eingabe für alle Spiele, ohne three.js (Unit-Tests in `games/test/`):
+  `link` (WebSocket mit Reconnect, LIVE/SIM-Badge aus `/api/state`, Android-Brücke) · `quat` · `motion` (Frame-Parser) ·
+  `calibration` · `wizard` · `swing` (Schwungdetektor) · `controller`.
+- **`games/src/tennis/core/`**: reiner, deterministischer Tennis-Spielkern ohne three.js: `physics`
   (Schwerkraft, Luftwiderstand, Magnus/Drall, Absprung, Netz, Bisektion für Zielschläge) · `scoring` · `cpu` · `game`
   (Zustandsmaschine Aufschlag → Rally → Punkt, Autopilot für Demo/Menü) · `rng`.
-- **`tennis/src/`**: Browser-Teil – `scene.ts` (Flutlicht-Platz, Schatten, ACES-Tonemapping, Ballspur, 3 Kameras,
-  devicePixelRatio ≤ 2), `hud.ts`, `audio.ts` (WebAudio: Schlag, Aufsprung, Netz, Publikum), `link.ts`
-  (WebSocket mit Reconnect, LIVE/SIM-Badge aus `/api/state`), `main.ts`.
-- **Kein Bundler:** `tsc` übersetzt nach `tennis/dist/js`, `three` (npm, Version fest) wird nach `dist/vendor/three` kopiert
+- **`games/src/tennis/`**: Browser-Teil – `scene.ts` (Flutlicht-Platz, Schatten, ACES-Tonemapping, Ballspur, 3 Kameras,
+  devicePixelRatio ≤ 2), `hud.ts`, `audio.ts` (WebAudio: Schlag, Aufsprung, Netz, Publikum), `limitsui.ts`, `main.ts`; Grafik in `gfx/`.
+- **Kein Bundler:** `tsc` übersetzt nach `games/dist/js`, `three` (npm, Version fest) wird nach `dist/vendor/three` kopiert
   und per Importmap geladen – das Spiel läuft offline.
-- **Bridge:** `./project tennis build` kopiert `tennis/dist` nach `bridge/internal/tennisapp/dist`, das per `go:embed` in die
-  exe kommt. Motion-Hub `bridge/internal/motion`, Endpunkte in [protocol.md](protocol.md).
+- **Bridge:** `./project games build` kopiert `games/dist` nach `hardware/thingy-bridge/internal/tennisapp/dist`, das per `go:embed` in die
+  exe kommt. Motion-Hub `hardware/thingy-bridge/internal/motion`, Endpunkte in [protocol.md](protocol.md).
 
 ## Entwickeln und testen
 
 ```bash
-./project tennis test        # build + typecheck + Unit-Tests + headless-Chromium-Smoke (Software-WebGL)
-./project tennis screenshot  # docs/img/tennis.png
+./project games test         # build + typecheck + Unit-Tests + headless-Chromium-Smoke (Software-WebGL)
+./project games screenshot   # docs/img/tennis.png
 ./project bridge test        # u. a. /api/motion ≥ 50 Hz und Tennis-Smoke gegen die echte Bridge im Simulator
 ```
 
-`node tennis/dev/stats.ts` (im Devcontainer) spielt viele Autopilot-Rallys und zeigt
+`node games/dev/stats.ts` (im Devcontainer) spielt viele Autopilot-Rallys und zeigt
 Gewinnschläge/Fehler je Schwierigkeit – hilfreich beim Balancing.
 
 ## Fehlerbehebung
@@ -128,4 +129,4 @@ und ein vorher eingeschaltetes Mikrofon läuft wieder.
 
 ## Android-App
 
-Die App enthält das Spiel (`tennis/dist` als Assets, Pill „🎾 Tennis“ im Header). `TennisActivity` zeigt es in einer WebView und liest den Thingy direkt per BLE (Spielmodus: 100 Hz, nur Quaternion und Raw). Frames kommen per `window.__thingyFrame`, Beeps/LED gehen per `ThingyNative.beep` an den Thingy. Der Thingy hat nur eine Verbindung: PC-Bridge und App nicht gleichzeitig. Die Pill „⛷ Ski“ startet dieselbe `TennisActivity` mit dem Intent-Extra `game=ski` und lädt `ski/index.html` (Lauberhorn und Streif, siehe [SKI.md](SKI.md)); relative Pfade wie `../js` lösen sich gegen `https://tennis.local/ski/` auf. Die APK gibt es als Artifact `disroop-sensor-playground-debug` im CI-Lauf auf main (bzw. am Release bei Tag `v*`).
+Die App enthält das Spiel (`games/dist` als Assets, Pill „🎾 Tennis“ im Header). `TennisActivity` zeigt es in einer WebView und liest den Thingy direkt per BLE (Spielmodus: 100 Hz, nur Quaternion und Raw). Frames kommen per `window.__thingyFrame`, Beeps/LED gehen per `ThingyNative.beep` an den Thingy. Der Thingy hat nur eine Verbindung: PC-Bridge und App nicht gleichzeitig. Die Pill „⛷ Ski“ startet dieselbe `TennisActivity` mit dem Intent-Extra `game=ski` und lädt `ski/index.html` (Lauberhorn und Streif, siehe [SKI.md](SKI.md)); relative Pfade wie `../js` lösen sich gegen `https://tennis.local/ski/` auf. Die APK gibt es als Artifact `disroop-sensor-playground-debug` im CI-Lauf auf main (bzw. am Release bei Tag `v*`).

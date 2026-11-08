@@ -1,0 +1,19 @@
+{
+  "name": "disroop-games",
+  "private": true,
+  "type": "module",
+  "description": "Spiele des disroop Playground (Tennis, Ski) mit gemeinsamer Eingabe (three.js, kein Bundler). Build: ./project games build",
+  "scripts": {
+    "build": "node dev/build.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json",
+    "test": "node --test test/*.test.ts"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "@types/three": "0.187.0",
+    "typescript": "7.0.2"
+  }
+}

@@ -62,9 +62,9 @@ Der Thingy nimmt **nur eine BLE-Verbindung** gleichzeitig an. Es ist also entwed
 5. **Ausgabe:**
    - `tui` zeichnet die Terminal-Ansicht neu, höchstens alle 100 ms.
    - `server` liefert `/api/state` und `/api/stream`. SSE sendet `telemetry` gedrosselt auf ≤ 10 Hz pro Client und `log`-Meldungen. Alle 15 s geht ein Keep-alive-Kommentar raus.
-   - Das Web-Dashboard liegt per `go:embed` in der exe (`bridge/web/embed.go`).
+   - Das Web-Dashboard liegt per `go:embed` in der exe (`hardware/thingy-bridge/web/embed.go`).
 6. **Aktoren:**
-   - `song.Player` spielt `shared/chorus.json` über `Session.Tone` und `Session.LED`/`LEDOff`.
+   - `song.Player` spielt `hardware/shared/chorus.json` über `Session.Tone` und `Session.LED`/`LEDOff`.
    - Ausgelöst wird das Lied per `POST /api/song` oder per Taster am Thingy (`Session.OnButton` → `Player.Toggle`).
    - `POST /api/led` setzt eine feste Farbe.
 
@@ -94,17 +94,17 @@ Die ganze Logik ist ohne Gerät testbar: Decoder, Store, Session, Player, Server
 | `internal/motion` | schneller Motion-Kanal: Quaternion/Raw/Taster/Tippen → Frames, 100 Hz solange ein Client zuhört (Spielmodus: nur Quaternion + Raw Motion schnell, Euler/Kompass pausiert) |
 | `internal/tui` | Terminal-Live-Ansicht (ANSI, auf Windows mit VT-Modus) |
 | `web` | `go:embed` des Dashboards |
-| `internal/tennisapp` | `go:embed` von Tennis (`tennis/` gebaut nach `dist/`), Details [TENNIS.md](TENNIS.md) |
+| `internal/tennisapp` | `go:embed` von Tennis (`games/` gebaut nach `dist/`), Details [TENNIS.md](TENNIS.md) |
 
 ## Web-Dashboard
 
-Das Dashboard besteht aus ES-Modulen **ohne Build-Step** (`bridge/web/static/js`):
+Das Dashboard besteht aus ES-Modulen **ohne Build-Step** (`hardware/thingy-bridge/web/static/js`):
 - Die Logik steckt in reinen, mit `node --test` getesteten Modulen: Reducer `state.js`, `format.js`, `classify.js`, `chart.js`, `ringbuffer.js`, `backoff.js` und weitere.
 - `view.js` und `live-chart.js` sind eine dünne DOM- bzw. Canvas-Schicht.
 - `connection.js` baut die `EventSource` bei Abbruch mit exponentiellem Backoff (0.5–10 s) neu auf.
 - Kommt 3 s lang kein Wert, zeigt das Dashboard „Daten veraltet“.
 
-Details: [bridge/web/README.md](../bridge/web/README.md).
+Details: [hardware/thingy-bridge/web/README.md](../hardware/thingy-bridge/web/README.md).
 
 ## Android-App
 
@@ -123,14 +123,14 @@ flowchart TB
   VM --> SP[SongPlayer] --> BLE
 ```
 
-- **`:protocol`** (reines Kotlin/JVM, JUnit) enthält UUIDs, Decoder, Commands, Startsequenz, IMA-ADPCM, NDEF, Snapshot und Song. Das Lied liest das Modul beim Build aus `shared/chorus.json`.
+- **`:protocol`** (reines Kotlin/JVM, JUnit) enthält UUIDs, Decoder, Commands, Startsequenz, IMA-ADPCM, NDEF, Snapshot und Song. Das Lied liest das Modul beim Build aus `hardware/shared/chorus.json`.
 - **`:app`** (Compose, Material 3):
   - `ThingyConnection` ist der Port. Adapter sind `BleThingyConnection` (direkter GATT-Client mit serialisierter `GattQueue` und Auto-Reconnect) und `SimulatedThingy`.
   - Der Simulator ist umschaltbar und automatisch aktiv, wenn das Gerät kein BLE hat.
 - In `onStop` trennt die App die Verbindung. So ist der Thingy wieder frei für `thingy.exe`.
 - Ein NFC-Tap (`NDEF_DISCOVERED` mit `vnd.android.nfc://ext/android.com:pkg`) verbindet sofort per BLE.
 
-Details: [android/README.md](../android/README.md).
+Details: [hardware/android/README.md](../hardware/android/README.md).
 
 ## Entscheide
 
@@ -152,6 +152,6 @@ Jede Komponente hat eine Simulator-Quelle: Go `device/sim`, Web `dev/sim.js` + `
 ## Verträge
 
 - [protocol.md](protocol.md): GATT-Characteristics, Formate, Startsequenz, Lied, NFC-AAR, Bridge-HTTP-API
-- [telemetry.schema.json](telemetry.schema.json): JSON-Schema des Snapshots, Beispiel in [shared/telemetry.example.json](../shared/telemetry.example.json)
-- [shared/chorus.json](../shared/chorus.json): einzige Quelle des Lieds. Bridge, Mock-Server und Android lesen es. Das Dashboard spiegelt nur die Tonhöhen in `static/js/chorus.js`, und `test/chorus.test.js` prüft, dass beide übereinstimmen.
+- [telemetry.schema.json](telemetry.schema.json): JSON-Schema des Snapshots, Beispiel in [hardware/shared/telemetry.example.json](../hardware/shared/telemetry.example.json)
+- [hardware/shared/chorus.json](../hardware/shared/chorus.json): einzige Quelle des Lieds. Bridge, Mock-Server und Android lesen es. Das Dashboard spiegelt nur die Tonhöhen in `static/js/chorus.js`, und `test/chorus.test.js` prüft, dass beide übereinstimmen.
 - [ENGINEERING.md](ENGINEERING.md): TDD, Clean Code, Smoke-Tests

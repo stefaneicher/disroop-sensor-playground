@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        area: [bridge, web, tennis, android]
+        area: [bridge, web, games, android]
     steps:
       - uses: actions/checkout@v5
 
@@ -40,11 +40,11 @@ jobs:
         run: ./project ${{ matrix.area }} test
 
       - name: Build
-        if: matrix.area != 'web' && matrix.area != 'tennis'
+        if: matrix.area != 'web' && matrix.area != 'games'
         run: ./project ${{ matrix.area }} build
 
       - uses: actions/upload-artifact@v4
-        if: matrix.area != 'web' && matrix.area != 'tennis'
+        if: matrix.area != 'web' && matrix.area != 'games'
         with:
           name: ${{ matrix.area }}
           path: |

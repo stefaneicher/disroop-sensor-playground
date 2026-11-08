@@ -4,8 +4,8 @@
 > Aufgabe in einem Teilprojekt ist das `RESUME.md` im tiefsten passenden Projektordner massgeblich; lies es zusätzlich
 > zu den Root-Regeln. Bei Konflikten gilt der spezifischere Projektstand für dessen Teilprojekt.
 >
-> **Motion One Prompt 1:** Bei Arbeiten an `devices/motion-one/` zuerst
-> [`devices/motion-one/management/RESUME.md`](devices/motion-one/management/RESUME.md) lesen. Dort stehen der aktuelle Stand
+> **Motion One Prompt 1:** Bei Arbeiten an `hardware/motion-one/` zuerst
+> [`hardware/motion-one/management/RESUME.md`](hardware/motion-one/management/RESUME.md) lesen. Dort stehen der aktuelle Stand
 > der V1-Integration, die offenen Schritte und die Verifikationsgrenzen. Der folgende Resume-Text dokumentiert den
 > ursprünglichen Thingy:52-/Spielprojekt-Kontext und ist nicht der aktuelle Motion-One-Arbeitsstand.
 
@@ -32,11 +32,11 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`. Danach 
 - **Android-Paket:** `ch.disroop.sensorplayground`
 - **Architektur:**
   - `thingy.exe` (Go, Windows, cross-compiled) verbindet BLE mit Terminal-Ausgabe, Webserver `:8052` mit SSE `/api/stream`, Lied und NFC-Schreiben.
-  - Web-GUI ist in die exe eingebettet (`bridge/web/`).
+  - Web-GUI ist in die exe eingebettet (`hardware/thingy-bridge/web/`).
   - Android-App in Kotlin.
 - **Aufteilung, damit sich die Agents nicht in die Quere kommen:**
   - `project` dispatcht auf `scripts/<bereich>.sh`.
-  - Ordner `bridge/`, `bridge/web/`, `android/`.
+  - Ordner `hardware/thingy-bridge/`, `hardware/thingy-bridge/web/`, `hardware/android/`.
   - Je Bereich ein eigener Workflow `.github/workflows/<bereich>.yml`.
   - Agents committen nicht, das macht der Manager.
 
@@ -85,7 +85,7 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`. Danach 
 - Default-Inhalt = AAR `no.nordicsemi.android.nrfthingy` + Text + URI.
 - Neuer Inhalt: AAR `ch.disroop.sensorplayground`.
 
-**Lied:** `shared/chorus.json` mit `{on_ms, off_ms, hz}` × 24 und `pause_ms` 1500.
+**Lied:** `hardware/shared/chorus.json` mit `{on_ms, off_ms, hz}` × 24 und `pause_ms` 1500.
 
 ## Hardware
 - Thingy:52 Adresse `E3:58:08:1B:53:5F`, Name „Thingy“, Werksfirmware sendet Advertising.
@@ -102,7 +102,7 @@ Lies zuerst `GOAL.md`, `PROGRESS.md`, `JOURNAL.md` und `docs/plan.html`. Danach 
 - Machbarkeits-Scanner: `C:\Users\stefa\AppData\Local\Temp\blescan\` (Go, `tinygo.org/x/bluetooth`, im `golang:1.27`-Container gebaut).
 
 ## Nächste Schritte
-Stand 2026-11-07 20:30. Alles gepusht. Apps im Repo: `bridge/` (thingy.exe + Dashboard), `android/`, `tennis/` (Tennis + Ski unter `tennis/src/ski/`).
+Stand 2026-11-07 20:30. Alles gepusht. Apps im Repo: `hardware/thingy-bridge/` (thingy.exe + Dashboard), `hardware/android/`, `games/` (Tennis + Ski, Eingabe in `games/src/input/`). Ordner umgebaut am 2026-11-08, siehe `docs/KONZEPT_PLAYGROUND.md`.
 - Demo starten: exe nach `%TEMP%\thingy-demo\` kopieren und dort laufen lassen, sonst ist `build/thingy.exe` für Builds gesperrt. Dashboard: `thingy.exe -no-tui`, Tennis: `/tennis/`, Ski: `/ski`.
 - Im Spielmodus sind Euler/Heading pausiert, sonst bricht BLE bei 100 Hz ab (siehe docs/TENNIS.md).
 - Lokaler Ordner und Repo heissen `disroop-sensor-playground`.

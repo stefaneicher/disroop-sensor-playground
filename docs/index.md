@@ -16,6 +16,6 @@
 | [ENGINEERING.md](ENGINEERING.md) | Engineering-Regeln (TDD, Clean Code, Simulator first) |
 | [plan.html](plan.html) | ursprünglicher Projektplan (Lavish) |
 
-Bereichs-READMEs: [bridge](../bridge/README.md) · [bridge/web](../bridge/web/README.md) · [tennis](../tennis/README.md) · [android](../android/README.md)
+Bereichs-READMEs: [bridge](../hardware/thingy-bridge/README.md) · [hardware/thingy-bridge/web](../hardware/thingy-bridge/web/README.md) · [tennis](../games/README.md) · [android](../hardware/android/README.md)
 
 Projektstatus: [GOAL.md](../GOAL.md) · [PROGRESS.md](../PROGRESS.md) · [JOURNAL.md](../JOURNAL.md) · [RESUME.md](../RESUME.md)

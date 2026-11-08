@@ -1,5 +1,5 @@
 {
-  // Disroop-Farben für dieses Projekt (gleiche Palette wie bridge/web/static/styles.css).
+  // Disroop-Farben für dieses Projekt (gleiche Palette wie hardware/thingy-bridge/web/static/styles.css).
   "workbench.colorTheme": "Dark Modern",
   "workbench.colorCustomizations": {
     "[Default Dark Modern]": {

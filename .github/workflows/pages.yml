@@ -22,15 +22,15 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: tennis/package-lock.json
+          cache-dependency-path: games/package-lock.json
       - run: npm ci && npm run build
-        working-directory: tennis
+        working-directory: games
       - name: Seite zusammenstellen
         run: |
-          mkdir -p _site/tennis _site/devices/motion-one/media
-          cp index.html _site/
-          cp -r tennis/dist _site/tennis/static
-          cp -r devices/motion-one/media/presentation _site/devices/motion-one/media/presentation
+          mkdir -p _site/games _site/hardware/motion-one/media
+          cp console/index.html _site/
+          cp -r games/dist/. _site/games/
+          cp -r hardware/motion-one/media/presentation _site/hardware/motion-one/media/presentation
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

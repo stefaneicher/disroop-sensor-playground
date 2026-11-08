@@ -11,5 +11,5 @@ written permission of the copyright holder; viewing on GitHub is permitted.
 Ausgenommen / Excluded:
 - Abhängigkeiten von Dritten (z. B. three.js, Go- und Gradle-Bibliotheken) stehen unter ihren eigenen Lizenzen.
 - „Nordic Thingy:52“ ist eine Marke von Nordic Semiconductor ASA.
-- „Highway to Hell“ (Tonfolge in shared/chorus.json) gehört den jeweiligen Rechteinhabern.
-- Der Master-Prompt „Vacuum“ von 203x Uplink, auf den devices/motion-one/ verweist, gehört seinem Autor.
+- „Highway to Hell“ (Tonfolge in hardware/shared/chorus.json) gehört den jeweiligen Rechteinhabern.
+- Der Master-Prompt „Vacuum“ von 203x Uplink, auf den hardware/motion-one/ verweist, gehört seinem Autor.

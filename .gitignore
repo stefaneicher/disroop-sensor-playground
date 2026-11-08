@@ -1,35 +1,35 @@
 .lavish/
 build/
 *.apk
-bridge/internal/song/chorus.json
-bridge/.image-build.log
+hardware/thingy-bridge/internal/song/chorus.json
+hardware/thingy-bridge/.image-build.log
 # android
-android/.gradle/
-android/.kotlin/
-android/**/build/
-android/local.properties
-android/.idea/
+hardware/android/.gradle/
+hardware/android/.kotlin/
+hardware/android/**/build/
+hardware/android/local.properties
+hardware/android/.idea/
 
 # project CLI (./t): Invoke installed locally
 .tools/
 
 # tennis: build output embedded by the bridge (./project tennis build)
-bridge/internal/tennisapp/dist/*
-!bridge/internal/tennisapp/dist/.keep
-devices/motion-one/logs/tools-smoke/
-devices/motion-one/firmware/build/
-devices/motion-one/logs/fw-smoke/
-devices/motion-one/logs/media-smoke/
-devices/motion-one/logs/mech-smoke/
-devices/motion-one/logs/pcb-smoke/
-devices/motion-one/logs/fw-v1/
+hardware/thingy-bridge/internal/tennisapp/dist/*
+!hardware/thingy-bridge/internal/tennisapp/dist/.keep
+hardware/motion-one/logs/tools-smoke/
+hardware/motion-one/firmware/build/
+hardware/motion-one/logs/fw-smoke/
+hardware/motion-one/logs/media-smoke/
+hardware/motion-one/logs/mech-smoke/
+hardware/motion-one/logs/pcb-smoke/
+hardware/motion-one/logs/fw-v1/
 # motion-one: regenerierbare Grossdateien (scripts/mechanics/build_enclosure.py) und Caches
-devices/motion-one/mechanics/cad/motion-one_baugruppe.step
-devices/motion-one/mechanics/cad/unterschale_*.step
-devices/motion-one/scripts/**/__pycache__/
-devices/motion-one/scripts/mechanics/_probe/
-devices/motion-one/logs/fw-pinout/
+hardware/motion-one/mechanics/cad/motion-one_baugruppe.step
+hardware/motion-one/mechanics/cad/unterschale_*.step
+hardware/motion-one/scripts/**/__pycache__/
+hardware/motion-one/scripts/mechanics/_probe/
+hardware/motion-one/logs/fw-pinout/
 .playwright-mcp/
-devices/motion-one/mechanics/alt_win_r4/*.FCStd
-devices/motion-one/mechanics/alt_win_r4/*.step
-devices/motion-one/mechanics/alt_win_r4/*.stl
+hardware/motion-one/mechanics/alt_win_r4/*.FCStd
+hardware/motion-one/mechanics/alt_win_r4/*.step
+hardware/motion-one/mechanics/alt_win_r4/*.stl

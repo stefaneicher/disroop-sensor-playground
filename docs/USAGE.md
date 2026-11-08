@@ -30,7 +30,7 @@ Alle Befehle laufen im Repo-Ordner unter **WSL**. Builds und Tests laufen im Dev
 
 | Befehl | Wirkung |
 |---|---|
-| `unit` | `node --test bridge/web/test/` |
+| `unit` | `node --test hardware/thingy-bridge/web/test/` |
 | `smoke` | Mock-Server + headless Chromium: Live-Werte, Lied- und LED-Steuerung, keine JS-Fehler |
 | `test` | `unit` + `smoke` |
 | `serve` | Mock-Server mit Simulator auf http://localhost:8053. `PORT=…` ändert den Port, `Strg+C` stoppt. |
@@ -162,7 +162,7 @@ curl.exe -s -X POST -H "Content-Type: application/json" -d '{"r":255,"g":0,"b":0
 
 ## Lied und LED
 
-- Das Lied besteht aus 24 Noten aus `shared/chorus.json`. Pro Note sendet die exe `[hz, on_ms, volume]` an den Lautsprecher (Frequenz-Modus).
+- Das Lied besteht aus 24 Noten aus `hardware/shared/chorus.json`. Pro Note sendet die exe `[hz, on_ms, volume]` an den Lautsprecher (Frequenz-Modus).
 - Die LED leuchtet während einer Note in einer Farbe je Tonhöhe (A = rot, 30° Farbton pro Halbton). In der Pause ist sie aus.
 - **Starten und stoppen:**
   - Taster am Thingy (bei laufender `thingy.exe` oder App)
@@ -200,7 +200,7 @@ curl.exe -s -X POST -H "Content-Type: application/json" -d '{"r":255,"g":0,"b":0
   - Mikrofon & Taster
 - **Lied:** spielt in der App **einmal** durch, der Taster am Thingy startet und stoppt es.
 - **Kein Bluetooth/keine Berechtigung:** Die App zeigt einen Knopf „Bluetooth einschalten“ bzw. „Berechtigung erteilen“.
-- Installation: siehe [README](../README.md#android-app-installieren) und [android/README.md](../android/README.md).
+- Installation: siehe [README](../README.md#android-app-installieren) und [hardware/android/README.md](../hardware/android/README.md).
 
 ## Thingy aufwecken
 
