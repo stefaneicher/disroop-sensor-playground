@@ -42,3 +42,11 @@
 - Inspektion: WSL2, 12 Kerne, 7 GB RAM, keine GPU; Werkzeug-Image ok, es fehlten CadQuery/Gmsh/CalculiX und eine Firmware-Toolchain.
 - 5 Custom Agents (`.github/agents/`), 9 Skills (`.github/skills/`), Projektstruktur und Management-Dateien unter `devices/motion-one/` angelegt.
 - Werkzeug-Image um CadQuery, Gmsh und CalculiX erweitert (Build läuft).
+
+## 2026-11-08 06:35 Motion One: V1-Entwürfe und Integrationsrunde
+- Pflicht-Smokes §5 abgeschlossen. Systeme/Anforderungen PASS; PCB, Firmware und Mechanik haben V1-Artefakte, aber sind wegen Schnittstellen- bzw. Hardwarefragen PARTIAL.
+- PCB: 4-Lagen-KiCad, ERC 0, DRC 0 Fehler/0 unverbunden, Gerber/BOM/CPL und SPICE-Paket; Bestückungspreis inkl. Versand bleibt teilweise geschätzt.
+- Firmware: Zephyr-App/UF2, 32/32 Host-Tests; `PINOUT_V1.json` inzwischen vorhanden, DTS-Abgleich und Rebuild gestartet. Keine Hardwaretests.
+- Mechanik: ergonomisches Gehäuse, STL/3MF, Toleranzkörper und PETG-Slices vorhanden. FEM-Netzkonvergenz PARTIAL; Kollision mit finalem Board-STEP und Schnittstellenrevision werden erneut geprüft.
+- Resume für Motion One auf `devices/motion-one/management/RESUME.md` berichtigt; Root-RESUME.md gehört zu älteren Thingy-Aufgaben.
+- Integrationsrunde: pcb-engineer richtet PCB an mechanischen Änderungswünschen aus; mechanical-engineer integriert Board-STEP; firmware-engineer mappt das echte Pinout. Keine Bestellung, kein Flashen, kein Druck auf Hardware.

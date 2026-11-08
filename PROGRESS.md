@@ -27,11 +27,11 @@ Stand: 2026-11-07 20:30. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 | 19 | Android-UI wie Web, Tennis + Ski in der App | ✅ | 0c38ca9 |
 | 20 | Umbenennung zu `disroop-sensor-playground` | ✅ | NFC-Tag neu schreiben offen |
 | 21 | Thingy-Ausrichtung im Dashboard (180°?) | 🔄 | wartet auf Kompass-Test des Users |
-| 22 | Eigener Controller „Disroop Motion One“: Vorab-Test, Prompt 1 (Entwicklung), Prompt 2 (Video, Produktseite) | ✅ | `devices/motion-one/`, Ausführung NOT RUN |
+| 22 | Eigener Controller „Disroop Motion One“: Vorab-Test, Prompt 1 (Entwicklung), Prompt 2 (Video, Produktseite) | 🔄 | Prompt 1 V1-Entwurf: PCB, Firmware, ergonomisches CAD, FEM und Druckdaten vorhanden; Integration und Release-Baseline offen. Hardwaretests/Bestellung NOT RUN. Siehe `devices/motion-one/management/RESUME.md` |
 | 23 | Copyright Stefan Eicher fürs ganze Repo | ✅ | `LICENSE` |
 
 ## Erkenntnisse
 - Toolversionen (geprüft 2026-11-06): Go 1.27.3, Node 26.13.0 (LTS), Gradle 9.9.0, Android platform 36, build-tools 36.1.0, cmdline-tools 16111833 (android-37 nicht im alten Repo-Format verfügbar), Docker 29.9.3.
 - PowerShell kann keine WinRT-BLE-Events abonnieren → BLE nur über die Go-exe.
 
-- Motion One: Aufsetzen (Agents, Skills, Struktur) PASS; Smoke-Tests und V1 NOT RUN. Siehe devices/motion-one/management/PROJECT_STATE.md
+- Motion One: §1–§7 und Pflicht-Smokes §5 PASS; PCB/Mechanik/Firmware V1 PARTIAL, Integrationsrunde aktiv; Baseline und Media/Doku offen. Siehe `devices/motion-one/management/PROJECT_STATE.md`
