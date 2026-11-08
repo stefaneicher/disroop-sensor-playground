@@ -11,4 +11,5 @@ target_sources(app PRIVATE
   ${FW}/fusion/src/motion_fusion.c
   ${FW}/icm/src/icm45686.c
   ${FW}/power/src/vbat.c
+  ${FW}/power/src/motor_drive.c
   src/main.c src/ble_thingy.c src/imu_task.c src/ui.c src/battery.c src/board_early.c)

@@ -5,12 +5,13 @@ CFLAGS = -std=c11 -Wall -Wextra -Werror -O2 -Icodec/include -Ifusion/include -Ii
 UNITY = $(UNITY_DIR)/src/unity.c
 HDRS = $(wildcard codec/include/*.h fusion/include/*.h icm/include/*.h power/include/*.h)
 
-TESTS = test_thingy_codec test_thingy_profile test_motion_fusion test_icm45686 test_vbat
+TESTS = test_thingy_codec test_thingy_profile test_motion_fusion test_icm45686 test_vbat test_motor_drive
 SRC_test_thingy_codec = codec/src/thingy_codec.c
 SRC_test_thingy_profile = codec/src/thingy_codec.c
 SRC_test_motion_fusion = fusion/src/motion_fusion.c
 SRC_test_icm45686 = icm/src/icm45686.c
 SRC_test_vbat = power/src/vbat.c
+SRC_test_motor_drive = power/src/motor_drive.c
 
 .SECONDEXPANSION:
 $(BUILD)/%: tests/%.c $$(SRC_%) $(HDRS)

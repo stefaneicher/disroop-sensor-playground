@@ -37,5 +37,6 @@ int ui_arm_button_wakeup(void);
 /* battery.c */
 int battery_init(void);
 uint16_t battery_read_mv(void);
+uint16_t battery_last_mv(void); /* letzte Messung, ohne ADC-Zugriff; 0 = keine */
 
 #endif

@@ -1,0 +1,11 @@
+9e40b3ee030f3229f35f6b3f6f3b1e2db36d7acd2e76270165c1d3db0170fdc1  zephyr.uf2
+1929d65f36e7cf1a253d66c2759ec176bd1e7d143b72e480e44134c03819c318  zephyr.hex
+1ef9b3f6beef0f16417b519e7f35ca88505dd3fb6abc074b4a24e0cd2b42ef67  zephyr.bin
+697ddcfb8431dac3c967bf90c1bcd153a8750ce2ba17b58101e6272fbc63639f  zephyr.elf
+-rwxrwxrwx 1 1000 1000  158192 Nov  8 12:46 zephyr.bin
+-rwxrwxrwx 1 1000 1000 4515944 Nov  8 12:46 zephyr.elf
+-rwxrwxrwx 1 1000 1000  444913 Nov  8 12:46 zephyr.hex
+-rwxrwxrwx 1 1000 1000     308 Nov  8 12:46 zephyr.sha256
+-rwxrwxrwx 1 1000 1000  316416 Nov  8 12:46 zephyr.uf2
+/workspace/devices/motion-one/logs/fw-motor/zephyr.elf: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), statically linked, with debug_info, not stripped
+hex-start: :020000022000DC :10600000807000202DB20200DF4E040019B20200A1 

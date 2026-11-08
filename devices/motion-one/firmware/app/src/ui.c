@@ -3,7 +3,9 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/drivers/pwm.h>
 #include <zephyr/drivers/gpio.h>
+#include <hal/nrf_power.h>
 #include "app.h"
+#include "motor_drive.h"
 
 LOG_MODULE_REGISTER(ui, LOG_LEVEL_INF);
 
@@ -11,7 +13,7 @@ static const struct pwm_dt_spec led[3] = {PWM_DT_SPEC_GET(DT_ALIAS(led_red)), PW
 					  PWM_DT_SPEC_GET(DT_ALIAS(led_blue))};
 static const struct pwm_dt_spec buzzer = PWM_DT_SPEC_GET(DT_ALIAS(buzzer));
 static const struct gpio_dt_spec btn = GPIO_DT_SPEC_GET(DT_ALIAS(sw0), gpios);
-static const struct gpio_dt_spec vib = GPIO_DT_SPEC_GET(DT_ALIAS(vib0), gpios);
+static const struct pwm_dt_spec motor = PWM_DT_SPEC_GET(DT_ALIAS(motor0));
 static struct gpio_callback btn_cb;
 static thingy_button_t btn_sm;
 static thingy_led_cmd_t led_cur;
@@ -73,10 +75,35 @@ void ui_led_apply(const thingy_led_cmd_t *cmd)
 	}
 }
 
+/* F-12 Arbitrierung (power/motor_drive.c): Summer hat Vorrang, Motor pausiert waehrend Ton (VBUS <= 500 mA). */
+static K_MUTEX_DEFINE(load_lock);
+static bool buz_req, mot_req;
+
+static void motor_output(bool on)
+{
+	uint32_t pulse = 0;
+	if (on) {
+		const bool usb = nrf_power_usbregstatus_vbusdet_get(NRF_POWER);
+		const uint16_t duty = motor_duty_permille(motor_supply_mv(battery_last_mv(), usb));
+		pulse = (uint32_t)((uint64_t)motor.period * duty / 1000u);
+	}
+	(void)pwm_set_pulse_dt(&motor, pulse);
+}
+
+static void loads_apply(void)
+{
+	const load_out_t o = load_arbitrate(buz_req, mot_req);
+	motor_output(o.motor_on);
+}
+
 static void buzzer_off(struct k_work *w)
 {
 	ARG_UNUSED(w);
+	k_mutex_lock(&load_lock, K_FOREVER);
 	(void)pwm_set_dt(&buzzer, buzzer.period, 0);
+	buz_req = false;
+	loads_apply(); /* pausierten Motor fortsetzen */
+	k_mutex_unlock(&load_lock);
 	ble_publish_speaker_done();
 }
 static K_WORK_DELAYABLE_DEFINE(buzzer_work, buzzer_off);
@@ -90,20 +117,30 @@ void ui_speaker_tone(const thingy_speaker_tone_t *t)
 	const uint32_t period = PWM_HZ(t->freq_hz);
 	/* Lautstaerke ueber Tastgrad, max. 50 % (ANNAHME, Summer-Kennlinie unbekannt) */
 	const uint32_t pulse = (uint32_t)((uint64_t)period * t->volume_pct / 200u);
+	k_mutex_lock(&load_lock, K_FOREVER);
+	buz_req = true;
+	loads_apply(); /* Motor zuerst aus, dann Summer an */
 	(void)pwm_set_dt(&buzzer, period, pulse);
+	k_mutex_unlock(&load_lock);
 	k_work_reschedule(&buzzer_work, K_MSEC(t->duration_ms));
 }
 
 static void vib_off(struct k_work *w)
 {
 	ARG_UNUSED(w);
-	(void)gpio_pin_set_dt(&vib, 0);
+	k_mutex_lock(&load_lock, K_FOREVER);
+	mot_req = false;
+	loads_apply();
+	k_mutex_unlock(&load_lock);
 }
 static K_WORK_DELAYABLE_DEFINE(vib_work, vib_off);
 
 void ui_vibrate_ms(uint32_t ms)
 {
-	(void)gpio_pin_set_dt(&vib, 1);
+	k_mutex_lock(&load_lock, K_FOREVER);
+	mot_req = true;
+	loads_apply();
+	k_mutex_unlock(&load_lock);
 	k_work_reschedule(&vib_work, K_MSEC(ms));
 }
 
@@ -150,10 +187,10 @@ int ui_init(void)
 			return -ENODEV;
 		}
 	}
-	if (!pwm_is_ready_dt(&buzzer) || !gpio_is_ready_dt(&btn) || !gpio_is_ready_dt(&vib)) {
+	if (!pwm_is_ready_dt(&buzzer) || !gpio_is_ready_dt(&btn) || !pwm_is_ready_dt(&motor)) {
 		return -ENODEV;
 	}
-	(void)gpio_pin_configure_dt(&vib, GPIO_OUTPUT_INACTIVE);
+	(void)pwm_set_pulse_dt(&motor, 0);
 	(void)gpio_pin_configure_dt(&btn, GPIO_INPUT);
 	gpio_init_callback(&btn_cb, btn_isr, BIT(btn.pin));
 	(void)gpio_add_callback(btn.port, &btn_cb);

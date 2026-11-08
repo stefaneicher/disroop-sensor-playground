@@ -38,9 +38,17 @@ int battery_init(void)
 	return rc ? rc : adc_channel_setup_dt(&ch);
 }
 
+static atomic_t last_mv; /* 0 = noch keine gueltige Messung */
+
 uint16_t battery_read_mv(void)
 {
 	uint16_t mv = 0;
 	(void)vbat_measure(&port, DT_PROP(USER, vbat_divider_num), DT_PROP(USER, vbat_divider_den), &mv);
+	atomic_set(&last_mv, mv);
 	return mv;
+}
+
+uint16_t battery_last_mv(void)
+{
+	return (uint16_t)atomic_get(&last_mv);
 }

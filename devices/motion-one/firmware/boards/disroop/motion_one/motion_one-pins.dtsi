@@ -50,6 +50,18 @@
 			low-power-enable;
 		};
 	};
+	/* F-12: Motor per PWM (eigene Instanz, da Summer die Periode von pwm1 aendert) */
+	pwm2_default: pwm2_default {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 1, 13)>; /* PINOUT:MOT_EN */
+		};
+	};
+	pwm2_sleep: pwm2_sleep {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT0, 1, 13)>;
+			low-power-enable;
+		};
+	};
 };
 
 &spi3 {
@@ -80,6 +92,13 @@
 	status = "okay";
 	pinctrl-0 = <&pwm1_default>;
 	pinctrl-1 = <&pwm1_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&pwm2 {
+	status = "okay";
+	pinctrl-0 = <&pwm2_default>;
+	pinctrl-1 = <&pwm2_sleep>;
 	pinctrl-names = "default", "sleep";
 };
 
@@ -119,6 +138,10 @@
 		buzzer: buzzer {
 			pwms = <&pwm1 0 PWM_USEC(2273) PWM_POLARITY_NORMAL>; /* FET-Gate, high = an */
 		};
+		motor: motor {
+			/* MOT_EN FET-Gate high = an (100k Pull-down); 20 kHz ANNAHME (unhoerbar) */
+			pwms = <&pwm2 0 PWM_USEC(50) PWM_POLARITY_NORMAL>;
+		};
 	};
 
 	buttons {
@@ -126,13 +149,6 @@
 		button0: button_0 {
 			gpios = <&gpio0 28 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; /* PINOUT:BTN */
 			zephyr,code = <INPUT_KEY_0>;
-		};
-	};
-
-	vibration {
-		compatible = "gpio-leds";
-		vib0: vib_0 {
-			gpios = <&gpio1 13 GPIO_ACTIVE_HIGH>; /* PINOUT:MOT_EN */
 		};
 	};
 
@@ -150,7 +166,7 @@
 		led-blue = &led_blue;
 		buzzer = &buzzer;
 		sw0 = &button0;
-		vib0 = &vib0;
+		motor0 = &motor;
 		imu0 = &imu;
 	};
 };
