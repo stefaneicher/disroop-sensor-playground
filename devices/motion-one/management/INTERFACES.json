@@ -208,7 +208,15 @@
       "location": "im Griff am Akku, Coin-Motor ueber Litzen an Lotpads J3",
       "note": "nicht auf IMU-Hoehe",
       "pads_x": 29.5,
-      "pads_y": 2.7
+      "pads_y": 2.7,
+      "part": "Leader LCM0827A3038F (LCSC C2759981), Coin-ERM 3.0 V",
+      "diameter_mm": 8.0,
+      "height_mm": 2.7,
+      "height_max_mm": 3.0,
+      "lead_length_mm": 27,
+      "lead_note": "2 Litzen AWG32 (rot +, blau -), 27+-2 mm ab Gehaeuserand, Litzenaustritt-Zunge max 3.0 x ca. 5.8 mm",
+      "mount": "3M-Klebepad 0.15 mm auf Unterseite (im Lieferzustand), Mulde in Unterschale beim Akku: Ø 8.6 mm x 3.2 mm tief + Litzenkanal (ANNAHME Spiel 0.3 mm)",
+      "source": "electronics/datasheets/LCM0827A3038F_C2759981.pdf S.9 (QUELLE)"
     },
     "battery_connector": {
       "x": 14.5,

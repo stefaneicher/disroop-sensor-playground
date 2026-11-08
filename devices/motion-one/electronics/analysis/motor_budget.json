@@ -1,0 +1,52 @@
+{
+ "sens": {
+  "5%": {
+   "motor_mA": 4.0,
+   "summe_mA": 11.47,
+   "laufzeit_h": 34.9
+  },
+  "10%": {
+   "motor_mA": 8.0,
+   "summe_mA": 15.47,
+   "laufzeit_h": 25.9
+  },
+  "20%": {
+   "motor_mA": 16.0,
+   "summe_mA": 23.47,
+   "laufzeit_h": 17.0
+  }
+ },
+ "buzzer_mA": 0.87,
+ "base_mA": 6.601,
+ "worst": {
+  "3.5": {
+   "i_3v3_mA": 138.6,
+   "v_3v3": 3.154,
+   "i_motor_start_mA": 137.3,
+   "i_bat_mA": 275.9
+  },
+  "3.3": {
+   "i_3v3_mA": 138.6,
+   "v_3v3": 2.954,
+   "i_motor_start_mA": 129.4,
+   "i_bat_mA": 268.0
+  },
+  "4.2": {
+   "i_3v3_mA": 138.6,
+   "v_3v3": 3.3,
+   "i_motor_start_mA": 164.7,
+   "i_bat_mA": 303.3
+  }
+ },
+ "dw01a_ocp_A": 2.68,
+ "usb": {
+  "charge_mA": 281,
+  "chrg_led_mA": 3,
+  "i_3v3_mA": 138.6,
+  "motor_start_at_vsys_mA": 191.0,
+  "motor_pwm3V_start_mA": 120.0,
+  "vbus_worst_noPWM_mA": 613.6,
+  "vbus_worst_PWM_mA": 542.6,
+  "vbus_typ_mA": 433.1
+ }
+}

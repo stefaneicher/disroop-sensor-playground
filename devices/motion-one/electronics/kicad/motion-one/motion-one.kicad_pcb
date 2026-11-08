@@ -567,7 +567,7 @@
 			(uuid "3ef31983-5279-4f63-b7e4-93279c5ddcb0")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_Push_1P1T_XKB_TS-1187A.step"
+		(model "${KIPRJMOD}/motion-one.3dshapes/SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -7346,15 +7346,15 @@
 			(uuid "0fd687a4-3199-4b4e-bef6-f648b6cc240d")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_HRO_TYPE-C-31-M-12.step"
+		(model "${KIPRJMOD}/motion-one.3dshapes/USB-C_SMD-TYPE-C-31-M-12_1.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 0 1.39 0)
 			)
 			(scale
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 0 0 0)
+				(xyz 0 0 180)
 			)
 		)
 	)
@@ -8773,15 +8773,15 @@
 			(uuid "26a64d48-962e-49b2-928b-49f53557565e")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_SPDT_Shouhan_MSK12C02.step"
+		(model "${KIPRJMOD}/motion-one.3dshapes/SW-SMD_3P-L6.6-W2.7-LS7.8-P1.50.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 0 0.55 0)
 			)
 			(scale
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 0 0 0)
+				(xyz 0 0 180)
 			)
 		)
 	)
@@ -12073,6 +12073,17 @@
 			(uuid "8fb12402-f0e5-41d8-8cb5-a18c59ce2ebc")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/motion-one.3dshapes/WIRELM-SMD_L18.0-W13.0-H3.0-E73-2G4M08S1C.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Resistor_SMD:R_0402_1005Metric"
 		(layer "F.Cu")

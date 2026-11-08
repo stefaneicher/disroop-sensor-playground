@@ -199,10 +199,10 @@
       "note": "Stand: fem/fem_results.json 03:43, alte Geometrie v1; keine r3-Netzstudie. Wiederaufnahme nur auf Wunsch.",
       "id": "F-09",
       "title": "Vibrationsmotor: Modell + 3D-Modelle (PCB)",
-      "status": "running",
+      "status": "done",
       "owner": "pcb-engineer",
       "agent_id": "d090dc26-b78f-4cd6-a645-5d8e5f337019",
-      "summary": "Motor war nur als Lötpads J3 „Motor separat“ geführt – kein Modell, nicht in BOM, keine Gehäuse-Mulde. PCB-Agent wählt Coin-Motor (LCSC), BOM, INTERFACES; dazu STEP-Modelle E73/USB-C/Taster/Schalter."
+      "summary": "Motor war nur als Lötpads J3 „Motor separat“ geführt – kein Modell, nicht in BOM, keine Gehäuse-Mulde. PCB-Agent wählt Coin-Motor (LCSC), BOM, INTERFACES; dazu STEP-Modelle E73/USB-C/Taster/Schalter. → Motor LCM0827A3038F (C2759981, Ø8×2.7 mm, 0.63 USD). Laufzeit 35 h @5 %. Offen: Firmware Motor-PWM ≤3.0 V und nicht gleichzeitig mit Summer (USB 500 mA)."
     },
     {
       "parent": "T-01.3",

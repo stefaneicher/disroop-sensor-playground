@@ -44,7 +44,13 @@ Bedarf fuer Bestand-Kriterium: 10 Geraete (ANNAHME) -> Bestand >= 10x Bedarf = 1
 | C22459454 | ICM-45686 | ICM-45686 | LGA-14_3x2.5mm_P0.5mm_LayoutBorder3x4y | U6 | 1 | Extended | 3061 | PASS | 10.2118 | 10.212 | 2026-11-08T10:39Z jlc_j2_alt.json | LSM6DSV16X C5267406 (Footprint-Wechsel) |
 | C32346 | Q13FC13500004 | 32.768kHz | Crystal_SMD_3215-2Pin_3.2x1.5mm | Y1 | 1 | Basic | 432670 | PASS | 0.1713 | 0.171 | 2026-11-07T23:04Z jlc_q2.json | Basic-Aequivalent |
 
-Nicht ueber JLC: J3 Motorpads (Litzen, Motor separat), J4 TC2030-NL (Tag-Connect Kabel, nur Footprint), TP1-6, H1-2 (keine Teile).
+Handbestueckung (nicht JLC-SMT), an J3 angeloetet:
+
+| LCSC | MPN | Wert | Bauform | Refs | Menge | Bestand | >=10x | USD/Stk (1/10/30) | USD/Geraet | Abfrage | Alternative |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| C2759981 | Leader LCM0827A3038F | ERM 3 V, 80 mA, 30 Ω | Coin Ø8 x 2.7 mm, Litzen 27 mm | M1 (an J3) | 1 | 2284 | PASS | 0.6297 / 0.5087 / 0.4563 | 0.630 | 2026-11-08T12:28:28+00:00 `sourcing/raw/jlc_motor_2026-11-08.json`, https://jlcpcb.com/partdetail/C2759981 | KOTL C1027B603F C2836604 (Ø10, 90 mA, Bestand 129, >=10x knapp PASS) |
+
+Nicht ueber JLC: J3 Motorpads (Litzen, Motor M1 von Hand, siehe oben), J4 TC2030-NL (Tag-Connect Kabel, nur Footprint), TP1-6, H1-2 (keine Teile).
 
 **Summe Teile/Geraet (Stufe 1): 20.24 USD** (r3: 20.33 − 0.2262 + 0.1322) (BERECHNUNG). Extended-Positionen: 12 (Extended-Gebuehr pro Auftrag, siehe ANGEBOTE_V1.md). Davon E73 7.69 + ICM-45686 10.21 = 17.90 USD (QUELLE).
 
