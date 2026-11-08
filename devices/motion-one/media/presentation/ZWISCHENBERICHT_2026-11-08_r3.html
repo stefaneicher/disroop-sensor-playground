@@ -1,6 +1,7 @@
 <!doctype html><html lang="de" data-lavish-annotate="on"><head><meta charset="utf-8"><title>Disroop Motion One – Zwischenbericht</title>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <style>
+html{scroll-snap-type:y proximity;scroll-behavior:smooth}section{scroll-snap-align:start}.nav{position:fixed;right:16px;bottom:16px;display:flex;gap:8px;z-index:9}.nav button{width:44px;height:44px;border:0;border-radius:50%;background:#374151;color:#fff;font-size:20px;cursor:pointer}
 body{margin:0;font-family:system-ui,sans-serif;background:#0f1115;color:#e5e7eb}
 section{min-height:100vh;box-sizing:border-box;padding:48px 64px;border-bottom:1px solid #222;display:flex;flex-direction:column;justify-content:center}
 h1{font-size:44px;margin:0 0 8px}h2{font-size:30px;margin:0 0 20px;color:#93c5fd}.sub{color:#9ca3af;font-size:18px}
@@ -30,7 +31,7 @@ table{border-collapse:collapse;width:100%;font-size:15px}td,th{padding:6px 8px;b
 <div class="c"><b>Beidhändig</b><br>Symmetrischer, taillierter Griff mit Fingerwellen und Daumenmulde</div>
 </div></section>
 
-<section><h2>Das zusammengebaute Gerät</h2><div class="g2"><div class="cv" id="v1"><div class="hint">Maus: drehen · Rad: zoomen</div></div>
+<section><h2>Das zusammengebaute Gerät</h2><div class="g2"><div class="cv" id="v1"><div class="hint">Maus: drehen</div></div>
 <div><div class="cards" style="grid-template-columns:1fr 1fr"><div class="c">Länge<div class="big">170 mm</div></div><div class="c">Masse<div class="big">≈ 81 g</div><span class="tag">BERECHNUNG, Ziel ≤ 120 g</span></div></div>
 <p class="sub">Zweiteilige Schale (PETG, FDM auf Bambu P2S), Tastenkappe und Lichtleiter separat gedruckt. Schalen halbtransparent dargestellt.</p>
 <p class="warn">Fügestelle hier noch Stand v1 (Lippe/Nut + Schattenfuge nach ADR-0001 in Arbeit).</p></div></div></section>
@@ -89,9 +90,15 @@ function view(id,f,op){const el=document.getElementById(id);const r=new THREE.We
  const ms=P.map((p,i)=>{const m=new THREE.Mesh(geo[i],new THREE.MeshStandardMaterial({color:Number(p.c),roughness:.55,metalness:.1,transparent:true,opacity:p.n.includes('schale')?op:1}));m.userData.v=p.v;s.add(m);return m});
  const set=k=>ms.forEach(m=>m.position.set(...m.userData.v.map(x=>x*k)));set(f);
  const b=new THREE.Box3();ms.forEach(m=>b.expandByObject(m));const ctr=b.getCenter(new THREE.Vector3()),sz=b.getSize(new THREE.Vector3()).length();
- c.target.copy(ctr);cam.position.copy(ctr).add(new THREE.Vector3(sz*.45,-sz*.75,sz*.55));c.autoRotate=true;c.autoRotateSpeed=.8;c.addEventListener('start',()=>c.autoRotate=false);
+ c.target.copy(ctr);cam.position.copy(ctr).add(new THREE.Vector3(sz*.45,-sz*.75,sz*.55));c.enableZoom=false;c.autoRotate=true;c.autoRotateSpeed=.8;c.addEventListener('start',()=>c.autoRotate=false);
  const rs=()=>{const w=el.clientWidth,h=el.clientHeight;r.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()};rs();addEventListener('resize',rs);
  (function a(){requestAnimationFrame(a);c.update();r.render(s,cam)})();return set}
 view('v1',0,.85);const set2=view('v2',1,1);document.getElementById('ex2').oninput=e=>set2(e.target.value/100);
 document.getElementById('leg').innerHTML=P.map(p=>`<span><i style="background:#${Number(p.c).toString(16).padStart(6,'0')}"></i>${NAMES[p.n]||p.n}</span>`).join('');
+
+const secs=[...document.querySelectorAll('section')];
+const go=d=>{const y=scrollY+innerHeight/3;let i=secs.findIndex((x,j)=>x.offsetTop<=y&&(!secs[j+1]||secs[j+1].offsetTop>y));secs[Math.max(0,Math.min(secs.length-1,i+d))].scrollIntoView({behavior:'smooth'})};
+addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(e.shiftKey?-1:1)}else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}});
+document.body.insertAdjacentHTML('beforeend','<div class="nav"><button id="pv">↑</button><button id="nx">↓</button></div>');
+pv.onclick=()=>go(-1);nx.onclick=()=>go(1);
 </script></body></html>
