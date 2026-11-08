@@ -55,3 +55,6 @@
 - `ConnectionHub` + `SensorApp` + `ConnectionHubTest` (FakeConnection) neu; `TennisActivity` nutzt den Hub. Siehe android/README.md.
 - NICHT gebaut/getestet: kein Android SDK/Gradle-Cache (~/.gradle fehlt). Tests nicht gelaufen.
 - Offen: B (Sensorseite als HTML), C (Header als header.js/css), ViewModel auf Hub umstellen.
+
+## 2026-11-08 Ski Querformat
+Ski: kompakte Querformat-HUD, zweispaltiges Menü mit grossen Touch-Zielen, Testmodus mit Live-Anzeigen, Bewegungsgrenzen (src/ski/limits.ts) mit Alarmrahmen und Ton. Unit-Tests grün, Menü-Screenshot 844x390 geprüft (Software-GL, 1 FPS); echtes Gerät nicht getestet.

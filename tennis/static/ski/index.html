@@ -30,6 +30,7 @@
         <canvas id="profile" width="220" height="56"></canvas>
       </section>
       <div id="h-info-box" class="infobox"><b id="h-info-title"></b><span id="h-info"></span></div>
+      <div id="limit" class="limit" hidden><b>⚠ Unmögliche Drehung</b><span id="limit-axis"></span></div>
       <div id="count" class="count"></div>
       <div class="msg" id="msg"></div>
       <div class="hint" id="hint">Thingy kippen = lenken · Nase nach unten oder Knopf halten = Hocke · kräftiger Ruck = Sprung</div>
@@ -45,6 +46,7 @@
         <ul id="m-facts" class="facts small muted"></ul>
         <button id="m-cam">Kamera: <b id="m-cam-v">Verfolger</b></button>
         <button id="m-cal">Kalibrieren</button>
+        <button id="m-test">Testmodus: Bewegung live</button>
         <a href="../" class="back-link menu-back">← Tennis</a>
         <a href="/" class="back-link menu-back">← Dashboard</a>
       </div>
@@ -57,6 +59,12 @@
         <button id="cal-ok" class="primary">Jetzt kalibrieren</button>
         <button id="cal-back">Zurück</button>
       </div>
+    </div>
+    <div id="test" class="testpanel" hidden>
+      <div class="gauge"><span>Lenken (Kippen)</span><div class="gbar"><i id="g-roll"></i><u class="lim l1"></u><u class="lim l2"></u></div><b id="g-roll-v">0°</b></div>
+      <div class="gauge"><span>Hocke (Nase)</span><div class="gbar"><i id="g-pitch"></i><u class="lim l1"></u><u class="lim l2"></u></div><b id="g-pitch-v">0°</b></div>
+      <p class="small muted">Gerät bewegen: der Skifahrer folgt live. Rot = Bewegung, die ein Mensch nicht schafft.</p>
+      <div class="trow"><button id="t-cal">Kalibrieren</button><button id="t-back" class="primary">Zurück zum Menü</button></div>
     </div>
     <div id="done" class="overlay" hidden>
       <div class="card">

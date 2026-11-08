@@ -8,12 +8,13 @@ import { radialTexture } from '../gfx/textures.ts';
 import { MotionLink } from '../link.ts';
 import { COURSES } from './courses.ts';
 import { autopilot, newSkier, startSkier, stepSkier, type SkiInput, type SkierState, type World as PhysWorld } from './physics.ts';
+import { AlarmGate, checkSkiLimits, SKI_PITCH_DOWN_LIMIT_DEG, SKI_PITCH_UP_LIMIT_DEG, SKI_ROLL_LIMIT_DEG, type SkiLimitState } from './limits.ts';
 import { SkierModel } from './skier.ts';
 import { SkiSfx } from './sfx.ts';
 import { Track, type CourseDef } from './track.ts';
 import { World } from './world.ts';
 
-type Mode = 'menu' | 'cal' | 'ready' | 'run' | 'done' | 'demo';
+type Mode = 'menu' | 'cal' | 'ready' | 'run' | 'done' | 'demo' | 'test';
 type CamMode = 'chase' | 'cockpit' | 'tv';
 const CAMS: CamMode[] = ['chase', 'cockpit', 'tv'];
 const CAM_LABEL: Record<CamMode, string> = { chase: 'Verfolger', cockpit: 'Cockpit', tv: 'TV' };
@@ -99,6 +100,8 @@ let tvAnchor = -1;
 let simTime = 0;
 let lastInput: SkiInput = { steer: 0, tuck: 0, jump: false };
 let record = 0;
+const alarmGate = new AlarmGate();
+let limitState: SkiLimitState | null = null;
 
 const spray = buildSpray();
 world.scene.add(spray.points);
@@ -234,7 +237,9 @@ function readInput(dt: number): SkiInput {
     const rel = ctrl.calibration.relative(ctrl.latest.q);
     tuck = Math.max(tuck, Math.max(0, Math.min(1, (-pitchDeg(rel) - 6) / 22)));
     if (ctrl.latest.button) tuck = 1;
-  }
+    limitState = checkSkiLimits(rel);
+    if (alarmGate.fire(limitState.level, performance.now())) sfx.alarm();
+  } else limitState = null;
   tuckSmooth += (tuck - tuckSmooth) * Math.min(1, dt * 8);
   const jump = jumpPulse || keys.has(' ');
   jumpPulse = false;
@@ -268,6 +273,8 @@ function setMode(m: Mode): void {
   $('menu').hidden = m !== 'menu';
   $('cal').hidden = m !== 'cal';
   $('done').hidden = m !== 'done';
+  $('test').hidden = m !== 'test';
+  if (m !== 'run' && m !== 'test') limitState = null;
   if (m === 'menu') {
     resetRun();
     toastUntil = 0;
@@ -354,6 +361,33 @@ const el = {
 };
 let lastProfile = 0;
 
+function updateLimitUi(): void {
+  const ls = limitState;
+  const alarm = !!ls && ls.level === 'alarm';
+  $('limit').hidden = !alarm;
+  document.body.classList.toggle('limit-warn', !!ls && ls.level === 'warn');
+  document.body.classList.toggle('limit-alarm', alarm);
+  if (alarm) $('limit-axis').textContent = ls.axis === 'roll' ? ' – zu weit gekippt' : ' – Nase zu weit';
+  if (mode !== 'test') return;
+  const r = ctrl.latest ? checkSkiLimits(ctrl.calibration.relative(ctrl.latest.q)) : null;
+  const roll = r?.roll ?? 0;
+  const pitch = r?.pitch ?? 0;
+  gauge('g-roll', roll / SKI_ROLL_LIMIT_DEG, Math.abs(roll) > SKI_ROLL_LIMIT_DEG);
+  gauge('g-pitch', pitch >= 0 ? pitch / SKI_PITCH_UP_LIMIT_DEG : pitch / SKI_PITCH_DOWN_LIMIT_DEG, pitch > SKI_PITCH_UP_LIMIT_DEG || -pitch > SKI_PITCH_DOWN_LIMIT_DEG);
+  $('g-roll-v').textContent = `${Math.round(roll)}°`;
+  $('g-pitch-v').textContent = `${Math.round(pitch)}°`;
+  if (!live()) $('g-roll-v').textContent += ' (kein Gerät)';
+}
+
+/** share -1..1 of the limit; the bar grows from the centre. */
+function gauge(id: string, share: number, over: boolean): void {
+  const e = $(id);
+  const w = Math.min(1, Math.abs(share)) * 50;
+  e.style.width = `${w}%`;
+  e.style.left = share >= 0 ? '50%' : `${50 - w}%`;
+  e.className = over ? 'over' : Math.abs(share) >= 0.85 ? 'near' : '';
+}
+
 function updateHud(): void {
   const total = sk.t + sk.penalty;
   el.time.textContent = fmt(total);
@@ -369,6 +403,7 @@ function updateHud(): void {
   el.badge.textContent = badge;
   el.badge.className = `badge ${badge === 'TASTATUR' ? 'off' : badge === 'SIM' ? 'sim' : 'live'}`;
   el.cam.textContent = CAM_LABEL[camMode];
+  updateLimitUi();
   const now = performance.now();
   $('h-info-box').style.opacity = now < toastUntil ? '1' : '0';
   if (now > msgUntil) $('msg').textContent = '';
@@ -447,6 +482,11 @@ function step(dt: number): void {
       setMode('run');
       showSection(0);
     }
+    return;
+  }
+  if (mode === 'test') {
+    sk.lean = input.steer;
+    sk.v = 0;
     return;
   }
   if (mode === 'cal') return;
@@ -609,6 +649,12 @@ $('m-cam').onclick = () => {
   tvAnchor = -1;
 };
 $('m-cal').onclick = () => setMode('cal');
+$('m-test').onclick = () => {
+  resetRun();
+  setMode('test');
+};
+$('t-cal').onclick = () => calibrate();
+$('t-back').onclick = () => setMode('menu');
 $('cal-ok').onclick = () => calibrate(true);
 $('cal-back').onclick = () => setMode('menu');
 $('d-again').onclick = () => startRun();

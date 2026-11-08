@@ -148,6 +148,12 @@ export class SkiSfx {
     this.tone(final ? 1320 : 880, final ? 0.45 : 0.15, 0.15, 'sine');
   }
 
+  /** Two-tone warning for an impossible wrist rotation. */
+  alarm(): void {
+    this.tone(520, 0.14, 0.14, 'square');
+    setTimeout(() => this.tone(390, 0.18, 0.14, 'square'), 150);
+  }
+
   gate(ok: boolean): void {
     if (ok) this.tone(1500, 0.05, 0.05, 'triangle');
     else this.tone(180, 0.22, 0.12, 'sawtooth');
