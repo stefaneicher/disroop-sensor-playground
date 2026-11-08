@@ -86,5 +86,23 @@ form{{margin-top:6px}}button{{font:inherit;font-size:12px;background:#2563eb;col
     print(f"board: {dst} ({total} threads, {done} done, {len(qs)} questions)")
 
 
+def watch(src, dst, interval=1.0):
+    import os
+    import time
+    last = None
+    while True:
+        m = os.path.getmtime(src)
+        if m != last:
+            last = m
+            try:
+                main(src, dst)
+            except (ValueError, KeyError) as err:
+                print(f"board: {src} ungueltig ({err}), warte auf naechste Aenderung")
+        time.sleep(interval)
+
+
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "THREADS.json", sys.argv[2] if len(sys.argv) > 2 else ".lavish/board.html")
+    args = [a for a in sys.argv[1:] if a != "--watch"]
+    src = args[0] if args else "THREADS.json"
+    dst = args[1] if len(args) > 1 else ".lavish/board.html"
+    (watch if "--watch" in sys.argv else main)(src, dst)

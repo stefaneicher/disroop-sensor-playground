@@ -31,4 +31,4 @@ Ordner `.github/skills/thread-board/` kopieren (oder nach `~/.copilot/skills/` f
 
 ## Darstellung und Aktualisierung
 - Jede Ebene hat einen eigenen Farbton (L0 blau, L1 violett, L2 türkis, L3 bernstein …), Geschwister wechseln die Helligkeit, links eine Farbleiste, oben ein Brotkrumen-Pfad (z. B. `T-01 › T-01.3 › F-01`).
-- Nach **jeder** Änderung an `THREADS.json` das Board sofort neu rendern; Lavish lädt die geänderte Datei nach (sonst F5).
+- Nach **jeder** Änderung an `THREADS.json` das Board sofort neu rendern (oder Watcher: `render_board.py --watch THREADS.json .lavish/board.html` rendert bei jeder Dateiänderung automatisch); im Browser ggf. F5.
