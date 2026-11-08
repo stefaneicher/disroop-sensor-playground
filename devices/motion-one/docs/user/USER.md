@@ -67,4 +67,14 @@ Alle Punkte sind **NOT RUN** und dürfen nicht als bestätigte Fehlerdiagnose ve
 - Reproduzierbare End-to-End-Prüfung am realen Muster; alle hardwareabhängigen Angaben bleiben bis dahin **NOT RUN**.
 - Akku- und Lade-Sicherheitsbelege, reale Prüfwerte und genehmigte Nutzerhinweise.
 
+## Abbildungen (Stand r3, DRAFT)
+
+Gerenderte Ansichten aus dem Gehäusestand r3 (nicht r4, nicht am realen Gerät geprüft). Lage von Taste, Lichtleiter und Öffnungen kann sich in r4 ändern.
+
+![Motion One geschlossen (r3)](../../media/renders/iso_closed.png)
+
+![Motion One geöffnet, Oberschale entfernt (r3)](../../media/renders/iso_open.png)
+
+Bedienung am Gerät: **NOT RUN**.
+
 Bis dahin ist diese DRAFT-Anleitung keine Produkt- oder Sicherheitsbehauptung und keine Betriebsfreigabe.

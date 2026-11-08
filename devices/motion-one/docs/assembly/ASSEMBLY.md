@@ -92,4 +92,18 @@ Als Debug-Verbindung nennt `PINOUT_V1.json` Tag-Connect TC2030-Pads mit VDD, SWD
 - Keine bestätigten Anzugsmomente, Einpressparameter oder Endmontage-Prüfgrenzen.
 - Keine bestätigte r3-Integration von PCB, Gehäuse, Akku und Kabeln.
 
+## Abbildungen (Stand r3, DRAFT)
+
+Die Renderings entstehen aus den STL-Dateien in `mechanics/assembly_stl/` (**Gehäuse r3**, Board `pcb_r3`). Das r4-Gehäuse ist noch nicht gebaut; die Bilder sind **nicht** der r4-Stand und keine Freigabe. Render: Blender/Cycles, 3840 x 2160 px, RGBA [QUELLE: `scripts/media/render_product.py`].
+
+![Abb. 1: Geschlossen, Isometrie (r3)](../../media/renders/iso_closed.png)
+
+![Abb. 2: Oberschale entfernt, Isometrie (r3)](../../media/renders/iso_open.png)
+
+![Abb. 3: Aufsicht ohne Oberschale (r3)](../../media/renders/top_open.png)
+
+![Abb. 4: Explosionsansicht ohne Beschriftung (r3, Rohbild)](../../media/renders/exploded_raw.png)
+
+Beschriftete Explosionsansicht, Anzugsmomente und Montageprüfungen: **offen / NOT RUN**.
+
 Bis diese offenen Punkte geschlossen und die Prüfungen am Muster protokolliert sind, ist diese Anleitung keine Freigabe zur Montage oder zum Betrieb.
