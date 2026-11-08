@@ -5,7 +5,7 @@ import numpy as np, trimesh
 
 res = {}
 for f in ["print/oberschale", "print/unterschale_glatt", "assembly_stl/oberschale", "assembly_stl/unterschale_glatt", "assembly_stl/pcb_r4"]:
-    p = f"devices/motion-one/mechanics/{f}.stl"
+    p = f"hardware/motion-one/mechanics/{f}.stl"
     m = trimesh.load(p, process=False)
     def stat(m):
         u, c = np.unique(m.edges_sorted, axis=0, return_counts=True)
@@ -20,4 +20,4 @@ for f in ["print/oberschale", "print/unterschale_glatt", "assembly_stl/oberschal
     print(f, res[f], flush=True)
     if after["watertight"]:
         shutil.copy(p, p.replace(".stl", ".orig.stl")); m.export(p)
-json.dump(res, open("devices/motion-one/mechanics/cad/stl_repair_r4.json", "w"), indent=1)
+json.dump(res, open("hardware/motion-one/mechanics/cad/stl_repair_r4.json", "w"), indent=1)
