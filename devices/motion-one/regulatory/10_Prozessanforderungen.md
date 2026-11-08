@@ -13,7 +13,7 @@ an den *Entwicklungs- und Nachweisprozess* (`PRQ-nnn`). Bezug: [Lücken](08_Luec
 | Adapter testen | Zephyr-Code läuft auf dem PC mit **`native_sim`**, damit auch BLE-, IMU- und UI-Adapter Tests bekommen | hoch | Machbarkeit prüfen |
 | Gherkin | Sinnvoll als **Verifikationsspezifikation** für Verhalten an der BLE-Schnittstelle, nicht als Ersatz für das SRS und nicht für Algorithmen | niedrig bis mittel | SRS oder Features als Quelle? |
 | Avionik-Sprache | Kandidaten: **EARS**, **FRET**, **AADL (SAE AS5506)**, **SCADE**. Ich empfehle EARS für die SRS-Sätze | niedrig | Welche war gemeint? ({OPEN-11}) |
-| Toolchain | **Compiler entschieden:** Clang, Arm Compiler, GCC, IAR. Matrix, Warnungen als Fehler, Conan 2, modernes CMake, Docker je Compilerfamilie, parallele Jobs | hoch | Versionen, Lizenzen für Arm Compiler und IAR |
+| Toolchain | **Compiler entschieden:** Clang, ARM-GCC, IAR (drei). Matrix, Warnungen als Fehler, Conan 2, modernes CMake, Docker je Compilerfamilie, parallele Jobs | hoch | Versionen, IAR-Lizenz |
 | Normkonformität | Dokumentation weiterhin als Dokument-als-Code, Nachweise (Abdeckung, Testberichte) automatisch erzeugt | mittel | Zweckbestimmung (OPEN-01) |
 
 ## 2. Abdeckung (Coverage)
@@ -157,11 +157,11 @@ wenigen, besonders kritischen Anforderungen. Für Klasse C ist beides **nicht ve
 |---|---|---|
 | <a id="PRQ-040"></a>**PRQ-040** | Die Compiler-Matrix steht in **einer Datei** (`toolchain_matrix.yml`). Sie legt Compiler, Version und Zweck fest (Host-Tests, Zielgerät, Abdeckung). | Entwurf |
 | <a id="PRQ-041"></a>**PRQ-041** | **Warnungen sind Fehler**, null Warnungen, auf allen Compilern der Matrix (`-Wall -Wextra -Werror` und ein strengerer Satz je Compiler). | Entwurf |
-| <a id="PRQ-042"></a>**PRQ-042** | Compiler (User, 2026-11-08): **Clang, Arm Compiler (armclang), GCC, IAR**, je in mehreren Versionen. Welche Versionen genau und welche Lizenzen vorhanden sind, ist offen ({OPEN-14}). | entschieden, Versionen offen |
+| <a id="PRQ-042"></a>**PRQ-042** | Compiler (User, 2026-11-08): **Clang, ARM-GCC (`arm-none-eabi-gcc`, ein Compiler) und IAR**, je in mehreren Versionen. Welche Versionen genau und ob eine IAR-Lizenz vorhanden ist, ist offen ({OPEN-14}). | entschieden, Versionen offen |
 | <a id="PRQ-043"></a>**PRQ-043** | Der Build nutzt **CMake mit Targets** (`target_link_libraries`, `target_compile_options`, ein Interface-Target für die Warnungen) und **Conan 2** für Abhängigkeiten (GoogleTest, cucumber-cpp, ggf. Zephyr-fremde Bibliotheken). | Entwurf |
 | <a id="PRQ-044"></a>**PRQ-044** | Aus der Matrix werden **Docker-Images je Compilerfamilie** gebaut (Basis per Digest festgelegt). | Entwurf |
 | <a id="PRQ-045"></a>**PRQ-045** | Die CI führt je Matrixzeile einen eigenen Job **parallel** aus (GitHub-Actions-Matrix, erzeugt aus der Datei). | Entwurf |
-| <a id="PRQ-046"></a>**PRQ-046** | IAR und der Arm Compiler sind kommerziell bzw. lizenzgebunden: Sie laufen nur auf einem eigenen Runner mit Lizenz, nicht in einem öffentlichen Image. Die Lizenzbedingungen sind vor der Nutzung zu prüfen. | Entwurf, Einschränkung |
+| <a id="PRQ-046"></a>**PRQ-046** | IAR ist kommerziell: Es läuft nur auf einem eigenen Runner mit Lizenz, nicht in einem öffentlichen Image. Die Lizenzbedingungen sind vor der Nutzung zu prüfen. | Entwurf, Einschränkung |
 
 Einschätzung: Der Aufwand liegt bei PRQ-043. Die Firmware ist heute mit `west` und Zephyr-CMake gebaut. Ein **Zwei-Schichten-Ansatz** ist realistisch:
 die reinen C-Module als CMake-Bibliotheken (Targets) für alle Compiler und für die Tests, die Zephyr-App weiter mit `west`, aber diese Bibliotheken einbindend.
@@ -194,5 +194,5 @@ vermutlich erst für neue Sitzungen. Die Normen selbst (IEC, ISO) bleiben kosten
 - <a id="OPEN-11"></a>**OPEN-11** Welche Avionik-Sprache war gemeint (EARS, FRET, AADL AS5506, SCADE, Norm DO-178C)? Hast du einen Namen oder eine Quelle?
 - <a id="OPEN-12"></a>**OPEN-12** ~~GoogleTest oder CppUTest?~~ **GoogleTest** (User, 2026-11-08). Für das Gerät bleibt ZTest meine Empfehlung als Option, solange nichts dagegen spricht.
 - <a id="OPEN-13"></a>**OPEN-13** Soll das **SRS** (Tabelle) oder die **Feature-Datei** die Quelle sein? Ich empfehle SRS als Quelle und Gherkin als Testbeschreibung.
-- <a id="OPEN-14"></a>**OPEN-14** ~~Welche Compiler?~~ **Clang, Arm Compiler, GCC, IAR** (User, 2026-11-08). Offen: Welche Versionen? Gibt es Lizenzen für Arm Compiler und IAR? Der Arm Compiler (armclang) ist ebenfalls lizenzpflichtig bzw. an Lizenzbedingungen gebunden (prüfen), dann gilt für ihn wie für IAR: eigener Runner statt öffentliches Image.
+- <a id="OPEN-14"></a>**OPEN-14** ~~Welche Compiler?~~ **Clang, ARM-GCC, IAR** (User, 2026-11-08; ARM-GCC ist ein einzelner Compiler). Offen: Welche Versionen? Gibt es eine IAR-Lizenz? Für die Tests auf x86 nehme ich Clang (MC/DC ab 18). Soll zusätzlich der x86-GCC (MC/DC ab 14) laufen?
 - <a id="OPEN-15"></a>**OPEN-15** Der User bestätigt GoogleTest. Offen: Zuerst MC/DC mit den bestehenden Unity-Tests messen (billiger Einstieg) und danach migrieren, oder sofort migrieren?

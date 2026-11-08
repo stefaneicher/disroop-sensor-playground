@@ -126,11 +126,11 @@ href="10_Prozessanforderungen.html#OPEN-11">OPEN-11</a>)</td>
 </tr>
 <tr class="even">
 <td>Toolchain</td>
-<td><strong>Compiler entschieden:</strong> Clang, Arm Compiler, GCC,
-IAR. Matrix, Warnungen als Fehler, Conan 2, modernes CMake, Docker je
+<td><strong>Compiler entschieden:</strong> Clang, ARM-GCC, IAR (drei).
+Matrix, Warnungen als Fehler, Conan 2, modernes CMake, Docker je
 Compilerfamilie, parallele Jobs</td>
 <td>hoch</td>
-<td>Versionen, Lizenzen für Arm Compiler und IAR</td>
+<td>Versionen, IAR-Lizenz</td>
 </tr>
 <tr class="odd">
 <td>Normkonformität</td>
@@ -605,9 +605,10 @@ strengerer Satz je Compiler).</td>
 </tr>
 <tr class="odd">
 <td><a id="PRQ-042"></a><strong>PRQ-042</strong></td>
-<td>Compiler (User, 2026-11-08): <strong>Clang, Arm Compiler (armclang),
-GCC, IAR</strong>, je in mehreren Versionen. Welche Versionen genau und
-welche Lizenzen vorhanden sind, ist offen (<a
+<td>Compiler (User, 2026-11-08): <strong>Clang, ARM-GCC
+(<code>arm-none-eabi-gcc</code>, ein Compiler) und IAR</strong>, je in
+mehreren Versionen. Welche Versionen genau und ob eine IAR-Lizenz
+vorhanden ist, ist offen (<a
 href="10_Prozessanforderungen.html#OPEN-14">OPEN-14</a>).</td>
 <td>entschieden, Versionen offen</td>
 </tr>
@@ -635,10 +636,9 @@ Datei).</td>
 </tr>
 <tr class="odd">
 <td><a id="PRQ-046"></a><strong>PRQ-046</strong></td>
-<td>IAR und der Arm Compiler sind kommerziell bzw. lizenzgebunden: Sie
-laufen nur auf einem eigenen Runner mit Lizenz, nicht in einem
-öffentlichen Image. Die Lizenzbedingungen sind vor der Nutzung zu
-prüfen.</td>
+<td>IAR ist kommerziell: Es läuft nur auf einem eigenen Runner mit
+Lizenz, nicht in einem öffentlichen Image. Die Lizenzbedingungen sind
+vor der Nutzung zu prüfen.</td>
 <td>Entwurf, Einschränkung</td>
 </tr>
 </tbody>
@@ -732,11 +732,10 @@ spricht.</li>
 die Quelle sein? Ich empfehle SRS als Quelle und Gherkin als
 Testbeschreibung.</li>
 <li><a id="OPEN-14"></a><strong>OPEN-14</strong> <del>Welche
-Compiler?</del> <strong>Clang, Arm Compiler, GCC, IAR</strong> (User,
-2026-11-08). Offen: Welche Versionen? Gibt es Lizenzen für Arm Compiler
-und IAR? Der Arm Compiler (armclang) ist ebenfalls lizenzpflichtig bzw.
-an Lizenzbedingungen gebunden (prüfen), dann gilt für ihn wie für IAR:
-eigener Runner statt öffentliches Image.</li>
+Compiler?</del> <strong>Clang, ARM-GCC, IAR</strong> (User, 2026-11-08;
+ARM-GCC ist ein einzelner Compiler). Offen: Welche Versionen? Gibt es
+eine IAR-Lizenz? Für die Tests auf x86 nehme ich Clang (MC/DC ab 18).
+Soll zusätzlich der x86-GCC (MC/DC ab 14) laufen?</li>
 <li><a id="OPEN-15"></a><strong>OPEN-15</strong> Der User bestätigt
 GoogleTest. Offen: Zuerst MC/DC mit den bestehenden Unity-Tests messen
 (billiger Einstieg) und danach migrieren, oder sofort migrieren?</li>
