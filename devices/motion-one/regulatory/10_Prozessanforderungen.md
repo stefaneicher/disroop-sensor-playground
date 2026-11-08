@@ -8,12 +8,12 @@ an den *Entwicklungs- und Nachweisprozess* (`PRQ-nnn`). Bezug: [Lücken](08_Luec
 
 | Thema | Empfehlung | Aufwand | Offen |
 |---|---|---|---|
-| Coverage | 100 % **MC/DC** für die reinen C-Module, Statement + Branch für die Adapter, Ausnahmen begründet und gelistet | mittel bis hoch | Begriff klären ({OPEN-10}) |
-| Testframework | **GoogleTest auf x86** (Hauptweg). Auf dem Gerät **ZTest** (Zephyr) als Option, nicht GoogleTest | mittel | Tests von Unity umschreiben? |
+| Coverage | **MC/DC entschieden.** 100 % für die reinen C-Module, Statement + Branch für die Adapter, Ausnahmen begründet und gelistet | mittel bis hoch | Gilt 100 % nur für die reinen Module? ({OPEN-10}) |
+| Testframework | **GoogleTest entschieden**, auf x86 (Hauptweg). Auf dem Gerät **ZTest** (Zephyr) als Option, nicht GoogleTest | mittel | Tests von Unity umschreiben? |
 | Adapter testen | Zephyr-Code läuft auf dem PC mit **`native_sim`**, damit auch BLE-, IMU- und UI-Adapter Tests bekommen | hoch | Machbarkeit prüfen |
 | Gherkin | Sinnvoll als **Verifikationsspezifikation** für Verhalten an der BLE-Schnittstelle, nicht als Ersatz für das SRS und nicht für Algorithmen | niedrig bis mittel | SRS oder Features als Quelle? |
 | Avionik-Sprache | Kandidaten: **EARS**, **FRET**, **AADL (SAE AS5506)**, **SCADE**. Ich empfehle EARS für die SRS-Sätze | niedrig | Welche war gemeint? ({OPEN-11}) |
-| Toolchain | Compiler-Matrix, Warnungen als Fehler, Conan 2, modernes CMake, Docker je Compilerfamilie, parallele Jobs | hoch | IAR-Lizenz, Compiler-Auswahl |
+| Toolchain | **Compiler entschieden:** Clang, Arm Compiler, GCC, IAR. Matrix, Warnungen als Fehler, Conan 2, modernes CMake, Docker je Compilerfamilie, parallele Jobs | hoch | Versionen, Lizenzen für Arm Compiler und IAR |
 | Normkonformität | Dokumentation weiterhin als Dokument-als-Code, Nachweise (Abdeckung, Testberichte) automatisch erzeugt | mittel | Zweckbestimmung (OPEN-01) |
 
 ## 2. Abdeckung (Coverage)
@@ -29,7 +29,7 @@ Der User nennt „Multi-Condition Decision Coverage“ und „MCDC“. Das sind 
 | **MCC** (*Multiple Condition Coverage*, auch „Multi-Condition“) | alle Kombinationen aller Bedingungen | 2ⁿ |
 
 MC/DC ist das Kriterium aus der Avionik (DO-178C, Stufe A) und der Automobilnorm ISO 26262 (ASIL D). MCC ist deutlich teurer und fast nie gefordert.
-Ich gehe davon aus, dass **MC/DC** gemeint ist ({OPEN-10}).
+**Entschieden (User, 2026-11-08): MC/DC.**
 
 Wichtig für die Einordnung: **IEC 62304 verlangt kein MC/DC.** Sie verlangt Abnahmekriterien für Einheiten, bei Klasse C zusätzliche
 (Abschnitt 5.5.4, Nummer ungeprüft). Die FDA verlangt Testnachweise, aber keine bestimmte Abdeckung. 100 % MC/DC ist also eine
@@ -74,8 +74,7 @@ Wichtig für die Einordnung: **IEC 62304 verlangt kein MC/DC.** Sie verlangt Abn
 | Passt zur MC/DC-Messung | ja (beliebiger Compiler) | ja | ja | ja |
 
 Begründung: GoogleTest ist auf dem PC das bequemste und verbreitetste Werkzeug (Mocks, Parametertests, Berichte für Nachweise). Auf dem Gerät
-ist es zu schwer. Dort bietet Zephyr **ZTest** mit **Twister** als Testläufer. Die Frage „GTest oder CPU-Test“ habe ich als „GoogleTest oder
-CppUTest/ZTest“ gelesen ({OPEN-12}).
+ist es zu schwer. Dort bietet Zephyr **ZTest** mit **Twister** als Testläufer. Die Frage „GTest oder CPU-Test“ ist mit der Bestätigung des Users für **GoogleTest** beantwortet ({OPEN-12}).
 
 | ID | Anforderung | Status |
 |---|---|---|
@@ -158,11 +157,11 @@ wenigen, besonders kritischen Anforderungen. Für Klasse C ist beides **nicht ve
 |---|---|---|
 | <a id="PRQ-040"></a>**PRQ-040** | Die Compiler-Matrix steht in **einer Datei** (`toolchain_matrix.yml`). Sie legt Compiler, Version und Zweck fest (Host-Tests, Zielgerät, Abdeckung). | Entwurf |
 | <a id="PRQ-041"></a>**PRQ-041** | **Warnungen sind Fehler**, null Warnungen, auf allen Compilern der Matrix (`-Wall -Wextra -Werror` und ein strengerer Satz je Compiler). | Entwurf |
-| <a id="PRQ-042"></a>**PRQ-042** | Compiler: Clang, GCC (Host), ARM-GCC (Zielgerät), IAR, je in mehreren Versionen. „AMG, CC“ bitte bestätigen ({OPEN-14}). | offen |
+| <a id="PRQ-042"></a>**PRQ-042** | Compiler (User, 2026-11-08): **Clang, Arm Compiler (armclang), GCC, IAR**, je in mehreren Versionen. Welche Versionen genau und welche Lizenzen vorhanden sind, ist offen ({OPEN-14}). | entschieden, Versionen offen |
 | <a id="PRQ-043"></a>**PRQ-043** | Der Build nutzt **CMake mit Targets** (`target_link_libraries`, `target_compile_options`, ein Interface-Target für die Warnungen) und **Conan 2** für Abhängigkeiten (GoogleTest, cucumber-cpp, ggf. Zephyr-fremde Bibliotheken). | Entwurf |
 | <a id="PRQ-044"></a>**PRQ-044** | Aus der Matrix werden **Docker-Images je Compilerfamilie** gebaut (Basis per Digest festgelegt). | Entwurf |
 | <a id="PRQ-045"></a>**PRQ-045** | Die CI führt je Matrixzeile einen eigenen Job **parallel** aus (GitHub-Actions-Matrix, erzeugt aus der Datei). | Entwurf |
-| <a id="PRQ-046"></a>**PRQ-046** | IAR ist kommerziell: Es läuft nur auf einem eigenen Runner mit Lizenz, nicht in einem öffentlichen Image. | Entwurf, Einschränkung |
+| <a id="PRQ-046"></a>**PRQ-046** | IAR und der Arm Compiler sind kommerziell bzw. lizenzgebunden: Sie laufen nur auf einem eigenen Runner mit Lizenz, nicht in einem öffentlichen Image. Die Lizenzbedingungen sind vor der Nutzung zu prüfen. | Entwurf, Einschränkung |
 
 Einschätzung: Der Aufwand liegt bei PRQ-043. Die Firmware ist heute mit `west` und Zephyr-CMake gebaut. Ein **Zwei-Schichten-Ansatz** ist realistisch:
 die reinen C-Module als CMake-Bibliotheken (Targets) für alle Compiler und für die Tests, die Zephyr-App weiter mit `west`, aber diese Bibliotheken einbindend.
@@ -191,9 +190,9 @@ vermutlich erst für neue Sitzungen. Die Normen selbst (IEC, ISO) bleiben kosten
 
 ## 9. Offene Fragen
 
-- <a id="OPEN-10"></a>**OPEN-10** Ist **MC/DC** gemeint (nicht MCC)? Gilt 100 % für alle Module oder nur für die reinen C-Module?
+- <a id="OPEN-10"></a>**OPEN-10** ~~Ist MC/DC gemeint?~~ **Ja, MC/DC** (User, 2026-11-08). Offen bleibt: Gilt 100 % für alle eigenen Module oder nur für die reinen C-Module (mein Vorschlag)?
 - <a id="OPEN-11"></a>**OPEN-11** Welche Avionik-Sprache war gemeint (EARS, FRET, AADL AS5506, SCADE, Norm DO-178C)? Hast du einen Namen oder eine Quelle?
-- <a id="OPEN-12"></a>**OPEN-12** „CPU-Test“: war **CppUTest** gemeint? Meine Empfehlung ZTest auf dem Gerät und GoogleTest auf dem PC steht, solange nichts dagegen spricht.
+- <a id="OPEN-12"></a>**OPEN-12** ~~GoogleTest oder CppUTest?~~ **GoogleTest** (User, 2026-11-08). Für das Gerät bleibt ZTest meine Empfehlung als Option, solange nichts dagegen spricht.
 - <a id="OPEN-13"></a>**OPEN-13** Soll das **SRS** (Tabelle) oder die **Feature-Datei** die Quelle sein? Ich empfehle SRS als Quelle und Gherkin als Testbeschreibung.
-- <a id="OPEN-14"></a>**OPEN-14** Welche Compiler genau („AMG, CC“)? Welche Versionen? Gibt es eine IAR-Lizenz?
-- <a id="OPEN-15"></a>**OPEN-15** Sollen die Unity-Tests wirklich nach GoogleTest wandern, oder reicht es, MC/DC mit den bestehenden Tests zu messen? Das wäre der billigere erste Schritt.
+- <a id="OPEN-14"></a>**OPEN-14** ~~Welche Compiler?~~ **Clang, Arm Compiler, GCC, IAR** (User, 2026-11-08). Offen: Welche Versionen? Gibt es Lizenzen für Arm Compiler und IAR? Der Arm Compiler (armclang) ist ebenfalls lizenzpflichtig bzw. an Lizenzbedingungen gebunden (prüfen), dann gilt für ihn wie für IAR: eigener Runner statt öffentliches Image.
+- <a id="OPEN-15"></a>**OPEN-15** Der User bestätigt GoogleTest. Offen: Zuerst MC/DC mit den bestehenden Unity-Tests messen (billiger Einstieg) und danach migrieren, oder sofort migrieren?

@@ -14,7 +14,7 @@ Ungeordnete Ideen und Möglichkeiten, noch **nicht** entschieden. Wird eine Idee
 Weiterentwickelt als Anforderungsentwurf in `devices/motion-one/regulatory/10_Prozessanforderungen.md` (dort PRQ-040 bis PRQ-046).
 Idee, noch nicht entschieden. Die Eigenschaften, die der User aus der Medizinalentwicklung kennt, sollen für die Firmware (und sinnvoll auch Bridge/Android) gelten:
 - **Warnungen sind Fehler, null Warnungen:** `-Werror` mit `-Wall -Wextra` (und strengeren Sätzen) auf allen Compilern.
-- **Mehrere Compiler und Versionen:** Clang, GCC (für Zielgerät als ARM GCC), IAR; jeweils in mehreren Versionen. Unklar, was „AMG, CC“ meinte: vermutlich *ARM-GCC* und *GCC*, oder *Arm Compiler (armclang)*. Bitte bestätigen.
+- **Mehrere Compiler und Versionen:** Clang, Arm Compiler (armclang), GCC und IAR (vom User bestätigt, 2026-11-08); jeweils in mehreren Versionen.
 - **Matrix als Datei** (z. B. `devices/motion-one/firmware/toolchain_matrix.yml`): Welche Komponentenversion muss laufen. Aus ihr entstehen automatisch die Docker-Images und die parallelen CI-Jobs.
 - **Build mit Conan 2.0 und modernem CMake** (Targets statt globaler Variablen, `target_link_libraries`, `target_compile_options` über ein Interface-Target `mo_warnings`). Ich habe „Core 2.0“ als **Conan 2.0** gelesen.
 
@@ -25,7 +25,7 @@ Entwurf der Matrix (nur ein Vorschlag, Versionen noch festzulegen):
 | GCC (Host) | Host-Unit-Tests | 12, 13, 14 | im Docker-Image, frei |
 | Clang (Host) | Host-Unit-Tests, Sanitizer | 16, 17, 18 | frei |
 | ARM GCC (`arm-none-eabi-gcc` / Zephyr SDK) | Zielgerät nRF52840 | Zephyr SDK 1.0.1 plus eine zweite | heutiger Weg über `west` |
-| Clang für ARM (oder armclang) | Zielgerät | je Version | Zephyr-Unterstützung prüfen |
+| Arm Compiler (armclang) | Zielgerät | je Lizenzversion | lizenzgebunden, Zephyr-Unterstützung prüfen |
 | IAR (`iccarm`) | Zielgerät | je Lizenzversion | **kommerziell**: Lizenz, nicht in ein öffentliches Image. Geht nur mit eigenem Runner oder Lizenzserver. Zephyr-Unterstützung für IAR prüfen |
 
 Fragen und Grenzen:

@@ -42,7 +42,7 @@ Status aller Punkte: **offen**.
 - [ ] (Firmware) P1-Befunde aus `08_Luecken.md`: Watchdog und Fehlerzustand (GAP-05), Version und UDI (GAP-14), BLE-Sicherheit (GAP-13), ICM-Datenblattabgleich (GAP-12).
 - [ ] (Firmware) Testbericht: README sagt 32/32, Code hat 69 Tests (GAP-20).
 - [ ] (Skills) Skills und Agent-Profil aus `09_Skills.md` anlegen, falls gewünscht.
-- [ ] (Prozess) `devices/motion-one/regulatory/10_Prozessanforderungen.md` mit dem User iterieren (MC/DC, GoogleTest/ZTest, Gherkin, Anforderungssprache), offene Fragen OPEN-10 bis OPEN-15. Nichts umsetzen, bevor entschieden ist.
+- [ ] (Prozess) `devices/motion-one/regulatory/10_Prozessanforderungen.md` mit dem User iterieren (MC/DC, GoogleTest/ZTest, Gherkin, Anforderungssprache), entschieden sind MC/DC, GoogleTest und die Compiler Clang, Arm Compiler, GCC, IAR; offen sind Versionen, Lizenzen, Modulumfang (OPEN-10, 11, 13, 14, 15). Nichts umsetzen, bevor entschieden ist.
 - [ ] (Toolchain) Compiler-Matrix mit Warnungen als Fehler, Conan 2 und modernem CMake, siehe `IDEEN.md`.
 
 ### Motion One (siehe `devices/motion-one/management/RESUME.md`)

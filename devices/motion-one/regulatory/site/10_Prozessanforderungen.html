@@ -85,16 +85,17 @@ Empfehlungen</h2>
 <tbody>
 <tr class="odd">
 <td>Coverage</td>
-<td>100 % <strong>MC/DC</strong> für die reinen C-Module, Statement +
-Branch für die Adapter, Ausnahmen begründet und gelistet</td>
+<td><strong>MC/DC entschieden.</strong> 100 % für die reinen C-Module,
+Statement + Branch für die Adapter, Ausnahmen begründet und
+gelistet</td>
 <td>mittel bis hoch</td>
-<td>Begriff klären (<a
+<td>Gilt 100 % nur für die reinen Module? (<a
 href="10_Prozessanforderungen.html#OPEN-10">OPEN-10</a>)</td>
 </tr>
 <tr class="even">
 <td>Testframework</td>
-<td><strong>GoogleTest auf x86</strong> (Hauptweg). Auf dem Gerät
-<strong>ZTest</strong> (Zephyr) als Option, nicht GoogleTest</td>
+<td><strong>GoogleTest entschieden</strong>, auf x86 (Hauptweg). Auf dem
+Gerät <strong>ZTest</strong> (Zephyr) als Option, nicht GoogleTest</td>
 <td>mittel</td>
 <td>Tests von Unity umschreiben?</td>
 </tr>
@@ -125,10 +126,11 @@ href="10_Prozessanforderungen.html#OPEN-11">OPEN-11</a>)</td>
 </tr>
 <tr class="even">
 <td>Toolchain</td>
-<td>Compiler-Matrix, Warnungen als Fehler, Conan 2, modernes CMake,
-Docker je Compilerfamilie, parallele Jobs</td>
+<td><strong>Compiler entschieden:</strong> Clang, Arm Compiler, GCC,
+IAR. Matrix, Warnungen als Fehler, Conan 2, modernes CMake, Docker je
+Compilerfamilie, parallele Jobs</td>
 <td>hoch</td>
-<td>IAR-Lizenz, Compiler-Auswahl</td>
+<td>Versionen, Lizenzen für Arm Compiler und IAR</td>
 </tr>
 <tr class="odd">
 <td>Normkonformität</td>
@@ -174,8 +176,7 @@ der Entscheidung</td>
 </table>
 <p>MC/DC ist das Kriterium aus der Avionik (DO-178C, Stufe A) und der
 Automobilnorm ISO 26262 (ASIL D). MCC ist deutlich teurer und fast nie
-gefordert. Ich gehe davon aus, dass <strong>MC/DC</strong> gemeint ist
-(<a href="10_Prozessanforderungen.html#OPEN-10">OPEN-10</a>).</p>
+gefordert. <strong>Entschieden (User, 2026-11-08): MC/DC.</strong></p>
 <p>Wichtig für die Einordnung: <strong>IEC 62304 verlangt kein
 MC/DC.</strong> Sie verlangt Abnahmekriterien für Einheiten, bei Klasse
 C zusätzliche (Abschnitt 5.5.4, Nummer ungeprüft). Die FDA verlangt
@@ -337,7 +338,8 @@ RTTI, viel Platz</td>
 Werkzeug (Mocks, Parametertests, Berichte für Nachweise). Auf dem Gerät
 ist es zu schwer. Dort bietet Zephyr <strong>ZTest</strong> mit
 <strong>Twister</strong> als Testläufer. Die Frage „GTest oder CPU-Test“
-habe ich als „GoogleTest oder CppUTest/ZTest“ gelesen (<a
+ist mit der Bestätigung des Users für <strong>GoogleTest</strong>
+beantwortet (<a
 href="10_Prozessanforderungen.html#OPEN-12">OPEN-12</a>).</p>
 <table>
 <thead>
@@ -603,10 +605,11 @@ strengerer Satz je Compiler).</td>
 </tr>
 <tr class="odd">
 <td><a id="PRQ-042"></a><strong>PRQ-042</strong></td>
-<td>Compiler: Clang, GCC (Host), ARM-GCC (Zielgerät), IAR, je in
-mehreren Versionen. „AMG, CC“ bitte bestätigen (<a
+<td>Compiler (User, 2026-11-08): <strong>Clang, Arm Compiler (armclang),
+GCC, IAR</strong>, je in mehreren Versionen. Welche Versionen genau und
+welche Lizenzen vorhanden sind, ist offen (<a
 href="10_Prozessanforderungen.html#OPEN-14">OPEN-14</a>).</td>
-<td>offen</td>
+<td>entschieden, Versionen offen</td>
 </tr>
 <tr class="even">
 <td><a id="PRQ-043"></a><strong>PRQ-043</strong></td>
@@ -632,8 +635,10 @@ Datei).</td>
 </tr>
 <tr class="odd">
 <td><a id="PRQ-046"></a><strong>PRQ-046</strong></td>
-<td>IAR ist kommerziell: Es läuft nur auf einem eigenen Runner mit
-Lizenz, nicht in einem öffentlichen Image.</td>
+<td>IAR und der Arm Compiler sind kommerziell bzw. lizenzgebunden: Sie
+laufen nur auf einem eigenen Runner mit Lizenz, nicht in einem
+öffentlichen Image. Die Lizenzbedingungen sind vor der Nutzung zu
+prüfen.</td>
 <td>Entwurf, Einschränkung</td>
 </tr>
 </tbody>
@@ -711,24 +716,30 @@ PRQ-045).</li>
 </ol>
 <h2 id="9-offene-fragen">9. Offene Fragen</h2>
 <ul>
-<li><a id="OPEN-10"></a><strong>OPEN-10</strong> Ist
-<strong>MC/DC</strong> gemeint (nicht MCC)? Gilt 100 % für alle Module
-oder nur für die reinen C-Module?</li>
+<li><a id="OPEN-10"></a><strong>OPEN-10</strong> <del>Ist MC/DC
+gemeint?</del> <strong>Ja, MC/DC</strong> (User, 2026-11-08). Offen
+bleibt: Gilt 100 % für alle eigenen Module oder nur für die reinen
+C-Module (mein Vorschlag)?</li>
 <li><a id="OPEN-11"></a><strong>OPEN-11</strong> Welche Avionik-Sprache
 war gemeint (EARS, FRET, AADL AS5506, SCADE, Norm DO-178C)? Hast du
 einen Namen oder eine Quelle?</li>
-<li><a id="OPEN-12"></a><strong>OPEN-12</strong> „CPU-Test“: war
-<strong>CppUTest</strong> gemeint? Meine Empfehlung ZTest auf dem Gerät
-und GoogleTest auf dem PC steht, solange nichts dagegen spricht.</li>
+<li><a id="OPEN-12"></a><strong>OPEN-12</strong> <del>GoogleTest oder
+CppUTest?</del> <strong>GoogleTest</strong> (User, 2026-11-08). Für das
+Gerät bleibt ZTest meine Empfehlung als Option, solange nichts dagegen
+spricht.</li>
 <li><a id="OPEN-13"></a><strong>OPEN-13</strong> Soll das
 <strong>SRS</strong> (Tabelle) oder die <strong>Feature-Datei</strong>
 die Quelle sein? Ich empfehle SRS als Quelle und Gherkin als
 Testbeschreibung.</li>
-<li><a id="OPEN-14"></a><strong>OPEN-14</strong> Welche Compiler genau
-(„AMG, CC“)? Welche Versionen? Gibt es eine IAR-Lizenz?</li>
-<li><a id="OPEN-15"></a><strong>OPEN-15</strong> Sollen die Unity-Tests
-wirklich nach GoogleTest wandern, oder reicht es, MC/DC mit den
-bestehenden Tests zu messen? Das wäre der billigere erste Schritt.</li>
+<li><a id="OPEN-14"></a><strong>OPEN-14</strong> <del>Welche
+Compiler?</del> <strong>Clang, Arm Compiler, GCC, IAR</strong> (User,
+2026-11-08). Offen: Welche Versionen? Gibt es Lizenzen für Arm Compiler
+und IAR? Der Arm Compiler (armclang) ist ebenfalls lizenzpflichtig bzw.
+an Lizenzbedingungen gebunden (prüfen), dann gilt für ihn wie für IAR:
+eigener Runner statt öffentliches Image.</li>
+<li><a id="OPEN-15"></a><strong>OPEN-15</strong> Der User bestätigt
+GoogleTest. Offen: Zuerst MC/DC mit den bestehenden Unity-Tests messen
+(billiger Einstieg) und danach migrieren, oder sofort migrieren?</li>
 </ul>
 </body>
 </html>
