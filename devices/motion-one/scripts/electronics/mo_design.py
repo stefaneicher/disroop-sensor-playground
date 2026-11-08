@@ -1,0 +1,88 @@
+"""Motion One V1 (Board r3, 2026-11-08): Bauteile, Netze, Platzierung (PCB-Koordinaten mm, y nach unten, Platine 0..70 x 0..25).
+INTERFACES-Koordinaten: x gleich, y_if = 25 - y_pcb."""
+R04, C04, R06, C06, C08, R12 = ('Resistor_SMD:R_0402_1005Metric', 'Capacitor_SMD:C_0402_1005Metric', 'Resistor_SMD:R_0603_1608Metric',
+                                'Capacitor_SMD:C_0603_1608Metric', 'Capacitor_SMD:C_0805_2012Metric', 'Resistor_SMD:R_1206_3216Metric')
+S23, S236 = 'Package_TO_SOT_SMD:SOT-23-3', 'Package_TO_SOT_SMD:SOT-23-6'
+MCX = 60.6  # Modulmitte x
+# ref: (symlib, symbol, value, footprint, lcsc, x, y, rot)
+P = {
+ 'U1': ('motion-one', 'E73-2G4M08S1C', 'E73-2G4M08S1C', 'motion-one:E73-2G4M08S1C', 'C356849', MCX, 12.5, 90),
+ 'U2': ('Power_Protection', 'USBLC6-2SC6', 'USBLC6-2SC6', S236, 'C7519', 11.2, 12.5, 0),
+ 'U3': ('Battery_Management', 'TP4056-42-ESOP8', 'TP4056', 'Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm', 'C16581', 20.0, 8.0, 0),
+ 'U4': ('Battery_Management', 'DW01A', 'DW01A', S236, 'C351410', 19.8, 21.7, 0),
+ 'Q3': ('motion-one', 'FS8205A', 'FS8205A', S236, 'C2830320', 24.3, 21.7, 0),
+ 'U5': ('Regulator_Linear', 'XC6206PxxxMR', 'XC6206P332MR', S23, 'C5446', 38.4, 3.3, 0),
+ 'U6': ('motion-one', 'ICM-45686', 'ICM-45686', 'Package_LGA:LGA-14_3x2.5mm_P0.5mm_LayoutBorder3x4y', 'C22459454', 32.5, 12.5, 0),
+ 'J1': ('Connector', 'USB_C_Receptacle_USB2.0_16P', 'USB-C TYPE-C-31-M-12', 'Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12', 'C165948', 3.5, 12.5, 270),
+ 'J2': ('Connector_Generic_MountingPin', 'Conn_01x02_MountingPin', 'BATT JST-SH', 'Connector_JST:JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal', 'C160402', 14.5, 19.9, 0),
+ 'J3': ('Connector_Generic', 'Conn_01x02', 'MOTOR', 'motion-one:MotorPads_2x1.5', '', 29.5, 22.3, 0),
+ 'J4': ('Connector', 'Conn_ARM_SWD_TagConnect_TC2030', 'SWD TC2030-NL', 'Connector:Tag-Connect_TC2030-IDC-NL_2x03_P1.27mm_Vertical', '', 45.0, 21.4, 0),
+ 'SW1': ('Switch', 'SW_SPDT', 'MSK12C02', 'Button_Switch_SMD:SW_SPDT_Shouhan_MSK12C02', 'C431540', 20.0, 1.8, 180),
+ 'SW2': ('Switch', 'SW_Push', 'TS-1187A', 'Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A', 'C318884', 48.0, 12.5, 90),
+ 'BZ1': ('Device', 'Buzzer', 'MLT-5020', 'motion-one:Buzzer_MLT-5020', 'C94598', 27.2, 12.6, 0),
+ 'D1': ('Device', 'D_Schottky', 'B5819W', 'Diode_SMD:D_SOD-123', 'C8598', 30.6, 2.75, 0),
+ 'D2': ('Device', 'D', '1N4148W', 'Diode_SMD:D_SOD-123', 'C81598', 31.9, 17.4, 90),
+ 'D3': ('Device', 'D', '1N4148W', 'Diode_SMD:D_SOD-123', 'C81598', 34.8, 22.2, 0),
+ 'D4': ('Device', 'LED_RAGB', 'XL-1615RGBC', 'motion-one:LED_XL-1615RGBC', 'C965840', 38.0, 12.5, 0),
+ 'D5': ('Device', 'LED', 'rot CHRG', 'LED_SMD:LED_0603_1608Metric', 'C2286', 26.4, 2.3, 0),
+ 'Y1': ('Device', 'Crystal', '32.768kHz', 'Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm', 'C32346', 49.0, 6.4, 0),
+ 'TH1': ('Device', 'Thermistor_NTC', '10k B3380', 'Resistor_SMD:R_0402_1005Metric', 'C77131', 18.6, 16.2, 90),
+ 'Q1': ('Transistor_FET', 'AO3401A', 'AO3401A', S23, 'C15127', 30.5, 6.0, 0),
+ 'Q2': ('Transistor_FET', 'AO3401A', 'AO3401A', S23, 'C15127', 36.9, 7.0, 0),
+ 'Q4': ('Transistor_FET', 'AO3401A', 'AO3401A', S23, 'C15127', 43.7, 3.3, 0),
+ 'Q5': ('Transistor_FET', '2N7002', '2N7002', S23, 'C8545', 48.0, 3.3, 0),
+ 'Q6': ('Transistor_FET', 'AO3400A', 'AO3400A', S23, 'C20917', 28.6, 17.8, 0),
+ 'Q7': ('Transistor_FET', 'AO3400A', 'AO3400A', S23, 'C20917', 39.3, 21.4, 0),
+ 'R1': ('Device', 'R', '5.1k', R04, 'C25905', 10.2, 9.0, 0), 'R2': ('Device', 'R', '5.1k', R04, 'C25905', 10.2, 16.0, 90),
+ 'R3': ('Device', 'R', '4.7k', R04, 'C25900', 13.2, 2.2, 0), 'R4': ('Device', 'R', '4.7k', R04, 'C25900', 13.2, 3.5, 0),
+ 'R5': ('Device', 'R', '2.2k', R04, 'C25879', 13.2, 4.8, 0), 'R6': ('Device', 'R', '1k', R04, 'C11702', 26.4, 3.9, 0),
+ 'R7': ('Device', 'R', '100', R04, 'C25076', 19.3, 18.8, 0), 'R8': ('Device', 'R', '1k', R04, 'C11702', 23.7, 18.8, 0),
+ 'R9': ('Device', 'R', '100k', R04, 'C25741', 30.5, 8.6, 0), 'R10': ('Device', 'R', '1M', R04, 'C26083', 36.9, 9.6, 0),
+ 'R11': ('Device', 'R', '1M', R04, 'C26083', 42.0, 5.9, 0), 'R12': ('Device', 'R', '100k', R04, 'C25741', 44.2, 5.9, 0),
+ 'R13': ('Device', 'R', '100k', R04, 'C25741', 42.0, 7.3, 0), 'R14': ('Device', 'R', '100k', R04, 'C25741', 44.2, 7.3, 0),
+ 'R15': ('Device', 'R', '22', R12, 'C17958', 34.6, 18.0, 90), 'R16': ('Device', 'R', '100k', R04, 'C25741', 28.6, 20.3, 0),
+ 'R17': ('Device', 'R', '100k', R04, 'C25741', 39.3, 18.6, 0), 'R18': ('Device', 'R', '470', R04, 'C25117', 37.6, 16.4, 90),
+ 'R19': ('Device', 'R', '100', R04, 'C25076', 38.8, 16.4, 90), 'R20': ('Device', 'R', '100', R04, 'C25076', 40.0, 16.4, 90),
+ 'C1': ('Device', 'C', '10uF', C08, 'C15850', 14.5, 10.0, 90), 'C2': ('Device', 'C', '10uF', C08, 'C15850', 25.2, 7.0, 90),
+ 'C3': ('Device', 'C', '100nF', C04, 'C1525', 21.5, 18.8, 0), 'C4': ('Device', 'C', '10uF', C08, 'C15850', 33.7, 6.0, 90),
+ 'C5': ('Device', 'C', '4.7uF', C06, 'C19666', 34.6, 2.3, 0), 'C6': ('Device', 'C', '1uF', C04, 'C52923', 41.05, 3.3, 90),
+ 'C7': ('Device', 'C', '4.7uF', C06, 'C19666', 49.6, 18.2, 90), 'C8': ('Device', 'C', '100nF', C04, 'C1525', 50.9, 21.0, 90),
+ 'C9': ('Device', 'C', '22pF', C04, 'C1555', 46.3, 6.4, 90), 'C10': ('Device', 'C', '22pF', C04, 'C1555', 49.0, 8.15, 0),
+ 'C11': ('Device', 'C', '100nF', C04, 'C1525', 31.6, 10.2, 0), 'C12': ('Device', 'C', '100nF', C04, 'C1525', 34.4, 9.4, 0),
+ 'C13': ('Device', 'C', '100nF', C04, 'C1525', 43.1, 8.6, 0), 'C14': ('Device', 'C', '10uF', C08, 'C15850', 22.5, 12.8, 90),
+ 'TP1': ('Connector', 'TestPoint', 'VBAT', 'TestPoint:TestPoint_Pad_D1.0mm', '', 52.6, 21.4, 0),
+ 'TP2': ('Connector', 'TestPoint', 'VSYS', 'TestPoint:TestPoint_Pad_D1.0mm', '', 54.9, 21.4, 0),
+ 'TP3': ('Connector', 'TestPoint', '3V3', 'TestPoint:TestPoint_Pad_D1.0mm', '', 57.2, 21.4, 0),
+ 'TP4': ('Connector', 'TestPoint', 'GND', 'TestPoint:TestPoint_Pad_D1.0mm', '', 59.5, 21.4, 0),
+ 'TP5': ('Connector', 'TestPoint', 'VBUS', 'TestPoint:TestPoint_Pad_D1.0mm', '', 61.8, 21.4, 0),
+ 'TP6': ('Connector', 'TestPoint', 'VSW', 'TestPoint:TestPoint_Pad_D1.0mm', '', 64.1, 21.4, 0),
+ '#FLG01': ('power', 'PWR_FLAG', 'PWR_FLAG', '', '', 0, 0, 0), '#FLG02': ('power', 'PWR_FLAG', 'PWR_FLAG', '', '', 0, 0, 0),
+ '#FLG03': ('power', 'PWR_FLAG', 'PWR_FLAG', '', '', 0, 0, 0), '#FLG04': ('power', 'PWR_FLAG', 'PWR_FLAG', '', '', 0, 0, 0),
+ '#FLG05': ('power', 'PWR_FLAG', 'PWR_FLAG', '', '', 0, 0, 0),
+}
+N = {
+ 'VBUS': 'J1.A4 J1.A9 J1.B4 J1.B9 U2.5 C1.1 U3.4 U3.8 D1.2 U1.27 R4.1 R6.1 Q1.1 R9.1 TP5.1 #FLG01.1',
+ 'GND': 'J1.A1 J1.A12 J1.B1 J1.B12 J1.SH U2.2 C1.2 U3.3 U3.9 R3.2 TH1.2 C2.2 Q3.3 R8.2 C4.2 C5.2 C6.2 C7.2 C8.2 C9.2 C10.2 '
+        'C11.2 C12.2 C13.2 C14.2 U5.1 U1.5 U1.21 U1.24 U6.6 U6.2 U6.3 U6.7 U6.10 R14.2 Q5.2 R12.2 Q6.2 Q7.2 R16.2 R17.2 R9.2 '
+        'R1.2 R2.2 SW1.1 SW2.2 J4.5 TP4.1 #FLG02.1',
+ 'VBAT': 'J2.1 U3.5 C2.1 R7.1 Q1.3 Q4.2 R11.1 TP1.1',
+ 'BATN': 'J2.2 U4.6 C3.2 Q3.1 #FLG03.1', 'DW_VCC': 'R7.2 U4.5 C3.1 #FLG04.1', 'DW_OD': 'U4.1 Q3.6', 'DW_OC': 'U4.3 Q3.4',
+ 'DW_CS': 'U4.2 R8.1', 'FS_D': 'Q3.2 Q3.5',
+ 'CC1': 'J1.A5 R1.1', 'CC2': 'J1.B5 R2.1', 'USB_DP': 'J1.A6 J1.B6 U2.3 U2.4 U1.31', 'USB_DM': 'J1.A7 J1.B7 U2.1 U2.6 U1.29',
+ 'CHG_PROG': 'U3.2 R3.1', 'CHG_TEMP': 'U3.1 TH1.1 R5.2', 'NTC_TOP': 'R4.2 R5.1', 'CHG_LED_K': 'U3.7 D5.1', 'CHG_LED_A': 'D5.2 R6.2',
+ 'VSYS': 'D1.1 Q1.2 C4.1 Q2.2 R10.1 TP2.1', 'PSW_G': 'Q2.1 R10.2 SW1.2',
+ 'VSW': 'Q2.3 C5.1 U5.3 J3.1 D3.1 TP6.1 #FLG05.1', 'MOT_N': 'J3.2 D3.2 Q7.3', 'MOT_EN': 'Q7.1 R17.1 U1.6',
+ '3V3': 'U5.2 C6.1 C7.1 C8.1 U1.19 U1.23 U6.8 U6.5 C11.1 C12.1 D4.2 C14.1 BZ1.1 D2.1 J4.1 TP3.1',
+ 'BUZ_N': 'BZ1.2 D2.2 R15.1', 'BUZ_D': 'R15.2 Q6.3', 'BUZ_PWM': 'Q6.1 R16.1 U1.7',
+ 'VDIV_TOP': 'Q4.3 R13.1', 'VDIV_G': 'Q4.1 R11.2 Q5.3', 'VBAT_EN': 'Q5.1 R12.1 U1.15', 'VBAT_ADC': 'R13.2 R14.1 C13.1 U1.18',
+ 'XL1': 'U1.11 Y1.1 C9.1', 'XL2': 'U1.13 Y1.2 C10.1',
+ 'IMU_SCK': 'U6.13 U1.14', 'IMU_MOSI': 'U6.14 U1.16', 'IMU_MISO': 'U6.1 U1.17', 'IMU_CS': 'U6.12 U1.20',
+ 'IMU_INT1': 'U6.4 U1.22', 'IMU_INT2': 'U6.9 U1.12',
+ 'LED_R': 'R18.1 U1.10', 'LED_G': 'R19.1 U1.9', 'LED_B': 'R20.1 U1.8',
+ 'LED_RK': 'R18.2 D4.1', 'LED_GK': 'R19.2 D4.3', 'LED_BK': 'R20.2 D4.4',
+ 'BTN': 'SW2.1 U1.4', 'SWDIO': 'J4.2 U1.37', 'SWCLK': 'J4.4 U1.39', 'NRESET': 'J4.3 U1.26',
+}
+N = {k: [tuple(t.rsplit('.', 1)) for t in v.split()] for k, v in N.items()}
+NC = [tuple(t.rsplit('.', 1)) for t in ('J1.A8 J1.B8 U3.6 SW1.3 J2.MP J4.6 ' + ' '.join(
+    'U1.%d' % n for n in (1, 2, 3, 25, 28, 30, 32, 33, 34, 35, 36, 38, 40, 41, 42, 43))).split()]
+POWER = ['VBUS', 'GND', 'VBAT', 'BATN', 'VSYS', 'VSW', '3V3', 'FS_D', 'BUZ_N', 'BUZ_D', 'MOT_N']

@@ -1,0 +1,26 @@
+{
+ "powerpath": {
+  "vsys_min_unplug": 3.669656,
+  "v3_min_unplug": 3.2985,
+  "vsys_usb": 4.874766,
+  "vsys_bat": 3.699999,
+  "ibat_usb": 1.028866e-10,
+  "v3_min_motor": 3.2985
+ },
+ "inrush": {
+  "i_peak": -6.752452,
+  "t_3v3": 0.0001597653
+ },
+ "buzzer_motor": {
+  "v3_min": 3.073361,
+  "vsw_min": 3.465394,
+  "motn_max": 4.413014,
+  "buzn_max": 4.008339
+ },
+ "vbat_div": {
+  "vadc_settled": 2.097353,
+  "t_settle": 0.02402638,
+  "ioff": -9.365589e-12,
+  "ion": -2.522646e-05
+ }
+}

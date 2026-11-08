@@ -1,0 +1,28 @@
+[
+ {
+  "query": "C160402",
+  "utc": "2026-11-08T05:36:58+00:00",
+  "lcsc": "C160402",
+  "mpn": "SM02B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 69104,
+  "price": [
+   [
+    1,
+    0.1322
+   ],
+   [
+    50,
+    0.1088
+   ],
+   [
+    150,
+    0.0969
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2.9mm 2P 4.32mm 4mm 50V Auxiliary Solder Pin Copper alloy PA SH ",
+  "url": "https://jlcpcb.com/partdetail/C160402",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-SM02B-SRSS-TB-LF-SN_C160402.pdf"
+ }
+]

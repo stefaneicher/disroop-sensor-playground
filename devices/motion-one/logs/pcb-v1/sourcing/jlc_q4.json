@@ -1,0 +1,158 @@
+[
+ {
+  "query": "0402 5.6k\u03a9",
+  "utc": "2026-11-08T00:37:03+00:00",
+  "lcsc": "C25908",
+  "mpn": "0402WGF5601TCE",
+  "type": "expand",
+  "stock": 306194,
+  "price": [
+   [
+    1,
+    0.001
+   ],
+   [
+    1000,
+    0.0008
+   ],
+   [
+    3000,
+    0.0007
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 5.6k\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface",
+  "url": "https://jlcpcb.com/partdetail/C25908",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010045_UNI-ROYAL-Uniroyal-Elec-0402WGF5601TCE_C25908.pdf"
+ },
+ {
+  "query": "0402 5.6k\u03a9",
+  "utc": "2026-11-08T00:37:03+00:00",
+  "lcsc": "C25942",
+  "mpn": "0402WGJ0562TCE",
+  "type": "expand",
+  "stock": 16441,
+  "price": [
+   [
+    1,
+    0.0008
+   ],
+   [
+    1000,
+    0.0008
+   ],
+   [
+    3000,
+    0.0008
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 5.6k\u03a9 50V 62.5mW Thick Film Resistor \u00b1100ppm/\u2103 \u00b15% 0402 Chip Resistor - Surface",
+  "url": "https://jlcpcb.com/partdetail/C25942",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010045_UNI-ROYAL-Uniroyal-Elec-0402WGJ0562TCE_C25942.pdf"
+ },
+ {
+  "query": "0402 5.6k\u03a9",
+  "utc": "2026-11-08T00:37:03+00:00",
+  "lcsc": "C100478",
+  "mpn": "CR0402FF5601G",
+  "type": "expand",
+  "stock": 11,
+  "price": [
+   [
+    1,
+    0.0006
+   ],
+   [
+    1000,
+    0.0005
+   ],
+   [
+    3000,
+    0.0004
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+125\u2103 5.6k\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1200ppm/\u2103 0402 Chip Resistor - Surface",
+  "url": "https://jlcpcb.com/partdetail/C100478",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_LIZ-Elec-CR0402FF5601G_C100478.pdf"
+ },
+ {
+  "query": "0402 5.6k\u03a9",
+  "utc": "2026-11-08T00:37:03+00:00",
+  "lcsc": "C100671",
+  "mpn": "CR0402JF0562G",
+  "type": "expand",
+  "stock": 10289,
+  "price": [
+   [
+    1,
+    0.0019
+   ],
+   [
+    1000,
+    0.0018
+   ],
+   [
+    3000,
+    0.0018
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+125\u2103 5.6k\u03a9 50V 62.5mW Thick Film Resistor \u00b1200ppm/\u2103 \u00b15% 0402 Chip Resistor - Surface",
+  "url": "https://jlcpcb.com/partdetail/C100671",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_LIZ-Elec-CR0402JF0562G_C100671.pdf"
+ },
+ {
+  "query": "C17958",
+  "utc": "2026-11-08T00:37:03+00:00",
+  "lcsc": "C17958",
+  "mpn": "1206W4F220JT5E",
+  "type": "base",
+  "stock": 596379,
+  "price": [
+   [
+    1,
+    0.0066
+   ],
+   [
+    1000,
+    0.0052
+   ],
+   [
+    5000,
+    0.004
+   ]
+  ],
+  "pkg": "1206",
+  "desc": "-55\u2103~+155\u2103 200V 22\u03a9 250mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 1206 Chip Resistor - Surface M",
+  "url": "https://jlcpcb.com/partdetail/C17958",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010145_UNI-ROYAL-Uniroyal-Elec-1206W4F220JT5E_C17958.pdf"
+ },
+ {
+  "query": "C23345",
+  "utc": "2026-11-08T00:37:04+00:00",
+  "lcsc": "C23345",
+  "mpn": "0603WAF220JT5E",
+  "type": "base",
+  "stock": 5985705,
+  "price": [
+   [
+    1,
+    0.0017
+   ],
+   [
+    1000,
+    0.0013
+   ],
+   [
+    5000,
+    0.0012
+   ]
+  ],
+  "pkg": "0603",
+  "desc": "-55\u2103~+155\u2103 100mW 22\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface Mo",
+  "url": "https://jlcpcb.com/partdetail/C23345",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010100_UNI-ROYAL-Uniroyal-Elec-0603WAF220JT5E_C23345.pdf"
+ }
+]

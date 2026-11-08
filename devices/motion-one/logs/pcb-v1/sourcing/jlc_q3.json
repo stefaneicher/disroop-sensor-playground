@@ -1,0 +1,180 @@
+[
+ {
+  "query": "C1555",
+  "utc": "2026-11-07T23:39:00+00:00",
+  "lcsc": "C1555",
+  "mpn": "0402CG220J500NT",
+  "type": "base",
+  "stock": 1708985,
+  "price": [
+   [
+    1,
+    0.0019
+   ],
+   [
+    1000,
+    0.0015
+   ],
+   [
+    3000,
+    0.0012
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "22pF 50V C0G \u00b15% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C1555",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_FH--Guangdong-Fenghua-Advanced-Tech-0402CG220J500NT_C1555.pdf"
+ },
+ {
+  "query": "C2286",
+  "utc": "2026-11-07T23:39:01+00:00",
+  "lcsc": "C2286",
+  "mpn": "KT-0603R",
+  "type": "base",
+  "stock": 6594087,
+  "price": [
+   [
+    1,
+    0.0077
+   ],
+   [
+    1000,
+    0.0059
+   ],
+   [
+    4000,
+    0.0046
+   ]
+  ],
+  "pkg": "0603",
+  "desc": "-40\u2103~+85\u2103 1.6mm x 0.8mm square LED 1.8V~2.4V 120\u00b0 20mA 300mcd 40mW 615nm~630nm 645nm Discr",
+  "url": "https://jlcpcb.com/partdetail/C2286",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1810231112_Hubei-KENTO-Elec-KT-0603R_C2286.pdf"
+ },
+ {
+  "query": "C25917",
+  "utc": "2026-11-07T23:39:01+00:00",
+  "lcsc": "C25917",
+  "mpn": "0402WGF6801TCE",
+  "type": "expand",
+  "stock": 1080758,
+  "price": [
+   [
+    1,
+    0.0015
+   ],
+   [
+    1000,
+    0.0012
+   ],
+   [
+    3000,
+    0.001
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 50V 6.8k\u03a9 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface",
+  "url": "https://jlcpcb.com/partdetail/C25917",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010045_UNI-ROYAL-Uniroyal-Elec-0402WGF6801TCE_C25917.pdf"
+ },
+ {
+  "query": "C25744",
+  "utc": "2026-11-07T23:39:01+00:00",
+  "lcsc": "C25744",
+  "mpn": "0402WGF1002TCE",
+  "type": "base",
+  "stock": 22764090,
+  "price": [
+   [
+    1,
+    0.0028
+   ],
+   [
+    1000,
+    0.0021
+   ],
+   [
+    3000,
+    0.0018
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 10k\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface ",
+  "url": "https://jlcpcb.com/partdetail/C25744",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0402WGF1002TCE_C25744.pdf"
+ },
+ {
+  "query": "C160402",
+  "utc": "2026-11-07T23:39:01+00:00",
+  "lcsc": "C160402",
+  "mpn": "SM02B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 69732,
+  "price": [
+   [
+    1,
+    0.1322
+   ],
+   [
+    50,
+    0.1088
+   ],
+   [
+    150,
+    0.0969
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2.9mm 2P 4.32mm 4mm 50V Auxiliary Solder Pin Copper alloy PA SH ",
+  "url": "https://jlcpcb.com/partdetail/C160402",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-SM02B-SRSS-TB-LF-SN_C160402.pdf"
+ },
+ {
+  "query": "C2838",
+  "utc": "2026-11-07T23:39:02+00:00",
+  "lcsc": "C9900196410",
+  "mpn": "HC2838",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "ESOP-8",
+  "desc": "ESOP-8 SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900196410",
+  "datasheet": null
+ },
+ {
+  "query": "C14663",
+  "utc": "2026-11-07T23:39:02+00:00",
+  "lcsc": "C14663",
+  "mpn": "CC0603KRX7R9BB104",
+  "type": "base",
+  "stock": 34211285,
+  "price": [
+   [
+    1,
+    0.0155
+   ],
+   [
+    500,
+    0.0121
+   ],
+   [
+    1500,
+    0.0102
+   ]
+  ],
+  "pkg": "0603",
+  "desc": "100nF 50V X7R \u00b110% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C14663",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
+ }
+]

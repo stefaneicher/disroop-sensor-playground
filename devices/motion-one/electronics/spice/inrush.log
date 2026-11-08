@@ -1,0 +1,15 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * einschaltstrom: sw1 schaltet gate q2 auf gnd bei 0.1 ms (gate r10 1m + cgs)
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using transient initial conditions
+
+No. of Data Rows : 5031
+i_peak              =  -6.752452e+00 at=  1.007059e-04
+t_3v3               =  1.597653e-04
+Note: Simulation executed from .control section 
+Using SPARSE 1.3 as Direct Linear Solver

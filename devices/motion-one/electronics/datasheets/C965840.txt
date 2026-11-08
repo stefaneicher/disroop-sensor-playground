@@ -1,0 +1,633 @@
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+XL-1615RGBC-RF                                                                                            Technical Data Sheet
+
+1615 七彩（共阳）
+
+            haracteristics
+ * 外观尺寸（L/W/H）:1.6*1.5*0.6 mm
+ Outline Dimensions (L / w / h):     1.6*1.5*0.6mm                                                       模型图仅供参考
+ * 发光颜色及胶体:RGB/透明胶体
+ Luminous color and colloid:RGB/ transparent colloid
+ * 环保工艺符合 ROHS 要求
+ Environmental protection products Complied With RoHS Directive
+ * 湿气敏感性等级（MSL）:3 级
+ Moisture sensitivity level（MSL） : 3 levels
+ * EIA 规范标准包装
+ EIA standard packaging
+ * 适用于 SMT 自动化贴片机
+ Suitable for SMT automatic production
+
+ * 适用于回流焊制程
+ Suitable for reflow soldering process
+
+
+
+
+                    roduct application
+* 家用电器Household Electric Appliances；
+* 健康医疗Health care；
+* 智能家居Smart Home；
+* 蓝牙音响Bluetooth audio；
+* 背光显示Backlight display；
+* 汽车仪表automobile instrument：
+* 亮化工程Quantitative Engineering
+* 照明灯饰Lighting decoration;
+* 特殊服饰Special clothing;
+
+
+
+
+                                                                                                                       1
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+            Catalogue
+
+
+
+
+   Electrical Characteristics...........................................................................................................................3
+
+
+
+   Typical Characteristic Curves...................................................................................................................6
+
+
+
+
+   Reliability Test Items And Conditions.......................................................................................................7
+
+
+
+   Outline Dimensions.....................................................................................................................................8
+
+
+
+
+   Packaging......................................................................................................................................................9
+
+
+
+
+   Guideline for Soldering..............................................................................................................................11
+
+
+
+
+   Precautions...................................................................................................................................................13
+
+
+
+
+                                                                                                                                                                      2
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+极限参数（Ta=25℃）Absolute Maximum Rating(ta=25 ℃)
+
+             参数名称                             符号                                 数值                                单位
+             Parameter                       Symbol                             Rating                             Unit
+
+                                                                       R                      50
+             消耗功率
+                                                 Pd                    G                      70                   mW
+          Consumed power
+                                                                       B                      70
+                                                                       R                      80
+            正向脉冲电流
+                                                IFP                    G                      80                   mA
+       Peak Forward current
+                                                                       B                      80
+                                                                       R                      20
+            正向工作电流
+                                                 IF                    G                      20                   mA
+    Forward working current
+                                                                       B                      20
+                                                                       R                       5
+             反向电压
+                                                VR                     G                       5                     V
+           Reverse voltage
+                                                                       B                       5
+             抗静电能力
+           Antistatic ability
+                                               ESD                              2000                                 V
+
+            工作环境温度
+                                               Topr                                  -40℃ ~ +85℃
+ Operating ambient temperature
+            储存环境温度
+                                                Tstg                                 -40℃ ~ +85℃
+  Storage ambient temperature
+
+             焊接条件                                                    回流焊（reflow soldering）：260°C，6s
+                                                Tsol
+         Welding conditions                                          手动焊（manual welding ）：300°C，3s
+
+
+
+
+                                                                                                                         3
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+                （Ta=25℃） Optical-electrical parameter(ta=25 ℃)
+
+       参数名称                       符号              颜色               测试条件                最小值          典型值          最大值          单位
+       Parameter                 Symbol          Colour         Test conditions         Min          Typ         Max          Unit
+
+                                                    R             IF = 20mA              100           /          180
+         光强
+                                   IV               B             IF = 20mA              120           /          180         mcd
+    light intensity
+                                                    G             IF = 20mA              350           /          800
+                                                    R             IF = 20mA              620           /          625
+     主波长
+                                   λD               B             IF = 20mA              460           /          475          nm
+Dominant wavelength
+                                                    G             IF = 20mA              515           /          530
+                                                    R             IF = 20mA                /         630            /
+     峰值波长
+                                   λP               B             IF = 20mA                /         465            /          nm
+  Peak wavelength
+                                                    G             IF = 20mA                /         530            /
+                                                    R             IF = 20mA                /          20            /
+      半波宽
+                                   Δλ               B             IF = 20mA                /          25            /          nm
+  Half wave width
+                                                    G             IF = 20mA                /          30            /
+                                                    R             IF = 20mA              1.8           /          2.4
+      正向电压                                          B             IF = 20mA              2.6           /          3.4
+                                   VF                                                                                          V
+   Forward voltage
+                                                    G             IF = 20mA              2.6           /          3.4
+
+    半光强视角
+                                 2θ1/2          R/G/B             IF = 20mA                /         120            /         deg
+   Half light angle
+                                                    R               VR=5V                  /           /            5
+     反向电流
+                                   IR               B               VR=5V                  /           /            5          uA
+   Reverse current
+                                                    G               VR=5V                  /           /            5
+
+备注（Note）:
+1.此发光亮度为根据人眼对发光亮度之感应曲线之模拟发光强度符合 CIE（国际光委会组织）
+The luminous intensity is the simulated luminous intensity according to the response curve of human eyes to
+luminous intensity, which conforms to CIE (International Light Commission)
+2.此发光角度之测量为其发光亮度一半时所测试之数据
+The measurement of the luminous angle is the data measured when the luminous brightness is half.
+3.发光亮度保证误差正负 15%
+Guaranteed error of luminous brightness is plus or minus 15%.
+
+
+
+
+                                                                                                                        4
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+              :
+      Brightness grading
+
+              Code                      Min                     Max                     Unit              Test conditions
+                D2                       80                      120
+                D3                      120                      150
+                D4                      150                      180
+                E1                      350                      400
+                E2                      400                      450                  mcd                      IF=20mA
+                E3                      450                      500
+                E4                      500                      550
+                E5                      550                      600
+                E6                      600                      700
+                E7                      700                      800
+
+               :                                                                               亮度误差±10% Brightness error±10%
+      Voltage grading
+
+              Code                      Min                     Max                     Unit              Test conditions
+              N12-7                      1.8                     2.0
+              N12-8                      2.0                     2.2
+              N12-9                      2.2                     2.4
+              N13-3                      2.8                     3.0                    V                      IF=20mA
+              N13-4                      3.0                     3.2
+              N11-8                      2.7                     2.9
+              N11-9                      2.9                     3.1
+
+
+                                                                                                电压误差±0.1V Voltage error±0.1V
+
+
+
+              Code                      Min                     Max                     Unit              Test conditions
+              HR02                       620                    625
+              HB04                       460                    465
+              HB05                       465                    470
+              HB06                       470                    475                     nm                     IF=20mA
+              HG02                       515                    520
+              HG03                       520                    525
+              HG04                       525                    530
+
+                                                         波长误差±1nm Wavelength error±1nm
+  备注：针对不用的应用领域，测试的条件不同 The testing conditions vary for different appli cation areas
+
+
+                                                                                                                       5
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+注：如无另外注明，测试环境温度为 25±5℃/Note：If not otherwise indicated the test environment temp erature is 25±5℃
+
+
+
+                                                                                                                       6
+   ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+ 类别         测试项目 Test                               测试环境                                       测试时间                      参考标准
+ Class        item                             Testing environment                            Testing time           Reference standard
+                                      室温条件下以最大额定电流持续点亮；                 1000 小时 1000 hours                            MIL-STD-750D:1026
+            工作寿命 Working
+                                   以 20mA 测试（Continuous lighting at the （-24 小时，+72 小时 )                              MIL-STD-883D:1005
+                   life
+                                        maximum rated current at room   （-24hours，+72hours                              JIS C 7021:B-1
+              高温高湿储存                     temperature;Test it at 20mA.）
+                                                                                           240 小时 240hours            MIL-STD-202F:103B
+ 耐久性测 High temperature                     IR-Reflow In-Board, 2 Times
+                                                                                         （±2小时             )（±         JIS C 7021:B-11
+    试         and high             环境温度Ta= 85±5℃,相对湿度RH= 90～95%
+                                                                                         2hours)
+Endurance humidity storage
+  test        高温储存
+                                                                                                                      MIL-STD-883D:1008
+            High-temperatur                     环境温度Ta= 85±5℃                            1000 小时 1000 hours
+                                                                                                                       JIS C 7021:B-10
+               e storage                                                                 （-24小时 +72小时)
+               低温储存Low                         环境温度 Ta= -40±5℃                           （-24hours+72hours）
+                                                                                                                       JIS C 7021:B-12
+               temperature
+                                                                                                                      MIL-STD-202F:107D
+              冷热循环 Cold                  105℃ ～ 25℃ ～ -55℃ ～ 25℃                                  100 次 循 环
+                                                                                                                      MIL-STD-750D:1051
+             and hot cycle                30mins    5mins      30mins    5mins                    100 Circles
+                                                                                                                      MIL-STD-883D:1010
+                                                                                                                      MIL-STD-202F:107D
+            冷热冲击 Hot and IR-Reflow In-Board, 2 Times；100± 5℃ ～                                  100    次 循 环
+                                                                                                                      MIL-STD-750D:1051
+               cold impact        -40℃ ± 5℃；20mins ； 20mins                                     100 Circles
+                                                                                                                      MIL-STD-883D:1011
+                 抗锡试验                                                                            10 ± 1secs           MIL-STD-202F:210A
+                                            焊锡温度 T.sol= 260 ± 5℃
+             Anti-tin test                                                                      2 次 2times            MIL-STD-750D:2031
+                                                                                                                        JIS C 7021:A-1
+                                  升温速度 heat up speed(183℃到最高值) ：最
+               红外回流焊
+                                    大 3℃/秒；维持温度 keep temperature 在
+                 有铅制程
+                                  125(±25)℃： 不超过 120 秒；维持温度 keep
+                 Infrared
+                                      temperature 在 183℃以上： 60-150 秒
+             reflowwelding
+                                  最高温度限制范围maximum temperature：235℃                                                   MIL-STD-750D:2031.2
+ 环境测试        There is lead
+                                  +5/-0℃；维持keep在235℃+5/-0℃时间：10-15                              --------                   J-STD-020C
+Environme        process
+                                    秒；降温速度cooling rate： 最大6℃/秒
+  ntal
+ testing                          升温速度 heat up speed(217℃到最高值) ：最
+               红外回流焊
+                                    大 3℃/秒；维持温度 keep temperature 在
+                 无铅制程
+                                  175(±25)℃： 不超过 180 秒；维持温度 keep
+            Infrared reflow
+                                      temperature 在 217℃以上： 60-120 秒
+                 welding
+                                    最高温度限制范围maximum temperature：                                                     MIL-STD-750D:2031.2
+                Lead-free
+                                  255℃+0/-5℃；维持keep在255℃+0/-5℃时间：                               --------                   J-STD-020C
+                 process
+                                  5-10秒；降温速度cooling rate： 最大6℃/秒
+
+                                  焊锡温度 Soldering temperature T.sol= 235                                               MIL-STD-202F:208D
+                                  ± 5℃；浸入速度 Immersion speed： 25±2.5                              浸入时间                 MIL-STD-750D:2026
+               可焊性试验
+                                  mm/秒；上锡率 ≧95% 焊盘面积；Tin loading Immersion time：2±                                    MIL-STD-883D:2003
+            Weldability test
+                                  rate ≥ 95% pad area Immersion time: 2 ±                         0.5 秒                IEC 68 Part 2-20
+                                                     0.5 seconds                                                        JIS C 7021:A-2
+
+
+
+
+                                                                                                                          7
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+     备注：            1.以上尺寸单位均为 mm
+   Remarks:         All dimensions are in millimeters.
+
+                   2.未特别标注公差的尺寸公差均为±0.25mm
+                      Tolerance is     ±0.25mm unless otherwise noted
+
+
+
+
+                                                                                                                       8
+ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+                                      Belt and disk dimensions
+
+
+
+
+注:
+     1. 尺寸单位为毫米(mm)。
+     1. Size unit is mm (mm).
+     2. 尺寸公差是±0.15mm。
+     2. The dimensional tolerance is ± 0.15mm.
+
+
+
+
+                                                                                                                        9
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+                                                                                                                       10
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+  1.
+
+  Hand Soldering
+
+  只建议在修理和重工的情况下使用手工焊接；推荐使用功率低于 3 0 W 的烙铁，焊接时烙铁的温度必须
+
+  保 持在 300℃以下，且每个电极只能进行一次焊接，每次焊接的持续时间不得超过 3 秒。
+
+  人手焊接过程中的不慎操作易引起 LED 产品的损坏，应当小心谨慎。
+
+  Manual welding is recommended only for repair and heavy industry situations. A soldering iron of less than
+
+  30W is recommended to be used in Hand Soldering. Please keep the temperature of the soldering iron under
+
+  300℃ while soldering. Each terminal of the LED is to go for less than 3 second and for one time only.
+
+  Be careful because the damage of the product is often started at the time of the hand soldering.
+
+  2.                 推荐使用以下无铅回流焊接温度图进行。
+
+  Reflow Soldering: Use the conditions shown in the under Figure of Pb -Free Reflow Soldering.
+
+
+
+
+           有铅制程 Lead process                                                            无铅制程 lead free
+
+
+       回流焊接最多只能进行两次。
+
+       Reflow soldering should not be done more than two times.
+
+       在回流焊接升温过程中，请不要对 LED 施加任何压力。
+
+       Stress on the LEDs should be avoided during heating in soldering process.
+
+       在焊接完成后，待产品温度下降到室温之后，再进行其他处理。
+
+       After soldering, do not deal with the product before its temperature drop down to room temperature.
+
+       产品最佳的最高焊接温度建议控制在 240±5℃/6S
+       The recommended maximum welding temperature for the product is 240±5 ℃/6s
+
+
+
+
+                                                                                                                       11
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+   3.
+
+   Cleaning
+
+        在焊接后推荐使用酒精进行清洗，在温度不高于 30℃的条件下持续 3 分钟， 不高于 50℃的条件下持
+
+   续 30 秒。
+
+        使用其他类似溶剂清洗前，请先确认使用的溶剂不会对 LED 的封装和环氧树脂部分造成损伤。
+
+   超声波清洗也是有效的方法，一般最大功率不应超过 300W ，否则可能对 LED 造成损伤。请根据
+
+   具体的 情况预先测试清洗条件是否会对 LED 造成损伤。
+
+        It is recommended that alcohol be used as a solvent for cleaning after soldering. Cleaning is to go under
+
+   30℃ for 3 minutes or 50℃ for 30 seconds. When using other solvents, it should be confirmed beforehand
+
+   whether the solvents will dissolve the package and the resin or not.
+
+        Ultrasonic    cleaning is    also an     effective way      for cleaning. But the       influence     of Ultrasonic
+
+   cleaning     on LED depends on factors such as ultrasonic power. Generally, the ultrasonic power should not
+
+   be higher than 300W. Before cleaning, a pretest should be done to confirm whether any damage to LEDs will
+
+   occur.
+
+
+
+                     此一般指导原则并不适用于所有 PCB                        设计和焊接设备的配置。具体工艺受到诸多因素的影
+   响， 请根据特定的 PCB 设计和焊接设备来确定焊接方案。
+
+         Note: This general guideline may not apply to all PCB designs and configurations of all soldering
+   equipment. The technics in practise is influenced by many factors, it should be specialized base on the PCB
+   designs and configurations of the soldering equipment..
+
+
+
+
+                                                                                                                       12
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+  1.
+
+  Storage
+
+  ·本产品使用密封防潮抗静电袋包装，并附有干燥剂，未开封的产品有一年的保存时间。
+
+  Moisture proof and anti-electrostatic package with moisture absorbent material is used, to keep moisture to a
+
+  minimum.
+  · 开封前，产品须存放在温度不高于 30℃，湿度不高于 60%RH 的环境中。
+
+  Before opening the package, the product should be kept at 30℃ or less and humidity less than 60% RH, and be
+  used within a year.
+
+  · 开封后，产品须存放在温度不高于 30℃，湿度不高于 40%RH 的环境中，且应该在 168 小时（7 天） 内
+
+  使 用完。建议工作环境为温度不高于 30℃，湿度不高于 60%RH。
+
+  After opening the package, the product should be stored at 30℃ or less and humidity less than 40%RH, and be
+
+  soldered within 168 hours (7 days). It is recommended that the product be operated at the workshop condition of
+
+  30℃ or less and humidity less than 60%RH.
+
+  · 对于尚未焊接的 LED ，如果吸湿剂或包装失效，或者产品没有符合以上有效存储条件，烘焙可以起到一定
+
+               60±5）℃，持续24 小时。
+  的性能恢复效果。烘焙条件：（
+
+  If the moisture absorbent material has fade away or the LEDs have exceeded the storage time, baking treatment
+
+  should be performed based on the following condition: (60±5)℃ for 24 hours.
+
+
+
+  2.
+
+  Static Electricity
+
+  静电和电涌会导致产品特性发生改变，例如正向电压降低等，如果情况严重甚至会损毁产品。所以在使用时必须采取有效的
+  防静电措施。所有相关的设备和机器都应该正确接地，同时必须采取其他防止静电和电涌的措施。使用防静电
+  手环，防静电垫子，防静电工作服、工作鞋、手套，防静电容器，都是有效的防止静电和电涌的措施。
+
+       Static electricity or surge voltage damages the LEDs. Damaged LEDs will show some unusual characteristic
+
+  such as the forward voltage becomes lower, or the LEDs do not light at the low current. even not light.
+
+  All devices, equipment and machinery must be properly grounded. At the same time, it is recommended that
+
+  wrist bands or anti-electrostatic gloves, anti-electrostatic containers be used when dealing with the LEDs.
+
+
+
+
+                                                                                                                       13
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+  3.
+
+  Design Consideration
+
+       设计电路时，通过 LED 的电流不能超过规定的最大值，同时，还需使用保护电阻，否则，微小的电压
+
+  变 化将会引起较大的电流变化，可能导致产品损毁。
+
+  建议使用以下（A）电路，该电路能够很好的调节通过每个 LED 的电流； 不推荐使用（B）电路，该电路 在
+
+  持续的电压驱动下，LED 的正向电压（VF ）发生变化，电流会随之而发生变化，可能使某些 LED 承受高
+
+  于规定的电流值。
+
+       In designing a circuit, the current through each LED must not exceed the absolute maximum rating specified
+
+  for each LED. In the meanwhile, resistors for protection should be applied, otherwise slight voltage shift will
+
+  cause big current change, burn out may happen.
+
+       It is recommended to use Circuit A which regulates the current flowing through each LED rather than Circuit
+
+  B. When driving LEDs with a constant voltage in Circuit B, the current through the LEDs may vary due to the
+
+  variation in Forward Voltage (VF) of the LEDs. In the worst case, some LED may be subjected to stresses in
+
+  excess of the Absolute Maximum Rating.
+
+
+
+
+         LED 的特性容易因为自身的发热和环境的温度的改变而发生改变。
+                                       温度的升高会降低 LED 的发光效率、
+  影响发光颜色等，所以在设计时应充分考虑散热的问题。
+
+         Thermal Design is paramount importance because heat generation may result in the Characteristics decline,
+
+  such as brightness decreased, Color changed and so on. Please consider the heat generation of the LEDs when
+
+  making the system design.
+
+
+
+
+                                                                                                                       14
+▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉ ▉
+
+
+
+
+  4.
+
+  Others
+
+  直接用手拿取产品不但会污染封装树脂表面，也可能由于静电等因素导致产品性能的改变。过度的压力也可能直接影响封装内
+  部的管芯和金线，因此请勿对产品施加过度压力，特别当产品处于高温状态下，例如在回流焊接过程中。
+
+       When handling the product, touching the encapsulant with bare hands will not only contaminate its surface,
+
+  but also affect on its optical characteristics. Excessive force to the encapsulant might result in catastrophic
+
+  failure of the LEDs due to die breakage or wire deformation. For this reason, please do not put excessive stress
+
+  on LEDs, especially when the LEDs are heated such as during Reflow Soldering.
+
+
+
+
+       LED 的环氧树脂封装部分相当脆弱，请勿用坚硬、尖锐的物体刮、擦封装树脂部分。在用镊子夹取的时
+
+  候也应当小心注意。
+
+  The epoxy resin of encapsulant is fragile, so please avoid scratch or friction over the epoxy resin surface.
+
+  While handling the product with tweezers, do not hold by the epoxy resin, be careful.
+
+  5.
+
+  Safety Advice For Human Eyes
+
+         LED 发光时，请勿直视发光光源，特别是对于一些光强较高的 LED ，强光可能伤害你的眼睛。
+
+  Viewing direct to the light emitting center of the LEDs, especially those of great Luminous Intensity, will cause
+  great hazard to human eyes. Please be careful.
+
+
+
+
+  规格书如有修改，不另行通知
+  If there are any modifications to the specification sheet, no further notice will be given
+
+
+                                                                                                                       15
+

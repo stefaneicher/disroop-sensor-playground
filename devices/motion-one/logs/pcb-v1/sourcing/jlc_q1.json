@@ -1,0 +1,1390 @@
+[
+ {
+  "query": "C356849",
+  "utc": "2026-11-07T22:59:13+00:00",
+  "lcsc": "C356849",
+  "mpn": "E73-2G4M08S1C",
+  "type": "expand",
+  "stock": 322,
+  "price": [
+   [
+    1,
+    7.69
+   ],
+   [
+    10,
+    7.5215
+   ],
+   [
+    12,
+    7.5215
+   ]
+  ],
+  "pkg": "SMD,18x13mm",
+  "desc": "-103dBm\u3001-95dBm -40\u2103~+85\u2103 120m 17.05mA 3.3V 8.27mA 8dBm Bluetooth 5.0\u3001Bluetooth 4.2 PWM\u3001SPI",
+  "url": "https://jlcpcb.com/partdetail/C356849",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2504101957_Chengdu-Ebyte-Elec-Tech-E73-2G4M08S1C_C356849.pdf"
+ },
+ {
+  "query": "C2764963",
+  "utc": "2026-11-07T22:59:13+00:00",
+  "lcsc": "C2764963",
+  "mpn": "E73-2G4M08S1CX",
+  "type": "expand",
+  "stock": 1011,
+  "price": [
+   [
+    1,
+    6.3718
+   ],
+   [
+    10,
+    6.2115
+   ],
+   [
+    12,
+    6.2115
+   ]
+  ],
+  "pkg": "SMD,18x13mm",
+  "desc": "-103dBm\u3001-95dBm -40\u2103~+85\u2103 120m 17.05mA 3.3V 8.27mA 8dBm Bluetooth 5.0\u3001Bluetooth 4.2 IPEX in",
+  "url": "https://jlcpcb.com/partdetail/C2764963",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2412091543_Chengdu-Ebyte-Elec-Tech-E73-2G4M08S1CX_C2764963.pdf"
+ },
+ {
+  "query": "C22459454",
+  "utc": "2026-11-07T22:59:14+00:00",
+  "lcsc": "C22459454",
+  "mpn": "ICM-45686",
+  "type": "expand",
+  "stock": 3091,
+  "price": [
+   [
+    1,
+    10.2118
+   ],
+   [
+    10,
+    8.7121
+   ],
+   [
+    30,
+    7.7995
+   ]
+  ],
+  "pkg": "LGA-14(3x2.5)",
+  "desc": "-40\u2103~+85\u2103 1.71V~3.6V 16bit 2.2uA 8KB IMU (accelerometer + gyroscope) Motion event detectio",
+  "url": "https://jlcpcb.com/partdetail/C22459454",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2411220643_TDK-InvenSense-ICM-45686_C22459454.pdf"
+ },
+ {
+  "query": "C5267406",
+  "utc": "2026-11-07T22:59:14+00:00",
+  "lcsc": "C5267406",
+  "mpn": "LSM6DSV16XTR",
+  "type": "expand",
+  "stock": 11292,
+  "price": [
+   [
+    1,
+    3.3527
+   ],
+   [
+    10,
+    2.9226
+   ],
+   [
+    30,
+    2.7035
+   ]
+  ],
+  "pkg": "LGA-14",
+  "desc": "-40\u2103~+85\u2103 1.71V~3.6V 2.6uA 4.5KB IMU (accelerometer + gyroscope) SPI\u3001I2C X,Y,Z X,Y,Z \u00b116g ",
+  "url": "https://jlcpcb.com/partdetail/C5267406",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2309061516_STMicroelectronics-LSM6DSV16XTR_C5267406.pdf"
+ },
+ {
+  "query": "C165948",
+  "utc": "2026-11-07T22:59:14+00:00",
+  "lcsc": "C165948",
+  "mpn": "TYPE-C-31-M-12",
+  "type": "expand",
+  "stock": 320167,
+  "price": [
+   [
+    1,
+    0.1868
+   ],
+   [
+    50,
+    0.1476
+   ],
+   [
+    150,
+    0.1283
+   ]
+  ],
+  "pkg": "SMD",
+  "desc": "-30\u2103~+80\u2103 1 10,000 cycles 16P 20V 5A 7.35mm Female Surface Mount, Right Angle Type-C SMD U",
+  "url": "https://jlcpcb.com/partdetail/C165948",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2205251630_Korean-Hroparts-Elec-TYPE-C-31-M-12_C165948.pdf"
+ },
+ {
+  "query": "C2765186",
+  "utc": "2026-11-07T22:59:15+00:00",
+  "lcsc": "C2765186",
+  "mpn": "TYPE-C 16PIN 2MD(073)",
+  "type": "expand",
+  "stock": 1175036,
+  "price": [
+   [
+    1,
+    0.0748
+   ],
+   [
+    200,
+    0.0602
+   ],
+   [
+    1000,
+    0.0509
+   ]
+  ],
+  "pkg": "SMD",
+  "desc": "-25\u2103~+85\u2103 1 10 thousand cycles 16P 3A 5V Black Female Surface Mount, Right Angle Type-C SM",
+  "url": "https://jlcpcb.com/partdetail/C2765186",
+  "datasheet": "https://jlcpcb.com/api/file/downloadByFileSystemAccessId/8588920841703079936"
+ },
+ {
+  "query": "C7519",
+  "utc": "2026-11-07T22:59:15+00:00",
+  "lcsc": "C7519",
+  "mpn": "USBLC6-2SC6",
+  "type": "expand",
+  "stock": 25258,
+  "price": [
+   [
+    1,
+    0.1623
+   ],
+   [
+    50,
+    0.124
+   ],
+   [
+    150,
+    0.1055
+   ]
+  ],
+  "pkg": "SOT-23-6L",
+  "desc": "-40\u2103~+125\u2103 150nA 17V 2 3.5pF 5.25V 5A 6V ESD IEC 61000-4-2 Unidirectional SOT-23-6L ESD an",
+  "url": "https://jlcpcb.com/partdetail/C7519",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2410121836_STMicroelectronics-USBLC6-2SC6_C7519.pdf"
+ },
+ {
+  "query": "C725790",
+  "utc": "2026-11-07T22:59:15+00:00",
+  "lcsc": "C725790",
+  "mpn": "TP4056",
+  "type": "expand",
+  "stock": 333426,
+  "price": [
+   [
+    1,
+    0.0771
+   ],
+   [
+    50,
+    0.0609
+   ],
+   [
+    150,
+    0.0525
+   ]
+  ],
+  "pkg": "ESOP-8",
+  "desc": "-40\u2103~+85\u2103 1 1A 35uA 4.2V 4V~6.5V Charging IC Lithium Battery Support Support \u6052\u6d41\u5145\u7535\u3001\u6052\u538b\u5145\u7535\u3001\u6d93\u6d41\u5145",
+  "url": "https://jlcpcb.com/partdetail/C725790",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2311091738_UMW-Youtai-Semiconductor-Co---Ltd--TP4056_C725790.pdf"
+ },
+ {
+  "query": "C16581",
+  "utc": "2026-11-07T22:59:16+00:00",
+  "lcsc": "C16581",
+  "mpn": "TP4056-42-ESOP8",
+  "type": "expand",
+  "stock": 110382,
+  "price": [
+   [
+    1,
+    0.1852
+   ],
+   [
+    50,
+    0.1468
+   ],
+   [
+    150,
+    0.1278
+   ]
+  ],
+  "pkg": "ESOP-8",
+  "desc": "-40\u2103~+85\u2103 1 1A 2uA 4.2V 4V~8V Charging IC Lithium Battery Support ESOP-8 Battery Managemen",
+  "url": "https://jlcpcb.com/partdetail/C16581",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1809261820_TOPPOWER-Nanjing-Extension-Microelectronics-TP4056-42-ESOP8_C16581.pdf"
+ },
+ {
+  "query": "C351410",
+  "utc": "2026-11-07T22:59:17+00:00",
+  "lcsc": "C351410",
+  "mpn": "DW01A",
+  "type": "expand",
+  "stock": 95352,
+  "price": [
+   [
+    1,
+    0.0532
+   ],
+   [
+    200,
+    0.0416
+   ],
+   [
+    600,
+    0.035
+   ]
+  ],
+  "pkg": "SOT-23-6L",
+  "desc": "-40\u2103~+85\u2103 1 2.5V 300mV~10V 3uA 4.3V Protection IC Support SOT-23-6L Battery Management ROH",
+  "url": "https://jlcpcb.com/partdetail/C351410",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1912111437_PUOLOP-DW01A_C351410.pdf"
+ },
+ {
+  "query": "C32254",
+  "utc": "2026-11-07T22:59:17+00:00",
+  "lcsc": "C32254",
+  "mpn": "FS8205",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.1978
+   ],
+   [
+    50,
+    0.1566
+   ],
+   [
+    150,
+    0.1389
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "-55\u2103~+150\u2103 1.2V 1W 2 N-Channel 20V 37m\u03a9@2.5V 6A N-Channel SOT-23-6 MOSFETs ROHS",
+  "url": "https://jlcpcb.com/partdetail/C32254",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1810110910_Fortune-Semicon-FS8205_C32254.pdf"
+ },
+ {
+  "query": "C82942",
+  "utc": "2026-11-07T22:59:17+00:00",
+  "lcsc": "C82942",
+  "mpn": "ME6211C33M5G-N",
+  "type": "expand",
+  "stock": 351569,
+  "price": [
+   [
+    1,
+    0.0624
+   ],
+   [
+    100,
+    0.0506
+   ],
+   [
+    300,
+    0.0445
+   ]
+  ],
+  "pkg": "SOT-23-5",
+  "desc": "-40\u2103~+150\u2103 1 120mV@(100mA) 3.3V 500mA 50uVrms 60uA 6V 70dB@(1kHz) Fixed Over Current Prote",
+  "url": "https://jlcpcb.com/partdetail/C82942",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1811131510_MICRONE-Nanjing-Micro-One-Elec-ME6211C33M5G-N_C82942.pdf"
+ },
+ {
+  "query": "C5446",
+  "utc": "2026-11-07T22:59:17+00:00",
+  "lcsc": "C5446",
+  "mpn": "XC6206P332MR-G",
+  "type": "base",
+  "stock": 493191,
+  "price": [
+   [
+    1,
+    0.1477
+   ],
+   [
+    50,
+    0.1212
+   ],
+   [
+    150,
+    0.1077
+   ]
+  ],
+  "pkg": "SOT-23-3L",
+  "desc": "-40\u2103~+85\u2103@(Ta) 1 1uA 200mA 3.3V 6V Fixed Over Current Protection Positive SOT-23-3L Voltag",
+  "url": "https://jlcpcb.com/partdetail/C5446",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Torex-Semicon-XC6206P332MR-G_C5446.pdf"
+ },
+ {
+  "query": "C8598",
+  "utc": "2026-11-07T22:59:18+00:00",
+  "lcsc": "C8598",
+  "mpn": "B5819W SL",
+  "type": "base",
+  "stock": 859502,
+  "price": [
+   [
+    1,
+    0.0262
+   ],
+   [
+    200,
+    0.0202
+   ],
+   [
+    600,
+    0.0174
+   ]
+  ],
+  "pkg": "SOD-123",
+  "desc": "1A 40V 600mV@1A 9A Independent SOD-123 Schottky Diodes ROHS",
+  "url": "https://jlcpcb.com/partdetail/C8598",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Jiangsu-Changjing-Electronics-Technology-Co---Ltd--B5819W-SL_C8598.pdf"
+ },
+ {
+  "query": "C15127",
+  "utc": "2026-11-07T22:59:18+00:00",
+  "lcsc": "C15127",
+  "mpn": "AO3401A",
+  "type": "base",
+  "stock": 1677120,
+  "price": [
+   [
+    1,
+    0.0828
+   ],
+   [
+    50,
+    0.0655
+   ],
+   [
+    150,
+    0.0566
+   ]
+  ],
+  "pkg": "SOT-23",
+  "desc": "1 P-Channel 14nC@10V 30V 47m\u03a9@10V\u300160m\u03a9@4.5V\u300185m\u03a9@2.5V 4A 55pF 645pF 80pF 900mV SOT-23 MOSF",
+  "url": "https://jlcpcb.com/partdetail/C15127",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2412061733_Alpha---Omega-Semicon-AO3401A_C15127.pdf"
+ },
+ {
+  "query": "C20917",
+  "utc": "2026-11-07T22:59:18+00:00",
+  "lcsc": "C20917",
+  "mpn": "AO3400A",
+  "type": "base",
+  "stock": 1065680,
+  "price": [
+   [
+    1,
+    0.0889
+   ],
+   [
+    50,
+    0.0717
+   ],
+   [
+    150,
+    0.0629
+   ]
+  ],
+  "pkg": "SOT-23",
+  "desc": "-55\u2103~+150\u2103 1 N-channel 1.45V 1.4W 30V 48m\u03a9@2.5V 5.7A 50pF 630pF 75pF 7nC@10V N-Channel SOT",
+  "url": "https://jlcpcb.com/partdetail/C20917",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1811081213_Alpha---Omega-Semicon-AO3400A_C20917.pdf"
+ },
+ {
+  "query": "C8545",
+  "utc": "2026-11-07T22:59:19+00:00",
+  "lcsc": "C8545",
+  "mpn": "2N7002",
+  "type": "base",
+  "stock": 5965426,
+  "price": [
+   [
+    1,
+    0.0167
+   ],
+   [
+    500,
+    0.013
+   ],
+   [
+    3000,
+    0.0114
+   ]
+  ],
+  "pkg": "SOT-23",
+  "desc": "1 N-channel 115mA 2.5V 225mW 25pF 50pF 5pF 5\u03a9@10V 60V N-Channel \u00b120V SOT-23 MOSFETs ROHS",
+  "url": "https://jlcpcb.com/partdetail/C8545",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Jiangsu-Changjing-Electronics-Technology-Co---Ltd--2N7002_C8545.pdf"
+ },
+ {
+  "query": "C318884",
+  "utc": "2026-11-07T22:59:19+00:00",
+  "lcsc": "C318884",
+  "mpn": "TS-1187A-B-A-B",
+  "type": "base",
+  "stock": 873144,
+  "price": [
+   [
+    1,
+    0.0207
+   ],
+   [
+    200,
+    0.0159
+   ],
+   [
+    600,
+    0.0139
+   ]
+  ],
+  "pkg": "SMD-4P,5.1x5.1mm",
+  "desc": "-30\u2103~+85\u2103 1.5mm 1.6N 100,000 cycles 12V 5.1mm 5.1mm 50mA Gold No Round Button SPST Surface",
+  "url": "https://jlcpcb.com/partdetail/C318884",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+ },
+ {
+  "query": "C160402",
+  "utc": "2026-11-07T22:59:19+00:00",
+  "lcsc": "C160402",
+  "mpn": "SM02B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 69732,
+  "price": [
+   [
+    1,
+    0.1322
+   ],
+   [
+    50,
+    0.1088
+   ],
+   [
+    150,
+    0.0969
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2.9mm 2P 4.32mm 4mm 50V Auxiliary Solder Pin Copper alloy PA SH ",
+  "url": "https://jlcpcb.com/partdetail/C160402",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-SM02B-SRSS-TB-LF-SN_C160402.pdf"
+ },
+ {
+  "query": "C295747",
+  "utc": "2026-11-07T22:59:19+00:00",
+  "lcsc": "C295747",
+  "mpn": "S2B-PH-SM4-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 7786,
+  "price": [
+   [
+    1,
+    0.2262
+   ],
+   [
+    50,
+    0.1803
+   ],
+   [
+    150,
+    0.1579
+   ]
+  ],
+  "pkg": "SMD,P=2mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 100V 1x2P 2 2A 2P 2mm 5.5mm 7.9mm 8.6mm Auxiliary Solder Pin Beige Copper allo",
+  "url": "https://jlcpcb.com/partdetail/C295747",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2102031704_JST-S2B-PH-SM4-TB-LF-SN_C295747.pdf"
+ },
+ {
+  "query": "C77131",
+  "utc": "2026-11-07T22:59:20+00:00",
+  "lcsc": "C77131",
+  "mpn": "NCP15XH103F03RC",
+  "type": "expand",
+  "stock": 304942,
+  "price": [
+   [
+    1,
+    0.0167
+   ],
+   [
+    500,
+    0.0129
+   ],
+   [
+    1500,
+    0.0112
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-40\u2103~+125\u2103 0.5mm 100mW 10k\u03a9 1mW/\u2103 1mm 310uA 3380K 3434K 3455K \u00b11% \u00b11% 0402 NTC Thermistors",
+  "url": "https://jlcpcb.com/partdetail/C77131",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Murata-Electronics-NCP15XH103F03RC_C77131.pdf"
+ },
+ {
+  "query": "C81598",
+  "utc": "2026-11-07T22:59:21+00:00",
+  "lcsc": "C81598",
+  "mpn": "1N4148W",
+  "type": "base",
+  "stock": 3537330,
+  "price": [
+   [
+    1,
+    0.0124
+   ],
+   [
+    500,
+    0.0097
+   ],
+   [
+    3000,
+    0.0075
+   ]
+  ],
+  "pkg": "SOD-123",
+  "desc": "150mA 1A 1V@50mA 1uA@75V 400mW 4ns 75V Independent SOD-123 Switching Diodes ROHS",
+  "url": "https://jlcpcb.com/partdetail/C81598",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1811061725_ST-Semtech-1N4148W_C81598.pdf"
+ },
+ {
+  "query": "MLT-5020",
+  "utc": "2026-11-07T22:59:21+00:00",
+  "lcsc": "C94598",
+  "mpn": "MLT-5020",
+  "type": "expand",
+  "stock": 147110,
+  "price": [
+   [
+    1,
+    0.4004
+   ],
+   [
+    50,
+    0.3119
+   ],
+   [
+    150,
+    0.2688
+   ]
+  ],
+  "pkg": "SMD,5x5mm",
+  "desc": "-20\u2103~+70\u2103 100mA 2.5mm 2V~4V 3V 4kHz 5.2mm 5.2mm 75dB Electromagnetic Passive (Externally D",
+  "url": "https://jlcpcb.com/partdetail/C94598",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2108131530_Jiangsu-Huaneng-Elec-MLT-5020_C94598.pdf"
+ },
+ {
+  "query": "MLT-8530",
+  "utc": "2026-11-07T22:59:21+00:00",
+  "lcsc": "C94599",
+  "mpn": "MLT-8530",
+  "type": "expand",
+  "stock": 138420,
+  "price": [
+   [
+    1,
+    0.2015
+   ],
+   [
+    50,
+    0.158
+   ],
+   [
+    150,
+    0.1369
+   ]
+  ],
+  "pkg": "SMD,8.5x8.5mm",
+  "desc": "-20\u2103~+70\u2103 2.5V~4.5V 2.7kHz 3.3mm 3.6V 8.5mm 8.5mm 80dB 95mA Electromagnetic Passive (Exter",
+  "url": "https://jlcpcb.com/partdetail/C94599",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1811151451_Jiangsu-Huaneng-Elec-MLT-8530_C94599.pdf"
+ },
+ {
+  "query": "MLT-8530",
+  "utc": "2026-11-07T22:59:21+00:00",
+  "lcsc": "C9900000449",
+  "mpn": "MLT-8530",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0007
+   ],
+   [
+    1000,
+    0.0002
+   ]
+  ],
+  "pkg": "SMD",
+  "desc": "SMD SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900000449",
+  "datasheet": null
+ },
+ {
+  "query": "MLT-8530",
+  "utc": "2026-11-07T22:59:21+00:00",
+  "lcsc": "C9900300361",
+  "mpn": "MLT-8530",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "SMD-4",
+  "desc": "SMD-4 SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900300361",
+  "datasheet": null
+ },
+ {
+  "query": "MLT-8530",
+  "utc": "2026-11-07T22:59:21+00:00",
+  "lcsc": "C9900300431",
+  "mpn": "MLT-8530",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "SMD,8.5x8.5mm",
+  "desc": "SMD,8.5x8.5mm SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900300431",
+  "datasheet": null
+ },
+ {
+  "query": "RGB-LED-0606",
+  "utc": "2026-11-07T22:59:21+00:00",
+  "lcsc": "C6795929",
+  "mpn": "HSMF-C114",
+  "type": "expand",
+  "stock": 1333,
+  "price": [
+   [
+    1,
+    1.0876
+   ],
+   [
+    10,
+    0.8996
+   ],
+   [
+    30,
+    0.7965
+   ]
+  ],
+  "pkg": "0606",
+  "desc": "-40\u2103~+85\u2103 0.35mm 1.5mm 1.6mm 140\u00b0\u3001145\u00b0 B:460nm~480nm\u3001G:515nm~535nm\u3001R:620nm~635nm Common An",
+  "url": "https://jlcpcb.com/partdetail/C6795929",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2306140936_Broadcom-AVAGO-HSMF-C114_C6795929.pdf"
+ },
+ {
+  "query": "RGB-LED-0606",
+  "utc": "2026-11-07T22:59:21+00:00",
+  "lcsc": "C113717",
+  "mpn": "FM-B1515RGBA-HG",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0197
+   ],
+   [
+    200,
+    0.0192
+   ],
+   [
+    600,
+    0.019
+   ]
+  ],
+  "pkg": "0606",
+  "desc": "0606 RGB LEDs ROHS",
+  "url": "https://jlcpcb.com/partdetail/C113717",
+  "datasheet": null
+ },
+ {
+  "query": "RGB-LED-0606",
+  "utc": "2026-11-07T22:59:21+00:00",
+  "lcsc": "C154473",
+  "mpn": "HQ19-2331RGBC",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.1039
+   ],
+   [
+    50,
+    0.0843
+   ],
+   [
+    150,
+    0.0745
+   ]
+  ],
+  "pkg": "0606",
+  "desc": "0606 RGB LEDs ROHS",
+  "url": "https://jlcpcb.com/partdetail/C154473",
+  "datasheet": "https://datasheet.lcsc.com/lcsc/1811090020_HARVATEK-HQ19-2331RGBC_C154473.pdf"
+ },
+ {
+  "query": "RGB-LED-0606",
+  "utc": "2026-11-07T22:59:21+00:00",
+  "lcsc": "C154474",
+  "mpn": "HQ19-2333BGRC",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0977
+   ],
+   [
+    50,
+    0.0782
+   ],
+   [
+    150,
+    0.0684
+   ]
+  ],
+  "pkg": "0606",
+  "desc": "0606 RGB LEDs ROHS",
+  "url": "https://jlcpcb.com/partdetail/C154474",
+  "datasheet": "https://datasheet.lcsc.com/lcsc/1811090021_HARVATEK-HQ19-2333BGRC_C154474.pdf"
+ },
+ {
+  "query": "XL-1615RGBC",
+  "utc": "2026-11-07T22:59:22+00:00",
+  "lcsc": "C9900194666",
+  "mpn": "XL-1615RGBC",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "4020",
+  "desc": "4020 SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900194666",
+  "datasheet": null
+ },
+ {
+  "query": "XL-1615RGBC",
+  "utc": "2026-11-07T22:59:22+00:00",
+  "lcsc": "C965840",
+  "mpn": "XL-1615RGBC-RF",
+  "type": "expand",
+  "stock": 715111,
+  "price": [
+   [
+    1,
+    0.0197
+   ],
+   [
+    500,
+    0.015
+   ],
+   [
+    1500,
+    0.013
+   ]
+  ],
+  "pkg": "SMD-4P,1.6x1.5mm",
+  "desc": "-30\u2103~+85\u2103 0.6mm 1.5mm 1.6mm 120\u00b0 B:460nm~470nm\u3001R:620nm~625nm\u3001G:515nm~530nm Common Anode R:",
+  "url": "https://jlcpcb.com/partdetail/C965840",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2410121441_XINGLIGHT-XL-1615RGBC-RF_C965840.pdf"
+ },
+ {
+  "query": "XL-1615RGBC",
+  "utc": "2026-11-07T22:59:22+00:00",
+  "lcsc": "C5440642",
+  "mpn": "XL-1615RGBC-YG",
+  "type": "expand",
+  "stock": 7963,
+  "price": [
+   [
+    1,
+    0.0262
+   ],
+   [
+    200,
+    0.0202
+   ],
+   [
+    600,
+    0.0169
+   ]
+  ],
+  "pkg": "SMD-4P,1.6x1.5mm",
+  "desc": "-20\u2103~+85\u2103 0.8mm 1.2mm 120\u00b0 2mm B:120mcd\u3001G:600mcd\u3001R:150mcd Common Anode G:520nm~530nm\u3001B:460",
+  "url": "https://jlcpcb.com/partdetail/C5440642",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2306160931_XINGLIGHT-XL-1615RGBC-YG_C5440642.pdf"
+ },
+ {
+  "query": "XL-1615RGBC",
+  "utc": "2026-11-07T22:59:22+00:00",
+  "lcsc": "C5349954",
+  "mpn": "XL-1615RGBC-2812B",
+  "type": "expand",
+  "stock": 225735,
+  "price": [
+   [
+    1,
+    0.0591
+   ],
+   [
+    100,
+    0.0465
+   ],
+   [
+    300,
+    0.04
+   ]
+  ],
+  "pkg": "SMD-4P,1.6x1.5mm",
+  "desc": "-20\u2103~+85\u2103 0.35mA 0.6mm 1.5mm 1.6mm 120\u00b0 130mcd\u3001360mcd\u3001110mcd 3.5V~5.5V 3000V 4.5kHz 800Kbi",
+  "url": "https://jlcpcb.com/partdetail/C5349954",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2504101957_XINGLIGHT-XL-1615RGBC-WS2812B_C5349954.pdf"
+ },
+ {
+  "query": "19-337",
+  "utc": "2026-11-07T22:59:22+00:00",
+  "lcsc": "C131204",
+  "mpn": "19-337/R6GHBHC-M01/2T",
+  "type": "expand",
+  "stock": 25789,
+  "price": [
+   [
+    1,
+    0.0926
+   ],
+   [
+    50,
+    0.073
+   ],
+   [
+    150,
+    0.0632
+   ]
+  ],
+  "pkg": "SMD-6P,1.6x1.6mm",
+  "desc": "SMD-6P,1.6x1.6mm RGB LEDs ROHS",
+  "url": "https://jlcpcb.com/partdetail/C131204",
+  "datasheet": "https://atta.szlcsc.com/upload/public/pdf/source/20170918/C131204_1505726866505976216.pdf"
+ },
+ {
+  "query": "19-337",
+  "utc": "2026-11-07T22:59:22+00:00",
+  "lcsc": "C264519",
+  "mpn": "19-337/R6GHBHC-A01/2T",
+  "type": "expand",
+  "stock": 16104,
+  "price": [
+   [
+    1,
+    0.0712
+   ],
+   [
+    100,
+    0.0557
+   ],
+   [
+    300,
+    0.048
+   ]
+  ],
+  "pkg": "SMD-6P,1.6x1.6mm",
+  "desc": "120\u00b0 SMD-6P,1.6x1.6mm RGB LEDs ROHS",
+  "url": "https://jlcpcb.com/partdetail/C264519",
+  "datasheet": "https://en.everlight.com/wp-content/plugins/ItemRelationship/product_files/pdf/19-337-R6GHBHC-A01-2T.pdf"
+ },
+ {
+  "query": "19-337",
+  "utc": "2026-11-07T22:59:22+00:00",
+  "lcsc": "C409504",
+  "mpn": "19-337/R6GHBHC-C02/2T",
+  "type": "expand",
+  "stock": 1001,
+  "price": [
+   [
+    1,
+    0.1036
+   ],
+   [
+    50,
+    0.0831
+   ],
+   [
+    150,
+    0.0728
+   ]
+  ],
+  "pkg": "SMD-6P,1.6x1.6mm",
+  "desc": "-40\u2103~+85\u2103 120\u00b0 SMD-6P,1.6x1.6mm RGB LEDs ROHS",
+  "url": "https://jlcpcb.com/partdetail/C409504",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2110271930_Everlight-Elec-19-337-R6GHBHC-C02-2T_C409504.pdf"
+ },
+ {
+  "query": "19-337",
+  "utc": "2026-11-07T22:59:22+00:00",
+  "lcsc": "C605456",
+  "mpn": "19-337C/RSBHGHC-M03/2T",
+  "type": "expand",
+  "stock": 55828,
+  "price": [
+   [
+    1,
+    0.1093
+   ],
+   [
+    50,
+    0.0864
+   ],
+   [
+    150,
+    0.075
+   ]
+  ],
+  "pkg": "SMD-6P,1.6x1.6mm",
+  "desc": "-40\u2103~+85\u2103 120\u00b0 SMD-6P,1.6x1.6mm RGB LEDs ROHS",
+  "url": "https://jlcpcb.com/partdetail/C605456",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2006151413_Everlight-Elec-19-337C-RSBHGHC-M03-2T_C605456.pdf"
+ },
+ {
+  "query": "C1525",
+  "utc": "2026-11-07T22:59:23+00:00",
+  "lcsc": "C1525",
+  "mpn": "CL05B104KO5NNNC",
+  "type": "base",
+  "stock": 34320311,
+  "price": [
+   [
+    1,
+    0.0031
+   ],
+   [
+    1000,
+    0.0023
+   ],
+   [
+    3000,
+    0.002
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "100nF 16V X7R \u00b110% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C1525",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Samsung-Electro-Mechanics-CL05B104KO5NNNC_C1525.pdf"
+ },
+ {
+  "query": "C52923",
+  "utc": "2026-11-07T22:59:23+00:00",
+  "lcsc": "C52923",
+  "mpn": "CL05A105KA5NQNC",
+  "type": "base",
+  "stock": 11553540,
+  "price": [
+   [
+    1,
+    0.0058
+   ],
+   [
+    1000,
+    0.0044
+   ],
+   [
+    3000,
+    0.0038
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "1uF 25V X5R \u00b110% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C52923",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Samsung-Electro-Mechanics-CL05A105KA5NQNC_C52923.pdf"
+ },
+ {
+  "query": "C19666",
+  "utc": "2026-11-07T22:59:23+00:00",
+  "lcsc": "C19666",
+  "mpn": "CL10A475KO8NNNC",
+  "type": "base",
+  "stock": 3850285,
+  "price": [
+   [
+    1,
+    0.015
+   ],
+   [
+    100,
+    0.0112
+   ],
+   [
+    300,
+    0.0095
+   ]
+  ],
+  "pkg": "0603",
+  "desc": "16V 4.7uF X5R \u00b110% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C19666",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Samsung-Electro-Mechanics-CL10A475KO8NNNC_C19666.pdf"
+ },
+ {
+  "query": "C15850",
+  "utc": "2026-11-07T22:59:23+00:00",
+  "lcsc": "C15850",
+  "mpn": "CL21A106KAYNNNE",
+  "type": "base",
+  "stock": 13984402,
+  "price": [
+   [
+    1,
+    0.0354
+   ],
+   [
+    200,
+    0.0275
+   ],
+   [
+    600,
+    0.0241
+   ]
+  ],
+  "pkg": "0805",
+  "desc": "10uF 25V X5R \u00b110% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C15850",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Samsung-Electro-Mechanics-CL21A106KAYNNNE_C15850.pdf"
+ },
+ {
+  "query": "C11702",
+  "utc": "2026-11-07T22:59:24+00:00",
+  "lcsc": "C11702",
+  "mpn": "0402WGF1001TCE",
+  "type": "base",
+  "stock": 33761603,
+  "price": [
+   [
+    1,
+    0.0013
+   ],
+   [
+    1000,
+    0.0011
+   ],
+   [
+    3000,
+    0.001
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 1k\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface M",
+  "url": "https://jlcpcb.com/partdetail/C11702",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010216_UNI-ROYAL-Uniroyal-Elec-0402WGF1001TCE_C11702.pdf"
+ },
+ {
+  "query": "C25744",
+  "utc": "2026-11-07T22:59:24+00:00",
+  "lcsc": "C25744",
+  "mpn": "0402WGF1002TCE",
+  "type": "base",
+  "stock": 22765191,
+  "price": [
+   [
+    1,
+    0.0028
+   ],
+   [
+    1000,
+    0.0021
+   ],
+   [
+    3000,
+    0.0018
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 10k\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface ",
+  "url": "https://jlcpcb.com/partdetail/C25744",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0402WGF1002TCE_C25744.pdf"
+ },
+ {
+  "query": "C25741",
+  "utc": "2026-11-07T22:59:24+00:00",
+  "lcsc": "C25741",
+  "mpn": "0402WGF1003TCE",
+  "type": "base",
+  "stock": 8784923,
+  "price": [
+   [
+    1,
+    0.0012
+   ],
+   [
+    1000,
+    0.001
+   ],
+   [
+    3000,
+    0.0008
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 100k\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface",
+  "url": "https://jlcpcb.com/partdetail/C25741",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010100_UNI-ROYAL-Uniroyal-Elec-0402WGF1003TCE_C25741.pdf"
+ },
+ {
+  "query": "C26083",
+  "utc": "2026-11-07T22:59:24+00:00",
+  "lcsc": "C26083",
+  "mpn": "0402WGF1004TCE",
+  "type": "base",
+  "stock": 2739301,
+  "price": [
+   [
+    1,
+    0.0012
+   ],
+   [
+    1000,
+    0.0009
+   ],
+   [
+    3000,
+    0.0008
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 1M\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface M",
+  "url": "https://jlcpcb.com/partdetail/C26083",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010030_UNI-ROYAL-Uniroyal-Elec-0402WGF1004TCE_C26083.pdf"
+ },
+ {
+  "query": "C25900",
+  "utc": "2026-11-07T22:59:25+00:00",
+  "lcsc": "C25900",
+  "mpn": "0402WGF4701TCE",
+  "type": "base",
+  "stock": 15758861,
+  "price": [
+   [
+    1,
+    0.0017
+   ],
+   [
+    1000,
+    0.0013
+   ],
+   [
+    3000,
+    0.0011
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 4.7k\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface",
+  "url": "https://jlcpcb.com/partdetail/C25900",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010045_UNI-ROYAL-Uniroyal-Elec-0402WGF4701TCE_C25900.pdf"
+ },
+ {
+  "query": "C25905",
+  "utc": "2026-11-07T22:59:25+00:00",
+  "lcsc": "C25905",
+  "mpn": "0402WGF5101TCE",
+  "type": "base",
+  "stock": 4532923,
+  "price": [
+   [
+    1,
+    0.0023
+   ],
+   [
+    1000,
+    0.0017
+   ],
+   [
+    3000,
+    0.0015
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 5.1k\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface",
+  "url": "https://jlcpcb.com/partdetail/C25905",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010045_UNI-ROYAL-Uniroyal-Elec-0402WGF5101TCE_C25905.pdf"
+ },
+ {
+  "query": "C25117",
+  "utc": "2026-11-07T22:59:25+00:00",
+  "lcsc": "C25117",
+  "mpn": "0402WGF4700TCE",
+  "type": "base",
+  "stock": 3010720,
+  "price": [
+   [
+    1,
+    0.001
+   ],
+   [
+    1000,
+    0.0008
+   ],
+   [
+    3000,
+    0.0007
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 470\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface ",
+  "url": "https://jlcpcb.com/partdetail/C25117",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2205311900_UNI-ROYAL-Uniroyal-Elec-0402WGF4700TCE_C25117.pdf"
+ },
+ {
+  "query": "C25879",
+  "utc": "2026-11-07T22:59:26+00:00",
+  "lcsc": "C25879",
+  "mpn": "0402WGF2201TCE",
+  "type": "base",
+  "stock": 3375603,
+  "price": [
+   [
+    1,
+    0.0011
+   ],
+   [
+    1000,
+    0.0009
+   ],
+   [
+    3000,
+    0.0008
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 2.2k\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface",
+  "url": "https://jlcpcb.com/partdetail/C25879",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010045_UNI-ROYAL-Uniroyal-Elec-0402WGF2201TCE_C25879.pdf"
+ },
+ {
+  "query": "C25076",
+  "utc": "2026-11-07T22:59:26+00:00",
+  "lcsc": "C25076",
+  "mpn": "0402WGF1000TCE",
+  "type": "base",
+  "stock": 11744509,
+  "price": [
+   [
+    1,
+    0.0012
+   ],
+   [
+    1000,
+    0.001
+   ],
+   [
+    3000,
+    0.0009
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 100\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface ",
+  "url": "https://jlcpcb.com/partdetail/C25076",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2205311900_UNI-ROYAL-Uniroyal-Elec-0402WGF1000TCE_C25076.pdf"
+ },
+ {
+  "query": "C25092",
+  "utc": "2026-11-07T22:59:26+00:00",
+  "lcsc": "C25092",
+  "mpn": "0402WGF220JTCE",
+  "type": "base",
+  "stock": 3459674,
+  "price": [
+   [
+    1,
+    0.0019
+   ],
+   [
+    1000,
+    0.0016
+   ],
+   [
+    3000,
+    0.0014
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 22\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface M",
+  "url": "https://jlcpcb.com/partdetail/C25092",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2205311900_UNI-ROYAL-Uniroyal-Elec-0402WGF220JTCE_C25092.pdf"
+ },
+ {
+  "query": "C4109",
+  "utc": "2026-11-07T22:59:26+00:00",
+  "lcsc": "C4109",
+  "mpn": "0402WGF2001TCE",
+  "type": "base",
+  "stock": 10728788,
+  "price": [
+   [
+    1,
+    0.0019
+   ],
+   [
+    1000,
+    0.0014
+   ],
+   [
+    3000,
+    0.0012
+   ]
+  ],
+  "pkg": "0402",
+  "desc": "-55\u2103~+155\u2103 2k\u03a9 50V 62.5mW Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0402 Chip Resistor - Surface M",
+  "url": "https://jlcpcb.com/partdetail/C4109",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010230_UNI-ROYAL-Uniroyal-Elec-0402WGF2001TCE_C4109.pdf"
+ }
+]

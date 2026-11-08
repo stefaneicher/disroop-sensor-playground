@@ -1,6 +1,6 @@
 {
-  "revision": "r1",
-  "status": "VORSCHLAG zur Abstimmung mit Mechanik/Elektronik (systems-engineer, 2026-11-07); Masse ANNAHME ausser wo QUELLE angegeben",
+  "revision": "r3",
+  "status": "Board r3 (pcb-engineer, 2026-11-08): Mechanik-Forderungen 1-7 aus Handoff mechanical-engineer 2026-11-07 umgesetzt; Positionen aus geroutetem Layout (QUELLE heights.json); Mechanik-Abnahme offen",
   "ble_profile": {
     "source": "docs/protocol.md:8-35; bridge/internal/thingy/uuids.go",
     "advertising_name": "Thingy",
@@ -8,42 +8,290 @@
     "base_uuid": "EF68xxxx-9B35-4933-9B10-52FFA9740042",
     "bonding": false,
     "mtu_accept": 247,
-    "conn_interval_ms": {"preferred_min": 7.5, "preferred_max": 15, "accept_max": 30},
+    "conn_interval_ms": {
+      "preferred_min": 7.5,
+      "preferred_max": 15,
+      "accept_max": 30
+    },
     "characteristics": [
-      {"uuid": "EF680401", "name": "Motion-Config", "props": "read/write", "bytes": 9, "format": "u16 pedo_ms, u16 temp_ms, u16 compass_ms, u16 motion_freq_hz 5..200, u8 wake_on_motion"},
-      {"uuid": "EF680404", "name": "Quaternion", "props": "notify", "bytes": 16, "format": "4x i32 /2^30 (w,x,y,z)"},
-      {"uuid": "EF680406", "name": "Raw", "props": "notify", "bytes": 18, "format": "9x i16: accel /1024 g, gyro /32 deg/s (geklemmt +-1023.97), compass /16 uT (0 ohne Magnetometer)"},
-      {"uuid": "EF680407", "name": "Euler", "props": "notify", "bytes": 12, "format": "3x i32 /65536 deg"},
-      {"uuid": "EF680409", "name": "Heading", "props": "notify", "bytes": 4, "format": "i32 /65536 deg"},
-      {"uuid": "EF680480", "name": "Raw-HR (erweitert, NEU)", "props": "notify", "bytes": 16, "format": "i16 ax,ay,az /1024 g (+-32 g); i16 gx,gy,gz /8 deg/s (+-4096); u16 sample_counter; u16 flags (bit0..2 accel-sat x/y/z, bit3..5 gyro-sat x/y/z, bit6 fusion-ok, Rest 0)", "note": "nur gesendet wenn abonniert; spaeter Ersatz fuer Raw im Spielmodus (Bridge-Change separat), Summe <= 200 Notif./s", "kennzeichnung": "ANNAHME"},
-      {"uuid": "EF680302", "name": "Button", "props": "notify", "bytes": 1, "format": "u8 0=los,1=gedrueckt"},
-      {"uuid": "EF680301", "name": "LED", "props": "read/write", "format": "Modi 0..3 laut docs/protocol.md:19"},
-      {"uuid": "EF680206", "name": "Env-Config", "props": "read/write", "bytes": 12, "format": "Thingy-Format, Werte duerfen ignoriert werden", "note": "Pflicht, sonst Bridge-Abbruch (bridge/internal/app/session.go:309-325)"},
-      {"uuid": "EF680501", "name": "Sound-Config", "props": "read/write", "format": "u8 speaker_mode, u8 mic_mode", "note": "Pflicht, Bridge schreibt Freq-Modus"},
-      {"uuid": "EF680502", "name": "Speaker", "props": "write w/o resp", "format": "u16 hz, u16 duration_ms, u8 volume 0..100"},
-      {"uuid": "2A19", "service": "180F", "name": "Battery Level", "props": "read/notify", "bytes": 1, "format": "u8 %"}
+      {
+        "uuid": "EF680401",
+        "name": "Motion-Config",
+        "props": "read/write",
+        "bytes": 9,
+        "format": "u16 pedo_ms, u16 temp_ms, u16 compass_ms, u16 motion_freq_hz 5..200, u8 wake_on_motion"
+      },
+      {
+        "uuid": "EF680404",
+        "name": "Quaternion",
+        "props": "notify",
+        "bytes": 16,
+        "format": "4x i32 /2^30 (w,x,y,z)"
+      },
+      {
+        "uuid": "EF680406",
+        "name": "Raw",
+        "props": "notify",
+        "bytes": 18,
+        "format": "9x i16: accel /1024 g, gyro /32 deg/s (geklemmt +-1023.97), compass /16 uT (0 ohne Magnetometer)"
+      },
+      {
+        "uuid": "EF680407",
+        "name": "Euler",
+        "props": "notify",
+        "bytes": 12,
+        "format": "3x i32 /65536 deg"
+      },
+      {
+        "uuid": "EF680409",
+        "name": "Heading",
+        "props": "notify",
+        "bytes": 4,
+        "format": "i32 /65536 deg"
+      },
+      {
+        "uuid": "EF680480",
+        "name": "Raw-HR (erweitert, NEU)",
+        "props": "notify",
+        "bytes": 16,
+        "format": "i16 ax,ay,az /1024 g (+-32 g); i16 gx,gy,gz /8 deg/s (+-4096); u16 sample_counter; u16 flags (bit0..2 accel-sat x/y/z, bit3..5 gyro-sat x/y/z, bit6 fusion-ok, Rest 0)",
+        "note": "nur gesendet wenn abonniert; spaeter Ersatz fuer Raw im Spielmodus (Bridge-Change separat), Summe <= 200 Notif./s",
+        "kennzeichnung": "ANNAHME"
+      },
+      {
+        "uuid": "EF680302",
+        "name": "Button",
+        "props": "notify",
+        "bytes": 1,
+        "format": "u8 0=los,1=gedrueckt"
+      },
+      {
+        "uuid": "EF680301",
+        "name": "LED",
+        "props": "read/write",
+        "format": "Modi 0..3 laut docs/protocol.md:19"
+      },
+      {
+        "uuid": "EF680206",
+        "name": "Env-Config",
+        "props": "read/write",
+        "bytes": 12,
+        "format": "Thingy-Format, Werte duerfen ignoriert werden",
+        "note": "Pflicht, sonst Bridge-Abbruch (bridge/internal/app/session.go:309-325)"
+      },
+      {
+        "uuid": "EF680501",
+        "name": "Sound-Config",
+        "props": "read/write",
+        "format": "u8 speaker_mode, u8 mic_mode",
+        "note": "Pflicht, Bridge schreibt Freq-Modus"
+      },
+      {
+        "uuid": "EF680502",
+        "name": "Speaker",
+        "props": "write w/o resp",
+        "format": "u16 hz, u16 duration_ms, u8 volume 0..100"
+      },
+      {
+        "uuid": "2A19",
+        "service": "180F",
+        "name": "Battery Level",
+        "props": "read/notify",
+        "bytes": 1,
+        "format": "u8 %"
+      }
     ]
   },
   "board": {
-    "outline_mm": {"length": 70, "width": 25, "thickness": 1.0, "shape": "laenglich, Ecken R2, fuer Griff"},
+    "outline_mm": {
+      "length": 70,
+      "width": 25,
+      "thickness": 1.0,
+      "shape": "laenglich, Kopfende Ecken R2, Griffende Ausklinkungen fuer Schraubdome"
+    },
     "layers": 4,
-    "mounting_holes": [{"x": 4, "y": 12.5, "d": 2.2, "screw": "M2"}, {"x": 66, "y": 12.5, "d": 2.2, "screw": "M2"}],
+    "mounting_holes": [],
     "origin": "Board-Ecke unten links, x entlang Laengsachse Richtung Kopfende (oben), Bestueckung Oberseite",
-    "max_component_height_mm": {"top": 3.5, "bottom": 0}
+    "max_component_height_mm": {
+      "top": 3.5,
+      "bottom": 0,
+      "note": "3.5 = SW1 MSK12C02 (ANNAHME); J2 JST-SH 2.9 (QUELLE LCSC C160402)"
+    },
+    "antenna_keepout": {
+      "x_min": 66.2,
+      "x_max": 70,
+      "layers": "alle",
+      "note": "kein Metall/Akku/Motor <= 5 mm"
+    },
+    "step": "electronics/kicad/motion-one/export/motion-one-board.step",
+    "heights_table": "electronics/kicad/motion-one/export/heights.json",
+    "notches": [
+      {
+        "x_min": 0,
+        "x_max": 10,
+        "y_min": 0,
+        "y_max": 5
+      },
+      {
+        "x_min": 0,
+        "x_max": 10,
+        "y_min": 20,
+        "y_max": 25
+      }
+    ],
+    "notch_note": "Schraubdome bei Board (10.5; 12.5+-11.5) sitzen in den Ausklinkungen; Zone bauteilfrei",
+    "mounting_note": "H1/H2 entfernt (r3); Board wird ueber Randstreifen geklemmt",
+    "edge_strip_mm": {
+      "width": 1.5,
+      "edges": "y=0 und y=25 (laengs)",
+      "component_free": true,
+      "exception": "SW1-Hebel/Koerper an y=25 (Hebel muss ueber Kante ragen, seitlicher Durchbruch)"
+    }
   },
   "positions": {
-    "usb_c": {"x": 0, "y": 12.5, "edge": "unten (Griffende)", "type": "USB-C Receptacle horizontal, Mittelmontage", "height_mm": 3.3},
-    "ble_module": {"x": 60, "y": 12.5, "part": "E73-2G4M08S1C 18x13 mm", "antenna": "Antenne ragt bzw. zeigt zum Kopfende, Keep-out ohne Kupfer und ohne Akku/Metall >= 5 mm", "height_mm": 2.2},
-    "imu": {"x": 35, "y": 12.5, "part": "ICM-45686", "note": "nahe Board-Mitte, weg von Motor/Summer, Achsen parallel Board-Kanten"},
-    "button_main": {"x": 48, "y": 12.5, "side": "oben, unter Daumen", "type": "Taktschalter mit Stoessel durch Gehaeuse", "height_mm": 3.5},
-    "button_power": {"x": 10, "y": 23, "side": "Seitenkante", "note": "optional, alternativ Lang-Druck Haupttaster"},
-    "led_rgb": {"x": 52, "y": 12.5, "note": "neben Haupttaster, Lichtleiter im Gehaeuse"},
-    "buzzer": {"x": 22, "y": 12.5, "size_mm": "9x9x4 (ANNAHME)", "note": "Schallaustritt im Gehaeuse"},
-    "motor": {"location": "im Griff am Akku, Coin-Motor 10x2.7 mm (ANNAHME), Litzen an Lotpads x=26", "note": "nicht auf IMU-Hoehe"},
-    "battery_connector": {"x": 15, "y": 5, "type": "JST-PH 2-polig"},
-    "swd_pads": {"x": 40, "y": 3, "pitch_mm": 1.27, "signals": ["VDD", "SWDIO", "SWCLK", "GND", "RESET"], "side": "unten oder oben, bei offenem Gehaeuse erreichbar"}
+    "usb_c": {
+      "x": 0,
+      "y": 12.5,
+      "edge": "unten (Griffende)",
+      "type": "USB-C Receptacle horizontal, Mittelmontage",
+      "height_mm": 3.26,
+      "part": "HRO TYPE-C-31-M-12",
+      "note": "Buchse ragt ca. 0.6 mm ueber Board-Kante x=0"
+    },
+    "ble_module": {
+      "x": 60.6,
+      "y": 12.5,
+      "part": "E73-2G4M08S1C 18x13 mm",
+      "antenna": "Antenne ragt bzw. zeigt zum Kopfende, Keep-out ohne Kupfer und ohne Akku/Metall >= 5 mm",
+      "height_mm": 3.0,
+      "rotation_deg": 90
+    },
+    "imu": {
+      "x": 32.5,
+      "y": 12.5,
+      "part": "ICM-45686",
+      "note": "nahe Board-Mitte, weg von Motor/Summer, Achsen parallel Board-Kanten"
+    },
+    "button_main": {
+      "x": 48.0,
+      "y": 12.5,
+      "side": "oben, unter Daumen",
+      "type": "Taktschalter mit Stoessel durch Gehaeuse",
+      "height_mm": 1.5,
+      "part": "TS-1187A 5.1x5.1",
+      "rotation_deg": 90
+    },
+    "button_power": {
+      "x": 20.0,
+      "y": 23.2,
+      "side": "Seitenkante y=25",
+      "type": "Schiebeschalter MSK12C02",
+      "height_mm": 3.5,
+      "note": "Hebel zeigt nach +y ueber Kante; Gehaeuse-Durchbruch noetig"
+    },
+    "led_rgb": {
+      "x": 38.0,
+      "y": 12.5,
+      "note": "neben Haupttaster, Lichtleiter im Gehaeuse",
+      "part": "XL-1615RGBC 1.6x1.5",
+      "height_mm": 0.55
+    },
+    "buzzer": {
+      "x": 27.2,
+      "y": 12.4,
+      "size_mm": "5x5x2",
+      "note": "Schallaustritt im Gehaeuse",
+      "part": "MLT-5020",
+      "height_mm": 2.0
+    },
+    "motor": {
+      "location": "im Griff am Akku, Coin-Motor ueber Litzen an Lotpads J3",
+      "note": "nicht auf IMU-Hoehe",
+      "pads_x": 29.5,
+      "pads_y": 2.7
+    },
+    "battery_connector": {
+      "x": 14.5,
+      "y": 5.1,
+      "height_mm": 2.9,
+      "type": "JST-SH 1.0 mm 2-polig SM02B-SRSS-TB, horizontal, Steckrichtung -y",
+      "part": "C160402",
+      "note": "Akku-Kabel mit JST-SHR-02V-S Stecker"
+    },
+    "swd_pads": {
+      "x": 45.0,
+      "y": 3.6,
+      "type": "Tag-Connect TC2030-IDC-NL (Pads, kein Bauteil)",
+      "signals": [
+        "VDD",
+        "SWDIO",
+        "RESET",
+        "SWCLK",
+        "GND",
+        "NC"
+      ],
+      "side": "oben"
+    },
+    "charge_led": {
+      "x": 26.4,
+      "y": 22.7,
+      "height_mm": 0.8,
+      "note": "Lade-LED D5 rot an CHRG"
+    },
+    "testpoints": {
+      "TP1": {
+        "x": 52.6,
+        "y": 3.6,
+        "height_mm": 0.05
+      },
+      "TP2": {
+        "x": 54.9,
+        "y": 3.6,
+        "height_mm": 0.05
+      },
+      "TP3": {
+        "x": 57.2,
+        "y": 3.6,
+        "height_mm": 0.05
+      },
+      "TP4": {
+        "x": 59.5,
+        "y": 3.6,
+        "height_mm": 0.05
+      },
+      "TP5": {
+        "x": 61.8,
+        "y": 3.6,
+        "height_mm": 0.05
+      },
+      "TP6": {
+        "x": 64.1,
+        "y": 3.6,
+        "height_mm": 0.05
+      }
+    }
   },
-  "battery": {"chemistry": "LiPo 1S 3.7 V mit Schutzschaltung", "capacity_mAh": 500, "class": "503040 (5x30x40 mm)", "mass_g": 10, "location": "im Griff unter dem Board, mechanisch fixiert, nicht schraubenerreichbar", "kennzeichnung": "ANNAHME"},
-  "enclosure": {"max_print_part_mm": [180, 180, 180], "target_mass_g": 120, "grip_diameter_mm": "32..38 (ANNAHME, Ergonomie pruefen)"},
-  "connectors": {"usb": "USB-C 5 V Laden + USB-DFU", "battery": "JST-PH 2", "debug": "SWD-Pads 1.27 mm"}
+  "battery": {
+    "chemistry": "LiPo 1S 3.7 V mit Schutzschaltung",
+    "capacity_mAh": 500,
+    "class": "503040 (5x30x40 mm)",
+    "mass_g": 10,
+    "location": "im Griff unter dem Board, mechanisch fixiert, nicht schraubenerreichbar",
+    "kennzeichnung": "ANNAHME"
+  },
+  "enclosure": {
+    "max_print_part_mm": [
+      180,
+      180,
+      180
+    ],
+    "target_mass_g": 120,
+    "grip_diameter_mm": "32..38 (ANNAHME, Ergonomie pruefen)"
+  },
+  "connectors": {
+    "usb": "USB-C 5 V Laden + USB-DFU",
+    "battery": "JST-SH 1.0 2-polig",
+    "debug": "Tag-Connect TC2030 (Pads)"
+  },
+  "pinout": "electronics/PINOUT_V1.json"
 }

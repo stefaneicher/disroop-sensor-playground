@@ -1,0 +1,41 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * power-path: usb ein (1 ms) / aus (6 ms), last 3v3 30 ma + motor 80 ma ab 3 ms
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+
+Initial Transient Solution
+--------------------------
+
+Node                                   Voltage
+----                                   -------
+vbus_src                                     0
+vbus                               5.99999e-07
+vsys                                       3.7
+vbat                                       3.7
+vbatc                                      3.7
+vsw                                        3.7
+3v3i                                       3.3
+3v3s                                    3.2985
+3v3                                     3.2985
+motd                                       3.7
+mctl                                         0
+b_ldo#branch                             -0.03
+vsense#branch                             0.03
+vmc#branch                                   0
+vbat#branch                         -3.037e-06
+vbus#branch                              3e-06
+
+
+No. of Data Rows : 4539
+vsys_min_unplug     =  3.669656e+00 at=  6.301993e-03
+v3_min_unplug       =  3.298500e+00 at=  6.074660e-03
+vsys_usb            =  4.874766e+00 from=  2.000000e-03 to=  2.901000e-03
+vsys_bat            =  3.699999e+00 from=  5.000000e-04 to=  9.005600e-04
+ibat_usb            =  1.028866e-10 from=  4.000000e-03 to=  5.901480e-03
+v3_min_motor        =  3.298500e+00 at=  3.002200e-03
+Note: Simulation executed from .control section 
+Using SPARSE 1.3 as Direct Linear Solver

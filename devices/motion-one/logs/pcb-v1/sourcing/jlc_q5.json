@@ -1,0 +1,158 @@
+[
+ {
+  "query": "C23140",
+  "utc": "2026-11-08T02:22:11+00:00",
+  "lcsc": "C23140",
+  "mpn": "0603WAF330JT5E",
+  "type": "base",
+  "stock": 3692522,
+  "price": [
+   [
+    1,
+    0.0024
+   ],
+   [
+    1000,
+    0.0019
+   ],
+   [
+    5000,
+    0.0016
+   ]
+  ],
+  "pkg": "0603",
+  "desc": "-55\u2103~+155\u2103 100mW 33\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface Mo",
+  "url": "https://jlcpcb.com/partdetail/C23140",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010116_UNI-ROYAL-Uniroyal-Elec-0603WAF330JT5E_C23140.pdf"
+ },
+ {
+  "query": "C23182",
+  "utc": "2026-11-08T02:22:11+00:00",
+  "lcsc": "C23182",
+  "mpn": "0603WAF470JT5E",
+  "type": "base",
+  "stock": 1357129,
+  "price": [
+   [
+    1,
+    0.002
+   ],
+   [
+    1000,
+    0.0015
+   ],
+   [
+    5000,
+    0.0013
+   ]
+  ],
+  "pkg": "0603",
+  "desc": "-55\u2103~+155\u2103 100mW 47\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface Mo",
+  "url": "https://jlcpcb.com/partdetail/C23182",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010116_UNI-ROYAL-Uniroyal-Elec-0603WAF470JT5E_C23182.pdf"
+ },
+ {
+  "query": "0603 47\u03a9 resistor",
+  "utc": "2026-11-08T02:22:12+00:00",
+  "lcsc": "C177276",
+  "mpn": "RCT0347RJLF",
+  "type": "expand",
+  "stock": 95466,
+  "price": [
+   [
+    1,
+    0.0014
+   ],
+   [
+    1000,
+    0.001
+   ],
+   [
+    5000,
+    0.0009
+   ]
+  ],
+  "pkg": "0603",
+  "desc": "-55\u2103~+155\u2103 100mW 47\u03a9 75V Thick Film Resistor \u00b1100ppm/\u2103 \u00b15% 0603 Chip Resistor - Surface Mo",
+  "url": "https://jlcpcb.com/partdetail/C177276",
+  "datasheet": "https://datasheet.lcsc.com/lcsc/2304140030_HKR-Hong-Kong-Resistors-RCT0347RJLF_C177276.pdf"
+ },
+ {
+  "query": "0603 47\u03a9 resistor",
+  "utc": "2026-11-08T02:22:12+00:00",
+  "lcsc": "C177650",
+  "mpn": "RCT0347RFLF",
+  "type": "expand",
+  "stock": 20319,
+  "price": [
+   [
+    1,
+    0.0014
+   ],
+   [
+    1000,
+    0.0011
+   ],
+   [
+    5000,
+    0.0009
+   ]
+  ],
+  "pkg": "0603",
+  "desc": "-55\u2103~+155\u2103 100mW 47\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface Mo",
+  "url": "https://jlcpcb.com/partdetail/C177650",
+  "datasheet": "https://datasheet.lcsc.com/lcsc/1811011016_HKR-Hong-Kong-Resistors-RCT0347RFLF_C177650.pdf"
+ },
+ {
+  "query": "0603 47\u03a9 resistor",
+  "utc": "2026-11-08T02:22:12+00:00",
+  "lcsc": "C22369796",
+  "mpn": "RCA0347RFLF",
+  "type": "expand",
+  "stock": 1914524,
+  "price": [
+   [
+    1,
+    0.0013
+   ],
+   [
+    1000,
+    0.001
+   ],
+   [
+    5000,
+    0.0009
+   ]
+  ],
+  "pkg": "0603",
+  "desc": "-55\u2103~+155\u2103 100mW 47\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface Mo",
+  "url": "https://jlcpcb.com/partdetail/C22369796",
+  "datasheet": null
+ },
+ {
+  "query": "0603 47\u03a9 resistor",
+  "utc": "2026-11-08T02:22:12+00:00",
+  "lcsc": "C22369961",
+  "mpn": "RCA0347RJLF",
+  "type": "expand",
+  "stock": 6904346,
+  "price": [
+   [
+    1,
+    0.0011
+   ],
+   [
+    1000,
+    0.0009
+   ],
+   [
+    5000,
+    0.0007
+   ]
+  ],
+  "pkg": "0603",
+  "desc": "-55\u2103~+155\u2103 100mW 47\u03a9 75V Thick Film Resistor \u00b1100ppm/\u2103 \u00b15% 0603 Chip Resistor - Surface Mo",
+  "url": "https://jlcpcb.com/partdetail/C22369961",
+  "datasheet": null
+ }
+]

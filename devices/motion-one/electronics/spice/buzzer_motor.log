@@ -1,0 +1,52 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * summer 2.7 khz pwm ab 0.5 ms, motor (25 ohm, 30 uh) ein bei 2 ms, aus bei 4 ms; batterie 3.5 v
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+
+Initial Transient Solution
+--------------------------
+
+Node                                   Voltage
+----                                   -------
+vbatc                                      3.5
+vsw                                        3.5
+3v3i                                       3.3
+3v3s                                   3.29925
+3v3                                    3.29925
+bzm                                    3.29925
+buzn                                   3.29925
+buzd                                   3.29925
+pwm                                          0
+m1                                         3.5
+motn                                       3.5
+men                                          0
+b_ldo#branch                            -0.015
+vsense#branch                            0.015
+lm#branch                          3.52998e-12
+lbz#branch                          3.2966e-12
+vmen#branch                                  0
+vpwm#branch                                  0
+vbat#branch                        -3.5314e-12
+
+ Reference value :  1.06989e-03
+ Reference value :  1.48682e-03
+ Reference value :  1.92475e-03
+ Reference value :  2.30860e-03
+ Reference value :  2.67084e-03
+ Reference value :  2.99364e-03
+ Reference value :  3.35445e-03
+ Reference value :  3.75113e-03
+ Reference value :  4.09134e-03
+ Reference value :  4.48541e-03
+ Reference value :  4.84998e-03
+No. of Data Rows : 176081
+v3_min              =  3.073361e+00 at=  3.275031e-03
+vsw_min             =  3.465394e+00 at=  2.982375e-03
+motn_max            =  4.413014e+00 at=  4.000888e-03
+buzn_max            =  4.008339e+00 at=  6.850400e-04
+Note: Simulation executed from .control section 
+Using SPARSE 1.3 as Direct Linear Solver

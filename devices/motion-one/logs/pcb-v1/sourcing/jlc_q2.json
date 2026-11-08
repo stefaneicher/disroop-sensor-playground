@@ -1,0 +1,796 @@
+[
+ {
+  "query": "FS8205A",
+  "utc": "2026-11-07T23:04:55+00:00",
+  "lcsc": "C908265",
+  "mpn": "FS8205A",
+  "type": "expand",
+  "stock": 21760,
+  "price": [
+   [
+    1,
+    0.0717
+   ],
+   [
+    100,
+    0.0584
+   ],
+   [
+    300,
+    0.0517
+   ]
+  ],
+  "pkg": "SOT-23-6L",
+  "desc": "-55\u2103~+150\u2103 1.2V 1.5W 11nC@4.5V 125pF 18m\u03a9@4.5V 2 N-Channel 20V 6A 800pF SOT-23-6L MOSFETs ",
+  "url": "https://jlcpcb.com/partdetail/C908265",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2010271837_FUXINSEMI-FS8205A_C908265.pdf"
+ },
+ {
+  "query": "FS8205A",
+  "utc": "2026-11-07T23:04:55+00:00",
+  "lcsc": "C2830320",
+  "mpn": "FS8205A",
+  "type": "expand",
+  "stock": 194714,
+  "price": [
+   [
+    1,
+    0.0499
+   ],
+   [
+    100,
+    0.038
+   ],
+   [
+    300,
+    0.0321
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "-55\u2103~+150\u2103 1.2V 1.5W 2 N-Channel 20V 31.5m\u03a9@2.5V 466pF 5.7nC@4.5V 58pF 65pF 6A SOT-23-6 MO",
+  "url": "https://jlcpcb.com/partdetail/C2830320",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2108132230_TECH-PUBLIC-FS8205A_C2830320.pdf"
+ },
+ {
+  "query": "FS8205A",
+  "utc": "2026-11-07T23:04:55+00:00",
+  "lcsc": "C14212",
+  "mpn": "FS8205A",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.1795
+   ],
+   [
+    10,
+    0.1345
+   ],
+   [
+    30,
+    0.1263
+   ]
+  ],
+  "pkg": "TSSOP-8",
+  "desc": "1.5V@250uA 1.5W 2 N-Channel 20V 38m\u03a9@2.5V,5.2A 6A TSSOP-8 MOSFETs ROHS",
+  "url": "https://jlcpcb.com/partdetail/C14212",
+  "datasheet": null
+ },
+ {
+  "query": "FS8205A",
+  "utc": "2026-11-07T23:04:55+00:00",
+  "lcsc": "C16052",
+  "mpn": "FS8205A",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.1883
+   ],
+   [
+    50,
+    0.1857
+   ],
+   [
+    150,
+    0.184
+   ]
+  ],
+  "pkg": "TSSOP-8",
+  "desc": "-55\u2103~+150\u2103 1V 1W 2 N-Channel 20V 35m\u03a9@2.5V 9A N-Channel TSSOP-8 MOSFETs ROHS",
+  "url": "https://jlcpcb.com/partdetail/C16052",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1809050110_Fortune-Semicon-FS8205A_C16052.pdf"
+ },
+ {
+  "query": "8205A SOT-23-6",
+  "utc": "2026-11-07T23:04:55+00:00",
+  "lcsc": "C351449",
+  "mpn": "8205A",
+  "type": "expand",
+  "stock": 15407,
+  "price": [
+   [
+    1,
+    0.0439
+   ],
+   [
+    100,
+    0.0339
+   ],
+   [
+    300,
+    0.0288
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "-55\u2103~+150\u2103 1.2V 145pF 2 N-Channel 20V 23nC@20V 36m\u03a9@2.5V 5A 630pF 830mW SOT-23-6 MOSFETs R",
+  "url": "https://jlcpcb.com/partdetail/C351449",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2311091735_UMW-Youtai-Semiconductor-Co---Ltd--8205A_C351449.pdf"
+ },
+ {
+  "query": "8205A SOT-23-6",
+  "utc": "2026-11-07T23:04:55+00:00",
+  "lcsc": "C2762931",
+  "mpn": "8205A",
+  "type": "expand",
+  "stock": 40068,
+  "price": [
+   [
+    1,
+    0.0427
+   ],
+   [
+    100,
+    0.0341
+   ],
+   [
+    300,
+    0.0298
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "-55\u2103~+150\u2103 1.5V 2 N-Channel 20V 2W 522.3pF 6A 74.69pF 75m\u03a9@1.8V 8.11nC@10V Common Drain SO",
+  "url": "https://jlcpcb.com/partdetail/C2762931",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2401051646_JSMSEMI-8205A_C2762931.pdf"
+ },
+ {
+  "query": "8205A SOT-23-6",
+  "utc": "2026-11-07T23:04:55+00:00",
+  "lcsc": "C3015230",
+  "mpn": "8205A",
+  "type": "expand",
+  "stock": 1420,
+  "price": [
+   [
+    1,
+    0.037
+   ],
+   [
+    200,
+    0.029
+   ],
+   [
+    600,
+    0.0246
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "-55\u2103~+150\u2103 11nC@4.5V 125pF 155pF 1V 2 N-Channel 20V 30m\u03a9@2.5V 5A 800pF N-Channel \u00b112V SOT-",
+  "url": "https://jlcpcb.com/partdetail/C3015230",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2205161616_YONGYUTAI-8205A_C3015230.pdf"
+ },
+ {
+  "query": "8205A SOT-23-6",
+  "utc": "2026-11-07T23:04:55+00:00",
+  "lcsc": "C5370944",
+  "mpn": "8205A",
+  "type": "expand",
+  "stock": 3491,
+  "price": [
+   [
+    1,
+    0.0557
+   ],
+   [
+    100,
+    0.0454
+   ],
+   [
+    300,
+    0.0401
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "-55\u2103~+150\u2103 1.5W 2 N-Channel 20V 25m\u03a9@2.5V 466pF 5.7nC@10V 500mV 58pF 65pF 6A SOT-23-6 MOSF",
+  "url": "https://jlcpcb.com/partdetail/C5370944",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2411121130_TECH-PUBLIC-8205A_C5370944.pdf"
+ },
+ {
+  "query": "C2830320",
+  "utc": "2026-11-07T23:04:55+00:00",
+  "lcsc": "C2830320",
+  "mpn": "FS8205A",
+  "type": "expand",
+  "stock": 194714,
+  "price": [
+   [
+    1,
+    0.0499
+   ],
+   [
+    100,
+    0.038
+   ],
+   [
+    300,
+    0.0321
+   ]
+  ],
+  "pkg": "SOT-23-6",
+  "desc": "-55\u2103~+150\u2103 1.2V 1.5W 2 N-Channel 20V 31.5m\u03a9@2.5V 466pF 5.7nC@4.5V 58pF 65pF 6A SOT-23-6 MO",
+  "url": "https://jlcpcb.com/partdetail/C2830320",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2108132230_TECH-PUBLIC-FS8205A_C2830320.pdf"
+ },
+ {
+  "query": "32.768kHz 2012",
+  "utc": "2026-11-07T23:04:56+00:00",
+  "lcsc": "C2236",
+  "mpn": "X206032768KGB2SC",
+  "type": "expand",
+  "stock": 94390,
+  "price": [
+   [
+    1,
+    0.0759
+   ],
+   [
+    100,
+    0.0597
+   ],
+   [
+    300,
+    0.0516
+   ]
+  ],
+  "pkg": "DT-26",
+  "desc": "-20\u2103~+70\u2103 12.5pF 32.768kHz 50k\u03a9 Through Hole Crystal Oscillator \u00b110ppm \u00b120ppm DT-26 Crysta",
+  "url": "https://jlcpcb.com/partdetail/C2236",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2403291504_YXC-Crystal-Oscillators-X206032768KGB2SC_C2236.pdf"
+ },
+ {
+  "query": "32.768kHz 2012",
+  "utc": "2026-11-07T23:04:56+00:00",
+  "lcsc": "C12675",
+  "mpn": "X803832768KGD4GI",
+  "type": "expand",
+  "stock": 11554,
+  "price": [
+   [
+    1,
+    0.3481
+   ],
+   [
+    50,
+    0.274
+   ],
+   [
+    150,
+    0.2424
+   ]
+  ],
+  "pkg": "MC-306",
+  "desc": "-40\u2103~+85\u2103 12.5pF 32.768kHz 60k\u03a9 Crystal Oscillator \u00b120ppm \u00b130ppm MC-306 Crystals ROHS",
+  "url": "https://jlcpcb.com/partdetail/C12675",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2403291504_YXC-Crystal-Oscillators-X803832768KGD4GI_C12675.pdf"
+ },
+ {
+  "query": "32.768kHz 2012",
+  "utc": "2026-11-07T23:04:56+00:00",
+  "lcsc": "C13712",
+  "mpn": "X206032768KGA2SC",
+  "type": "expand",
+  "stock": 46823,
+  "price": [
+   [
+    1,
+    0.0902
+   ],
+   [
+    50,
+    0.0707
+   ],
+   [
+    150,
+    0.0611
+   ]
+  ],
+  "pkg": "DT-26",
+  "desc": "-20\u2103~+70\u2103 12.5pF 32.768kHz 50k\u03a9 Through Hole Crystal Oscillator \u00b15ppm DT-26 Crystals ROHS",
+  "url": "https://jlcpcb.com/partdetail/C13712",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2403291504_YXC-Crystal-Oscillators-X206032768KGA2SC_C13712.pdf"
+ },
+ {
+  "query": "32.768kHz 2012",
+  "utc": "2026-11-07T23:04:56+00:00",
+  "lcsc": "C15482",
+  "mpn": "Q13MC14620002",
+  "type": "expand",
+  "stock": 92280,
+  "price": [
+   [
+    1,
+    0.1832
+   ],
+   [
+    50,
+    0.1448
+   ],
+   [
+    150,
+    0.1283
+   ]
+  ],
+  "pkg": "MC-146",
+  "desc": "-40\u2103~+85\u2103 12.5pF 32.768kHz 65k\u03a9 Crystal Oscillator \u00b120ppm MC-146 Crystals ROHS",
+  "url": "https://jlcpcb.com/partdetail/C15482",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2404180924_Seiko-Epson-Q13MC14620002_C15482.pdf"
+ },
+ {
+  "query": "C32346",
+  "utc": "2026-11-07T23:04:56+00:00",
+  "lcsc": "C32346",
+  "mpn": "Q13FC13500004",
+  "type": "base",
+  "stock": 432670,
+  "price": [
+   [
+    1,
+    0.1713
+   ],
+   [
+    50,
+    0.1351
+   ],
+   [
+    150,
+    0.1173
+   ]
+  ],
+  "pkg": "SMD3215-2P",
+  "desc": "-40\u2103~+85\u2103 12.5pF 32.768kHz 70k\u03a9 SMD crystal oscillator \u00b120ppm SMD3215-2P Crystals ROHS",
+  "url": "https://jlcpcb.com/partdetail/C32346",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2404180925_Seiko-Epson-Q13FC13500004_C32346.pdf"
+ },
+ {
+  "query": "BQ24074",
+  "utc": "2026-11-07T23:04:57+00:00",
+  "lcsc": "C54313",
+  "mpn": "BQ24074RGTR",
+  "type": "expand",
+  "stock": 5924,
+  "price": [
+   [
+    1,
+    2.118
+   ],
+   [
+    10,
+    1.8399
+   ],
+   [
+    30,
+    1.6649
+   ]
+  ],
+  "pkg": "QFN-16-EP(3x3)",
+  "desc": "-40\u2103~+125\u2103 1 1.5A 4.2V 4.35V~10.2V 6.5uA Charging IC Lithium Battery Not supported Support",
+  "url": "https://jlcpcb.com/partdetail/C54313",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1809192125_Texas-Instruments-BQ24074RGTR_C54313.pdf"
+ },
+ {
+  "query": "BQ24074",
+  "utc": "2026-11-07T23:04:57+00:00",
+  "lcsc": "C2861252",
+  "mpn": "BQ24074RGTT",
+  "type": "expand",
+  "stock": 150,
+  "price": [
+   [
+    1,
+    3.1418
+   ],
+   [
+    10,
+    2.6724
+   ],
+   [
+    30,
+    2.3796
+   ]
+  ],
+  "pkg": "VQFN-16-EP(3x3)",
+  "desc": "-40\u2103~+125\u2103 1 1.5A 4.2V 4.35V~10.5V 6.5uA Charging IC Lithium Battery Support Support VQFN-",
+  "url": "https://jlcpcb.com/partdetail/C2861252",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2303010930_Texas-Instruments-BQ24074RGTT_C2861252.pdf"
+ },
+ {
+  "query": "BQ24074",
+  "utc": "2026-11-07T23:04:57+00:00",
+  "lcsc": "C3682481",
+  "mpn": "BQ24074RGTRG4",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    1.472
+   ],
+   [
+    10,
+    1.472
+   ],
+   [
+    12,
+    1.472
+   ]
+  ],
+  "pkg": "VQFN-16(3x3)",
+  "desc": "-40\u2103~+125\u2103 1 1.5A 4.2V 4.35V~10.5V 6.5uA Charging IC Lithium Battery Support Support VQFN-",
+  "url": "https://jlcpcb.com/partdetail/C3682481",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2302282101_Texas-Instruments-BQ24074RGTRG4_C3682481.pdf"
+ },
+ {
+  "query": "BQ24074",
+  "utc": "2026-11-07T23:04:57+00:00",
+  "lcsc": "C9900265255",
+  "mpn": "595-BQ24074RGTT",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "VQFN-16-EP(3x3)",
+  "desc": "VQFN-16-EP(3x3) SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900265255",
+  "datasheet": null
+ },
+ {
+  "query": "C54313",
+  "utc": "2026-11-07T23:04:57+00:00",
+  "lcsc": "C54313",
+  "mpn": "BQ24074RGTR",
+  "type": "expand",
+  "stock": 5924,
+  "price": [
+   [
+    1,
+    2.118
+   ],
+   [
+    10,
+    1.8399
+   ],
+   [
+    30,
+    1.6649
+   ]
+  ],
+  "pkg": "QFN-16-EP(3x3)",
+  "desc": "-40\u2103~+125\u2103 1 1.5A 4.2V 4.35V~10.2V 6.5uA Charging IC Lithium Battery Not supported Support",
+  "url": "https://jlcpcb.com/partdetail/C54313",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_1809192125_Texas-Instruments-BQ24074RGTR_C54313.pdf"
+ },
+ {
+  "query": "MSK12C02",
+  "utc": "2026-11-07T23:04:57+00:00",
+  "lcsc": "C431540",
+  "mpn": "MSK12C02",
+  "type": "expand",
+  "stock": 179615,
+  "price": [
+   [
+    1,
+    0.0543
+   ],
+   [
+    100,
+    0.044
+   ],
+   [
+    300,
+    0.0386
+   ]
+  ],
+  "pkg": "SMD,8x2.8mm",
+  "desc": "-20\u2103~+70\u2103 1.4mm 10000 times 12V 2.8mm 50mA 8mm SMD(SMT) Tab SPDT Surface Mount, Right Angl",
+  "url": "https://jlcpcb.com/partdetail/C431540",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_SHOU-HAN-MSK12C02_C431540.pdf"
+ },
+ {
+  "query": "MSK12C02",
+  "utc": "2026-11-07T23:04:57+00:00",
+  "lcsc": "C9900208899",
+  "mpn": "MSK12C02",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "SW-TH_MSK12C02",
+  "desc": "SW-TH_MSK12C02 SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900208899",
+  "datasheet": null
+ },
+ {
+  "query": "MSK12C02",
+  "utc": "2026-11-07T23:04:57+00:00",
+  "lcsc": "C9900230827",
+  "mpn": "MSK12C02",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0398
+   ],
+   [
+    100,
+    0.0205
+   ]
+  ],
+  "pkg": "SMD",
+  "desc": "SMD SMT ROHS",
+  "url": "https://jlcpcb.com/partdetail/C9900230827",
+  "datasheet": null
+ },
+ {
+  "query": "MSK12C02",
+  "utc": "2026-11-07T23:04:57+00:00",
+  "lcsc": "C431541",
+  "mpn": "MSK12C02-HB",
+  "type": "expand",
+  "stock": 69742,
+  "price": [
+   [
+    1,
+    0.0614
+   ],
+   [
+    100,
+    0.0488
+   ],
+   [
+    300,
+    0.0424
+   ]
+  ],
+  "pkg": "SMD,8x2.8mm",
+  "desc": "-25\u2103~+70\u2103 1.4mm 10,000 cycles 12V 2.8mm 50mA 8mm Black Rectangular Columnar SMD(SMT) Tab S",
+  "url": "https://jlcpcb.com/partdetail/C431541",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2407161403_SHOU-HAN-MSK12C02-HB_C431541.pdf"
+ },
+ {
+  "query": "C431540",
+  "utc": "2026-11-07T23:04:57+00:00",
+  "lcsc": "C431540",
+  "mpn": "MSK12C02",
+  "type": "expand",
+  "stock": 179615,
+  "price": [
+   [
+    1,
+    0.0543
+   ],
+   [
+    100,
+    0.044
+   ],
+   [
+    300,
+    0.0386
+   ]
+  ],
+  "pkg": "SMD,8x2.8mm",
+  "desc": "-20\u2103~+70\u2103 1.4mm 10000 times 12V 2.8mm 50mA 8mm SMD(SMT) Tab SPDT Surface Mount, Right Angl",
+  "url": "https://jlcpcb.com/partdetail/C431540",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_SHOU-HAN-MSK12C02_C431540.pdf"
+ },
+ {
+  "query": "C2681555",
+  "utc": "2026-11-07T23:04:58+00:00",
+  "lcsc": "C2681555",
+  "mpn": "TYPE-C 24P QT",
+  "type": "expand",
+  "stock": 78241,
+  "price": [
+   [
+    1,
+    0.5398
+   ],
+   [
+    50,
+    0.4236
+   ],
+   [
+    150,
+    0.3664
+   ]
+  ],
+  "pkg": "SMD",
+  "desc": "-30\u2103~+80\u2103 1 10 thousand cycles 20V 24P 3A 7.9mm Black Female Surface Mount, Right Angle Ty",
+  "url": "https://jlcpcb.com/partdetail/C2681555",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2101221939_SHOU-HAN-TYPE-C-24P-QT_C2681555.pdf"
+ },
+ {
+  "query": "AP2112K-3.3",
+  "utc": "2026-11-07T23:04:58+00:00",
+  "lcsc": "C51118",
+  "mpn": "AP2112K-3.3TRG1",
+  "type": "expand",
+  "stock": 13585,
+  "price": [
+   [
+    1,
+    0.1829
+   ],
+   [
+    50,
+    0.1451
+   ],
+   [
+    150,
+    0.1265
+   ]
+  ],
+  "pkg": "SOT-25-5",
+  "desc": "-40\u2103~+85\u2103@(Ta) 1 250mV@(600mA) 3.3V 50uVrms 55uA 600mA 65dB@(1kHz) 6V Fixed Over Current P",
+  "url": "https://jlcpcb.com/partdetail/C51118",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Diodes-Incorporated-AP2112K-3-3TRG1_C51118.pdf"
+ },
+ {
+  "query": "AP2112K-3.3",
+  "utc": "2026-11-07T23:04:58+00:00",
+  "lcsc": "C23380830",
+  "mpn": "AP2112K-3.3TRG1",
+  "type": "expand",
+  "stock": 22550,
+  "price": [
+   [
+    1,
+    0.1113
+   ],
+   [
+    50,
+    0.0897
+   ],
+   [
+    150,
+    0.0789
+   ]
+  ],
+  "pkg": "SOT-23-5",
+  "desc": "-40\u2103~+85\u2103@(Ta) 1 10uA 3.3V 320mV@(600mA) 5.5V 600mA 75dB@(1kHz) Fixed Over Temperature Pro",
+  "url": "https://jlcpcb.com/partdetail/C23380830",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2406281355_TECH-PUBLIC-AP2112K-3-3TRG1_C23380830.pdf"
+ },
+ {
+  "query": "AP2112K-3.3",
+  "utc": "2026-11-07T23:04:58+00:00",
+  "lcsc": "C3021085",
+  "mpn": "TPAP2112K-3.3TRG1",
+  "type": "expand",
+  "stock": 5542,
+  "price": [
+   [
+    1,
+    0.0951
+   ],
+   [
+    50,
+    0.0833
+   ],
+   [
+    150,
+    0.0774
+   ]
+  ],
+  "pkg": "SOT-23-5",
+  "desc": "-40\u2103~+85\u2103@(Ta) 1 10uA 3.3V 320mV@(600mA) 5.5V 600mA 80dB@(100Hz) Fixed Over Current Protec",
+  "url": "https://jlcpcb.com/partdetail/C3021085",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2205241716_TECH-PUBLIC-TPAP2112K-3-3TRG1_C3021085.pdf"
+ },
+ {
+  "query": "AP2112K-3.3",
+  "utc": "2026-11-07T23:04:58+00:00",
+  "lcsc": "C22365427",
+  "mpn": "AP2112K-3.3TRG1(MS)",
+  "type": "expand",
+  "stock": 31744,
+  "price": [
+   [
+    1,
+    0.0795
+   ],
+   [
+    50,
+    0.0632
+   ],
+   [
+    150,
+    0.0548
+   ]
+  ],
+  "pkg": "SOT-23-5",
+  "desc": "-40\u2103~+125\u2103@(Tj) 1 2uA 3.3V 320mV@(600mA) 600mA 6V 75dB@(1kHz) Fixed Over Current Protectio",
+  "url": "https://jlcpcb.com/partdetail/C22365427",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2404151058_MSKSEMI-AP2112K-3-3TRG1-MS_C22365427.pdf"
+ },
+ {
+  "query": "C51118",
+  "utc": "2026-11-07T23:04:58+00:00",
+  "lcsc": "C51118",
+  "mpn": "AP2112K-3.3TRG1",
+  "type": "expand",
+  "stock": 13585,
+  "price": [
+   [
+    1,
+    0.1829
+   ],
+   [
+    50,
+    0.1451
+   ],
+   [
+    150,
+    0.1265
+   ]
+  ],
+  "pkg": "SOT-25-5",
+  "desc": "-40\u2103~+85\u2103@(Ta) 1 250mV@(600mA) 3.3V 50uVrms 55uA 600mA 65dB@(1kHz) 6V Fixed Over Current P",
+  "url": "https://jlcpcb.com/partdetail/C51118",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Diodes-Incorporated-AP2112K-3-3TRG1_C51118.pdf"
+ },
+ {
+  "query": "C2061",
+  "utc": "2026-11-07T23:04:58+00:00",
+  "lcsc": "C49363163",
+  "mpn": "SC2061UA-BK",
+  "type": "expand",
+  "stock": 50,
+  "price": [
+   [
+    1,
+    0.1225
+   ],
+   [
+    50,
+    0.0975
+   ],
+   [
+    150,
+    0.0849
+   ]
+  ],
+  "pkg": "TO-92S",
+  "desc": "-40\u2103~+85\u2103 1.8mT 1mT 2.2V~5V 2.5uA Omnipolar Push-pull TO-92S Hall Switches ROHS",
+  "url": "https://jlcpcb.com/partdetail/C49363163",
+  "datasheet": null
+ }
+]

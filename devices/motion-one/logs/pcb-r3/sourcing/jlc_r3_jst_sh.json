@@ -1,0 +1,132 @@
+[
+ {
+  "query": "C160402",
+  "utc": "2026-11-08T05:59:23+00:00",
+  "lcsc": "C160402",
+  "mpn": "SM02B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 69104,
+  "price": [
+   [
+    1,
+    0.1322
+   ],
+   [
+    50,
+    0.1088
+   ],
+   [
+    150,
+    0.0969
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2.9mm 2P 4.32mm 4mm 50V Auxiliary Solder Pin Copper alloy PA SH ",
+  "url": "https://jlcpcb.com/partdetail/C160402",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-SM02B-SRSS-TB-LF-SN_C160402.pdf"
+ },
+ {
+  "query": "SM02B-SRSS-TB",
+  "utc": "2026-11-08T05:59:24+00:00",
+  "lcsc": "C18337480",
+  "mpn": "SM02B-SRSS-TB",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.1847
+   ],
+   [
+    10,
+    0.1847
+   ],
+   [
+    30,
+    0.1847
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2.9mm 2P 4.32mm 4mm 50V Auxiliary Solder Pin Copper alloy PA SH ",
+  "url": "https://jlcpcb.com/partdetail/C18337480",
+  "datasheet": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2403271619_JST-SM02B-SRSS-TB_C18337480.pdf"
+ },
+ {
+  "query": "SM02B-SRSS-TB",
+  "utc": "2026-11-08T05:59:24+00:00",
+  "lcsc": "C160402",
+  "mpn": "SM02B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 69104,
+  "price": [
+   [
+    1,
+    0.1322
+   ],
+   [
+    50,
+    0.1088
+   ],
+   [
+    150,
+    0.0969
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm 1x2P 2 2.9mm 2P 4.32mm 4mm 50V Auxiliary Solder Pin Copper alloy PA SH ",
+  "url": "https://jlcpcb.com/partdetail/C160402",
+  "datasheet": "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-SM02B-SRSS-TB-LF-SN_C160402.pdf"
+ },
+ {
+  "query": "SM02B-SRSS-TB",
+  "utc": "2026-11-08T05:59:24+00:00",
+  "lcsc": "C5306062",
+  "mpn": "SM02B-SRSS-TB(LF)(SN)",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    0.0664
+   ],
+   [
+    50,
+    0.054
+   ],
+   [
+    150,
+    0.0478
+   ]
+  ],
+  "pkg": "SMD,P=1mm,Surface Mount\uff0cRight Angle",
+  "desc": "-25\u2103~+85\u2103 1 1A 1mm Copper alloy Surface Mount, Right Angle Tin SMD,P=1mm,Surface Mount\uff0cRig",
+  "url": "https://jlcpcb.com/partdetail/C5306062",
+  "datasheet": null
+ },
+ {
+  "query": "SM02B-SRSS-TB",
+  "utc": "2026-11-08T05:59:24+00:00",
+  "lcsc": "C24283063",
+  "mpn": "SM02B-SRSS-TB(LF)(SN)(P)",
+  "type": "expand",
+  "stock": 0,
+  "price": [
+   [
+    1,
+    1.1972
+   ],
+   [
+    10,
+    1.1972
+   ],
+   [
+    30,
+    1.1972
+   ]
+  ],
+  "pkg": "-",
+  "desc": "- Lack of specifications ROHS",
+  "url": "https://jlcpcb.com/partdetail/C24283063",
+  "datasheet": null
+ }
+]

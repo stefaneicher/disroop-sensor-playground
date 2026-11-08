@@ -1,0 +1,30 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * batteriemessteiler: vbat_en 0->3.3 v bei 1 ms, aus bei 36 ms, ausgang teiler + 100 nf, saadc-last
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+
+Initial Transient Solution
+--------------------------
+
+Node                                   Voltage
+----                                   -------
+vbat                                       4.2
+g                                          4.2
+top                                   1.04e-06
+en                                           0
+adc                                    5.2e-07
+ven#branch                                   0
+vbat#branch                         -9.385e-12
+
+
+No. of Data Rows : 4548
+vadc_settled        =  2.097353e+00 from=  3.300000e-02 to=  3.590685e-02
+t_settle            =  2.402638e-02
+ioff                =  -9.365589e-12 from=  2.000000e-04 to=  9.028000e-04
+ion                 =  -2.522646e-05 from=  3.300000e-02 to=  3.590685e-02
+Note: Simulation executed from .control section 
+Using SPARSE 1.3 as Direct Linear Solver
