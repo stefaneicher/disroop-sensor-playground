@@ -178,6 +178,19 @@
       "note": "Stand: fem/fem_results.json 03:43, alte Geometrie v1; keine r3-Netzstudie. Wiederaufnahme nur auf Wunsch."
     },
     {
+      "id": "F-08",
+      "parent": "T-01.3",
+      "title": "CAD-Build beschleunigen",
+      "kind": "feedback",
+      "topic": "Gehäuse & Gestaltung",
+      "owner": "mechanical-engineer",
+      "status": "open",
+      "source": "Chat 11:24",
+      "refs": [],
+      "note": "Stand: fem/fem_results.json 03:43, alte Geometrie v1; keine r3-Netzstudie. Wiederaufnahme nur auf Wunsch.",
+      "summary": "Kollision mit vereinfachter Platine (Quader statt 216-MB-STEP); Cache für unveränderte Teile; Ober-/Unterschale parallel bauen; Repo nach WSL ~ verschieben (Datei-IO ~80× schneller), .wslconfig mehr RAM. Erst nach Gehäuse r3."
+    },
+    {
       "id": "T-01.4",
       "parent": "T-01",
       "title": "Bootloader-Board-Definition (Q-01)",
