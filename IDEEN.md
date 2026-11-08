@@ -11,6 +11,7 @@ Ungeordnete Ideen und Möglichkeiten, noch **nicht** entschieden. Wird eine Idee
 - Eigenes Spiel-Device als Nachfolger des Thingy (siehe Motion One).
 
 ### Software-Qualität wie in der Medizinentwicklung (User, 2026-11-08)
+Weiterentwickelt als Anforderungsentwurf in `devices/motion-one/regulatory/10_Prozessanforderungen.md` (dort PRQ-040 bis PRQ-046).
 Idee, noch nicht entschieden. Die Eigenschaften, die der User aus der Medizinalentwicklung kennt, sollen für die Firmware (und sinnvoll auch Bridge/Android) gelten:
 - **Warnungen sind Fehler, null Warnungen:** `-Werror` mit `-Wall -Wextra` (und strengeren Sätzen) auf allen Compilern.
 - **Mehrere Compiler und Versionen:** Clang, GCC (für Zielgerät als ARM GCC), IAR; jeweils in mehreren Versionen. Unklar, was „AMG, CC“ meinte: vermutlich *ARM-GCC* und *GCC*, oder *Arm Compiler (armclang)*. Bitte bestätigen.

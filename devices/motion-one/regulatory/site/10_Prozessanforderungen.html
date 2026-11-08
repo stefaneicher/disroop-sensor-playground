@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Prozessanforderungen</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="top"><a href="index.html">Start</a> · <a href="01_Normen.html">Normen</a> · <a href="02_SRS.html">SRS</a> · <a href="03_SAD.html">SAD</a> · <a href="04_SDD.html">SDD</a> · <a href="05_SOUP.html">SOUP</a> · <a href="06_Risiko.html">Risiko</a> · <a href="07_Rueckverfolgbarkeit.html">Rückverfolgbarkeit</a> · <a href="08_Luecken.html">Lücken</a> · <a href="09_Skills.html">Skills</a> · <a href="10_Prozessanforderungen.html">Prozessanforderungen</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a
+href="#prozessanforderungen-tests-abdeckung-anforderungssprache-toolchain"
+id="toc-prozessanforderungen-tests-abdeckung-anforderungssprache-toolchain">Prozessanforderungen:
+Tests, Abdeckung, Anforderungssprache, Toolchain</a>
+<ul>
+<li><a href="#1-zusammenfassung-der-empfehlungen"
+id="toc-1-zusammenfassung-der-empfehlungen">1. Zusammenfassung der
+Empfehlungen</a></li>
+<li><a href="#2-abdeckung-coverage" id="toc-2-abdeckung-coverage">2.
+Abdeckung (Coverage)</a></li>
+<li><a href="#3-testframework" id="toc-3-testframework">3.
+Testframework</a></li>
+<li><a href="#4-anforderungen-als-gherkin-feature-dateien"
+id="toc-4-anforderungen-als-gherkin-feature-dateien">4. Anforderungen
+als Gherkin (Feature-Dateien)</a></li>
+<li><a href="#5-formale-anforderungssprache-aus-der-avionik"
+id="toc-5-formale-anforderungssprache-aus-der-avionik">5. Formale
+Anforderungssprache aus der Avionik</a></li>
+<li><a href="#6-toolchain-compiler-matrix-build"
+id="toc-6-toolchain-compiler-matrix-build">6. Toolchain,
+Compiler-Matrix, Build</a></li>
+<li><a href="#7-dokumentation-für-fda-und-iec-62304"
+id="toc-7-dokumentation-für-fda-und-iec-62304">7. Dokumentation für FDA
+und IEC 62304</a></li>
+<li><a href="#8-reihenfolge-zum-iterieren"
+id="toc-8-reihenfolge-zum-iterieren">8. Reihenfolge zum
+Iterieren</a></li>
+<li><a href="#9-offene-fragen" id="toc-9-offene-fragen">9. Offene
+Fragen</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1
+id="prozessanforderungen-tests-abdeckung-anforderungssprache-toolchain">Prozessanforderungen:
+Tests, Abdeckung, Anforderungssprache, Toolchain</h1>
+<p><strong>Status: Entwurf zum Iterieren. Nichts davon ist
+umgesetzt.</strong> Das Dokument sammelt, was der User am 2026-11-08
+gefordert hat, mit meiner Empfehlung und den offenen Fragen je Punkt.
+Die Anforderungen an die <em>Firmware</em> stehen im <a
+href="02_SRS.html">SRS</a>, hier stehen die Anforderungen an den
+<em>Entwicklungs- und Nachweisprozess</em> (<code>PRQ-nnn</code>).
+Bezug: <a href="08_Luecken.html">Lücken</a>, <code>IDEEN.md</code>,
+<code>TODO.md</code>.</p>
+<h2 id="1-zusammenfassung-der-empfehlungen">1. Zusammenfassung der
+Empfehlungen</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Thema</th>
+<th>Empfehlung</th>
+<th>Aufwand</th>
+<th>Offen</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Coverage</td>
+<td>100 % <strong>MC/DC</strong> für die reinen C-Module, Statement +
+Branch für die Adapter, Ausnahmen begründet und gelistet</td>
+<td>mittel bis hoch</td>
+<td>Begriff klären (<a
+href="10_Prozessanforderungen.html#OPEN-10">OPEN-10</a>)</td>
+</tr>
+<tr class="even">
+<td>Testframework</td>
+<td><strong>GoogleTest auf x86</strong> (Hauptweg). Auf dem Gerät
+<strong>ZTest</strong> (Zephyr) als Option, nicht GoogleTest</td>
+<td>mittel</td>
+<td>Tests von Unity umschreiben?</td>
+</tr>
+<tr class="odd">
+<td>Adapter testen</td>
+<td>Zephyr-Code läuft auf dem PC mit
+<strong><code>native_sim</code></strong>, damit auch BLE-, IMU- und
+UI-Adapter Tests bekommen</td>
+<td>hoch</td>
+<td>Machbarkeit prüfen</td>
+</tr>
+<tr class="even">
+<td>Gherkin</td>
+<td>Sinnvoll als <strong>Verifikationsspezifikation</strong> für
+Verhalten an der BLE-Schnittstelle, nicht als Ersatz für das SRS und
+nicht für Algorithmen</td>
+<td>niedrig bis mittel</td>
+<td>SRS oder Features als Quelle?</td>
+</tr>
+<tr class="odd">
+<td>Avionik-Sprache</td>
+<td>Kandidaten: <strong>EARS</strong>, <strong>FRET</strong>,
+<strong>AADL (SAE AS5506)</strong>, <strong>SCADE</strong>. Ich empfehle
+EARS für die SRS-Sätze</td>
+<td>niedrig</td>
+<td>Welche war gemeint? (<a
+href="10_Prozessanforderungen.html#OPEN-11">OPEN-11</a>)</td>
+</tr>
+<tr class="even">
+<td>Toolchain</td>
+<td>Compiler-Matrix, Warnungen als Fehler, Conan 2, modernes CMake,
+Docker je Compilerfamilie, parallele Jobs</td>
+<td>hoch</td>
+<td>IAR-Lizenz, Compiler-Auswahl</td>
+</tr>
+<tr class="odd">
+<td>Normkonformität</td>
+<td>Dokumentation weiterhin als Dokument-als-Code, Nachweise (Abdeckung,
+Testberichte) automatisch erzeugt</td>
+<td>mittel</td>
+<td>Zweckbestimmung (OPEN-01)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-abdeckung-coverage">2. Abdeckung (Coverage)</h2>
+<h3 id="begriffe-zuerst">Begriffe zuerst</h3>
+<p>Der User nennt „Multi-Condition Decision Coverage“ und „MCDC“. Das
+sind <strong>zwei verschiedene Kriterien</strong>:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Kriterium</th>
+<th>Bedeutung</th>
+<th>Testfälle bei n Bedingungen</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Statement / Branch</td>
+<td>jede Anweisung / jeder Zweig einmal</td>
+<td>wenige</td>
+</tr>
+<tr class="even">
+<td><strong>MC/DC</strong> (<em>Modified Condition/Decision
+Coverage</em>)</td>
+<td>jede Bedingung ändert <strong>für sich allein</strong> das Ergebnis
+der Entscheidung</td>
+<td>etwa n+1</td>
+</tr>
+<tr class="odd">
+<td><strong>MCC</strong> (<em>Multiple Condition Coverage</em>, auch
+„Multi-Condition“)</td>
+<td>alle Kombinationen aller Bedingungen</td>
+<td>2ⁿ</td>
+</tr>
+</tbody>
+</table>
+<p>MC/DC ist das Kriterium aus der Avionik (DO-178C, Stufe A) und der
+Automobilnorm ISO 26262 (ASIL D). MCC ist deutlich teurer und fast nie
+gefordert. Ich gehe davon aus, dass <strong>MC/DC</strong> gemeint ist
+(<a href="10_Prozessanforderungen.html#OPEN-10">OPEN-10</a>).</p>
+<p>Wichtig für die Einordnung: <strong>IEC 62304 verlangt kein
+MC/DC.</strong> Sie verlangt Abnahmekriterien für Einheiten, bei Klasse
+C zusätzliche (Abschnitt 5.5.4, Nummer ungeprüft). Die FDA verlangt
+Testnachweise, aber keine bestimmte Abdeckung. 100 % MC/DC ist also eine
+<strong>selbst gesetzte, strengere Anforderung</strong>. Das ist
+zulässig und ein starkes Signal in einem Audit, wenn sie eingehalten
+wird.</p>
+<h3 id="anforderungen">Anforderungen</h3>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="PRQ-001"></a><strong>PRQ-001</strong></td>
+<td>Für die reinen C-Module (<code>codec</code>, <code>fusion</code>,
+<code>icm</code>, <code>power</code>, <code>input</code>) wird
+<strong>100 % MC/DC</strong> gemessen und gefordert.</td>
+<td>Entwurf</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-002"></a><strong>PRQ-002</strong></td>
+<td>Für die Zephyr-Adapter (<code>ble_thingy</code>,
+<code>imu_task</code>, <code>ui</code>, <code>ext</code>,
+<code>battery</code>, <code>main</code>, <code>board_early</code>) gilt
+<strong>100 % Statement und Branch</strong>, MC/DC nach
+Möglichkeit.</td>
+<td>Entwurf, Vorschlag</td>
+</tr>
+<tr class="odd">
+<td><a id="PRQ-003"></a><strong>PRQ-003</strong></td>
+<td>Jede Ausnahme (nicht erreichbarer Code, defensive Prüfung,
+Hardwarefehler, die sich nicht erzeugen lassen) steht in einer Liste mit
+Begründung und Prüfdatum. Ein Prozent ohne Begründung zählt nicht.</td>
+<td>Entwurf</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-004"></a><strong>PRQ-004</strong></td>
+<td>Gemessen wird mit <strong>GCC ab Version 14</strong>
+(<code>-fcondition-coverage</code>, Bericht mit
+<code>gcov --conditions</code>) oder <strong>Clang ab Version
+18</strong> (<code>-fcoverage-mcdc</code>, Bericht mit
+<code>llvm-cov</code>). Beide werden in der Compiler-Matrix (<a
+href="10_Prozessanforderungen.html#PRQ-040">PRQ-040</a>) geführt.</td>
+<td>Entwurf, Versionen prüfen</td>
+</tr>
+<tr class="odd">
+<td><a id="PRQ-005"></a><strong>PRQ-005</strong></td>
+<td>Der Abdeckungsbericht (HTML und maschinenlesbar) wird in der CI
+erzeugt, als Artefakt abgelegt und <strong>blockiert den Merge</strong>,
+wenn ein Modul unter dem Sollwert liegt.</td>
+<td>Entwurf</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-006"></a><strong>PRQ-006</strong></td>
+<td>Der Bericht verweist je Datei auf die Anforderungen (<a
+href="02_SRS.html#SRS-001">SRS-001</a> usw.), damit die Abdeckung Teil des
+Verifikationsnachweises ist.</td>
+<td>Entwurf</td>
+</tr>
+</tbody>
+</table>
+<h3 id="einschätzung-kritisch">Einschätzung (kritisch)</h3>
+<ul>
+<li><strong>Machbar</strong> für die reinen Module: Sie sind klein (rund
+1500 Zeilen C, ohne Tests), ohne Hardware, und die Entscheidungen sind
+meist kurz. MC/DC braucht grob n+1 Testfälle je Entscheidung mit n
+Bedingungen, also mehr als Branch-Abdeckung. Wie viele es hier sind,
+zeigt erst das Pilotmodul (Abschnitt 8).</li>
+<li><strong>Nicht ehrlich machbar</strong> für den Zephyr-Kern und den
+BLE-Stack (SOUP): nicht unser Code, nicht messbar. Nur eigener Code
+zählt.</li>
+<li><strong>Aussagekraft:</strong> Abdeckung auf <strong>x86</strong>
+misst den Quelltext, nicht das Programm auf dem Cortex-M4. Für Klasse C
+ist das mit Begründung üblich. Wer es auf Objektcode-Ebene braucht
+(Avionik Stufe A), muss auf dem Gerät messen. Das ist deutlich
+aufwändiger (Instrumentierung, Platz, kein UART im Gerät, siehe
+ADR-0002).</li>
+<li><strong>Fallen:</strong> Entscheidungen mit Nebenwirkungen im
+Ausdruck, Makros, die mehrere Bedingungen verstecken (<code>MIN</code>,
+<code>BIT</code>, <code>ARRAY_SIZE</code>), Zeitbedingungen und
+<code>volatile</code>. Das Werkzeug zählt Bedingungen im
+vorverarbeiteten Code. Manche Ausdrücke sind <strong>nicht
+MC/DC-testbar</strong>, weil Bedingungen nicht unabhängig sind (z. B.
+<code>x &gt; 0 &amp;&amp; x &lt; 10</code> ist abhängig von
+<code>x</code>). Dort wird der Code vereinfacht statt der Test
+verbogen.</li>
+<li>GCC begrenzt Ausdrücke für MC/DC auf 64 Bedingungen. Das ist hier
+kein Thema.</li>
+<li><strong>Alternative bei Bedarf:</strong> Kommerzielle Werkzeuge
+(VectorCAST, LDRA, Cantata, BullseyeCoverage) liefern Berichte, die
+Auditoren kennen, und messen auch auf dem Gerät. Sie kosten Lizenzen.
+Für den Start reichen GCC 14 und Clang 18.</li>
+</ul>
+<h2 id="3-testframework">3. Testframework</h2>
+<h3 id="entscheid-googletest-auf-x86-ztest-auf-dem-gerät">Entscheid:
+GoogleTest auf x86, ZTest auf dem Gerät</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Kriterium</th>
+<th>GoogleTest</th>
+<th>Unity (heute)</th>
+<th>ZTest (Zephyr)</th>
+<th>CppUTest</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sprache</td>
+<td>C++ (testet C über <code>extern "C"</code>)</td>
+<td>C</td>
+<td>C</td>
+<td>C++</td>
+</tr>
+<tr class="even">
+<td>Läuft auf x86</td>
+<td>ja</td>
+<td>ja</td>
+<td>ja (über <code>native_sim</code>)</td>
+<td>ja</td>
+</tr>
+<tr class="odd">
+<td>Läuft auf Cortex-M4 (256 KB RAM)</td>
+<td><strong>nein praktisch</strong>: braucht C++-Laufzeit, Ausnahmen,
+RTTI, viel Platz</td>
+<td>ja</td>
+<td><strong>ja</strong>, gebaut für Zephyr</td>
+<td>möglich, aber nicht unser Weg</td>
+</tr>
+<tr class="even">
+<td>Mocking</td>
+<td><strong>GoogleMock</strong></td>
+<td>von Hand</td>
+<td><code>fff</code> (Fake-Funktionen)</td>
+<td>CppUMock</td>
+</tr>
+<tr class="odd">
+<td>Parametrisierte Tests, XML-Bericht</td>
+<td><strong>ja</strong></td>
+<td>nein / mit Zusatz</td>
+<td>XML über Twister</td>
+<td>teilweise</td>
+</tr>
+<tr class="even">
+<td>Passt zur MC/DC-Messung</td>
+<td>ja (beliebiger Compiler)</td>
+<td>ja</td>
+<td>ja</td>
+<td>ja</td>
+</tr>
+</tbody>
+</table>
+<p>Begründung: GoogleTest ist auf dem PC das bequemste und verbreitetste
+Werkzeug (Mocks, Parametertests, Berichte für Nachweise). Auf dem Gerät
+ist es zu schwer. Dort bietet Zephyr <strong>ZTest</strong> mit
+<strong>Twister</strong> als Testläufer. Die Frage „GTest oder CPU-Test“
+habe ich als „GoogleTest oder CppUTest/ZTest“ gelesen (<a
+href="10_Prozessanforderungen.html#OPEN-12">OPEN-12</a>).</p>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="PRQ-010"></a><strong>PRQ-010</strong></td>
+<td>Unit-Tests laufen mit <strong>GoogleTest auf x86</strong> (Linux, im
+Docker-Image). Die Testdateien sind C++ und rufen die C-Module über
+<code>extern "C"</code> auf. Die Firmware bleibt C.</td>
+<td>Entwurf</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-011"></a><strong>PRQ-011</strong></td>
+<td>Die Ports <code>icm_bus_t</code> und <code>vbat_port_t</code> werden
+mit GoogleMock oder handgeschriebenen Fakes ersetzt.</td>
+<td>Entwurf</td>
+</tr>
+<tr class="odd">
+<td><a id="PRQ-012"></a><strong>PRQ-012</strong></td>
+<td>Die bestehenden 69 Unity-Tests werden nach GoogleTest übernommen.
+Umschreiben ist mechanisch, das Verhalten bleibt gleich. Ein Test gilt
+erst als übernommen, wenn er auf demselben Code
+<strong>fehlschlägt</strong>, wenn man die Prüfung umkehrt
+(Gegenprobe).</td>
+<td>Entwurf, Aufwand klein bis mittel</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-013"></a><strong>PRQ-013</strong></td>
+<td><strong>Option:</strong> Dieselben Testfälle sind auf dem Gerät
+ausführbar (<strong>ZTest</strong> über Twister, Ergebnis per RTT, da
+kein UART). Zweck: Gleitkomma- und Zeitverhalten auf dem echten
+Prozessor, Treiber-Integration.</td>
+<td>Option</td>
+</tr>
+<tr class="odd">
+<td><a id="PRQ-014"></a><strong>PRQ-014</strong></td>
+<td>Gemeinsame Testvektoren (Eingabe, erwartete Bytes) liegen als Daten
+vor (Header oder Datei), damit GoogleTest und ZTest dieselben Fälle
+prüfen, ohne die Testlogik doppelt zu pflegen.</td>
+<td>Entwurf</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-015"></a><strong>PRQ-015</strong></td>
+<td>Die Zephyr-Adapter werden auf dem PC mit
+<strong><code>native_sim</code></strong> gebaut und getestet (simulierte
+GPIO, SPI, Bluetooth-Controller). Dadurch bekommen die Einheiten UNIT-12
+bis UNIT-18 Tests.</td>
+<td>Entwurf, Machbarkeit prüfen</td>
+</tr>
+</tbody>
+</table>
+<h3 id="einschätzung">Einschätzung</h3>
+<ul>
+<li>Ohne <code>native_sim</code> (PRQ-015) bleiben die Adapter
+ungetestet, und 100 % bei PRQ-002 wird nicht erreichbar. Das ist die
+grösste technische Unbekannte. Zephyr bringt dafür einen
+Bluetooth-Controller-Ersatz (virtuell) mit. Ob er unseren GATT-Code
+ausreichend abdeckt, muss ein Spike zeigen.</li>
+<li>Auf dem x86-PC laufen <code>float</code> mit SSE, auf dem Cortex-M4F
+mit der Single-Precision-FPU. Beides ist IEEE 754, Ergebnisse können
+sich durch Fused-Multiply-Add (<code>-ffp-contract</code>) in der
+letzten Stelle unterscheiden. Darum PRQ-013 als Option und Toleranzen in
+den Fusion-Tests.</li>
+<li>Das Hauptrisiko liegt nicht im Framework, sondern in den Zeit- und
+Nebenläufigkeitsfällen der Adapter.</li>
+</ul>
+<h2 id="4-anforderungen-als-gherkin-feature-dateien">4. Anforderungen
+als Gherkin (Feature-Dateien)</h2>
+<p>Gherkin beschreibt Verhalten in der Form <em>Gegeben / Wenn /
+Dann</em>, in Dateien <code>*.feature</code>. Beispiel für <a
+href="02_SRS.html#SRS-010">SRS-010</a>:</p>
+<pre class="gherkin"><code>@SRS-010
+Feature: Motion-Konfiguration über BLE
+  Scenario: Frequenz ausserhalb des Bereichs wird abgelehnt
+    Given das Gerät ist verbunden
+    When der Client in EF680401 die Frequenz 300 Hz schreibt
+    Then antwortet das Gerät mit &quot;Value not allowed&quot;
+    And die Konfiguration bleibt unverändert</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="PRQ-020"></a><strong>PRQ-020</strong></td>
+<td>Verhalten an der BLE-Schnittstelle und am Taster wird als
+Feature-Dateien unter
+<code>devices/motion-one/regulatory/features/</code> festgehalten.</td>
+<td>Entwurf</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-021"></a><strong>PRQ-021</strong></td>
+<td>Jedes Szenario trägt Tags auf die Anforderung
+(<code>@SRS-nnn</code>) und, falls vorhanden, auf die Gefährdung
+(<code>@HAZ-nn</code>). Die Rückverfolgbarkeitsmatrix wird daraus
+erzeugt.</td>
+<td>Entwurf</td>
+</tr>
+<tr class="odd">
+<td><a id="PRQ-022"></a><strong>PRQ-022</strong></td>
+<td>Die Szenarien laufen auf zwei Ebenen: (a) auf x86 gegen die C-Module
+bzw. <code>native_sim</code> (mit <code>cucumber-cpp</code> und
+GoogleTest), (b) am Gerät über BLE (z. B. Python-Schritte mit
+<code>behave</code> und <code>bleak</code> gegen das echte Gerät,
+Hardware-in-the-Loop).</td>
+<td>Entwurf</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-023"></a><strong>PRQ-023</strong></td>
+<td>Es gibt <strong>eine</strong> Quelle der Wahrheit je Anforderung.
+Entscheid offen (<a
+href="10_Prozessanforderungen.html#OPEN-13">OPEN-13</a>).</td>
+<td>offen</td>
+</tr>
+</tbody>
+</table>
+<h3 id="einschätzung-sinnvoll-aber-mit-grenzen">Einschätzung: sinnvoll,
+aber mit Grenzen</h3>
+<p><strong>Dafür:</strong> Szenarien sind für Fachleute ohne
+Programmierkenntnis lesbar, prüfbar und wiederholbar. Sie eignen sich
+gut für Zustände und Protokoll (Verbinden, Abonnieren, Fehlerantworten,
+Taster kurz/lang, Abschaltung). Die Tags liefern die Rückverfolgbarkeit,
+die IEC 62304 verlangt.</p>
+<p><strong>Dagegen:</strong></p>
+<ul>
+<li>Für Zahlen und Algorithmen (Filtergenauigkeit, Bias-Schwelle,
+Kodierung auf Bit-Ebene) sind Gherkin-Szenarien umständlich. Dort
+bleiben Tabellen und Testvektoren besser.</li>
+<li>Gherkin ist <strong>nicht formal</strong>: Es prüft nichts von
+allein, ein Szenario ist nur so gut wie die Schritte dahinter.</li>
+<li>Eine zweite Beschreibung neben dem SRS führt zu Doppelpflege.
+Deshalb PRQ-023.</li>
+</ul>
+<p><strong>Mein Vorschlag:</strong> Das SRS (ID, Satz, Tag) bleibt die
+<strong>Anforderung</strong>. Gherkin ist die
+<strong>Verifikationsspezifikation</strong> (Testfall in lesbarer Form).
+Die Matrix verbindet beides über die Tags. Nur Verhalten, das sich als
+Szenario klar sagen lässt, wird als Feature geschrieben (geschätzt 60–70
+% der Anforderungen).</p>
+<h2 id="5-formale-anforderungssprache-aus-der-avionik">5. Formale
+Anforderungssprache aus der Avionik</h2>
+<p>Der User erinnert sich an „eine Sprache aus der Avionik mit einer
+Nummer“. Ich kenne mehrere Kandidaten (<a
+href="10_Prozessanforderungen.html#OPEN-11">OPEN-11</a>):</p>
+<table>
+<thead>
+<tr class="header">
+<th>Kandidat</th>
+<th>Was es ist</th>
+<th>Nummer?</th>
+<th>Passt hier?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>EARS</strong></td>
+<td><em>Easy Approach to Requirements Syntax</em>: Satzschablonen („Wenn
+<Ereignis>, soll das System <Reaktion>“), aus der Luftfahrt
+(Rolls-Royce)</td>
+<td>nein</td>
+<td><strong>ja</strong>, leicht, bleibt Markdown</td>
+</tr>
+<tr class="even">
+<td><strong>FRET</strong> (NASA)</td>
+<td>strukturierte Sprache (FRETish) mit Übersetzung in Temporallogik,
+Prüfung mit Modellprüfern</td>
+<td>nein</td>
+<td>ja, wenn echte formale Prüfung gewünscht</td>
+</tr>
+<tr class="odd">
+<td><strong>AADL</strong></td>
+<td><em>Architecture Analysis &amp; Design Language</em>, <strong>SAE
+AS5506</strong></td>
+<td><strong>ja (AS5506)</strong></td>
+<td>eher für Architektur (SAD) als für Anforderungen</td>
+</tr>
+<tr class="even">
+<td><strong>SCADE / Lustre</strong></td>
+<td>modellbasierte Sprache für sicherheitskritische Steuerungen,
+qualifizierter Codegenerator (DO-178C)</td>
+<td>nein</td>
+<td>Overkill, bräuchte Werkzeug und Lizenz</td>
+</tr>
+<tr class="odd">
+<td><strong>DO-178C</strong> (+ DO-331 Modellbasiert, DO-333 Formale
+Methoden)</td>
+<td><strong>Norm</strong>, keine Sprache, aber der Rahmen, in dem MC/DC
+und strenge Anforderungen stammen</td>
+<td><strong>ja (DO-178C)</strong></td>
+<td>als Vorbild für Abdeckung und Anforderungsstil</td>
+</tr>
+</tbody>
+</table>
+<p>Falls der User die Nummer meint, ist es am wahrscheinlichsten
+<strong>AS5506 (AADL)</strong> oder die Norm <strong>DO-178C</strong>.
+Eine reine Anforderungssprache mit Nummer kenne ich nicht sicher.</p>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="PRQ-030"></a><strong>PRQ-030</strong></td>
+<td>SRS-Sätze folgen den <strong>EARS</strong>-Schablonen
+(ereignisgesteuert, zustandsgesteuert, unerwünschtes Verhalten,
+optional).</td>
+<td>Entwurf, Empfehlung</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-031"></a><strong>PRQ-031</strong></td>
+<td>Für 3–5 kritische Anforderungen (z. B. <a
+href="02_SRS.html#SRS-052">SRS-052</a>, <a
+href="02_SRS.html#SRS-043">SRS-043</a>) wird als Versuch eine
+<strong>formale Fassung</strong> (FRET) erstellt und geprüft.</td>
+<td>Option</td>
+</tr>
+</tbody>
+</table>
+<p>Einschätzung: EARS kostet fast nichts und macht Sätze eindeutiger
+(„soll“ statt „sollte“, ein Auslöser, eine Reaktion). Formale Methoden
+lohnen sich erst bei wenigen, besonders kritischen Anforderungen. Für
+Klasse C ist beides <strong>nicht verlangt</strong>.</p>
+<h2 id="6-toolchain-compiler-matrix-build">6. Toolchain,
+Compiler-Matrix, Build</h2>
+<p>(Aus der Anforderung des Users von früher am selben Tag, hier
+konsolidiert. Matrix-Entwurf: <code>IDEEN.md</code>.)</p>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="PRQ-040"></a><strong>PRQ-040</strong></td>
+<td>Die Compiler-Matrix steht in <strong>einer Datei</strong>
+(<code>toolchain_matrix.yml</code>). Sie legt Compiler, Version und
+Zweck fest (Host-Tests, Zielgerät, Abdeckung).</td>
+<td>Entwurf</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-041"></a><strong>PRQ-041</strong></td>
+<td><strong>Warnungen sind Fehler</strong>, null Warnungen, auf allen
+Compilern der Matrix (<code>-Wall -Wextra -Werror</code> und ein
+strengerer Satz je Compiler).</td>
+<td>Entwurf</td>
+</tr>
+<tr class="odd">
+<td><a id="PRQ-042"></a><strong>PRQ-042</strong></td>
+<td>Compiler: Clang, GCC (Host), ARM-GCC (Zielgerät), IAR, je in
+mehreren Versionen. „AMG, CC“ bitte bestätigen (<a
+href="10_Prozessanforderungen.html#OPEN-14">OPEN-14</a>).</td>
+<td>offen</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-043"></a><strong>PRQ-043</strong></td>
+<td>Der Build nutzt <strong>CMake mit Targets</strong>
+(<code>target_link_libraries</code>,
+<code>target_compile_options</code>, ein Interface-Target für die
+Warnungen) und <strong>Conan 2</strong> für Abhängigkeiten (GoogleTest,
+cucumber-cpp, ggf. Zephyr-fremde Bibliotheken).</td>
+<td>Entwurf</td>
+</tr>
+<tr class="odd">
+<td><a id="PRQ-044"></a><strong>PRQ-044</strong></td>
+<td>Aus der Matrix werden <strong>Docker-Images je
+Compilerfamilie</strong> gebaut (Basis per Digest festgelegt).</td>
+<td>Entwurf</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-045"></a><strong>PRQ-045</strong></td>
+<td>Die CI führt je Matrixzeile einen eigenen Job
+<strong>parallel</strong> aus (GitHub-Actions-Matrix, erzeugt aus der
+Datei).</td>
+<td>Entwurf</td>
+</tr>
+<tr class="odd">
+<td><a id="PRQ-046"></a><strong>PRQ-046</strong></td>
+<td>IAR ist kommerziell: Es läuft nur auf einem eigenen Runner mit
+Lizenz, nicht in einem öffentlichen Image.</td>
+<td>Entwurf, Einschränkung</td>
+</tr>
+</tbody>
+</table>
+<p>Einschätzung: Der Aufwand liegt bei PRQ-043. Die Firmware ist heute
+mit <code>west</code> und Zephyr-CMake gebaut. Ein
+<strong>Zwei-Schichten-Ansatz</strong> ist realistisch: die reinen
+C-Module als CMake-Bibliotheken (Targets) für alle Compiler und für die
+Tests, die Zephyr-App weiter mit <code>west</code>, aber diese
+Bibliotheken einbindend. Mit mehreren Compilern auf dem
+<strong>Zielgerät</strong> geht es nur so weit, wie Zephyr sie
+unterstützt (GCC ja, Clang und IAR eingeschränkt, prüfen).</p>
+<h2 id="7-dokumentation-für-fda-und-iec-62304">7. Dokumentation für FDA
+und IEC 62304</h2>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Anforderung</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a id="PRQ-050"></a><strong>PRQ-050</strong></td>
+<td>Die Dokumentation bleibt <strong>Dokument-als-Code</strong>
+(Markdown im Repo, HTML erzeugt, Links in den Code, automatische
+Prüfung).</td>
+<td>umgesetzt (Entwurf, siehe <a href="index.html">README</a>)</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-051"></a><strong>PRQ-051</strong></td>
+<td>Nachweise (Testbericht, Abdeckungsbericht, SBOM, Compilerprotokoll)
+werden von der CI erzeugt und mit Commit-ID als
+<strong>Nachweispaket</strong> je Release abgelegt.</td>
+<td>Entwurf</td>
+</tr>
+<tr class="odd">
+<td><a id="PRQ-052"></a><strong>PRQ-052</strong></td>
+<td>Jede Klausel von IEC 62304 (Klasse C) und jedes erwartete
+FDA-Dokument ist in der <a href="08_Luecken.html">Lückenanalyse</a> einem
+Nachweis zugeordnet.</td>
+<td>umgesetzt als Entwurf</td>
+</tr>
+<tr class="even">
+<td><a id="PRQ-053"></a><strong>PRQ-053</strong></td>
+<td>Die frei verfügbaren <strong>FDA-Leitfäden</strong> werden als PDF
+abgelegt und im Text mit Abschnittsnummern zitiert.</td>
+<td>offen: Zugriff, siehe unten</td>
+</tr>
+</tbody>
+</table>
+<p>Hinweis zum Zugriff: Der User schreibt, <code>fda.gov</code> sei
+jetzt erreichbar. Aus dieser Sitzung antwortet der Server noch nicht
+(Verbindung scheitert). Die Änderung gilt vermutlich erst für neue
+Sitzungen. Die Normen selbst (IEC, ISO) bleiben kostenpflichtig und
+kommen nicht ins öffentliche Repo.</p>
+<h2 id="8-reihenfolge-zum-iterieren">8. Reihenfolge zum Iterieren</h2>
+<ol type="1">
+<li>Begriffe klären (<a
+href="10_Prozessanforderungen.html#OPEN-10">OPEN-10</a> bis <a
+href="10_Prozessanforderungen.html#OPEN-14">OPEN-14</a>), damit die
+Anforderungen eindeutig sind.</li>
+<li><strong>Spike <code>native_sim</code></strong> (PRQ-015): Läuft der
+Zephyr-Code auf dem PC mit simuliertem BLE? Davon hängt ab, ob PRQ-002
+erreichbar ist.</li>
+<li><strong>Pilotmodul</strong> <code>codec</code> mit GoogleTest und
+MC/DC (PRQ-001, PRQ-010, PRQ-004): Wie viele Testfälle, wie viele nicht
+testbare Ausdrücke?</li>
+<li>SRS auf EARS umstellen und Gherkin-Pilot für zehn Anforderungen
+(PRQ-020, PRQ-030).</li>
+<li>Compiler-Matrix zuerst für die reinen Module (PRQ-040 bis
+PRQ-045).</li>
+<li>Gerätetests mit ZTest nur, wenn der x86-Weg steht (PRQ-013).</li>
+</ol>
+<h2 id="9-offene-fragen">9. Offene Fragen</h2>
+<ul>
+<li><a id="OPEN-10"></a><strong>OPEN-10</strong> Ist
+<strong>MC/DC</strong> gemeint (nicht MCC)? Gilt 100 % für alle Module
+oder nur für die reinen C-Module?</li>
+<li><a id="OPEN-11"></a><strong>OPEN-11</strong> Welche Avionik-Sprache
+war gemeint (EARS, FRET, AADL AS5506, SCADE, Norm DO-178C)? Hast du
+einen Namen oder eine Quelle?</li>
+<li><a id="OPEN-12"></a><strong>OPEN-12</strong> „CPU-Test“: war
+<strong>CppUTest</strong> gemeint? Meine Empfehlung ZTest auf dem Gerät
+und GoogleTest auf dem PC steht, solange nichts dagegen spricht.</li>
+<li><a id="OPEN-13"></a><strong>OPEN-13</strong> Soll das
+<strong>SRS</strong> (Tabelle) oder die <strong>Feature-Datei</strong>
+die Quelle sein? Ich empfehle SRS als Quelle und Gherkin als
+Testbeschreibung.</li>
+<li><a id="OPEN-14"></a><strong>OPEN-14</strong> Welche Compiler genau
+(„AMG, CC“)? Welche Versionen? Gibt es eine IAR-Lizenz?</li>
+<li><a id="OPEN-15"></a><strong>OPEN-15</strong> Sollen die Unity-Tests
+wirklich nach GoogleTest wandern, oder reicht es, MC/DC mit den
+bestehenden Tests zu messen? Das wäre der billigere erste Schritt.</li>
+</ul>
+</body>
+</html>
