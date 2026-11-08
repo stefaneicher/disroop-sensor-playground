@@ -17,6 +17,7 @@ Der Manager führt wie ein Team-Manager **Threads**: ein Thread ist ein Faden ei
 - Status rollt nach oben: Eltern-Thread ist erst `done`, wenn alle Kinder `done` sind (der Generator berechnet das).
 - Sub-Thread mit `owner` = Agent/Sub-Agent entspricht einem delegierten Auftrag.
 - Typ-Marke je Thread: 💬 aus Chat (`feedback`), ❓ Frage, 📐 Entscheid, 📋 Aufgabe (Manager), 🤖 Agent-Auftrag bzw. pulsierend „Agent arbeitet“ (`task` mit Agent-`owner` und `status:running`).
+- Git-Hashes (7–40 Hex) in `refs`, `note` und Cockpit-Feed werden automatisch Links auf `https://github.com/<repo>/commit/<hash>` (`repo` aus THREADS.json oder `git remote origin`).
 - Bedienung: Knöpfe „Alle auf/zu“, „Nur offene“; Tasten J/K bzw. ↑/↓, ←/→, Enter, E, C, O, A; Doppelklick klappt einen ganzen Teilbaum.
 - `archived:true` blendet einen Thread aus (Schalter „Archivierte ausblenden“, Standard an; Kinder werden mit ausgeblendet). Archivieren/Wiederherstellen per Knopf am Thread → Lavish-Prompt `tag:"archive"`, `data:{thread,archive}`.
 - Fragen an den User: `kind:"question"`, `status:"needs-user"`, optional `options:[…]`; **Pflicht** `question` (ganze Frage mit Kontext) und `recommendation` – erscheinen aufklappbar am Thread.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Rendert THREADS.json als eigenständige Lavish-HTML-Seite (Thread-Baum, Topics, Fragen)."""
-import html, json, sys
+import html, json, re, sys
 
 SYM = {"done": ("✓", "#14532d", "#bbf7d0"), "running": ("▶", "#1e3a8a", "#bfdbfe"),
        "open": ("○", "#374151", "#d1d5db"), "blocked": ("✕", "#7f1d1d", "#fecaca"),
@@ -38,6 +38,30 @@ def kind_badge(t):
     return f'<span class="b k" style="background:{bg}">{lab}</span>'
 
 
+REPO = ""
+HEX = re.compile(r"(?<![-\w])([0-9a-f]{7,40})(?![-\w])")
+
+
+def link(txt):
+    t = html.escape(txt)
+    if not REPO:
+        return t
+    return HEX.sub(lambda m: (f'<a class="gh" href="https://github.com/{REPO}/commit/{m[1]}" target="_blank">{m[1]}</a>'
+                              if re.search(r"\d", m[1]) and re.search(r"[a-f]", m[1]) else m[1]), t)
+
+
+def repo_slug(d):
+    if d.get("repo"):
+        return d["repo"]
+    import subprocess
+    try:
+        u = subprocess.run(["git", "remote", "get-url", "origin"], capture_output=True, text=True).stdout.strip()
+    except OSError:
+        return ""
+    m = re.search(r"github\.com[:/](.+?)(?:\.git)?$", u)
+    return m[1] if m else ""
+
+
 HUES = [217, 262, 160, 32, 330, 190]
 
 
@@ -47,7 +71,7 @@ def node(t, kids, depth=0, idx=0, path=()):
     light = 17 + (idx % 2) * 5
     style = (f'style="background:hsl({h},35%,{light}%);border-left:4px solid hsl({h},75%,58%)"')
     crumb = " › ".join(path + (t["id"],))
-    refs = " · ".join(e(r) for r in t.get("refs", []))
+    refs = " · ".join(link(r) for r in t.get("refs", []))
     q = ""
     if t.get("kind") == "question" and t["status"] == "needs-user":
         opts = t.get("options") or ["Ja", "Nein"]
@@ -66,11 +90,13 @@ def node(t, kids, depth=0, idx=0, path=()):
     return (f'<details open class="{"arch" if arch else ""}" {style}><summary title="{e(crumb)}"><span class="lv" style="color:hsl({h},75%,70%)">L{depth}</span> '
             f'<span class="cr">{e(crumb)}</span><br><b>{e(t["id"])}</b> {e(t["title"])} {kind_badge(t)} {badge(rollup(t, kids))}'
             f' <span class="o">{e(t.get("owner", ""))}</span>{f' <code class="sid">{e(t["agent_id"][:8])}</code>' if t.get("agent_id") else ""}{" <span class=\"b\">📦 archiviert</span>" if arch else ""}</summary>'
-            f'<div class="m">{e(t.get("note", ""))} <span class="r">{refs}</span>{q}</div>{inner}</details>')
+            f'<div class="m">{link(t.get("note", ""))} <span class="r">{refs}</span>{q}</div>{inner}</details>')
 
 
 def main(src, dst):
     d = json.load(open(src, encoding="utf-8"))
+    global REPO
+    REPO = repo_slug(d)
     ts = d["threads"]
     kids = {}
     for t in ts:
@@ -87,7 +113,7 @@ def main(src, dst):
         f'<li class="{"arch" if t.get("archived") else ""}">{e(t["id"])} {e(t["title"])} {badge(t["status"])}</li>' for t in v) + "</ul></div>"
         for k, v in fb.items())
     qs = [t for t in ts if t["status"] == "needs-user" and not t.get("archived")]
-    feed = "".join(f'<li><span class="r">{e(x.get("t", ""))}</span> {e(x.get("msg", ""))}</li>'
+    feed = "".join(f'<li><span class="r">{e(x.get("t", ""))}</span> {link(x.get("msg", ""))}</li>'
                    for x in reversed(d.get("log", [])[-40:]))
     narch = sum(1 for t in ts if t.get("archived"))
     page = f"""<!doctype html><html lang="de" data-lavish-annotate="on"><head><meta charset="utf-8">
@@ -99,7 +125,7 @@ details{{margin:6px 0 6px 12px;padding:4px 8px;border-radius:6px}}summary{{curso
 .b{{font-size:11px;padding:1px 6px;border-radius:6px;white-space:nowrap}}.o{{color:#93c5fd;font-size:12px}}
 .m{{font-size:12px;color:#9ca3af;margin:0 0 4px 14px}}.r{{color:#6b7280}}.c{{background:#1f2937;border-radius:8px;padding:10px;margin-bottom:10px;font-size:13px}}
 .bar{{height:8px;background:#374151;border-radius:9px;overflow:hidden}}.bar i{{display:block;height:100%;background:#22c55e}}
-body.hide .arch{{display:none}}.arch{{opacity:.55}}.ab{{background:#4b5563;margin-left:6px}}.tg{{float:right;font-size:13px;color:#9ca3af;text-align:right}}.feed ul{{margin:0;padding-left:16px;max-height:260px;overflow:auto}}.feed li{{margin:2px 0}}.qd{{margin:6px 0;padding:4px 8px;background:#1f2937;border-radius:6px}}.qd p{{margin:4px 0;color:#e5e7eb}}.sid{{font-size:11px;color:#fbbf24}}.k{{color:#e5e7eb;margin-right:2px}}.live{{animation:pl 1.4s infinite}}@keyframes pl{{50%{{box-shadow:0 0 0 3px #10b98155}}}}.kh{{font-size:11px;margin-top:4px}}summary:focus{{outline:2px solid #fbbf24;outline-offset:2px;border-radius:4px}}
+body.hide .arch{{display:none}}.arch{{opacity:.55}}.ab{{background:#4b5563;margin-left:6px}}.tg{{float:right;font-size:13px;color:#9ca3af;text-align:right}}.feed ul{{margin:0;padding-left:16px;max-height:260px;overflow:auto}}.feed li{{margin:2px 0}}.qd{{margin:6px 0;padding:4px 8px;background:#1f2937;border-radius:6px}}.qd p{{margin:4px 0;color:#e5e7eb}}a.gh{{color:#60a5fa;font-family:monospace}}.sid{{font-size:11px;color:#fbbf24}}.k{{color:#e5e7eb;margin-right:2px}}.live{{animation:pl 1.4s infinite}}@keyframes pl{{50%{{box-shadow:0 0 0 3px #10b98155}}}}.kh{{font-size:11px;margin-top:4px}}summary:focus{{outline:2px solid #fbbf24;outline-offset:2px;border-radius:4px}}
 form{{margin-top:6px}}button{{font:inherit;font-size:12px;background:#2563eb;color:#fff;border:0;border-radius:5px;padding:3px 8px}}
 </style></head><body><div class="tg"><button type="button" id="exA" title="E">⊞ Alle auf</button> <button type="button" id="coA" title="C">⊟ Alle zu</button> <button type="button" id="opA" title="O">Nur offene</button> <label><input type="checkbox" id="hideArch" checked> Archivierte ausblenden ({narch})</label> <label><input type="checkbox" id="live" checked> Live (10 s)</label><div class="kh">Tasten: J/K oder ↑/↓ bewegen · ←/→ zu/auf · Enter umschalten · E/C alle auf/zu · O nur offene · A Archiv · Doppelklick: Teilbaum auf/zu</div></div><h1>{e(d.get('project', 'Projekt'))} – Thread-Board</h1>
 <p style="color:#9ca3af;font-size:13px">Stand {e(d.get('updated', ''))} · {done}/{total} Threads fertig · Session <code class="sid" title="{e(d.get('session', ''))}">{e(d.get('session', '–'))}</code></p>
