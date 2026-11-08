@@ -3,6 +3,8 @@
 Ein geplanter Einhand-Motion-Controller für Tennis und Ski. Das Gerät soll das Thingy:52-BLE-Profil nachbilden, damit
 Bridge, Spiele und Android-App ohne Codeänderungen funktionieren.
 
+[![Motion One – zusammengebaut und Explosion](media/presentation/preview.png)](media/presentation/ZWISCHENBERICHT_2026-11-08_r3.html)
+
 > **▶ Überblick in 5 Minuten:** [Technische Präsentation – Zwischenbericht r3](media/presentation/ZWISCHENBERICHT_2026-11-08_r3.html)
 > (Funktionen, 3D-Ansicht zusammengebaut und als Explosion, Komponenten, Preis, Design-Herleitung). Datei herunterladen
 > bzw. lokal im Browser öffnen – GitHub zeigt HTML nur als Quelltext.
