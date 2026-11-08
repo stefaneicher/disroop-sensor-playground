@@ -28,3 +28,4 @@ Wichtige Entscheide werden je Disziplin als ADR festgehalten, **mit Bild** (Skiz
 | [firmware/ADR-0001](firmware/ADR-0001-bootloader-v1.md) | USB-Bootloader in V1 | Angenommen | 2026-11-08 |
 | [firmware/ADR-0002](firmware/ADR-0002-nur-rtt.md) | Kein UART, nur RTT | Angenommen | 2026-11-08 |
 | [firmware/ADR-0003](firmware/ADR-0003-motor-leistungsbegrenzung.md) | Motor-PWM ≤ 3.0 V, Arbitrierung | Angenommen | 2026-11-08 |
+| [firmware/ADR-0004](firmware/ADR-0004-erweiterung-treiber.md) | Treiber J5: Stick, Touch, LED-Pins r4 | Angenommen | 2026-11-08 |
