@@ -1,6 +1,6 @@
 {
  "project": "disroop-sensor-playground",
- "updated": "2026-11-08T11:24+01:00",
+ "updated": "2026-11-08T11:25+01:00",
  "threads": [
   {
    "id": "T-01",
@@ -148,7 +148,8 @@
    "kind": "feedback",
    "topic": "Prozess & Doku",
    "owner": "manager",
-   "status": "done"
+   "status": "done",
+   "archived": true
   },
   {
    "id": "F-06",
@@ -157,7 +158,8 @@
    "kind": "feedback",
    "topic": "Prozess & Doku",
    "owner": "manager",
-   "status": "done"
+   "status": "done",
+   "archived": true
   },
   {
    "id": "F-07",
@@ -196,6 +198,10 @@
   {
    "t": "11:24",
    "msg": "FEM pausiert (User); mech-r3 informiert"
+  },
+  {
+   "t": "11:25",
+   "msg": "F-05, F-06 archiviert (User im Board)"
   }
  ],
  "session": "2161f388-0bc4-4170-b315-b3a7921669eb"
