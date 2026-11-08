@@ -14,6 +14,13 @@ Stand 2026-11-08 06:45 CET. This is the authoritative task resume for Motion One
 - No hardware has been ordered, printed, flashed, or powered. No hardware-dependent test is a PASS.
 - WSL memory setting `C:\Users\stefa\.wslconfig` is 12 GB but takes effect only after `wsl --shutdown`; no restart should be initiated by an agent.
 
+## Stand r4 (2026-11-08 22:50 CET)
+- PCB r4: U2 SRV05-4 TVS on the control board, Pin-1 marker, `*_gerber_r4.zip` (`c1883b7`). Control-board ERC/DRC clean; main-board ERC NOT RUN; U2 CPL rotation (270°) is an ASSUMPTION, JLC preview only by the user.
+- Mechanics r4 (`bc3ad34`, `adfb480`): collision check PASS (0 collisions, cap clearance min 0.305 mm; SIMULATION). STL watertightness FAIL (Oberschale, Unterschale glatt, `pcb_r4.stl`; repair via trimesh insufficient, next: remesh via STEP with gmsh/Blender or finer tessellation). SLS PA12 tolerances PARTIAL (calculated; light-pipe clearance 0.1 mm < 0.2 mm FAIL, proposal 0.2; model wall thickness NOT RUN).
+- Next: STL fix, LP_CLR to 0.2, then renders/PDFs on r4 and labelled exploded view (docs-media), update `metrics.json`/report.
+- **Release rule (user):** when everything is done, create a new GitHub release (`gh release create`) with verified artifacts only. Not yet: STL FAIL and docs on r4 are open.
+- PR #2 (CI: always build bridge, web, tennis, android, firmware) pending checks; Pages deploys via `.github/workflows/pages.yml`.
+
 ## Immediate continuation
 1. Complete cross-disciplinary iteration: PCB engineer adjusts board positions/features to the mechanical handoff; mechanical engineer incorporates current INTERFACES/board STEP and reruns CAD, collision checks and slicing; firmware engineer maps `PINOUT_V1.json` to DTS and reruns tests/build.
 2. Review their new handoffs, verify artifacts/reports and resolve discrepancies. Commit/push the integrated design only after this verification.
