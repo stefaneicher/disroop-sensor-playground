@@ -42,3 +42,7 @@ Stand 2026-11-08 06:45 CET. This is the authoritative task resume for Motion One
 
 ## FEM (2026-11-08)
 PAUSIERT auf User-Entscheid („für das Gerät nicht so wichtig“). Letzter Stand: `mechanics/fem/fem_results.json` (03:43, Geometrie v1). r3-Netzstudie nicht gerechnet; nur auf Wunsch wieder aufnehmen.
+
+## User-Entscheide 2026-11-08
+- Q-01: Bootloader mit eigener Board-Definition schon in V1.
+- Q-02: Kein UART, kein TX-Testpad in r4; Debug ausschliesslich über SWD/Segger RTT.
