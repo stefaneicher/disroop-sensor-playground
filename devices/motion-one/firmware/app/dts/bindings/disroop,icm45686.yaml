@@ -6,3 +6,7 @@ properties:
     type: phandle-array
     required: true
     description: INT1 (Push-Pull, aktiv high), FIFO-Watermark und Wake-on-Motion
+  int2-gpios:
+    type: phandle-array
+    required: false
+    description: INT2 (Push-Pull, aktiv high), auf V1 verdrahtet, derzeit ungenutzt

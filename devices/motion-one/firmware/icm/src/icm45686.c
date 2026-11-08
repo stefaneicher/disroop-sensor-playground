@@ -79,6 +79,7 @@ icm_status_t icm45686_init(const icm_bus_t *bus, uint8_t odr, uint16_t watermark
 	}
 	int e = 0;
 	e |= wr(bus, ICM_REG_INT1_CONFIG2, ICM_INT1_PUSH_PULL_PULSED_HIGH);
+	e |= wr(bus, ICM_REG_INT2_CONFIG2, ICM_INT1_PUSH_PULL_PULSED_HIGH); /* INT2 push-pull (PINOUT), ungenutzt */
 	e |= wr(bus, ICM_REG_FIFO_CONFIG3, 0);
 	e |= wr(bus, ICM_REG_FIFO_CONFIG0, ICM_FIFO_MODE_STREAM | ICM_FIFO_DEPTH_MAX);
 	e |= wr(bus, ICM_REG_FIFO_CONFIG1_0, (uint8_t)watermark_frames);

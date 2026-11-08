@@ -28,3 +28,4 @@ devices/motion-one/mechanics/cad/motion-one_baugruppe.step
 devices/motion-one/mechanics/cad/unterschale_*.step
 devices/motion-one/scripts/**/__pycache__/
 devices/motion-one/scripts/mechanics/_probe/
+devices/motion-one/logs/fw-pinout/

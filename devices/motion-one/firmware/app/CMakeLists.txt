@@ -5,9 +5,10 @@ find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(motion_one_fw)
 
 set(FW ${CMAKE_CURRENT_SOURCE_DIR}/..)
-target_include_directories(app PRIVATE ${FW}/codec/include ${FW}/fusion/include ${FW}/icm/include src)
+target_include_directories(app PRIVATE ${FW}/codec/include ${FW}/fusion/include ${FW}/icm/include ${FW}/power/include src)
 target_sources(app PRIVATE
   ${FW}/codec/src/thingy_codec.c
   ${FW}/fusion/src/motion_fusion.c
   ${FW}/icm/src/icm45686.c
-  src/main.c src/ble_thingy.c src/imu_task.c src/ui.c src/battery.c)
+  ${FW}/power/src/vbat.c
+  src/main.c src/ble_thingy.c src/imu_task.c src/ui.c src/battery.c src/board_early.c)

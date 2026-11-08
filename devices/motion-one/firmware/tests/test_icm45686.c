@@ -122,6 +122,11 @@ static void test_init_sequence(void)
 	TEST_ASSERT_EQUAL_INT(ICM_FIFO_IF_EN | ICM_FIFO_ACCEL_EN | ICM_FIFO_GYRO_EN, last_write(ICM_REG_FIFO_CONFIG3));
 	TEST_ASSERT_EQUAL_INT(ICM_INT1_FIFO_THS, last_write(ICM_REG_INT1_CONFIG0));
 	TEST_ASSERT_EQUAL_INT(ICM_PWR_ACCEL_LN | ICM_PWR_GYRO_LN, last_write(ICM_REG_PWR_MGMT0));
+	/* PCB-Hinweis: INT1 und INT2 push-pull (drive-Bit 2 = 0), aktiv high (Bit 0) */
+	TEST_ASSERT_EQUAL_INT(0x01, last_write(ICM_REG_INT1_CONFIG2));
+	TEST_ASSERT_EQUAL_INT(0x01, last_write(ICM_REG_INT2_CONFIG2));
+	TEST_ASSERT_EQUAL_INT(0, last_write(ICM_REG_INT1_CONFIG2) & ICM_INTX_DRIVE_OD);
+	TEST_ASSERT_EQUAL_INT(0, last_write(ICM_REG_INT2_CONFIG2) & ICM_INTX_DRIVE_OD);
 	/* hal_tdk: FIFO-Modus vor if_en; Sensoren erst nach FIFO-Konfiguration einschalten */
 	const int mode = first_index(ICM_REG_FIFO_CONFIG0, ICM_FIFO_MODE_STREAM | ICM_FIFO_DEPTH_MAX);
 	const int ifen = first_index(ICM_REG_FIFO_CONFIG3, ICM_FIFO_IF_EN | ICM_FIFO_ACCEL_EN | ICM_FIFO_GYRO_EN);

@@ -58,6 +58,8 @@
 #define ICM_INT1_FIFO_THS 0x02u
 #define ICM_INT1_WOM_XYZ 0x0Eu
 #define ICM_INT1_PUSH_PULL_PULSED_HIGH 0x01u
+#define ICM_REG_INT2_CONFIG2 0x58u /* QUELLE hal_tdk inv_imu_regmap_le.h */
+#define ICM_INTX_DRIVE_OD 0x04u   /* INTx_CONFIG2 Bit 2: 1 = open-drain, 0 = push-pull (hal_tdk) */
 
 #define ICM_WOM_EN 0x10u
 #define ICM_WOM_MODE_PREV 0x08u
