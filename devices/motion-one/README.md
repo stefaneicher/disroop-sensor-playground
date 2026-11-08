@@ -23,6 +23,7 @@ Schritte stehen im [Motion-One-Resume](management/RESUME.md).
 ## Projektdateien
 
 - [Entwicklungsprompt](PROMPT_1_ENTWICKLUNG.md) und [Marktauftritt-Prompt](PROMPT_2_MARKTAUFTRITT.md)
+- [Technische Präsentation (Zwischenbericht r3)](media/presentation/ZWISCHENBERICHT_2026-11-08_r3.html)
 - [Vorab-Check](PREFLIGHT.md) und [Vorbildanalyse](ANALYSE.md)
 - [Hauptprotokoll](../../docs/protocol.md)
 
