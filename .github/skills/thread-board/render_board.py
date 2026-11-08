@@ -83,7 +83,7 @@ form{{margin-top:6px}}button{{font:inherit;font-size:12px;background:#2563eb;col
 <div><h2>Fragen an dich ({len(qs)})</h2>{''.join(node(t, {}) for t in qs) or '<p>keine</p>'}
 <h2>Dein Feedback nach Topics</h2>{topics or '<p>keins</p>'}</div></div></body></html>"""
     open(dst, "w", encoding="utf-8").write(page)
-    print(f"board: {dst} ({total} threads, {done} done, {len(qs)} questions)")
+    print(f"board: {dst} ({total} threads, {done} done, {len(qs)} questions)", flush=True)
 
 
 def watch(src, dst, interval=1.0):
