@@ -8,7 +8,7 @@ Ungeordnete Ideen und Möglichkeiten, noch **nicht** entschieden. Wird eine Idee
 
 ## Offen
 - **disroop Playground** (User, 2026-11-08): Repo neu framen als Spielebasis und Showcase (IT-Firmen, Vortrag, Familie). Umsetzung später. Konzepte:
-  - [`docs/KONZEPT_PLAYGROUND.md`](docs/KONZEPT_PLAYGROUND.md) – Framing, Publikum, Zielstruktur, Umbauschritte
+  - [`docs/KONZEPT_PLAYGROUND.md`](docs/KONZEPT_PLAYGROUND.md) – Framing (Spielkonsole), Publikum, Ordner alt → neu, Repo-Umbenennung, Startseite und README
   - [`docs/KONZEPT_HANDY_CONTROLLER.md`](docs/KONZEPT_HANDY_CONTROLLER.md) – Handy per QR-Code als Controller, Skicross bis 20 Spieler
   - [`docs/KONZEPT_LANDSCHAFT.md`](docs/KONZEPT_LANDSCHAFT.md) – Systemlandschaft: was es gibt, was fehlt (Relay-Hosting, Deploy, Betrieb)
 - Copilot-Diktat: Konzept unter `copilot-diktat/.lavish/diktat-konzept.html` (aus dem früheren Resume übernommen).

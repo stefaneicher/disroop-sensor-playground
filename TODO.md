@@ -37,7 +37,9 @@ Status aller Punkte: **offen**.
 - [ ] (Latenz) Latenz Handy → Bildschirm messen und anzeigen, Ziel unter 50 ms.
 - [ ] (Stand) Stand-Modus: Attract-Loop mit grossem QR, Ski-Rangliste mit Spitznamen, Tennis 1:1 mit zwei Handys.
 - [ ] (Skicross) Mehrspieler-Skicross bis 20 Handys: Lobby, Simulation auf dem Bildschirm, Strecke, Rangliste, optional Turnier.
-- [ ] (Umbau) Repo schrittweise auf die Playground-Struktur umbauen, siehe `docs/KONZEPT_PLAYGROUND.md`.
+- [ ] (Umbau) Eigene Domain für Pages, dann Repo in `disroop-playground` umbenennen (Checkliste in `docs/KONZEPT_PLAYGROUND.md`).
+- [ ] (Umbau) Ordner schrittweise umbauen (Tabelle alt → neu in `docs/KONZEPT_PLAYGROUND.md`).
+- [ ] (Präsentation) Neue README und Konsolen-Startseite nach `docs/KONZEPT_PLAYGROUND.md`.
 - [ ] (Story) Animierte Übersichtszeichnung (Leiter + Architektur) für die Landingpage.
 - [ ] (Hosting) Relay-Hosting entscheiden (offene Frage im Konzept), Deployment in CI.
 

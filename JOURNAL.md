@@ -76,3 +76,6 @@ Ski: kompakte Querformat-HUD, zweispaltiges Menü mit grossen Touch-Zielen, Test
 
 ## 2026-11-08 Konzept Systemlandschaft
 - Neu: `docs/KONZEPT_LANDSCHAFT.md` (Bausteine, Lücken, Reihenfolge; Ranglisten ohne DB). Alle drei Playground-Konzepte in `IDEEN.md` referenziert. Umsetzung später.
+
+## 2026-11-08 Konzept Playground erweitert
+- `docs/KONZEPT_PLAYGROUND.md`: Konsolen-Bild, Ordner-Tabelle alt → neu, Checkliste Repo-Umbenennung (Pages-Domain zuerst, applicationId bleibt), Aufbau Startseite und README. TODO ergänzt. Umsetzung später.

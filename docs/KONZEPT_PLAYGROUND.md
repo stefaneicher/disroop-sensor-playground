@@ -1,10 +1,10 @@
-# disroop Playground – Konzept auf einer Seite
+# disroop Playground – Konzept
 
-Status: **Richtung entschieden** (User, 2026-11-08). Details zum Handy: [`KONZEPT_HANDY_CONTROLLER.md`](KONZEPT_HANDY_CONTROLLER.md).
+Status: **Richtung entschieden, Umsetzung später** (User, 2026-11-08). Weitere Konzepte: [`KONZEPT_HANDY_CONTROLLER.md`](KONZEPT_HANDY_CONTROLLER.md), [`KONZEPT_LANDSCHAFT.md`](KONZEPT_LANDSCHAFT.md).
 
 ## Was es ist
 
-Eine Spielebasis, auf der beliebige HTML-Spiele laufen. Gesteuert wird mit Tastatur, Handy, Thingy:52 oder dem eigenen Controller Motion One. Alles ist von KI-Agenten gebaut, von der Leiterplatte bis zum Spiel, und läuft in Docker und CI.
+**Eine Spielkonsole, die KI gebaut hat.** Auf ihr laufen beliebige HTML-Spiele. Gesteuert wird mit Tastatur, Handy, Thingy:52 oder dem eigenen Controller Motion One. Alles ist von KI-Agenten gebaut, von der Leiterplatte bis zum Spiel, und läuft in Docker und CI.
 
 **Kernbotschaft:** *KI baut nicht nur Software. Sie kommt in der physischen Welt an.* Die Spiele sind der Köder, die durchgehende Kette Hardware → Firmware → Funk → Software → Spiel ist der Beweis.
 
@@ -18,34 +18,99 @@ Eine Spielebasis, auf der beliebige HTML-Spiele laufen. Gesteuert wird mit Tasta
 
 Jeder findet sich auf seiner Stufe wieder. Breite Spielfreude vorne, technische Tiefe dahinter.
 
+## Das Konsolen-Bild
+
+| Konsole | Im Playground |
+|---|---|
+| Konsole (Gehäuse, Menü) | `console/`: Startseite, Spielauswahl, gemeinsamer Header |
+| Spielkassetten | `games/*`: je ein Ordner mit `game.json` |
+| Controller | `input/`: Gesten-SDK mit Adaptern (Tastatur, Touch, Handy, Thingy, Motion One, Simulator) |
+| Zubehör / Hardware | `hardware/`: Thingy-Bridge, Android-App, Motion One |
+| Online-Dienst | `relay/`: Handy-Controller und Mehrspieler |
+| «Making-of» auf der Packung | `docs/story/`: wie KI-Agenten das gebaut haben |
+
 ## Die Leiter
 
 1. **Handy** – QR-Code scannen, sofort mitspielen, keine Hürde.
 2. **Thingy:52** – echte Embedded-Sensorik über Bluetooth LE.
 3. **Motion One** – eigenes Gerät, von Agenten entworfen (PCB, Firmware, Gehäuse).
-4. **Hinter den Kulissen** – Agenten, Journal, CI, Docker: wie es entstanden ist.
+4. **Unter der Haube** – Agenten, Journal, CI, Docker: wie es entstanden ist.
 
-## Architektur
+## Zielstruktur
 
 Alle Eingabegeräte liefern dieselben Gesten (`tilt`, `swing`, `tuck`, `jump`, `button`). Die Spiele wissen nicht, woher sie kommen.
 
 ```
-games/       tennis, ski, skicross, kids-*   (je game.json: Name, Gesten, Alter, Spielerzahl)
+console/     Startseite (Konsole), Spielauswahl aus game.json, Header
+games/       tennis, ski, skicross, kids-*        (je game.json: Name, Gesten, Alter, Spielerzahl)
 input/       Gesten-SDK + Adapter: keyboard, touch, phone, thingy, motion-one, sim
 hardware/    thingy-bridge (Go), android, motion-one
 relay/       Go-Relay für Handys und Mehrspieler (Docker)
-pipeline/    devcontainer, CI, release
-story/       Journal, Metriken, «wie es gebaut wurde»
+docs/        Verträge, Anleitungen, Konzepte; docs/story/ = Making-of
+.devcontainer/ .github/ scripts/ tasks/ project t   bleiben im Root (Werkzeuge erwarten das)
 ```
 
-## Was das fürs Umbauen heisst
+Hinweis: Ein eigener Ordner `pipeline/` ist nicht sinnvoll. Devcontainer, GitHub Actions und das CLI müssen im Root liegen. In der Präsentation heisst diese Ebene trotzdem «Entwicklung» (siehe Landschaft).
 
-Schrittweise und jeder Schritt einzeln lauffähig. Kein Big Bang.
+## Ordner: alt → neu
 
-1. **Input herauslösen:** `tennis/src/link.ts` und `core/motion.ts` werden zu `input/` (Gesten-SDK). Tastatur und Touch aus Tennis und Ski kommen als Adapter dazu.
-2. **Spiele trennen:** `tennis/` wird zu `games/tennis/` und `games/ski/`, beide mit `game.json`. Die Startseite listet die Spiele aus den Manifesten.
-3. **Handy-Adapter + Relay** (siehe Handy-Konzept), danach **Skicross** als erstes Mehrspieler-Spiel.
-4. **Kinderspiele** als einfache `games/kids-*` aufnehmen, zuerst nur mit Tastatur oder Touch.
-5. **Hardware ordnen:** `bridge/`, `android/` und `devices/motion-one/` kommen unter `hardware/`. Skripte, CI und Pages-Pfade werden nachgezogen.
-6. **Repo umbenennen** in `disroop-playground` (GitHub leitet alte Links weiter).
-7. **Story-Seite:** Landingpage mit animierter Übersicht (Leiter + Architektur).
+| Heute | Neu | Bemerkung |
+|---|---|---|
+| `index.html` (Landingpage) | `console/index.html` | Pages-Workflow anpassen |
+| `tennis/src/link.ts`, `core/motion.ts`, `quat.ts`, `calibration.ts` | `input/` | Wird das Gesten-SDK, Tests ziehen mit |
+| `tennis/static/header.*` | `console/` | Gemeinsamer Header aller Spiele |
+| `tennis/` (ohne Ski) | `games/tennis/` | |
+| `tennis/src/ski/`, `tennis/static/ski/` | `games/ski/` | Eigenes `package.json` oder gemeinsamer Build |
+| `bridge/` | `hardware/thingy-bridge/` | Go-Modulpfad ändern (`…/bridge` → `…/hardware/thingy-bridge`) |
+| `android/` | `hardware/android/` | `applicationId` bleibt (siehe unten) |
+| `devices/motion-one/` | `hardware/motion-one/` | Rund 94 Dateien verweisen auf den Pfad, deshalb zuletzt |
+| `shared/` | `hardware/thingy-bridge/shared/` | Lied und Telemetrie-Beispiel gehören zur Bridge |
+| JOURNAL, PROGRESS, RESUME, GOAL | bleiben im Root | Historische Einträge nicht umschreiben |
+
+**Vorgehen:** Ein Schritt pro Commit, immer mit `git mv` (die Historie bleibt erhalten). Nach jedem Schritt laufen `./project <bereich> test` und die CI grün. Reihenfolge: `input/` → `games/` → `console/` → `hardware/thingy-bridge` und `hardware/android` → `relay/` neu → `hardware/motion-one` zuletzt.
+
+## Repo umbenennen: `disroop-sensor-playground` → `disroop-playground`
+
+Das ist schon einmal passiert (`disroop-thingy-arcade` → `disroop-sensor-playground`, 2026-11-07, siehe JOURNAL). Checkliste:
+
+1. **Zuerst eine eigene Domain für Pages** (z. B. `play.disroop.ch`). GitHub leitet Repo-URLs nach einer Umbenennung weiter, **Pages-URLs aber nicht**. Mit eigener Domain bleiben QR-Codes, Folien und Links gültig.
+2. **Umbenennung in GitHub** (Settings → Repository name). Danach die Remotes lokal nachziehen: `git remote set-url origin …`.
+3. **Namen im Code ersetzen:** `project` (Image `…-dev`, Cache-Volume), `t`, `tasks/_lib.py` (APK-Name), `tasks/release.py`, `.devcontainer/` (Name, Volume), `bridge/go.mod` (Modulpfad), `README.md`, Landingpage-Footer, `THREADS.json`, `RESUME.md`.
+4. **APK-Datei** heisst neu `disroop-playground-debug.apk`.
+5. **Bewusst nicht ändern:** Die Android-`applicationId` `ch.disroop.sensorplayground` bleibt. Sonst müsste man die App neu installieren und den NFC-Tag neu schreiben, und Nutzer sehen das ohnehin nicht.
+6. **Lokal:** WSL-Ordner umbenennen, Devcontainer-Image neu bauen (`./project image`).
+7. **Historie:** JOURNAL und PROGRESS behalten den alten Namen, neuer JOURNAL-Eintrag zur Umbenennung.
+
+## Präsentation
+
+### Startseite (Landingpage) als Konsole
+
+Aufbau von oben nach unten, wie eine Konsole, die man einschaltet:
+
+1. **Einschalten (Hero):** «disroop Playground – die Spielkonsole, die KI gebaut hat.» Daneben gross der QR-Code: «Scannen und mitfahren.» Im Hintergrund läuft die Ski-Abfahrt als Attract-Loop.
+2. **Spiele (Kassetten):** Kacheln aus den `game.json` – Tennis, Ski, Skicross, Kinderspiele. Pro Kachel stehen die möglichen Controller als Symbole.
+3. **Controller (die Leiter):** Tastatur → Handy → Thingy:52 → Motion One. Kurz pro Stufe: was es ist und was es zeigt.
+4. **Unter der Haube:** die animierte Systemlandschaft mit Entwicklung, Auslieferung, Geräte und Programme, Hardware. Die Ebenen bauen sich nacheinander auf, eine Bewegung läuft sichtbar vom Gerät bis ins Spiel.
+5. **So wurde es gebaut:** Agenten-Rollen (Systems, Firmware, PCB, Mechanik, Docs), Zahlen aus `metrics.json`, Auszüge aus dem Journal.
+6. **Für Firmen:** «Das können wir auch für euch» – Kontakt zu disroop.
+
+### README
+
+Die README folgt demselben Narrativ, nur kürzer und für Entwickler:
+
+1. Ein Satz und ein Bild: Konsole, Spiele, Controller.
+2. «In 1 Minute spielen»: Link zu Pages und QR-Code, ohne Installation.
+3. Systemlandschaft als Mermaid-Diagramm (aus `KONZEPT_LANDSCHAFT.md`).
+4. Ordnerstruktur (Konsolen-Bild).
+5. Quickstart für Entwickler (Devcontainer, `./project`).
+6. Links: Konzepte, Verträge (`docs/protocol.md`), Making-of.
+
+Die heutige README (Thingy-zentriert, Sensorübersicht, NFC) wandert nach `hardware/thingy-bridge/README.md`.
+
+## Reihenfolge der Umsetzung
+
+1. Eigene Domain für Pages, dann das Repo umbenennen.
+2. Ordner umbauen nach obiger Tabelle, Schritt für Schritt.
+3. Neue README und Konsolen-Startseite mit animierter Landschaft.
+4. Relay und Handy-Controller, dann Skicross (siehe Handy-Konzept).
+5. Kinderspiele als `games/kids-*` aufnehmen.
