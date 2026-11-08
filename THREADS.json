@@ -1,6 +1,6 @@
 {
  "project": "disroop-sensor-playground",
- "updated": "2026-11-08T11:20+01:00",
+ "updated": "2026-11-08T11:24+01:00",
  "threads": [
   {
    "id": "T-01",
@@ -77,7 +77,8 @@
     "Später (V2)"
    ],
    "question": "Taster und LED sitzen auf dem Board an anderen Pins als beim nRF52840-DK. Damit der Bootloader (Firmware-Update per Bluetooth) funktioniert, braucht er eine eigene Board-Definition. Soll ich die erstellen lassen, oder bleibt es vorerst bei Programmierung nur per SWD?",
-   "recommendation": "Ja – eigene Board-Definition. Updates dann per Bluetooth ohne Gehäuse öffnen; reine Firmware-Arbeit, kein Hardware-Eingriff. Erstes Flashen bleibt per SWD."
+   "recommendation": "Ja – eigene Board-Definition. Updates dann per Bluetooth ohne Gehäuse öffnen; reine Firmware-Arbeit, kein Hardware-Eingriff. Erstes Flashen bleibt per SWD.",
+   "archived": true
   },
   {
    "id": "Q-02",
@@ -91,7 +92,8 @@
     "Nein"
    ],
    "question": "Der UART ist in r3 entfallen. Debug-Ausgaben gehen trotzdem per SWD mit Segger RTT. Soll in r4 trotzdem ein TX-Testpad an einem freien Pin dazukommen?",
-   "recommendation": "Ja – ein Pad ohne Bauteil, ohne Mehrkosten; Reserve, falls RTT nicht verfügbar ist (z. B. Programmieradapter ohne RTT)."
+   "recommendation": "Ja – ein Pad ohne Bauteil, ohne Mehrkosten; Reserve, falls RTT nicht verfügbar ist (z. B. Programmieradapter ohne RTT).",
+   "archived": true
   },
   {
    "id": "T-02",
@@ -170,6 +172,14 @@
   {
    "t": "11:20",
    "msg": "Status 11:20: mech-r3 läuft (Kollision/FEM/Slice offen); Q-01, Q-02, T-02-Start warten auf User"
+  },
+  {
+   "t": "11:20",
+   "msg": "Gehäuse: Kollision FAIL (J1 USB-C ↔ Oberschale 2.2 mm³); Neubau mit Fügeband läuft seit 24 min; Warnung 'Schnitt verworfen' bei x=35.5"
+  },
+  {
+   "t": "11:24",
+   "msg": "Q-01, Q-02 archiviert (vom User im Board); Antwort weiterhin offen"
   }
  ],
  "session": "2161f388-0bc4-4170-b315-b3a7921669eb"
