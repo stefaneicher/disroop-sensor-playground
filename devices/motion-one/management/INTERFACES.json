@@ -66,6 +66,19 @@
         "format": "u8 0=los,1=gedrueckt"
       },
       {
+        "uuid": "EF680380",
+        "service": "EF680300",
+        "name": "UI-Ext Bedienplatine (erweitert, NEU)",
+        "props": "read/notify",
+        "bytes": 8,
+        "format": "u8 version=1; u8 flags (bit0 present, bit1 stick_btn, bit2 touch, bit3 touch_locked, bit4 center_ok, Rest 0); i8 x -100..100 %; i8 y -100..100 % (+ = rechts/vorne, Totzone 8 %); u16 seq (+1 je Notify, ueberlauf); u16 reserved=0",
+        "rate": "nur bei Aenderung, nur wenn abonniert, max 20 Notif./s, bei motion_freq_hz > 50 max 10/s (Stick 50 ms aktiv / 500 ms Ruhe), Touch sofort nach 30 ms Entprellung",
+        "absent": "present=0, x=y=0, alle Bits 0; genau 1 Notify nach CCC-Abo, danach keine",
+        "note": "Thingy-Button EF680302 bleibt unveraendert (nur SW1 Hauptplatine); Clients ignorieren unbekannte UUID; Laenge >= 8 akzeptieren, version>1 Felder ab Byte 8 ignorieren",
+        "adr": "adr/systems/ADR-0002-ble-bedienplatine.md",
+        "kennzeichnung": "ANNAHME (Entscheid systems-engineer 2026-11-08, Hardware NOT RUN)"
+      },
+      {
         "uuid": "EF680301",
         "name": "LED",
         "props": "read/write",

@@ -21,6 +21,7 @@ Wichtige Entscheide werden je Disziplin als ADR festgehalten, **mit Bild** (Skiz
 |---|---|---|---|
 | [mechanics/ADR-0001](mechanics/ADR-0001-fuegestelle-lippe-nut.md) | Fügestelle Schalen: Lippe + Nut + Schattenfuge | Angenommen | 2026-11-08 |
 | [systems/ADR-0001](systems/ADR-0001-fertigung-jlc.md) | Fertigung JLCPCB + JLC3DP | Angenommen | 2026-11-08 |
+| [systems/ADR-0002](systems/ADR-0002-ble-bedienplatine.md) | BLE-Format Bedienplatine EF680380 | Angenommen | 2026-11-08 |
 | [mechanics/ADR-0002](mechanics/ADR-0002-sls-pa12.md) | Gehäuse SLS PA12, Lichtleiter SLA | Angenommen | 2026-11-08 |
 | [mechanics/ADR-0003](mechanics/ADR-0003-fem-pausiert.md) | FEM pausiert | Angenommen | 2026-11-08 |
 | [electronics/ADR-0001](electronics/ADR-0001-vibrationsmotor.md) | Vibrationsmotor LCM0827A3038F | Angenommen | 2026-11-08 |

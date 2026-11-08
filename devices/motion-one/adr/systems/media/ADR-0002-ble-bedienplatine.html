@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><title>ADR-0002 BLE Bedienplatine</title>
+<h1>BLE-Format Bedienplatine – Optionen</h1>
+<table border=1 cellpadding=6>
+<tr><th>Option</th><th>Ort</th><th>Thingy-kompatibel</th><th>Bewertung</th></tr>
+<tr><td>A</td><td>EF680302 Button auf 2..4 B erweitern</td><td>Nein (Clients erwarten 1 B)</td><td>verworfen</td></tr>
+<tr><td>B</td><td>Stick/Touch als Tap/Lage-Ereignisse kodieren</td><td>formal ja, semantisch falsch</td><td>verworfen</td></tr>
+<tr style="background:#cfc"><td>C</td><td>Neue EF680380 im UI-Service 0300, 8 B, Versionsbyte</td><td>Ja (unbekannte UUID ignoriert)</td><td><b>gewählt</b></td></tr>
+<tr><td>D</td><td>Eigener Disroop-Service mit neuer Basis-UUID</td><td>Ja</td><td>mehr Discovery/Code, kein Nutzen</td></tr>
+</table>
+<p>Layout C: [ver u8][flags u8][x i8][y i8][seq u16 LE][res u16] – max 20 Notify/s, nur bei Änderung.</p>

@@ -34,6 +34,22 @@ Gefundenes Gerät: `E3:58:08:1B:53:5F`.
 | `EF680109` | NFC (**erst ab FW v2.2.0**, fehlt in v2.1.0) | read/write | rohe **NDEF-Message** (ohne TLV), max. 247 B, wird persistent gespeichert |
 | `2A19` (Service `180F`) | Akku | read/notify | u8 % (aus der Akkuspannung; Notify nur bei Änderung) |
 
+### Motion One: Bedienplatine `EF680380` (Erweiterung, nicht Thingy)
+Nur Motion One (devices/motion-one, ADR `adr/systems/ADR-0002`). Zusatz-Characteristic im UI-Service `EF680300`, read/notify, 8 B LE.
+Die Thingy-Characteristics bleiben unverändert; `EF680302` meldet nur den Taster der Hauptplatine. Clients ohne Kenntnis ignorieren die UUID.
+
+| Byte | Typ | Inhalt |
+|---|---|---|
+| 0 | u8 | `version` = 1 |
+| 1 | u8 | flags: bit0 `present`, bit1 Stick-Taste, bit2 Touch, bit3 Touch gesperrt (Spam), bit4 Mitte kalibriert, Rest 0 |
+| 2 | i8 | Stick X −100..100 % (+ = rechts), Totzone 8 % |
+| 3 | i8 | Stick Y −100..100 % (+ = vorne/weg vom Griff) |
+| 4–5 | u16 | `seq`, +1 je Notify (Überlauf), erkennt Verluste |
+| 6–7 | u16 | reserviert = 0 |
+
+Notify nur bei Änderung und nur abonniert, höchstens 20/s, bei `motion_freq_hz` > 50 höchstens 10/s (Stick 50 ms aktiv / 500 ms Ruhe); Touch sofort nach 30 ms Entprellung.
+Ohne Bedienplatine: `present` = 0, x = y = 0, alle Bits 0; genau ein Notify nach dem Abo, danach keine. Clients akzeptieren Länge ≥ 8 und ignorieren Bytes ab 8; bei `version` ≠ 1 nur Byte 0–1 auswerten.
+
 ### Akku-Trend (lädt / Akkubetrieb) – Heuristik
 Die Werksfirmware kennt USB-Versorgung und Ladezustand intern (`m_batt_meas`: Pins USB_DETECT und CSO des Ladereglers),
 veröffentlicht sie aber **nicht** über BLE. Über BLE kommt nur der Akkustand in % (Service `180F`), berechnet aus der Spannung.
