@@ -21,6 +21,9 @@ Stand 2026-11-08 06:45 CET. This is the authoritative task resume for Motion One
 4. Manager creates `metrics.json` from verified handoffs, technical report/PDF, `REPRODUCE.md`, `DEMO_RUNBOOK.md`, requirements verification matrix, SHA-256 manifest, then `releases/V1_BASELINE/`.
 5. Update root `README.md` link, `JOURNAL.md`, root `PROGRESS.md`, this Resume, run relevant checks, review diff, commit/push.
 
+## Sourcing rule (user, 2026-11-08)
+- Offers must cover PCBA **and** 3D printing of the enclosure parts, ideally from the same manufacturer (one order, one shipment). `sourcing/ANGEBOTE_V1.md` still needs this update and the r3 J2 connector (JST-SH C160402).
+
 ## Key files
 - Overall requirements: `PROMPT_1_ENTWICKLUNG.md`
 - Current project state: `management/PROJECT_STATE.md`, `management/TASK_BOARD.md`

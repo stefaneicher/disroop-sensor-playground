@@ -7,4 +7,5 @@ description: "Lager- und Preisabfrage bei Bestückern (JLCPCB/LCSC, PCBWay, Aisl
 
 - Nur öffentliche Seiten oder offizielle APIs (Playwright-MCP), keine Logins. Pro Teil: Teilenummer, Bestand, Stückpreis, Abfragezeit (ISO), URL.
 - Mindestbestand ≥ 10 × Bedarf; JLCPCB: Basic vor Extended (Extended kostet Einrichtgebühr je Teil).
-- Kosten: PCB + Bestückung + Teile + Setup + Versand + Zoll/MWST CH = Total und pro Gerät.
+- 3D-Druck der Gehäuseteile immer mit abfragen, bevorzugt beim gleichen Hersteller wie die PCBA (JLCPCB/JLC3DP, PCBWay): Verfahren, Material, Toleranz, Preis, Lieferzeit; gemeinsamer Versand.
+- Kosten: PCB + Bestückung + 3D-Druck + Teile + Setup + Versand + Zoll/MWST CH = Total und pro Gerät.

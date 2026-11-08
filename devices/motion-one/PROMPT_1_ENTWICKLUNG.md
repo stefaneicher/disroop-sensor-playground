@@ -80,6 +80,9 @@ PASS, PARTIAL, FAIL, BLOCKED und NOT RUN und mach aus einem FAIL nie einen Erfol
     Bauteil, Zukaufteile (Akku, Motor, Schrauben) mit Bezugsquelle in die Schweiz.
   - Preis: Leiterplatte, Bestückung, Bauteile, Einrichtkosten, Versand und Zoll in die Schweiz, Total und Preis pro Gerät.
   - Lieferzeit bis zu mir, Mindestmengen und Einschränkungen (z. B. einseitige Bestückung, Bauteile auf Bestellung).
+  - 3D-Druck des Gehäuses (alle druckbaren Teile, Material gemäss Mechanik, z. B. PETG) im selben Angebot mit abklären:
+    bevorzugt beim gleichen Hersteller wie die Leiterplatte (z. B. JLCPCB/JLC3DP, PCBWay), damit eine Bestellung und ein
+    Versand genügen. Je Angebot: Druckverfahren, Material, Toleranz, Preis, Lieferzeit; sonst Alternative begründen.
   - Empfehlung mit Begründung; ich wähle aus. Bestellt wird nichts ohne meine Freigabe.
 - Stückzahl V1: mindestens 2 bestückte Geräte, sinnvoll bis 5. Nur wenn die Mindestbestellung des Bestückers grösser ist
   oder es im Vergleich deutlich günstiger pro Stück wird, bis höchstens 10.
