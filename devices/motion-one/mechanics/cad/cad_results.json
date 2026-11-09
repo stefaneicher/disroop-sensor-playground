@@ -63,7 +63,7 @@
       "print_file": "devices/motion-one/mechanics/print/lichtleiter"
     },
     "unterschale_glatt": {
-      "volume_mm3": 27604.295969187602,
+      "volume_mm3": 27606.661492268853,
       "valid": true,
       "print_bbox": [
         170.2704223578854,
@@ -71,9 +71,9 @@
         19.078481635304325
       ],
       "com": [
-        78.95522944704354,
-        -0.013436668614332407,
-        -8.069704677971016
+        78.95963808738108,
+        -0.013514429037256945,
+        -8.06875588388517
       ],
       "print_flip_about_x": false,
       "print_file": "devices/motion-one/mechanics/print/unterschale_glatt"
@@ -87,7 +87,7 @@
   ],
   "end_ellipse_r_min": 4.437763776155193,
   "chosen_variant": "glatt",
-  "runtime_s": 1158.1540007591248,
+  "runtime_s": 1114.7507412433624,
   "f08": {
     "batch": true,
     "nproc": 1,
@@ -95,32 +95,32 @@
     "times": [
       [
         "Schale+Fuegeband",
-        28.35,
+        28.36,
         1
       ],
       [
-        "Teil top 471.8s",
-        500.18,
+        "Teil top 472.7s",
+        501.08,
         1
       ],
       [
-        "Teil glatt 604.3s",
-        1104.49,
+        "Teil glatt 556.8s",
+        1057.87,
         1
       ],
       [
         "Teile fertig",
-        1105.31,
+        1058.63,
         1
       ],
       [
         "Export STL/3MF/BREP",
-        1138.54,
+        1094.67,
         1
       ],
       [
         "Baugruppe STEP",
-        1158.15,
+        1114.75,
         1
       ]
     ]
