@@ -16,7 +16,7 @@ Stand: 2026-11-07 20:30. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 | 8 | Agent **web** (Dashboard in `bridge/web/`) | ✅ | gegen Mock-SSE getestet |
 | 9 | Agent **android** (Kotlin, `ch.disroop.sensorplayground`) | ✅ | Decoder-Unit-Tests, NFC via AAR |
 | 10 | Hardware-Smoke-Test (Terminal, Lied, Web live) | ✅ | `./t hw.smoke` |
-| 11 | NFC-Tag umschreiben → App öffnet | 🔄 | FW v2.2.0 per DFU, AAR geschrieben; Tap-Test durch User offen |
+| 11 | NFC-Tag umschreiben → App öffnet | ✅ | FW v2.2.0 per DFU, AAR geschrieben; Tap-Test durch User bestätigt (2026-11-09) |
 | 12 | CI (Build + Tests im Devcontainer-Image) + Release exe/apk | ✅ | Pre-Release v0.1.0-preview |
 | 13 | Disroop-Look Web + Android, Screenshots | ✅ | 4310fa0, e289159 |
 | 14 | Akku-Trend lädt/Akkubetrieb (Heuristik) | ✅ | 56a5035 |
@@ -25,7 +25,7 @@ Stand: 2026-11-07 20:30. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 | 17 | Copilot-Diktat-App (Konzept) | 🔄 | `../copilot-diktat/.lavish/diktat-konzept.html`, Entscheide offen |
 | 18 | Thingy Ski (Lauberhorn, Streif), Ton, FPS-Anzeige, Performance | ✅ | docs/SKI.md, 0c38ca9 |
 | 19 | Android-UI wie Web, Tennis + Ski in der App | ✅ | 0c38ca9 |
-| 20 | Umbenennung zu `disroop-sensor-playground` | ✅ | NFC-Tag neu schreiben offen |
+| 20 | Umbenennung zu `disroop-sensor-playground` | ✅ | NFC-Tag neu geschrieben (siehe 11) |
 | 21 | Thingy-Ausrichtung im Dashboard (180°?) | 🔄 | wartet auf Kompass-Test des Users |
 | 22 | Eigener Controller „Disroop Motion One“: Vorab-Test, Prompt 1 (Entwicklung), Prompt 2 (Video, Produktseite) | 🔄 | Prompt 1 V1-Entwurf: PCB, Firmware, ergonomisches CAD, FEM und Druckdaten vorhanden; Integration und Release-Baseline offen. Hardwaretests/Bestellung NOT RUN. Siehe `devices/motion-one/management/RESUME.md` |
 | 23 | Copyright Stefan Eicher fürs ganze Repo | ✅ | `LICENSE` |
