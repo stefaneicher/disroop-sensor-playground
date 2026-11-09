@@ -70,23 +70,23 @@
       "print_file": "devices/motion-one/mechanics/print/lichtleiter"
     },
     "schieber": {
-      "volume_mm3": 177.27180483200002,
+      "volume_mm3": 176.64308094089415,
       "valid": true,
       "print_bbox": [
         11.400000200000001,
-        8.578266600000003,
-        5.300000200000005
+        8.578266600000005,
+        5.300186075012492
       ],
       "com": [
-        24.600000000000005,
-        18.148708423606536,
-        1.8611782044814051
+        24.598328342689154,
+        18.13960537673014,
+        1.8528536602532981
       ],
       "print_flip_about_x": false,
       "print_file": "devices/motion-one/mechanics/print/schieber"
     },
     "unterschale_glatt": {
-      "volume_mm3": 27727.10747847718,
+      "volume_mm3": 27833.0795208143,
       "valid": true,
       "print_bbox": [
         170.2704223578854,
@@ -94,9 +94,9 @@
         19.078481635304325
       ],
       "com": [
-        78.9782334682147,
-        0.0003909238640944016,
-        -8.05110097829321
+        78.68319209789767,
+        -0.005254453021941208,
+        -8.031909514241876
       ],
       "print_flip_about_x": false,
       "print_file": "devices/motion-one/mechanics/print/unterschale_glatt"
@@ -110,7 +110,7 @@
   ],
   "end_ellipse_r_min": 4.437763776155193,
   "chosen_variant": "glatt",
-  "runtime_s": 952.853688955307,
+  "runtime_s": 938.92236161232,
   "f08": {
     "batch": true,
     "nproc": 1,
@@ -118,32 +118,32 @@
     "times": [
       [
         "Schale+Fuegeband",
-        51.18,
+        36.01,
         1
       ],
       [
-        "Teil top 335.2s",
-        386.36,
+        "Teil top 319.8s",
+        355.83,
         1
       ],
       [
-        "Teil glatt 517.2s",
-        903.55,
+        "Teil glatt 525.4s",
+        881.21,
         1
       ],
       [
         "Teile fertig",
-        904.68,
+        882.11,
         1
       ],
       [
         "Export STL/3MF/BREP",
-        946.14,
+        918.58,
         1
       ],
       [
         "Baugruppe STEP",
-        969.57,
+        939.33,
         1
       ]
     ]

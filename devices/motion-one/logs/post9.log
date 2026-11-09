@@ -1,0 +1,16 @@
+devices/motion-one/mechanics/print/oberschale.stl {'open': 0, 'nonman': 0, 'watertight': True}
+devices/motion-one/mechanics/print/unterschale_glatt.stl {'open': 32, 'nonman': 0, 'watertight': False}
+devices/motion-one/mechanics/print/tastenkappe.stl {'open': 0, 'nonman': 0, 'watertight': True}
+devices/motion-one/mechanics/print/lichtleiter.stl {'open': 0, 'nonman': 0, 'watertight': True}
+devices/motion-one/mechanics/assembly_stl/akku.stl {'open': 0, 'nonman': 0, 'watertight': True}
+devices/motion-one/mechanics/assembly_stl/lichtleiter.stl {'open': 0, 'nonman': 0, 'watertight': True}
+devices/motion-one/mechanics/assembly_stl/motor.stl {'open': 0, 'nonman': 0, 'watertight': True}
+devices/motion-one/mechanics/assembly_stl/oberschale.stl {'open': 0, 'nonman': 0, 'watertight': True}
+devices/motion-one/mechanics/assembly_stl/pcb_r3.stl {'open': 0, 'nonman': 0, 'watertight': True}
+devices/motion-one/mechanics/assembly_stl/pcb_r4.stl {'open': 0, 'nonman': 37, 'watertight': False}
+devices/motion-one/mechanics/assembly_stl/tastenkappe.stl {'open': 0, 'nonman': 0, 'watertight': True}
+devices/motion-one/mechanics/assembly_stl/unterschale_glatt.stl {'open': 32, 'nonman': 0, 'watertight': False}
+thin<0.9 n 204 min [  3.6 -16.8   0. ] max [166.4  13.9  11.2] xhist [67, 0, 0, 10, 0, 12, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63]
+oberschale {'min_mm': 0.46, 'p1_mm': 1.2, 'n': 650577}
+thin<0.9 n 16 min [ 17.2 -17.7  -0.3] max [ 19.7 -16.8   0.8] xhist [0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+unterschale_glatt {'min_mm': 0.87, 'p1_mm': 1.2, 'n': 463961}

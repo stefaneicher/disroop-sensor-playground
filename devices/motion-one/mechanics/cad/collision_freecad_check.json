@@ -1,0 +1,102 @@
+{
+ "status": "done",
+ "pairs": [
+  {
+   "shell": "oberschale",
+   "solid_index": 0,
+   "vol_mm3": -11.427,
+   "bbox": [
+    51.6,
+    -18.0,
+    1.0,
+    69.6,
+    -5.0,
+    4.0
+   ]
+  },
+  {
+   "shell": "oberschale",
+   "solid_index": 25,
+   "vol_mm3": -5.206,
+   "bbox": [
+    2.3,
+    -17.1,
+    0.1,
+    10.2,
+    -7.9,
+    4.3
+   ]
+  },
+  {
+   "shell": "oberschale",
+   "solid_index": 39,
+   "vol_mm3": 207.342,
+   "bbox": [
+    0.0,
+    -25.0,
+    0.0,
+    70.0,
+    0.0,
+    0.9
+   ]
+  },
+  {
+   "shell": "unterschale_glatt",
+   "solid_index": 25,
+   "vol_mm3": -0.0,
+   "bbox": [
+    2.3,
+    -17.1,
+    0.1,
+    10.2,
+    -7.9,
+    4.3
+   ]
+  },
+  {
+   "shell": "unterschale_glatt",
+   "solid_index": 39,
+   "vol_mm3": -6.084,
+   "bbox": [
+    0.0,
+    -25.0,
+    0.0,
+    70.0,
+    0.0,
+    0.9
+   ]
+  },
+  {
+   "shell": "lichtleiter",
+   "solid_index": 39,
+   "vol_mm3": 0.565,
+   "bbox": [
+    0.0,
+    -25.0,
+    0.0,
+    70.0,
+    0.0,
+    0.9
+   ]
+  }
+ ],
+ "timing": {
+  "oberschale": {
+   "candidates": 40,
+   "t_s": 715.1
+  },
+  "unterschale_glatt": {
+   "candidates": 14,
+   "t_s": 740.6
+  },
+  "tastenkappe": {
+   "candidates": 1,
+   "t_s": 740.7
+  },
+  "lichtleiter": {
+   "candidates": 1,
+   "t_s": 740.8
+  }
+ },
+ "n_board_solids": 40
+}

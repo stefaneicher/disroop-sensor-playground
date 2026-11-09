@@ -482,6 +482,8 @@ def bottom_shell(shell, variant):
              box(bx0 - t, bx1 + t, -by - t, -by, -40, zb_top), box(bx0 - t, bx1 + t, by, by + t, -40, zb_top)]
     adds += [box(bx0, bx1, cy - t / 2, cy + t / 2, -40, P.Z_BAT) for cy in P.CRADLE_Y]   # Wiegerippen
     adds += [c.intersect(box(-5, P.L + 5, -40, 40, -40, -0.01)) for c in clip_solids()]   # r4: Haken-Balken (Koepfe nach dem Z_S-Schnitt)
+    jr = P.J1_RIB
+    adds.append(box(jr["x0"], jr["x1"], -jr["hw"], jr["hw"], -40, zb_top))   # Boardstuetze J1
     for sx in P.BOARD_SUPPORT_X[:1]:
         adds.append(box(sx, P.BOARD_SUPPORT_X[1], -BCY, BCY, -40, zb_top))
     # r4 Muenzmotor LCM0827: Sockel bis Akku-Unterseite - 0.3, Mulde D8.6 x 3.2 (F-10)
@@ -510,6 +512,13 @@ def bottom_shell(shell, variant):
     bot = safe_clean(bot.intersect(box(-5, P.L + 5, -40, 40, -40, P.Z_S)))
     bot = cut_all(bot, [box(bx0 + 0.013, bx1 - 0.017, -by - 0.037, by + 0.041, P.Z_BAT + 0.011, P.Z_S + 0.5)])   # r4: Akkufach VOR der Lippe (sonst 0.013-mm-Sliver an der Lippenwurzel, 32 offene Kanten)
     bot = fuse_all(bot, [lip().intersect(clip)])   # ADR-0001 Lippe (ragt bis +LIP_H ueber die Trennebene)
+    tb = P.BAT_TABS
+    tabs = []
+    for tx in tb["xs"]:
+        for sg in (-1, 1):
+            ya, yb = sorted((sg * (bw / 2 - tb["over"]), sg * (bw / 2 + g + 0.5)))
+            tabs.append(box(tx, tx + tb["len"], ya, yb, tb["z0"], tb["z1"]))
+    bot = fuse_all(bot, tabs)   # Akku-Halte-Nasen nach dem Akkufach-Schnitt
     bot = fuse_all(bot, clip_solids(True))   # Haken-Koepfe ueber Trennebene
     print(f'  {variant}: nach Fusion V={bot.Volume():.0f} valid={bot.isValid()}')
     cuts = []

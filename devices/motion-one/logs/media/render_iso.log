@@ -1,0 +1,33 @@
+/workspace/devices/motion-one/scripts/media/render_product.py:28: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m = bpy.data.materials.new(name); m.use_nodes = True
+/workspace/devices/motion-one/scripts/media/render_product.py:55: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  w = bpy.data.worlds.new("w"); sc.world = w; w.use_nodes = True
+02:11.784  render           | Saved: 'devices/motion-one/media/renders/iso_closed.png'
+04:34.488  render           | Saved: 'devices/motion-one/media/renders/iso_open.png'
+DIM_MM oberschale [170.0, 43.19, 13.6]
+DIM_MM unterschale_glatt [170.0, 43.6, 16.77]
+DIM_MM tastenkappe [13.0, 12.96, 9.3]
+DIM_MM lichtleiter [5.0, 4.99, 9.95]
+DIM_MM pcb_r3 [70.7, 26.35, 4.5]
+DIM_MM akku [40.0, 30.0, 5.0]
+RENDERED iso_closed.png
+DIM_MM unterschale_glatt [170.0, 43.6, 16.77]
+DIM_MM tastenkappe [13.0, 12.96, 9.3]
+DIM_MM lichtleiter [5.0, 4.99, 9.95]
+DIM_MM pcb_r3 [70.7, 26.35, 4.5]
+DIM_MM akku [40.0, 30.0, 5.0]
+RENDERED iso_open.png
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+Timer 'STL Import' took 11.34 ms
+Timer 'STL Import' took 11.19 ms
+Timer 'STL Import' took 5.83 ms
+Timer 'STL Import' took 4.63 ms
+Timer 'STL Import' took 4.93 ms
+Timer 'STL Import' took 3.53 ms
+Timer 'STL Import' took 15.30 ms
+Timer 'STL Import' took 7.90 ms
+Timer 'STL Import' took 7.20 ms
+Timer 'STL Import' took 6.76 ms
+Timer 'STL Import' took 4.94 ms
+
+Blender quit

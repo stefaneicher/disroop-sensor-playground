@@ -1,16 +1,16 @@
 {
  "method": "SIMULATION (Netz): manifold3d Schnittvolumen auf STL assembly_stl, Bbox-Vorfilter; Abstand per Punktstichprobe 40000",
- "timestamp": "2026-11-09 07:52:36",
+ "timestamp": "2026-11-09 09:25:41",
  "runtime_s": 0.9,
  "build_hash_sha256": {
   "oberschale": "febab0d07383d30b99f911b5848468bf2b120cb4a17e285f797ab29d6e06030c",
-  "unterschale_glatt": "1b7ef4ed111fb3ee760cd39b28df7446ba2c69d3c6646ca21fd26b014754c544",
+  "unterschale_glatt": "6970b6309f6867aa4ed7dd1f3e363110132a37d2cf4a617743bdd27c8295ffe4",
   "pcb_r4": "19681e13daa6c91bd9b8acf58c77918afebc0ed0093c21f10c2a74e83f69dd74",
   "akku": "9b1d0c9a425707d040536e12c44a1ceaa024cf79cc19a41e6ce260cd30035a51",
   "motor": "04e3763b61728775df02c5f71c781a0bf2c63831c6508fef0c61fcd63273db36",
   "tastenkappe": "5e45b0281c7d47aca488bb88412f0367fd390fc3dbcec6fee3cb25b5f19d35a3",
   "lichtleiter": "e583f9b6d09d356b40d1cb0282264fdff24c0190c10d4ee8508e0d096589f4bd",
-  "schieber": "6d7045042e5f21bfdadb586890eb337e9d053d6e2efbe2406fa8f29a853a5bad"
+  "schieber": "c0a6287ca704e18d9f6ed9044d4f7ba5b73432fbf105321f8fd74fd7e5243743"
  },
  "tol_mm3": 0.01,
  "watertight": {
@@ -46,5 +46,12 @@
  },
  "keepout_pass": true,
  "note": "Kappe/Lichtleiter-Abstand ist Stichprobe (Untergrenze unsicher ~0.05 mm); Beruehrflaechen Board/Schale koennen Volumen ~0 liefern",
- "status": "FAIL"
+ "pcb_r4_koerper": {
+  "bodies": 72,
+  "watertight": 38,
+  "whole_watertight": false,
+  "note": "STEP-Tessellat des PCB-Agents (Fremdteil), Mechanik-Teile separat bewertet; Kollisionsmessung per Schnittvolumen bleibt gueltig, wenn Schnitt 0"
+ },
+ "status_mechanik_teile": "PASS",
+ "status": "PARTIAL"
 }

@@ -10,3 +10,88 @@ Fuegeband V=7169 valid=True
 [t]   1940.5s Teil verrippt_ausgespart 556.8s
 Oberschale V=19540 valid=True (1902.5s)
 [t]   1942.0s Teile fertig
+Unterschale glatt: V=27767 valid=True (1904.2s)
+Unterschale verrippt: V=30294 valid=True (1907.4s)
+Unterschale verrippt_ausgespart: V=28794 valid=True (1910.0s)
+[t]   2043.3s Export STL/3MF/BREP
+/usr/local/lib/python3.12/dist-packages/cadquery/utils.py:82: FutureWarning: save will be removed in the next release.
+  warn(f"{f.__name__} will be removed in the next release.", FutureWarning)
+[t]   2053.3s Baugruppe STEP
+{
+ "params_file": "scripts/mechanics/params.py",
+ "motor_z0": -10.85,
+ "cap": {
+  "z_switch_gap": 1.8,
+  "z_flange_top": 7.400000000000001,
+  "z_top": 11.100000000000001,
+  "z_inner_ceiling": 7.600000000000001
+ },
+ "lightpipe": {
+  "z_bottom": 0.75,
+  "z_top": 10.703921601786258
+ },
+ "outer_volume": 149873.32453472298,
+ "inner_volume": 110421.64951452092,
+ "section_r_min": 7.483106511697922,
+ "section_r_min_at": [
+  85.0,
+  -17.269624616468477,
+  3.9848273059254975
+ ],
+ "end_ellipse_r_min": 4.437763776155193,
+ "chosen_variant": "glatt",
+ "runtime_s": 2011.7817244529724,
+ "f08": {
+  "batch": false,
+  "nproc": 1,
+  "fast": false,
+  "times": [
+   [
+    "Schale+Fuegeband",
+    152.4,
+    1
+   ],
+   [
+    "Teil top 324.2s",
+    476.57,
+    1
+   ],
+   [
+    "Teil glatt 392.5s",
+    869.09,
+    1
+   ],
+   [
+    "Teil verrippt 514.7s",
+    1383.77,
+    1
+   ],
+   [
+    "Teil verrippt_ausgespart 556.8s",
+    1940.53,
+    1
+   ],
+   [
+    "Teile fertig",
+    1942.01,
+    1
+   ],
+   [
+    "Export STL/3MF/BREP",
+    2043.26,
+    1
+   ],
+   [
+    "Baugruppe STEP",
+    2053.31,
+    1
+   ]
+  ]
+ }
+}
+oberschale V=19540 valid True bbox [229.3, 73.4, 59.8]
+tastenkappe V=545 valid True bbox [13.0, 13.0, 9.3]
+lichtleiter V=86 valid True bbox [5.0, 5.0, 10.0]
+unterschale_glatt V=27767 valid True bbox [170.3, 43.8, 19.1]
+unterschale_verrippt V=30294 valid True bbox [170.3, 43.8, 19.1]
+unterschale_verrippt_ausgespart V=28794 valid True bbox [170.3, 43.8, 19.1]

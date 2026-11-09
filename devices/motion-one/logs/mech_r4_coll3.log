@@ -1,0 +1,19 @@
+{
+ "board_step": "electronics/kicad/motion-one/export/motion-one-board.step",
+ "n_board_solids": 40,
+ "tol_mm3": 0.01,
+ "pairs": [],
+ "clearance_min": {
+  "tastenkappe": 0.305,
+  "lichtleiter": 5.9
+ },
+ "keepout": {
+  "motor": 32.8,
+  "schraube_h2": 5.7,
+  "j5_stecker": 2.7,
+  "dom_h2": 5.2
+ },
+ "keepout_pass": true,
+ "collisions": 0,
+ "status": "PASS"
+}

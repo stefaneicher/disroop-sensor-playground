@@ -1,0 +1,154 @@
+{
+ "wand_oberschale": {
+  "pitch_mm": 0.4,
+  "min_mm": 0.8,
+  "at": [
+   4.4,
+   -6.8,
+   3.2
+  ],
+  "n_medial_lt_1mm": 313,
+  "n_medial": 41267,
+  "worst5": [
+   {
+    "th": 0.8,
+    "at": [
+     4.4,
+     -6.8,
+     3.2
+    ]
+   },
+   {
+    "th": 0.8,
+    "at": [
+     4.4,
+     -6.8,
+     2.8
+    ]
+   },
+   {
+    "th": 0.8,
+    "at": [
+     4.4,
+     -6.8,
+     2.4
+    ]
+   },
+   {
+    "th": 0.8,
+    "at": [
+     4.4,
+     -6.8,
+     2.0
+    ]
+   },
+   {
+    "th": 0.8,
+    "at": [
+     4.4,
+     -6.8,
+     1.6
+    ]
+   }
+  ],
+  "note": "Medialachsen-Naeherung, Aufloesung 0.4 mm: Werte <1 mm an Rundungen/Kanten auch Messartefakt"
+ },
+ "wand_unterschale_glatt": {
+  "pitch_mm": 0.4,
+  "min_mm": 0.8,
+  "at": [
+   35.2,
+   -15.2,
+   0.0
+  ],
+  "n_medial_lt_1mm": 130,
+  "n_medial": 46335,
+  "worst5": [
+   {
+    "th": 0.8,
+    "at": [
+     35.2,
+     -15.2,
+     0.0
+    ]
+   },
+   {
+    "th": 0.8,
+    "at": [
+     35.2,
+     -16.0,
+     0.0
+    ]
+   },
+   {
+    "th": 0.8,
+    "at": [
+     35.2,
+     -15.6,
+     0.0
+    ]
+   },
+   {
+    "th": 0.8,
+    "at": [
+     34.8,
+     -16.8,
+     -10.0
+    ]
+   },
+   {
+    "th": 0.8,
+    "at": [
+     34.8,
+     -16.0,
+     0.0
+    ]
+   }
+  ],
+  "note": "Medialachsen-Naeherung, Aufloesung 0.4 mm: Werte <1 mm an Rundungen/Kanten auch Messartefakt"
+ },
+ "lippenspiel": {
+  "min_mm": 0.191,
+  "p5_mm": 0.252,
+  "nominal_mm": 0.25,
+  "n": 8476
+ },
+ "schieber_dx-1.5": {
+  "oberschale": 0.0,
+  "unterschale": 0.0,
+  "pcb": 0.0
+ },
+ "schieber_dx+0.0": {
+  "oberschale": 0.0,
+  "unterschale": 0.0,
+  "pcb": 0.0
+ },
+ "schieber_dx+1.5": {
+  "oberschale": 0.0,
+  "unterschale": 0.0,
+  "pcb": 0.0
+ },
+ "pcb_r4": {
+  "sha256": "19681e13daa6c91bd9b8acf58c77918afebc0ed0093c21f10c2a74e83f69dd74",
+  "merge_vertices": {
+   "bodies": 72,
+   "watertight_bodies": 38,
+   "whole_watertight": false
+  },
+  "raw": {
+   "bodies": 16720,
+   "watertight_bodies": 0,
+   "whole_watertight": false
+  }
+ },
+ "clip_balken": {
+  "L_mm": 14.0,
+  "t_mm": 1.0,
+  "delta_mm": 0.7,
+  "eps": 0.0054,
+  "sigma_MPa": 8.0,
+  "F_N": 0.48,
+  "label": "BERECHNUNG Balkentheorie, L=14 aus z_root -14..0 (ANNAHME starre Einspannung), E 1.5 GPa",
+  "ok_lt_2pct": true
+ }
+}

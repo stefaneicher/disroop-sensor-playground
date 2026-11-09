@@ -5,9 +5,9 @@
   "watertight": true
  },
  "devices/motion-one/mechanics/print/unterschale_glatt.stl": {
-  "open": 32,
+  "open": 0,
   "nonman": 0,
-  "watertight": false
+  "watertight": true
  },
  "devices/motion-one/mechanics/print/tastenkappe.stl": {
   "open": 0,
@@ -45,8 +45,8 @@
   "watertight": true
  },
  "devices/motion-one/mechanics/assembly_stl/pcb_r4.stl": {
-  "open": 10,
-  "nonman": 60,
+  "open": 0,
+  "nonman": 37,
   "watertight": false
  },
  "devices/motion-one/mechanics/assembly_stl/tastenkappe.stl": {
@@ -55,8 +55,8 @@
   "watertight": true
  },
  "devices/motion-one/mechanics/assembly_stl/unterschale_glatt.stl": {
-  "open": 32,
+  "open": 0,
   "nonman": 0,
-  "watertight": false
+  "watertight": true
  }
 }

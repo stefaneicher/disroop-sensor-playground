@@ -167,3 +167,7 @@ M_DEV = 0.120             # I REQ-055 Obergrenze (konservativ)
 H_DROP = 1.0              # Auftrag
 S_STOP = 2.0              # A Bremsweg (Schale + Boden) fuer statische Ersatzlast
 F_SCREW = 150.0           # B M2, Anzugsmoment 0.06 Nm, K 0.2: F = T/(K d) = 0.06/(0.2*0.002)
+
+# --- r4 Nachtrag 2026-11-09 -----------------------------------------------------------------------
+BAT_TABS = dict(xs=(28.3, 45.7), len=5.6, over=0.4, z0=-2.4, z1=-1.0)   # A Halte-Nasen am Akkurahmen: ragen 0.4 mm ueber die Akkukante (Luft 0.1 zur Akku-Oberseite), Beutelzelle gibt nach
+J1_RIB = dict(x0=6.0, x1=8.0, hw=6.0)   # A Querrippe unter Board hinter J1: Steckkraft USB-C in die Unterschale (KEINE Kabelzugentlastung)

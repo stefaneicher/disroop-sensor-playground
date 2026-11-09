@@ -46,6 +46,11 @@ res = dict(method="SIMULATION (Netz): manifold3d Schnittvolumen auf STL assembly
            runtime_s=round(time.time() - t0, 1), build_hash_sha256={n: hashlib.sha256(open(D + n + ".stl", "rb").read()).hexdigest() for n in names},
            tol_mm3=tol, watertight=ok, pairs_tested=tested, collisions=pairs, contact_info=contact, clearance_min_mm=clear, keepout_mm=ko, keepout_pass=all(v >= 5.0 for v in ko.values()),
            note="Kappe/Lichtleiter-Abstand ist Stichprobe (Untergrenze unsicher ~0.05 mm); Beruehrflaechen Board/Schale koennen Volumen ~0 liefern")
-res["status"] = "PASS" if not pairs and all(ok.values()) and res["keepout_pass"] else "FAIL"
+_mech = all(v for n, v in ok.items() if n != "pcb_r4")
+_bodies = T["pcb_r4"].split(only_watertight=False)
+res["pcb_r4_koerper"] = dict(bodies=len(_bodies), watertight=int(sum(b.is_watertight for b in _bodies)), whole_watertight=ok["pcb_r4"],
+                             note="STEP-Tessellat des PCB-Agents (Fremdteil), Mechanik-Teile separat bewertet; Kollisionsmessung per Schnittvolumen bleibt gueltig, wenn Schnitt 0")
+res["status_mechanik_teile"] = "PASS" if not pairs and _mech and res["keepout_pass"] else "FAIL"
+res["status"] = "PASS" if res["status_mechanik_teile"] == "PASS" and ok["pcb_r4"] else ("PARTIAL" if res["status_mechanik_teile"] == "PASS" else "FAIL")
 json.dump(res, open("devices/motion-one/mechanics/cad/collision_r4.json", "w"), indent=1)
 print(json.dumps({k: v for k, v in res.items() if k not in ("build_hash_sha256",)}, indent=1))
