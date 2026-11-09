@@ -1,0 +1,46 @@
+{
+ "bodies": 40,
+ "replaced": [
+  {
+   "i": 0,
+   "open": 4,
+   "nonmanifold": 4,
+   "replaced_by_bbox": [
+    51.6,
+    -18.0,
+    0.99,
+    69.6,
+    -5.0,
+    4.0
+   ]
+  },
+  {
+   "i": 23,
+   "open": 4,
+   "nonmanifold": 4,
+   "replaced_by_bbox": [
+    16.7,
+    -3.7,
+    0.49,
+    23.3,
+    0.5,
+    2.5
+   ]
+  },
+  {
+   "i": 25,
+   "open": 2,
+   "nonmanifold": 3090,
+   "replaced_by_bbox": [
+    2.29,
+    -16.97,
+    0.06,
+    10.19,
+    -8.03,
+    4.25
+   ]
+  }
+ ],
+ "after_open": 0,
+ "after_nonmanifold": 0
+}

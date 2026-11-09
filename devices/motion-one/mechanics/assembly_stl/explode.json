@@ -108,10 +108,10 @@
     10
    ],
    "tess_tol_mm": 0.05,
-   "triangles": 59450,
-   "bytes": 2972584,
-   "watertight": false,
-   "bodies_watertight": "37/40",
+   "triangles": 16720,
+   "bytes": 836084,
+   "watertight": true,
+   "bodies_watertight": "40/40",
    "bbox_min": [
     4.6,
     -12.5,
@@ -122,7 +122,7 @@
     13.0,
     3.25
    ],
-   "sha256": "435ac6a5711de5260659dd10f88a21985e1471c91041d9069497c112b38d7b3e"
+   "sha256": "19681e13daa6c91bd9b8acf58c77918afebc0ed0093c21f10c2a74e83f69dd74"
   },
   "akku": {
    "file": "akku.stl",
