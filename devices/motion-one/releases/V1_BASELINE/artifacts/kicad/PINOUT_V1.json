@@ -1,0 +1,179 @@
+{
+ "revision": "r4",
+ "board": "motion-one V1",
+ "module": "Ebyte E73-2G4M08S1C (nRF52840)",
+ "source": "scripts/electronics/mo_design.py",
+ "pins": [
+  {
+   "signal": "EXT5",
+   "module_pin": 1,
+   "gpio": "P1.11",
+   "function": "J5.6 EXT5, GPIO (Touch-Ausgang TTP233H, aktiv high)"
+  },
+  {
+   "signal": "LED_B",
+   "module_pin": 2,
+   "gpio": "P1.10",
+   "function": "RGB blau, aktiv low (Common-Anode 3V3)"
+  },
+  {
+   "signal": "EXT4",
+   "module_pin": 3,
+   "gpio": "P0.03",
+   "function": "J5.5 EXT4, GPIO/AIN1 (Stick-Taste aktiv low, interner Pull-up)"
+  },
+  {
+   "signal": "BTN",
+   "module_pin": 4,
+   "gpio": "P0.28/AIN4",
+   "function": "Taster aktiv low, interner Pull-up"
+  },
+  {
+   "signal": "MOT_EN",
+   "module_pin": 6,
+   "gpio": "P1.13",
+   "function": "Motor-FET Gate, high=an (100k Pull-down)"
+  },
+  {
+   "signal": "BUZ_PWM",
+   "module_pin": 7,
+   "gpio": "P0.02/AIN0",
+   "function": "Summer-FET Gate PWM 2-4 kHz (100k Pull-down)"
+  },
+  {
+   "signal": "EXT1",
+   "module_pin": 8,
+   "gpio": "P0.29/AIN5",
+   "function": "J5.2 EXT1, SAADC AIN5 (Stick X), 0..3V3"
+  },
+  {
+   "signal": "EXT3",
+   "module_pin": 9,
+   "gpio": "P0.31/AIN7",
+   "function": "J5.4 EXT3, SAADC AIN7 (frei/analog)"
+  },
+  {
+   "signal": "EXT2",
+   "module_pin": 10,
+   "gpio": "P0.30/AIN6",
+   "function": "J5.3 EXT2, SAADC AIN6 (Stick Y), 0..3V3"
+  },
+  {
+   "signal": "XL1",
+   "module_pin": 11,
+   "gpio": "XL1",
+   "function": "32.768 kHz"
+  },
+  {
+   "signal": "IMU_INT2",
+   "module_pin": 12,
+   "gpio": "P0.26",
+   "function": "IMU INT2, push-pull"
+  },
+  {
+   "signal": "XL2",
+   "module_pin": 13,
+   "gpio": "XL2",
+   "function": "32.768 kHz"
+  },
+  {
+   "signal": "IMU_SCK",
+   "module_pin": 14,
+   "gpio": "P0.06",
+   "function": "SPI SCK (SPIM, bis 8 MHz)"
+  },
+  {
+   "signal": "VBAT_EN",
+   "module_pin": 15,
+   "gpio": "P0.05/AIN3",
+   "function": "Teiler-Freigabe high=an (Messung), sonst low"
+  },
+  {
+   "signal": "IMU_MOSI",
+   "module_pin": 16,
+   "gpio": "P0.08",
+   "function": "SPI MOSI"
+  },
+  {
+   "signal": "IMU_MISO",
+   "module_pin": 17,
+   "gpio": "P1.09",
+   "function": "SPI MISO"
+  },
+  {
+   "signal": "VBAT_ADC",
+   "module_pin": 18,
+   "gpio": "P0.04/AIN2",
+   "function": "SAADC AIN2, Vbat/2, Freigabe >= 25 ms vor Messung (tau 5 ms, 1%)"
+  },
+  {
+   "signal": "IMU_CS",
+   "module_pin": 20,
+   "gpio": "P0.12",
+   "function": "SPI CS aktiv low"
+  },
+  {
+   "signal": "IMU_INT1",
+   "module_pin": 22,
+   "gpio": "P0.07",
+   "function": "IMU INT1 (Data-ready/Wake-on-motion), push-pull"
+  },
+  {
+   "signal": "NRESET",
+   "module_pin": 26,
+   "gpio": "RST/P0.18",
+   "function": "Reset (TC2030)"
+  },
+  {
+   "signal": "VBUS",
+   "module_pin": 27,
+   "gpio": "VBUS",
+   "function": "USB-Detect (VBUS-Pin Modul, POWER.USBDETECTED)"
+  },
+  {
+   "signal": "LED_R",
+   "module_pin": 28,
+   "gpio": "P0.15",
+   "function": "RGB rot, aktiv low"
+  },
+  {
+   "signal": "USB_DM",
+   "module_pin": 29,
+   "gpio": "D-",
+   "function": "USB D-"
+  },
+  {
+   "signal": "LED_G",
+   "module_pin": 30,
+   "gpio": "P0.17",
+   "function": "RGB gruen, aktiv low"
+  },
+  {
+   "signal": "USB_DP",
+   "module_pin": 31,
+   "gpio": "D+",
+   "function": "USB D+"
+  },
+  {
+   "signal": "SWDIO",
+   "module_pin": 37,
+   "gpio": "SWDIO",
+   "function": "SWD"
+  },
+  {
+   "signal": "SWCLK",
+   "module_pin": 39,
+   "gpio": "SWCLK",
+   "function": "SWD"
+  }
+ ],
+ "notes": [
+  "LED aktiv low: GPIO low = an",
+  "IMU ICM-45686 per SPI Mode 0/3, AP_CS aktiv low",
+  "VBAT_ADC = VBAT * 100k/(100k+100k), Referenz intern 0.6 V Gain 1/6",
+  "Ein/Aus: Schiebeschalter SW1 trennt VSYS->VSW hardwareseitig (kein GPIO)",
+  "Ladezustand nur LED (TP4056 CHRG), kein GPIO",
+  "r4: J5 JST-SH 8p: 1=3V3 (max. 10 mA), 2..6=EXT1..EXT5, 7=RSV (NC), 8=GND; Serien-R 100 Ohm + ESD auf Bedienplatine",
+  "r4: LED R/G/B von P0.30/P0.31/P0.29 auf P0.15/P0.17/P1.10 verlegt (ADC-Pins frei fuer EXT)"
+ ]
+}

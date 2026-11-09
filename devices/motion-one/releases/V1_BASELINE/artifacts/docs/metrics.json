@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "release": "pre-baseline V1 design; integration not yet signed off",
+  "metrics": [
+    {
+      "name": "board_outline",
+      "value": "70 x 25 x 1.0",
+      "unit": "mm",
+      "classification": "QUELLE",
+      "revision": "PCB INTERFACES r2",
+      "evidence": "electronics/kicad/motion-one/export/heights.json",
+      "status": "PARTIAL"
+    },
+    {
+      "name": "board_layers",
+      "value": 4,
+      "unit": "layers",
+      "classification": "QUELLE",
+      "revision": "PCB V1",
+      "evidence": "electronics/kicad/motion-one/motion-one.kicad_pcb",
+      "status": "PASS"
+    },
+    {
+      "name": "board_erc_errors",
+      "value": 0,
+      "unit": "errors",
+      "classification": "MESSUNG",
+      "revision": "PCB V1",
+      "evidence": "logs/pcb-v1/",
+      "status": "PASS"
+    },
+    {
+      "name": "board_drc_unconnected",
+      "value": 0,
+      "unit": "items",
+      "classification": "MESSUNG",
+      "revision": "PCB V1",
+      "evidence": "logs/pcb-v1/",
+      "status": "PASS"
+    },
+    {
+      "name": "pcba_parts_cost",
+      "value": 20.33,
+      "unit": "USD/device",
+      "classification": "QUELLE",
+      "revision": "BOM V1",
+      "evidence": "sourcing/BOM_V1.md",
+      "status": "PARTIAL"
+    },
+    {
+      "name": "pcba_estimated_total_5pcs",
+      "value": 213,
+      "unit": "USD/5 devices",
+      "classification": "BERECHNUNG (shipping and courier fees are ANNAHME)",
+      "revision": "Offer comparison V1",
+      "evidence": "sourcing/ANGEBOTE_V1.md",
+      "status": "PARTIAL"
+    },
+    {
+      "name": "pcba_estimated_unit_cost_5pcs",
+      "value": 42.6,
+      "unit": "USD/device",
+      "classification": "BERECHNUNG (shipping and courier fees are ANNAHME)",
+      "revision": "Offer comparison V1",
+      "evidence": "sourcing/ANGEBOTE_V1.md",
+      "status": "PARTIAL"
+    },
+    {
+      "name": "calculated_runtime_game_mode",
+      "value": 49,
+      "unit": "h",
+      "classification": "BERECHNUNG",
+      "revision": "PCB analysis V1",
+      "evidence": "electronics/analysis/ANALYSE_V1.md",
+      "status": "NOT RUN (no battery/hardware measurement)"
+    },
+    {
+      "name": "calculated_runtime_game_mode_system_model",
+      "value": 65,
+      "unit": "h",
+      "classification": "BERECHNUNG (system model; different current and actuator-duty assumptions)",
+      "revision": "Systems V1",
+      "evidence": "requirements/budgets_output.md",
+      "status": "NOT RUN (superseded for planning by conservative PCB estimate; no hardware measurement)"
+    },
+    {
+      "name": "calculated_off_current_max",
+      "value": 6,
+      "unit": "uA",
+      "classification": "BERECHNUNG",
+      "revision": "PCB analysis V1",
+      "evidence": "electronics/analysis/ANALYSE_V1.md",
+      "status": "NOT RUN (no hardware measurement)"
+    },
+    {
+      "name": "charger_current",
+      "value": 255,
+      "unit": "mA",
+      "classification": "BERECHNUNG",
+      "revision": "PCB analysis V1",
+      "evidence": "electronics/analysis/ANALYSE_V1.md",
+      "status": "PASS (calculation only)"
+    },
+    {
+      "name": "inrush_current_peak",
+      "value": 6.75,
+      "unit": "A",
+      "classification": "SIMULATION",
+      "revision": "PCB analysis V1",
+      "evidence": "electronics/spice/inrush.cir",
+      "status": "PARTIAL (soft-start recommended)"
+    },
+    {
+      "name": "enclosure_length",
+      "value": 170,
+      "unit": "mm",
+      "classification": "ANNAHME",
+      "revision": "Mechanics V1, board integration pending",
+      "evidence": "scripts/mechanics/params.py",
+      "status": "PARTIAL"
+    },
+    {
+      "name": "enclosure_mass_estimate",
+      "value": 80.8,
+      "unit": "g",
+      "classification": "BERECHNUNG (board, battery and small parts partly ANNAHME)",
+      "revision": "Mechanics V1, board integration pending",
+      "evidence": "management/handoffs/mechanical-engineer/2026-11-07-v1.md",
+      "status": "PARTIAL"
+    },
+    {
+      "name": "enclosure_grip_equivalent_diameter",
+      "value": 34,
+      "unit": "mm",
+      "classification": "BERECHNUNG",
+      "revision": "Mechanics V1",
+      "evidence": "mechanics/cad/cad_results.json",
+      "status": "PASS (design estimate; physical ergonomics not tested)"
+    },
+    {
+      "name": "enclosure_minimum_outer_radius",
+      "value": 4.4,
+      "unit": "mm",
+      "classification": "BERECHNUNG",
+      "revision": "Mechanics V1",
+      "evidence": "mechanics/cad/cad_results.json",
+      "status": "PASS"
+    },
+    {
+      "name": "enclosure_minimum_fem_safety_factor",
+      "value": 3.0,
+      "unit": "ratio",
+      "classification": "SIMULATION (mesh convergence PARTIAL; static drop-equivalent load only)",
+      "revision": "Mechanics V1",
+      "evidence": "mechanics/fem/fem_results.json",
+      "status": "PARTIAL"
+    },
+    {
+      "name": "enclosure_print_time",
+      "value": 236,
+      "unit": "min",
+      "classification": "SIMULATION",
+      "revision": "Mechanics V1, P2S profile",
+      "evidence": "mechanics/print/slice/motion-one_gehaeuse/result.json",
+      "status": "PASS (slicer only)"
+    },
+    {
+      "name": "enclosure_print_material",
+      "value": 71.6,
+      "unit": "g",
+      "classification": "SIMULATION",
+      "revision": "Mechanics V1, PETG",
+      "evidence": "mechanics/print/slice/motion-one_gehaeuse/result.json",
+      "status": "PASS (slicer only)"
+    },
+    {
+      "name": "firmware_flash_size",
+      "value": 158724,
+      "unit": "bytes",
+      "classification": "MESSUNG",
+      "revision": "Firmware V1",
+      "evidence": "logs/fw-v1/app-build.log",
+      "status": "PASS"
+    },
+    {
+      "name": "firmware_ram_size",
+      "value": 36196,
+      "unit": "bytes",
+      "classification": "MESSUNG",
+      "revision": "Firmware V1",
+      "evidence": "logs/fw-v1/app-build.log",
+      "status": "PASS"
+    },
+    {
+      "name": "firmware_host_test_count",
+      "value": 32,
+      "unit": "tests",
+      "classification": "MESSUNG",
+      "revision": "Firmware V1",
+      "evidence": "logs/fw-v1/unit-tests.log",
+      "status": "PASS"
+    },
+    {
+      "name": "firmware_sensor_to_notify_latency",
+      "value": {
+        "typical": 2.8,
+        "worst_case": 5.3
+      },
+      "unit": "ms",
+      "classification": "BERECHNUNG (includes assumptions)",
+      "revision": "Firmware V1",
+      "evidence": "management/handoffs/firmware-engineer/2026-11-07-v1.md",
+      "status": "PARTIAL (not measured on hardware)"
+    },
+    {
+      "name": "media_renders_r4",
+      "value": "4 Renders + 1 beschriftete Explosionsansicht, 3840 x 2160 RGBA",
+      "unit": "images",
+      "classification": "MESSUNG (PNG-Header, Alpha 0..255)",
+      "revision": "Gehaeuse r4 cc9b9ef, assembly_stl",
+      "evidence": "media/renders/",
+      "status": "PARTIAL (Explosionsvektoren ANNAHME; iso_open/top_open nicht visuell geprueft)"
+    },
+    {
+      "name": "docs_pdf_pages_r4",
+      "value": {
+        "assembly": 7,
+        "user": 4
+      },
+      "unit": "pages",
+      "classification": "MESSUNG (pdfinfo)",
+      "revision": "Gehaeuse r4",
+      "evidence": "docs/assembly/ASSEMBLY.pdf, docs/user/USER.pdf",
+      "status": "PARTIAL (DRAFT, Seiten nicht visuell geprueft)"
+    }
+  ]
+}
