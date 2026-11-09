@@ -1,4 +1,27 @@
-# Motion One – Montageanleitung
+# Motion One – Montageanleitung (Gehäuse r4, Prototyp)
+
+> **Stand Gehäuse r4 (Commit cc9b9ef), Prototyp, nichts am realen Muster geprüft (NOT RUN).** Die r3-Abschnitte weiter unten sind teilweise veraltet; für das Gehäuse gilt der folgende Abschnitt.
+
+## Gehäuse r4: Teile und Schritte (Konstruktion, NOT RUN am Muster)
+
+Teile: Oberschale, Unterschale glatt (mit 3 Platinen-Clips), Schieber SW1, Tastenkappe, Lichtleiter, Platine r4, Akku 503040 (Hüllkörper, ANNAHME), Motor [QUELLE: `mechanics/assembly_stl/explode.json`].
+
+1. **Druck:** `mechanics/print/*.stl` bzw. `.3mf`. Toleranzkörper zuerst. Wandstärke und Lippenspiel: **NOT RUN** (nicht gemessen).
+2. **Akku fixieren:** Schaum-/Klebepad 1.5 mm ist **ANNAHME**; das Gehäuse hat keine Halterung in z. Akku nicht anschliessen vor Freigabe (Sicherheitsnachweise fehlen).
+3. **Schieber SW1:** Hub ±1.5 mm, Spiel 0.2 mm, Fenster 7.0 mm [BERECHNUNG/SIMULATION]. Hebel des MSK12C02 greift in die Nut. Hebelhöhe z, y_tip 13.55 mm und Y-Spiegelung sind **ANNAHME**. Endlagen **NOT RUN**.
+4. **Platine einlegen:** von oben in die Unterschale drücken, bis die **3 Schnapphaken** einrasten (+y: 2, −y: 1; Eingriff 0.7 mm, ANNAHME). Federweg in PETG vermutlich knapp, **NOT RUN**. Abweichung: 3 statt 4 Clips.
+5. **USB-C (J1):** Aussparung 14.0 × 8.0 × 4.45 mm; Luft seitlich 0.83 mm, oben/unten 0.75 mm, Tiefe 1.0 mm [BERECHNUNG, Steckermasse ANNAHME]. Keine Zugentlastung.
+6. **Service J4:** Durchbruch 6 × 5 mm in der Oberschale über J4 (Grösse ANNAHME). Kein Reset-Taster, kein Reset-Loch, kein abnehmbarer Deckel.
+7. **Tastenkappe und Lichtleiter** einsetzen; Spiel 0.201 mm bzw. 0.192 mm [SIMULATION]. LED-Sichtbarkeit **NOT RUN**.
+8. **Oberschale aufsetzen**, M2-Schrauben mit Gewindeeinsätzen (Lötkolben nötig). Anzugsmoment: **offen**.
+
+Netzkollision 0, Keepouts PASS [SIMULATION]; Gesamtlabel FAIL wegen `pcb_r4.stl` (im Mechanik-Check nicht wasserdicht, Widerspruch zum PCB-Handoff 2026-11-09-step-dicht; ungeklärt). Klemmrippen x 33/40/67 per Innenraum-Subtraktion, nur im Netz geprüft.
+
+**Offen:** Wandstärke und Lippenspiel NOT RUN; Hebelmasse SW1; Clip-Federweg; Schieber-Endlagen; Akkufixierung; USB-C-Zugentlastung; Kabelclips J2/J5; LED-Sichtbarkeit; Lanyard-Festigkeit; FEM; Servicedurchbruch-Grösse; Prägung «I»/«O» (ein/aus ANNAHME); Viewer nicht im Browser geprüft.
+
+![Abb. r4-1: Beschriftete Explosionsansicht (Explosionsvektoren ANNAHME)](../../media/renders/exploded_labeled.png)
+
+---
 
 > **DRAFT – V1-Integration pending (r3). NOT RUN.** Dieses Dokument ist ein quellengebundener Arbeitsentwurf, keine freigegebene Arbeitsanweisung. Board- und Mechanik-Integration r3 läuft parallel. Wegen der unten aufgeführten Geometriewidersprüche nicht drucken, montieren, Akku anschliessen oder flashen, bevor die zuständigen Disziplinen eine abgestimmte Revision und deren Handoff geliefert haben.
 
@@ -92,17 +115,17 @@ Als Debug-Verbindung nennt `PINOUT_V1.json` Tag-Connect TC2030-Pads mit VDD, SWD
 - Keine bestätigten Anzugsmomente, Einpressparameter oder Endmontage-Prüfgrenzen.
 - Keine bestätigte r3-Integration von PCB, Gehäuse, Akku und Kabeln.
 
-## Abbildungen (Stand r3, DRAFT)
+## Abbildungen (r4)
 
 Die Renderings entstehen aus den STL-Dateien in `mechanics/assembly_stl/` (**Gehäuse r3**, Board `pcb_r3`). Das r4-Gehäuse ist noch nicht gebaut; die Bilder sind **nicht** der r4-Stand und keine Freigabe. Render: Blender/Cycles, 3840 x 2160 px, RGBA [QUELLE: `scripts/media/render_product.py`].
 
-![Abb. 1: Geschlossen, Isometrie (r3)](../../media/renders/iso_closed.png)
+![Abb. 1: Geschlossen, Isometrie](../../media/renders/iso_closed.png)
 
-![Abb. 2: Oberschale entfernt, Isometrie (r3)](../../media/renders/iso_open.png)
+![Abb. 2: Oberschale entfernt, Isometrie](../../media/renders/iso_open.png)
 
-![Abb. 3: Aufsicht ohne Oberschale (r3)](../../media/renders/top_open.png)
+![Abb. 3: Aufsicht ohne Oberschale](../../media/renders/top_open.png)
 
-![Abb. 4: Explosionsansicht ohne Beschriftung (r3, Rohbild)](../../media/renders/exploded_raw.png)
+![Abb. 4: Explosionsansicht ohne Beschriftung](../../media/renders/exploded_raw.png)
 
 Beschriftete Explosionsansicht, Anzugsmomente und Montageprüfungen: **offen / NOT RUN**.
 

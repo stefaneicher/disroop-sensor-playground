@@ -83,3 +83,6 @@ PAUSIERT auf User-Entscheid („für das Gerät nicht so wichtig“). Letzter St
 
 ## Stand 2026-11-08 21:40 PCB r4c
 D2 umgesetzt: 4-Kanal-TVS U2 SRV05-4 (C13612) auf Bedienplatine, ERC/DRC 0. D3: Pin-1-Text `J5-1`/`J1-1` auf F.Fab (keine DRC-Warnung). D4: Gerber-ZIPs `*_gerber_r4.zip` neu erzeugt. Handoff: management/handoffs/pcb-engineer/2026-11-08-r4c.md. Offen PCB: JLC-Vorschau Rotationen (U2 CPL 270, ANNAHME), Bestellung durch User.
+
+## Stand 2026-11-09 docs-media r4 + Pre-release
+Renders (4 + beschriftete Explosion, 3840x2160 RGBA) aus assembly_stl r4 (cc9b9ef), ASSEMBLY/USER aktualisiert, PDFs gebaut (7/4 Seiten), Pre-release `motion-one-r4-prototype`. Offen: Wandstaerke/Lippenspiel NOT RUN, Hebelmasse SW1, Clip-Federweg, Schieber-Endlagen, Akkufixierung, pcb_r4.stl-Dichtheit widerspruechlich, iso_open/top_open nicht visuell geprueft. Handoff: management/handoffs/docs-media-engineer/2026-11-09-r4-release.md

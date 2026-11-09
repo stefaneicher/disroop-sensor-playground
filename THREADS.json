@@ -252,6 +252,15 @@
       "status": "running",
       "refs": [],
       "note": "Gestartet 11:44; Debug nur RTT."
+    },
+    {
+      "id": "T-05",
+      "parent": null,
+      "title": "Motion One r4: Renders, Anleitungen, Pre-release",
+      "kind": "task",
+      "owner": "docs-media-engineer",
+      "status": "done",
+      "note": "Renders+Explosion r4, ASSEMBLY/USER PDF, Pre-release motion-one-r4-prototype; offene Punkte siehe Handoff 2026-11-09-r4-release"
     }
   ],
   "log": [

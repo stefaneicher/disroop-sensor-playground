@@ -211,6 +211,27 @@
       "revision": "Firmware V1",
       "evidence": "management/handoffs/firmware-engineer/2026-11-07-v1.md",
       "status": "PARTIAL (not measured on hardware)"
+    },
+    {
+      "name": "media_renders_r4",
+      "value": "4 Renders + 1 beschriftete Explosionsansicht, 3840 x 2160 RGBA",
+      "unit": "images",
+      "classification": "MESSUNG (PNG-Header, Alpha 0..255)",
+      "revision": "Gehaeuse r4 cc9b9ef, assembly_stl",
+      "evidence": "media/renders/",
+      "status": "PARTIAL (Explosionsvektoren ANNAHME; iso_open/top_open nicht visuell geprueft)"
+    },
+    {
+      "name": "docs_pdf_pages_r4",
+      "value": {
+        "assembly": 7,
+        "user": 4
+      },
+      "unit": "pages",
+      "classification": "MESSUNG (pdfinfo)",
+      "revision": "Gehaeuse r4",
+      "evidence": "docs/assembly/ASSEMBLY.pdf, docs/user/USER.pdf",
+      "status": "PARTIAL (DRAFT, Seiten nicht visuell geprueft)"
     }
   ]
 }

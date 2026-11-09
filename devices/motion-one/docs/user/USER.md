@@ -1,4 +1,12 @@
-# Motion One – Bedienungsanleitung
+# Motion One – Bedienungsanleitung (Gehäuse r4, Prototyp)
+
+> **Prototyp r4, nichts am Gerät geprüft (NOT RUN).** Ergänzungen zum Gehäuse r4:
+>
+> - **Schieber SW1 (Ein/Aus):** Hub ±1.5 mm, Prägung «I» und «O»; Zuordnung ein/aus ist **ANNAHME**, Endlagen NOT RUN.
+> - **USB-C:** Aussparung am Griffende, keine Zugentlastung; Kabel nicht seitlich belasten. Laden nicht freigegeben.
+> - **Service J4:** Durchbruch 6 × 5 mm oben für Servicezugang, nur für Fachpersonal. Kein Reset-Taster.
+> - **Platine:** von 3 Schnapphaken gehalten; Gehäuse nicht gewaltsam öffnen.
+> - **LED-Sichtbarkeit** über Lichtleiter: NOT RUN.
 
 > **DRAFT – V1-Integration pending (r3). NOT RUN.** Arbeitsentwurf, keine freigegebene Anleitung für ein ausgeliefertes oder validiertes Gerät. Sämtliche hardwareabhängigen Bedienungs- und Sicherheitsschritte sind **NOT RUN**. Board-/Mechanik-Integration r3 und reale Prüfungen stehen aus.
 
@@ -67,13 +75,13 @@ Alle Punkte sind **NOT RUN** und dürfen nicht als bestätigte Fehlerdiagnose ve
 - Reproduzierbare End-to-End-Prüfung am realen Muster; alle hardwareabhängigen Angaben bleiben bis dahin **NOT RUN**.
 - Akku- und Lade-Sicherheitsbelege, reale Prüfwerte und genehmigte Nutzerhinweise.
 
-## Abbildungen (Stand r3, DRAFT)
+## Abbildungen (r4)
 
 Gerenderte Ansichten aus dem Gehäusestand r3 (nicht r4, nicht am realen Gerät geprüft). Lage von Taste, Lichtleiter und Öffnungen kann sich in r4 ändern.
 
-![Motion One geschlossen (r3)](../../media/renders/iso_closed.png)
+![Motion One geschlossen](../../media/renders/iso_closed.png)
 
-![Motion One geöffnet, Oberschale entfernt (r3)](../../media/renders/iso_open.png)
+![Motion One geöffnet, Oberschale entfernt](../../media/renders/iso_open.png)
 
 Bedienung am Gerät: **NOT RUN**.
 

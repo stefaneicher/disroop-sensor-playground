@@ -14,3 +14,4 @@
 | T11 | Media und Anleitungen (§11) | docs-media-engineer | IN PROGRESS: Quellengebundene Montage-/Bedienungs-Drafts beauftragt; finaler Media-Stand wartet auf integrierte Revision |
 | T12 | Bericht, Baseline V1 (§13) | Manager | IN PROGRESS: technischer Bericht als Entwurf erstellt; finaler PDF/Release benötigt abgeschlossene Integrationsrunde und Verifikationsmatrix |
 | T13 | engineering-change vorbereiten (§14) | Manager | PARTIAL: Skill angelegt |
+| T11b | Media/Anleitungen r4 | docs-media-engineer | PARTIAL: Renders, PDFs, Pre-release erstellt; Draft, nichts am Muster geprueft |

@@ -9,7 +9,7 @@ os.makedirs(out, exist_ok=True)
 ex = json.load(open(os.path.join(src, "explode.json")))["parts"]
 COL = {"oberschale": (0.08, 0.09, 0.11, 1), "unterschale_glatt": (0.12, 0.13, 0.15, 1),
        "tastenkappe": (0.95, 0.45, 0.05, 1), "lichtleiter": (0.7, 0.9, 1.0, 1),
-       "pcb_r3": (0.05, 0.35, 0.15, 1), "akku": (0.2, 0.3, 0.8, 1)}
+       "pcb_r3": (0.05, 0.35, 0.15, 1), "pcb_r4": (0.05, 0.35, 0.15, 1), "schieber": (0.9, 0.9, 0.9, 1), "motor": (0.6, 0.6, 0.6, 1), "akku": (0.2, 0.3, 0.8, 1)}
 
 def build(mode):
     bpy.ops.wm.read_factory_settings(use_empty=True)
