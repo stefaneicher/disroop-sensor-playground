@@ -80,6 +80,16 @@ SW1_LEVER = dict(w=1.4, y_tip=13.55, z0=1.0, z1=2.5)   # A MSK12C02-Hebel (Daten
 SLIDER = dict(travel=1.5, clr=0.2, shaft_w=3.6, z0=0.3, z_shaft=3.6, z_collar=4.4, collar_w=11.4, collar_y=(13.95, 14.95),
               y_in=13.05, slot_w=1.6, slot_y=14.8, slot_z=2.7, grip_w=10.0, grip_gap=0.3, grip_t=1.5, grip_z=4.6,
               groove_pitch=1.6, groove_w=0.8, groove_d=0.6, n_groove=5)   # A Schieber (Griffkappe)
+# r4-Pad 2026-11-09: plane Anlageflaeche innen ums SW1-Fenster + Fuehrungsleisten (Schieber wackelt sonst)
+SLIDER_PAD_CLR = 0.15     # A Spiel Kragen <-> Pad (y, Wandnormale); gleiches Spiel Hebelspitze <-> Schlitzgrund (Kragen gefangen)
+SLIDER_SIDE_CLR = 0.2     # A Spiel Kragen <-> obere/untere Fuehrungsleiste (normal zur Gleitflaeche)
+SLIDER_GUIDE = dict(z0=0.2, z1=4.6, y_f1=13.95, rail_z=4.2, rail_over=0.6, lip_z=0.25, grip_z0=0.2)
+#   A Kragen x = collar_w 11.4, y 13.05..13.95, z 0.2..4.6 (0.8 ueber Fensteroberkante 3.8), Dach und Unterkante je 45 Grad (Trapez);
+#   Pad-Flaeche y = y_f1 + SLIDER_PAD_CLR = 14.10, x-Laenge = Fenster + 2 x travel + collar_w = 21.4;
+#   obere Fuehrungsleiste: 45-Grad-Unterseite ab z 4.2, ragt rail_over 0.6 vor das Pad;
+#   untere Fuehrungsleiste: 45-Grad-Oberseite ab z lip_z 0.25 (y 13.5) bis 0.85 (Pad), steht auf dem Druckbett der Oberschale;
+#   beide Leisten in der Oberschale (Unterschale: Akku wird von oben eingelegt, Leiste ueber dem Akku nicht montierbar);
+#   Normalabstand Kragenschraege <-> Leiste = SLIDER_SIDE_CLR. Griff z grip_z0 0.2 = Unterseite Schieber plan (Druckbett)
 CLIP = dict(t=1.0, head_h=0.8, engage=0.7, y_beam=13.0, z_root=-14.0)   # A Schnapphaken: Balken y 13.0..14.0, Kopf 0.8 hoch, 0.7 ueber Boardkante
 CLIPS = [(+1, 68.1, 73.6), (+1, 58.3, 60.8), (-1, 70.0, 74.0)]   # A (Seite, x0, x1) Geraet; Mittelbereich durch Akkurahmen/J5/H2 blockiert
 SERVICE_J4 = (6.0, 5.0)   # A Servicedurchbruch Oberschale ueber J4 (Tag-Connect, Board 45.0/21.4), Breite x Tiefe y

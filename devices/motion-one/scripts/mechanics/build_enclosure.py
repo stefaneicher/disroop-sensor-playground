@@ -306,24 +306,35 @@ def lightpipe_geom():
     return fuse_all(rod, [cone, col]), dict(z_bottom=z0, z_top=z_top)
 
 
+def _yz_prism(x0, x1, pts):
+    """Prisma laengs x aus Polygon in (y, z)."""
+    return cq.Workplane("YZ", origin=(x0, 0, 0)).polyline(pts).close().extrude(x1 - x0).val()
+
+
 def slider_geom():
-    """r4-Luecke 1: Schieber (Griffkappe) fuer SW1: Schaft im Fenster, Rillen-Griff aussen, Fuss innen (Verliersicherung),
-    Hebelschlitz. Einbaulage Mittelstellung (Geraetekoordinaten)."""
-    S = P.SLIDER; sx = dev(P.SW1_XY)[0]
+    """r4-Pad (2026-11-09): Schieber (Griffkappe) fuer SW1: Schaft im Fenster, Rillen-Griff aussen, Kragen innen
+    (liegt mit SLIDER_PAD_CLR an der planen Pad-Flaeche an, 45-Grad-Dach unter der oberen Fuehrungsleiste,
+    Unterkante SLIDER_SIDE_CLR ueber der unteren Leiste), Hebelschlitz (Grund SLIDER_PAD_CLR hinter der Hebelspitze
+    -> Kragen gefangen zwischen Pad und Hebel). Einbaulage Mittelstellung (Geraetekoordinaten)."""
+    S = P.SLIDER; G = P.SLIDER_GUIDE; sx = dev(P.SW1_XY)[0]
     hw = P.SW1_WIN[0] / 2
     a_max = max(dims(sx + d)[0] for d in np.linspace(-hw - S["travel"], hw + S["travel"], 9))
     y_g0 = a_max + 0.1; y_g1 = y_g0 + S["grip_t"] + 0.3
-    sw = S["shaft_w"] / 2
-    d1 = P.LIP_D0 + P.LIP_W + P.GROOVE_CLR + P.BAND_T   # Fuegeband-Innenflaeche = a - d1 (B)
-    a_min = min(dims(sx + d)[0] for d in np.linspace(-S["collar_w"] / 2, S["collar_w"] / 2, 9))
-    y_f1 = min(a_min - d1 - 0.15, S['y_in'] + 0.7)                           # Fuss stoppt 0.15 vor der Bandflaeche (Verliersicherung)
-    shaft = box(sx - sw, sx + sw, S["y_in"], y_g0 + 0.2, S["z0"], S["z_shaft"])
-    foot = box(sx - S["collar_w"] / 2, sx + S["collar_w"] / 2, S["y_in"], y_f1, S["z0"], S["z_shaft"])
+    sw = S["shaft_w"] / 2; cw = S["collar_w"] / 2
+    y_f1 = G["y_f1"]; z0 = G["z0"]
+    shaft = box(sx - sw, sx + sw, S["y_in"], y_g0 + 0.2, z0, S["z_shaft"])
+    collar = box(sx - cw, sx + cw, S["y_in"], y_f1, z0, G["z1"])
+    y_pad = y_f1 + P.SLIDER_PAD_CLR
+    zr = lambda y: G["rail_z"] + (y_pad - y) - P.SLIDER_SIDE_CLR * math.sqrt(2)   # Dachebene parallel Leisten-Unterseite
+    ya, yb = S["y_in"] - 1, y_f1 + 1
+    collar = collar.cut(_yz_prism(sx - cw - 1, sx + cw + 1, [(ya, zr(ya)), (yb, zr(yb)), (yb, 10), (ya, 10)]))
+    zl = lambda y: G["lip_z"] + (y - (y_pad - G["rail_over"])) + P.SLIDER_SIDE_CLR * math.sqrt(2)   # Unterkante parallel untere Leiste
+    collar = collar.cut(_yz_prism(sx - cw - 1, sx + cw + 1, [(ya, zl(ya)), (yb, zl(yb)), (yb, -1), (ya, -1)]))
     gw = S["grip_w"] / 2
-    grip = box(sx - gw, sx + gw, y_g0, y_g1, -0.9, 4.4)
-    s = fuse_all(shaft, [foot, grip])
+    grip = box(sx - gw, sx + gw, y_g0, y_g1, G["grip_z0"], 4.4)
+    s = fuse_all(shaft, [collar, grip])
     lv = P.SW1_LEVER
-    s = s.cut(box(sx - S["slot_w"] / 2, sx + S["slot_w"] / 2, S["y_in"] - 0.1, lv["y_tip"] + 0.8, lv["z0"] - 0.2, lv["z1"] + 0.2))
+    s = s.cut(box(sx - S["slot_w"] / 2, sx + S["slot_w"] / 2, S["y_in"] - 0.1, lv["y_tip"] + P.SLIDER_PAD_CLR, lv["z0"] - 0.2, lv["z1"] + 0.2))
     cuts = []
     for k in range(S["n_groove"]):
         gx = sx + (k - (S["n_groove"] - 1) / 2) * S["groove_pitch"]
@@ -335,7 +346,31 @@ def slider_geom():
         else:
             cuts.append(cq.Solid.makeCylinder(0.6, 0.5, V(mx, (y_g0 + y_g1) / 2, 4.0), V(0, 0, 1)).cut(cq.Solid.makeCylinder(0.25, 0.5, V(mx, (y_g0 + y_g1) / 2, 4.0), V(0, 0, 1))))
     s = cut_all(s, cuts)
-    return s, dict(y_foot1=y_f1, x=sx, y_grip0=y_g0, y_grip1=y_g1, a_max=a_max)
+    return s, dict(y_foot1=y_f1, y_pad=y_pad, x=sx, y_grip0=y_g0, y_grip1=y_g1, a_max=a_max, pad_x=slider_pad_x())
+
+
+def slider_pad_x():
+    S = P.SLIDER; sx = dev(P.SW1_XY)[0]
+    h = P.SW1_WIN[0] / 2 + S["travel"] + S["collar_w"] / 2
+    return sx - h, sx + h
+
+
+def slider_pad():
+    """Oberschale: plane Anlageflaeche y = y_pad (parallel x) ums SW1-Fenster + obere Fuehrungsleiste mit 45-Grad-Unterseite.
+    Wird vor dem Fensterschnitt angefuegt (Fenster schneidet durch das Pad)."""
+    G = P.SLIDER_GUIDE; x0, x1 = slider_pad_x()
+    yp = G["y_f1"] + P.SLIDER_PAD_CLR; zr, ov = G["rail_z"], G["rail_over"]
+    zl = G["lip_z"]
+    return _yz_prism(x0, x1, [(yp - ov, 0.02), (30, 0.02), (30, 8.0), (yp - ov, 8.0), (yp - ov, zr + ov), (yp, zr),
+                              (yp, zl + ov), (yp - ov, zl)])
+
+
+def slider_pocket():
+    """Freiraum Kragen zwischen den Leisten (Komplement des Pad-Profils bis y_in-0.3), ueber pad_x."""
+    G = P.SLIDER_GUIDE; x0, x1 = slider_pad_x()
+    yp = G["y_f1"] + P.SLIDER_PAD_CLR; zr, ov = G["rail_z"], G["rail_over"]; zl = G["lip_z"]
+    yi = P.SLIDER["y_in"] - 0.3
+    return _yz_prism(x0, x1, [(yi, zl), (yp - ov, zl), (yp, zl + ov), (yp, zr), (yp - ov, zr + ov), (yi, zr + ov)])
 
 
 def clip_solids(heads=False):
@@ -451,7 +486,9 @@ def top_shell(shell):
         if True:
             y0, y1 = (BCY - P.BOARD_EDGE_KEEPOUT, 30) if sgn > 0 else (-30, -(BCY - P.BOARD_EDGE_KEEPOUT))
             adds.append(box(cx - P.RIB_T / 2, cx + P.RIB_T / 2, y0, y1, 0.02, 40))   # 0.02: vermeidet koplanare Flaeche (OCC-Fehler)
+    adds.append(slider_pad())   # r4-Pad: Anlageflaeche + obere Fuehrungsleiste Schieber
     top = fuse_all(top, clip_all(adds, o))
+    top = top.cut(slider_pocket())   # r4-Pad: Fuegeband innen im Schiebebereich freistellen (Kragen-Huellraum)
     cuts = [cyl(sx, sy, -1, P.INS_HOLE_DEPTH, P.INS_D_HOLE) for sx, sy in P.SCREWS]
     cuts.append(cyl(BTN[0], BTN[1], 0, 40, P.CAP_D + 2 * P.CAP_CLR))
     cuts.append(cyl(LED[0], LED[1], 0, 40, P.LP_D + 2 * P.LP_CLR))

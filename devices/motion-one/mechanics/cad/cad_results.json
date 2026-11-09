@@ -2,11 +2,16 @@
   "params_file": "scripts/mechanics/params.py",
   "motor_z0": -10.85,
   "slider": {
-    "y_foot1": 13.75,
+    "y_foot1": 13.95,
+    "y_pad": 14.1,
     "x": 24.6,
     "y_grip0": 19.8282664,
     "y_grip1": 21.6282664,
-    "a_max": 19.7282664
+    "a_max": 19.7282664,
+    "pad_x": [
+      13.900000000000002,
+      35.3
+    ]
   },
   "cap": {
     "z_switch_gap": 1.6,
@@ -22,7 +27,7 @@
   "inner_volume": 110243.03110362885,
   "parts": {
     "oberschale": {
-      "volume_mm3": 20223.001639194485,
+      "volume_mm3": 20371.737029807515,
       "valid": true,
       "print_bbox": [
         170.3649025256811,
@@ -70,7 +75,7 @@
       "print_file": "devices/motion-one/mechanics/print/lichtleiter"
     },
     "schieber": {
-      "volume_mm3": 176.64308094089415,
+      "volume_mm3": 176.0008185356917,
       "valid": true,
       "print_bbox": [
         11.400000200000001,

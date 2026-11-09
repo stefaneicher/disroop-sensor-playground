@@ -1,16 +1,16 @@
 {
  "method": "SIMULATION (Netz): manifold3d Schnittvolumen auf STL assembly_stl, Bbox-Vorfilter; Abstand per Punktstichprobe 40000",
- "timestamp": "2026-11-09 09:25:41",
- "runtime_s": 0.9,
+ "timestamp": "2026-11-09 19:35:14",
+ "runtime_s": 1.1,
  "build_hash_sha256": {
-  "oberschale": "febab0d07383d30b99f911b5848468bf2b120cb4a17e285f797ab29d6e06030c",
+  "oberschale": "438a7f87746bc5e6387f57c557661432426eba278d1592cccb9fd3dc629733c8",
   "unterschale_glatt": "6970b6309f6867aa4ed7dd1f3e363110132a37d2cf4a617743bdd27c8295ffe4",
   "pcb_r4": "19681e13daa6c91bd9b8acf58c77918afebc0ed0093c21f10c2a74e83f69dd74",
   "akku": "9b1d0c9a425707d040536e12c44a1ceaa024cf79cc19a41e6ce260cd30035a51",
   "motor": "04e3763b61728775df02c5f71c781a0bf2c63831c6508fef0c61fcd63273db36",
   "tastenkappe": "5e45b0281c7d47aca488bb88412f0367fd390fc3dbcec6fee3cb25b5f19d35a3",
   "lichtleiter": "e583f9b6d09d356b40d1cb0282264fdff24c0190c10d4ee8508e0d096589f4bd",
-  "schieber": "c0a6287ca704e18d9f6ed9044d4f7ba5b73432fbf105321f8fd74fd7e5243743"
+  "schieber": "1595ac05d581bc9198b07d54903d329d5cd812c658097a58c60f6f368daca288"
  },
  "tol_mm3": 0.01,
  "watertight": {
@@ -36,7 +36,7 @@
  ],
  "clearance_min_mm": {
   "tastenkappe-oberschale": 0.202,
-  "lichtleiter-oberschale": 0.166,
+  "lichtleiter-oberschale": 0.171,
   "tastenkappe-pcb_r4": 0.106
  },
  "keepout_mm": {

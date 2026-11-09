@@ -1,0 +1,52 @@
+{
+ "label": "SIMULATION (BREP exakt, OCC-Schnittvolumen)",
+ "kollision_dx-1.5_mm3": {
+  "oberschale": 0.0,
+  "unterschale": 0.0
+ },
+ "kollision_dx+0.0_mm3": {
+  "oberschale": 0.0,
+  "unterschale": 0.0
+ },
+ "kollision_dx+1.5_mm3": {
+  "oberschale": 0.0,
+  "unterschale": 0.0
+ },
+ "spiel_mm": {
+  "+y (zum Pad)": 0.15,
+  "+z (obere Leiste)": 0.2,
+  "-z (untere Leiste)": 0.28,
+  "normal Dach (0,+1,+1)/sqrt2": 0.2,
+  "normal Unterkante (0,+1,-1)/sqrt2": 0.2,
+  "-y (nach innen, frei bis Hebel)": null
+ },
+ "kippen_um_x_frei_grad": {
+  "+": 2.05,
+  "-": 5.25,
+  "note": "Kragen frei gegen Pad/Leisten; Hebel im Schlitz zusaetzlich"
+ },
+ "hebel": {
+  "slot_y": [
+   12.950000000000001,
+   13.700000000000001
+  ],
+  "lever_tip_y": 13.55,
+  "eingriff_tiefe_mm": 0.5,
+  "spiel_spitze_schlitzgrund_mm": 0.15,
+  "spiel_x_mm": 0.1,
+  "kragen_gefangen": true,
+  "note": "Schlitz bewegt sich mit dem Hebel; Eingriff in beiden Endlagen identisch, ANNAHME Hebelmasse (Datenblatt NICHT geprueft)"
+ },
+ "spiel_y_gesamt_mm": 0.3,
+ "ueberhang_pad_gt45": [
+  {
+   "c": [
+    33.0,
+    13.12,
+    4.8
+   ],
+   "nz": -1.0,
+   "A": 0.9
+  }
+ ]
+}
