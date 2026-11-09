@@ -36,8 +36,8 @@
     -30
    ],
    "tess_tol_mm": 0.02,
-   "triangles": 29972,
-   "bytes": 1498684,
+   "triangles": 29759,
+   "bytes": 1488034,
    "watertight": false,
    "bodies_watertight": null,
    "bbox_min": [
@@ -50,7 +50,7 @@
     21.74,
     2.0
    ],
-   "sha256": "d4b5aab11bd76942c49b49145a605b4df8783078dc72eae876f09380704bf908"
+   "sha256": "156c543b3cc3ad694c6b5f91afeccd41e121f79c5bc5a5c61a9bcd7ed1542d98"
   },
   "tastenkappe": {
    "file": "tastenkappe.stl",

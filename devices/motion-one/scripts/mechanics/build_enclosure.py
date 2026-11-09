@@ -456,13 +456,13 @@ def bottom_shell(shell, variant):
     clip = o
     bot = fuse_all(bot, clip_all(adds, clip))
     bot = safe_clean(bot.intersect(box(-5, P.L + 5, -40, 40, -40, P.Z_S)))
+    bot = cut_all(bot, [box(bx0 + 0.013, bx1 - 0.017, -by - 0.037, by + 0.041, P.Z_BAT + 0.011, P.Z_S - 0.013)])   # r4: Akkufach VOR der Lippe (sonst 0.013-mm-Sliver an der Lippenwurzel, 32 offene Kanten)
     bot = fuse_all(bot, [lip().intersect(clip)])   # ADR-0001 Lippe (ragt bis +LIP_H ueber die Trennebene)
     print(f'  {variant}: nach Fusion V={bot.Volume():.0f} valid={bot.isValid()}')
     cuts = []
     for sx, sy in P.SCREWS:
         cuts.append(cyl(sx, sy, -40, 1, P.D_THROUGH))
         cuts.append(cyl(sx, sy, -40, P.Z_CB, P.D_CBORE))
-    cuts.append(box(bx0 + 0.013, bx1 - 0.017, -by + 0.011, by - 0.019, P.Z_BAT + 0.011, P.Z_S - 0.013))   # Akkufach freihalten (r3: nicht koplanar zu Wiegerippen, nicht in Lippe)
     pd_, ph_ = P.MOTOR_POCKET
     cuts.append(cyl(mx, my, mt - ph_, mt + 0.5, pd_))                       # Mulde
     lw, ld = P.MOTOR_LEAD_CH                                                # Litzenkanal -y bis Akkurahmen, dann hoch zum Board
