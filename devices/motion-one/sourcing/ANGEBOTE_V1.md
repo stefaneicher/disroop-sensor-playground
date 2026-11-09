@@ -4,7 +4,10 @@ Board r3: 4 Lagen, 70 x 25 mm, 1.0 mm, HASL, einseitig bestückt, 59 Platzierung
 Druckteile (Gehäuse r3 **vorläufig**, Fügestelle/USB-C-Aussparung in Arbeit): Oberschale 19.35 cm³, Unterschale glatt 24.92 cm³, Tastenkappe 0.54 cm³, Lichtleiter 0.09 cm³ = **44.9 cm³/Satz** (BERECHNUNG trimesh aus `mechanics/print/*.stl`, alle wasserdicht; Bauraum max. 170 x 44 x 17 mm).
 Kennzeichnung: QUELLE (URL, Datum), BERECHNUNG, ANNAHME, NOT RUN. 1 USD ≈ 0.80 CHF (ANNAHME). MWST CH 8.1 % (QUELLE ESTV). Industriezoll CH = 0 seit 1.1.2024 (QUELLE allgemein). Verzollungsgebühr Kurier ≈ 18 USD (ANNAHME). Alle Preise ohne Login: Endpreise erst nach Upload durch den User (NOT RUN).
 
-## 0 Update r4 / User-Entscheid Q-03 (2026-11-08): JLCPCB + JLC3DP
+## 00 User-Entscheid 2026-11-09: Gehäuse druckt der User selbst
+Die 3D-Druckpositionen (SLS PA12, SLA Lichtleiter bei JLC3DP) entfallen aus der Bestellung. Bestellt wird nur PCBA (Hauptboard r4 + Bedienplatine) bei JLCPCB. Abzug 3D-Druck laut Abschnitt 2: 75 USD (5 Stk) bzw. 150 USD (10 Stk), also 5 Stk ≈ 297 − 75 = **≈ 222 USD ≈ 178 CHF** (BERECHNUNG, ANNAHMEN wie oben, Versand kann etwas sinken, nicht neu berechnet). Wegen FDM-Eigendruck gelten die SLS-Regeln (Wand ≥ 1.0, Spiel 0.2–0.4 mm) nicht mehr; Toleranzen vom eigenen Drucker prüfen.
+
+## 0 Update r4 / User-Entscheid Q-03 (2026-11-08): JLCPCB + JLC3DP (Gehäuse-Teil siehe Abschnitt 00)
 
 Entscheid: PCBA (Hauptboard r4 + Bedienplatine motion-one-ui) bei JLCPCB, Gehäuseteile **SLS PA12** (Ober-/Unterschale, Tastenkappe), Lichtleiter **SLA transparent** bei JLC3DP. Swiss3D/Schaffner = Rückfalloption. Abfragen 2026-11-08 ohne Login, ohne Bestellung.
 

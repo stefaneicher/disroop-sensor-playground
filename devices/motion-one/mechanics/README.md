@@ -35,3 +35,14 @@ Keine Behauptung über Fallfestigkeit oder Produktsicherheit ist dadurch belegt.
 
 Der finale Schnittstellenvertrag steht in `../management/INTERFACES.json`. Nach Boardänderungen CAD-Bau, Kollisions-
 prüfung und Slice erneut ausführen. Erst den Toleranzkörper drucken und Spiel messen, bevor das Gehäuse gedruckt wird.
+
+## Gehäuse r4: Stand und nicht gemachte Prüfungen (2026-11-09)
+User-Entscheid: Prototypen-Gehäuse wird selbst gedruckt, Rückmeldung nach dem ersten Druck. Folgende Prüfungen sind **NOT RUN** und werden bewusst übersprungen:
+- Wandstärke im Modell (Ziel ≥ 1.0 mm): Raycast/Querschnitt unbrauchbar, Voxel-Messung (`scripts/mechanics/wall_edt.py`) nicht gelaufen. Verdacht: Nut/Schattenfuge nur ca. 0.45 mm Restwand in der Oberschale (Messung unsicher).
+- Lippe/Nut-Spiel nach `LIP_D0` 1.8 nicht geprüft.
+- `pcb_r4.stl`: Dichtheit widersprüchlich (Mechanik 34 von 72 Körpern undicht, PCB-Agent 40/40 dicht). Nur Kollisionskörper, kein Druckteil; `collision_r4.json` Gesamtlabel FAIL deswegen.
+- Neubau mit `LP_GAP` 0.0 und `CAP_TRAVEL_GAP` 0.1 fehlt (STL zeigen noch 0.2/0.3 mm Luft). Kurz bauen vor dem Druck.
+- FEM, SLS-Toleranzen, Slicer-Lauf für r4, Renders/Explosionsansicht auf r4 nicht erneuert.
+- Netz-Kollision (manifold3d, SIMULATION): keine Kollision; Schalen-Kontakt 1.05 mm³ an der Trennebene ist Messartefakt.
+
+Risiken für den ersten Druck (Prototypenphase): (1) Wand an Nut/Fuge dünn, mit 0.4-mm-Düse prüfen, ggf. `LIP_D0` erhöhen; (2) Kappen-/Lichtleiterspiel bewusst knapp lang, nachfeilen; (3) J5-Fase ist abgeschaltet (J5-Öffnung ohne Fase); (4) Drucker-Toleranz FDM ≠ SLS: Toleranzkörper `print/toleranzkoerper.3mf` zuerst drucken; (5) Akku-/USB-C-/Bedienplatinen-Passung nur im Modell geprüft.
