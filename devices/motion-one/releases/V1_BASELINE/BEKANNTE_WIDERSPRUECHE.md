@@ -9,3 +9,5 @@
 | 5 | Laufzeit Spielmodus 49 h (PCB) vs. 65 h (Systems), unterschiedliche Annahmen; 49 h konservativ. | dokumentiert | BERECHNUNG, NOT RUN |
 | 6 | Lippenspiel min 0.191 mm unter Soll 0.25 mm (p5 0.252). | Passprobe nötig | SIMULATION |
 | 7 | `metrics.json` firmware_* zeigt noch V1 (32 Tests, 158724 B); aktuell 69/0, FLASH 161100 B, RAM 37604 B. | im Bericht korrigiert | MESSUNG |
+| 8 | Die UI-Platine an J5 ist eine optionale Erweiterungsplatine, nicht Teil des Geräts r4 und im Gehäuse r4 nicht vorgesehen. | dokumentiert | QUELLE: Schaltplan r4-C, UI-Seite |
+| 9 | Bei der hierarchischen Schaltplanintegration wurden auf den PCBs 54 Netze der Hauptplatine bzw. 12 Netze der UI-Platine explizit umbenannt; die Geometrie und elektrischen Pin-Gruppen sind unverändert. Netzklassenmuster und Schaltplan-Verknüpfungen wurden nachgeführt. | Parität 0, offene Verbindungen 0; Beleg pcb_namespace_migration.json | BERECHNUNG, PASS |

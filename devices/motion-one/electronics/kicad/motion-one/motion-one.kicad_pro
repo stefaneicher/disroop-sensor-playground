@@ -319,47 +319,47 @@
     "netclass_patterns": [
       {
         "netclass": "Power",
-        "pattern": "/VBUS"
+        "pattern": "VBUS"
       },
       {
         "netclass": "Power",
-        "pattern": "/GND"
+        "pattern": "GND"
       },
       {
         "netclass": "Power",
-        "pattern": "/VBAT"
+        "pattern": "VBAT"
       },
       {
         "netclass": "Power",
-        "pattern": "/BATN"
+        "pattern": "BATN"
       },
       {
         "netclass": "Power",
-        "pattern": "/VSYS"
+        "pattern": "VSYS"
       },
       {
         "netclass": "Power",
-        "pattern": "/VSW"
+        "pattern": "VSW"
       },
       {
         "netclass": "Power",
-        "pattern": "/3V3"
+        "pattern": "3V3"
       },
       {
         "netclass": "Power",
-        "pattern": "/FS_D"
+        "pattern": "Net-(Q3-D-Pad2)"
       },
       {
         "netclass": "Power",
-        "pattern": "/BUZ_N"
+        "pattern": "Net-(BZ1--)"
       },
       {
         "netclass": "Power",
-        "pattern": "/BUZ_D"
+        "pattern": "Net-(Q6-D)"
       },
       {
         "netclass": "Power",
-        "pattern": "/MOT_N"
+        "pattern": "Net-(D3-A)"
       }
     ]
   },

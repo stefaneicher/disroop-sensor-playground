@@ -1,0 +1,233 @@
+{
+  "motion-one": {
+    "status": "PASS",
+    "netlist": "MATCH",
+    "components": 68,
+    "net_groups": 74,
+    "changed_net_names": {
+      "/3V3": "3V3",
+      "/BATN": "BATN",
+      "/BTN": "Net-(U1-P0.28{slash}AIN4)",
+      "/BUZ_D": "Net-(Q6-D)",
+      "/BUZ_N": "Net-(BZ1--)",
+      "/BUZ_PWM": "/haptic/BUZ_PWM",
+      "/CC1": "Net-(J1-CC1)",
+      "/CC2": "Net-(J1-CC2)",
+      "/CHG_LED_A": "Net-(D5-A)",
+      "/CHG_LED_K": "Net-(D5-K)",
+      "/CHG_PROG": "Net-(U3-PROG)",
+      "/CHG_TEMP": "Net-(U3-TEMP)",
+      "/DW_CS": "Net-(U4-CS)",
+      "/DW_OC": "Net-(Q3-G2)",
+      "/DW_OD": "Net-(Q3-G1)",
+      "/DW_VCC": "Net-(U4-VCC)",
+      "/EXT1": "/mcu/EXT1",
+      "/EXT2": "/mcu/EXT2",
+      "/EXT3": "/mcu/EXT3",
+      "/EXT4": "/mcu/EXT4",
+      "/EXT5": "/mcu/EXT5",
+      "/FS_D": "Net-(Q3-D-Pad2)",
+      "/GND": "GND",
+      "/IMU_CS": "/imu/IMU_CS",
+      "/IMU_INT1": "/imu/IMU_INT1",
+      "/IMU_INT2": "/imu/IMU_INT2",
+      "/IMU_MISO": "/imu/IMU_MISO",
+      "/IMU_MOSI": "/imu/IMU_MOSI",
+      "/IMU_SCK": "/imu/IMU_SCK",
+      "/LED_B": "/mcu/LED_B",
+      "/LED_BK": "Net-(D4-BK)",
+      "/LED_G": "/mcu/LED_G",
+      "/LED_GK": "Net-(D4-GK)",
+      "/LED_R": "/mcu/LED_R",
+      "/LED_RK": "Net-(D4-RK)",
+      "/MOT_EN": "/haptic/MOT_EN",
+      "/MOT_N": "Net-(D3-A)",
+      "/NRESET": "Net-(J4-~{RESET})",
+      "/NTC_TOP": "Net-(R4-Pad2)",
+      "/PSW_G": "Net-(Q2-G)",
+      "/SWCLK": "Net-(J4-SWCLK)",
+      "/SWDIO": "Net-(J4-SWDIO)",
+      "/USB_DM": "/mcu/USB_DM",
+      "/USB_DP": "/mcu/USB_DP",
+      "/VBAT": "VBAT",
+      "/VBAT_ADC": "/battery_sense/VBAT_ADC",
+      "/VBAT_EN": "/battery_sense/VBAT_EN",
+      "/VBUS": "VBUS",
+      "/VDIV_G": "Net-(Q4-G)",
+      "/VDIV_TOP": "Net-(Q4-D)",
+      "/VSW": "VSW",
+      "/VSYS": "VSYS",
+      "/XL1": "Net-(U1-XL1)",
+      "/XL2": "Net-(U1-XL2)"
+    },
+    "renamed_pcb_net_names": [
+      "/3V3",
+      "/BATN",
+      "/BTN",
+      "/BUZ_D",
+      "/BUZ_N",
+      "/BUZ_PWM",
+      "/CC1",
+      "/CC2",
+      "/CHG_LED_A",
+      "/CHG_LED_K",
+      "/CHG_PROG",
+      "/CHG_TEMP",
+      "/DW_CS",
+      "/DW_OC",
+      "/DW_OD",
+      "/DW_VCC",
+      "/EXT1",
+      "/EXT2",
+      "/EXT3",
+      "/EXT4",
+      "/EXT5",
+      "/FS_D",
+      "/GND",
+      "/IMU_CS",
+      "/IMU_INT1",
+      "/IMU_INT2",
+      "/IMU_MISO",
+      "/IMU_MOSI",
+      "/IMU_SCK",
+      "/LED_B",
+      "/LED_BK",
+      "/LED_G",
+      "/LED_GK",
+      "/LED_R",
+      "/LED_RK",
+      "/MOT_EN",
+      "/MOT_N",
+      "/NRESET",
+      "/NTC_TOP",
+      "/PSW_G",
+      "/SWCLK",
+      "/SWDIO",
+      "/USB_DM",
+      "/USB_DP",
+      "/VBAT",
+      "/VBAT_ADC",
+      "/VBAT_EN",
+      "/VBUS",
+      "/VDIV_G",
+      "/VDIV_TOP",
+      "/VSW",
+      "/VSYS",
+      "/XL1",
+      "/XL2"
+    ],
+    "netclass_pattern_updates": [
+      {
+        "old": "/VBUS",
+        "netclass": "Power",
+        "pattern": "VBUS"
+      },
+      {
+        "old": "/GND",
+        "netclass": "Power",
+        "pattern": "GND"
+      },
+      {
+        "old": "/VBAT",
+        "netclass": "Power",
+        "pattern": "VBAT"
+      },
+      {
+        "old": "/BATN",
+        "netclass": "Power",
+        "pattern": "BATN"
+      },
+      {
+        "old": "/VSYS",
+        "netclass": "Power",
+        "pattern": "VSYS"
+      },
+      {
+        "old": "/VSW",
+        "netclass": "Power",
+        "pattern": "VSW"
+      },
+      {
+        "old": "/3V3",
+        "netclass": "Power",
+        "pattern": "3V3"
+      },
+      {
+        "old": "/FS_D",
+        "netclass": "Power",
+        "pattern": "Net-(Q3-D-Pad2)"
+      },
+      {
+        "old": "/BUZ_N",
+        "netclass": "Power",
+        "pattern": "Net-(BZ1--)"
+      },
+      {
+        "old": "/BUZ_D",
+        "netclass": "Power",
+        "pattern": "Net-(Q6-D)"
+      },
+      {
+        "old": "/MOT_N",
+        "netclass": "Power",
+        "pattern": "Net-(D3-A)"
+      }
+    ],
+    "relinked_footprints": 68,
+    "board_sha256_before": "3e690f68fe0f0f7bdec96e396ed29db6e3ccfedc03cabecfc564069030ccd839",
+    "board_sha256_after": "4dcd2b763cfdeb5a212982c62ac7119e03a897339ac7750acd9d935e4f63ece3",
+    "geometry_and_electrical_groups": "PASS (full parsed PCB equality after inverse namespace mapping and removal of only footprint schematic-link metadata)",
+    "canonical_geometry_sha256": "fecb52b92158169b144954871ab33b2764966a4e427a1a5dd44ea88c9a4d823a"
+  },
+  "motion-one-ui": {
+    "status": "PASS",
+    "netlist": "MATCH",
+    "components": 13,
+    "net_groups": 14,
+    "changed_net_names": {
+      "/3V3": "3V3",
+      "/EXT1": "Net-(J1-Pin_2)",
+      "/EXT2": "Net-(J1-Pin_3)",
+      "/EXT4": "Net-(J1-Pin_5)",
+      "/EXT5": "Net-(J1-Pin_6)",
+      "/GND": "GND",
+      "/STICK_BTN": "Net-(R3-Pad2)",
+      "/STICK_X": "Net-(R1-Pad2)",
+      "/STICK_Y": "Net-(R2-Pad2)",
+      "/TOUCH_I": "Net-(U1-I)",
+      "/TOUCH_PAD": "Net-(E1-Pin_1)",
+      "/TOUCH_Q": "Net-(U1-Q)"
+    },
+    "renamed_pcb_net_names": [
+      "/3V3",
+      "/EXT1",
+      "/EXT2",
+      "/EXT4",
+      "/EXT5",
+      "/GND",
+      "/STICK_BTN",
+      "/STICK_X",
+      "/STICK_Y",
+      "/TOUCH_I",
+      "/TOUCH_PAD",
+      "/TOUCH_Q"
+    ],
+    "netclass_pattern_updates": [
+      {
+        "old": "/GND",
+        "netclass": "Power",
+        "pattern": "GND"
+      },
+      {
+        "old": "/3V3",
+        "netclass": "Power",
+        "pattern": "3V3"
+      }
+    ],
+    "relinked_footprints": 13,
+    "board_sha256_before": "72e7681b2c5b2df2920412bbb51fb99d3e5cb5da1f2f9f663fa660499a03af9e",
+    "board_sha256_after": "a90af5c0b8225170faf85643cd3c5418de5ce725615da6d39696e58be19b5c17",
+    "geometry_and_electrical_groups": "PASS (full parsed PCB equality after inverse namespace mapping and removal of only footprint schematic-link metadata)",
+    "canonical_geometry_sha256": "bc39de2b3f6603d58e936a5302d250ac3fa48d599b8369ddd6bc8459ab9c83e0"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "captured_at": "2026-11-09T17:18:16.378113+00:00",
+  "sha256": {
+    "baseline/motion-one-ui.drc.json": "850e859d774bb1b5918d9b6d72f4ba470974ec46349112081faa7484294d2d46",
+    "baseline/motion-one-ui.erc.json": "4bb41490854e90327ba38d796f0964523a65d908ceda1ddc232c373f5d46ccbd",
+    "baseline/motion-one-ui.netlist.xml": "4a132cc1bbdab5b1563a45a4d8611bd0d1f913e6544a159be7661ec9cd8127fd",
+    "baseline/motion-one.drc.json": "83c41071c6e0751f6bf5eadf0b3b49beb3303700d3968f9b47795a640142c7f1",
+    "baseline/motion-one.erc.json": "f42021d56f4e172cc998094915b190558636bb3088e0108731e10af0732b6c4e",
+    "baseline/motion-one.netlist.xml": "178af3bd1ad7c1054a7f7bb2710e4b12d6063ce9ed28ca2c0a8a0c65223423fc",
+    "before/motion-one/motion-one.kicad_pcb": "3e690f68fe0f0f7bdec96e396ed29db6e3ccfedc03cabecfc564069030ccd839",
+    "before/motion-one/motion-one.kicad_pro": "730f02eb3d5144d5f5e2d9d4129e150fd4728e033b313bc8228be329c3624d43",
+    "before/motion-one/motion-one.kicad_sch": "a65eecb35e07d5d265bb8f832fb14fabb72cd88ee1f846b75247b2487695a518",
+    "before/motion-one-ui/motion-one-ui.kicad_pcb": "72e7681b2c5b2df2920412bbb51fb99d3e5cb5da1f2f9f663fa660499a03af9e",
+    "before/motion-one-ui/motion-one-ui.kicad_pro": "fd80358fe6d3ce92d557be459a262b66fee8fc6d74cc3471db3faa02da54a21b",
+    "before/motion-one-ui/motion-one-ui.kicad_sch": "0ac9fc5cde3c6d1783dc3c0b567f0ac0b7c592421a4bb2eb30c2144bd8fb76f2"
+  }
+}

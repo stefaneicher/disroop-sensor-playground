@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.kicad.org/erc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-11-09T17:01:25",
+    "date": "2026-11-09T17:19:36",
     "ignored_checks": [
         {
             "description": "Global label only appears once in the schematic",
@@ -29,7 +29,52 @@
     "sheets": [
         {
             "path": "/",
-            "uuid_path": "/2f456ca9-0d7f-4327-afdd-c43f3ef68dc5",
+            "uuid_path": "/b0ded96a-e683-552b-b5e4-3c558cb91d56",
+            "violations": []
+        },
+        {
+            "path": "/usb_io/",
+            "uuid_path": "/b0ded96a-e683-552b-b5e4-3c558cb91d56/edeb4bae-2ff8-5f98-9747-98311849a897",
+            "violations": []
+        },
+        {
+            "path": "/power_charge/",
+            "uuid_path": "/b0ded96a-e683-552b-b5e4-3c558cb91d56/d41b5a67-d480-5d72-9b61-f55a10553677",
+            "violations": []
+        },
+        {
+            "path": "/cell_protection/",
+            "uuid_path": "/b0ded96a-e683-552b-b5e4-3c558cb91d56/58b2f781-4200-54b7-9638-92704d38c7a1",
+            "violations": []
+        },
+        {
+            "path": "/regulator/",
+            "uuid_path": "/b0ded96a-e683-552b-b5e4-3c558cb91d56/8bdfed06-1e4a-5959-9fa4-29c2f5ef3b28",
+            "violations": []
+        },
+        {
+            "path": "/mcu/",
+            "uuid_path": "/b0ded96a-e683-552b-b5e4-3c558cb91d56/97948a5b-8c14-5a8d-b34a-ca366390dfab",
+            "violations": []
+        },
+        {
+            "path": "/battery_sense/",
+            "uuid_path": "/b0ded96a-e683-552b-b5e4-3c558cb91d56/241032fc-55c4-5743-9467-c3d4f8ad99c4",
+            "violations": []
+        },
+        {
+            "path": "/imu/",
+            "uuid_path": "/b0ded96a-e683-552b-b5e4-3c558cb91d56/43f94497-7492-5e21-97ec-0a98925224f7",
+            "violations": []
+        },
+        {
+            "path": "/haptic/",
+            "uuid_path": "/b0ded96a-e683-552b-b5e4-3c558cb91d56/71c9f0da-9e88-578f-ba41-362e5a4f43b2",
+            "violations": []
+        },
+        {
+            "path": "/ui_io/",
+            "uuid_path": "/b0ded96a-e683-552b-b5e4-3c558cb91d56/6bdc36a8-c8f9-59d2-ae88-c06307666735",
             "violations": []
         }
     ],

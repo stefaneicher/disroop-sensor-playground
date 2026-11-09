@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "scope": "Requested final PDF pages 1 and 11 viewed with view tool",
+  "pdf_sha256": "d1296aa57b57eb73524d2da30ac484819c36be87e7e8602448d58ac0e608e8f9",
+  "pages": 11,
+  "viewed_pages": [
+    1,
+    11
+  ],
+  "other_final_pages": "NOT RUN (final closeout request explicitly limited review)",
+  "result": "Root block diagram and UI wiring readable; optional-UI notice visible and not overlapping.",
+  "ui_notice": "Optionale Erweiterungsplatine (J5), nicht Teil des Geräts r4"
+}

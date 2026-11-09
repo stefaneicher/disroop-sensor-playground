@@ -323,7 +323,7 @@
       },
       {
         "netclass": "Power",
-        "pattern": "/GND"
+        "pattern": "GND"
       },
       {
         "netclass": "Power",
@@ -343,7 +343,7 @@
       },
       {
         "netclass": "Power",
-        "pattern": "/3V3"
+        "pattern": "3V3"
       },
       {
         "netclass": "Power",

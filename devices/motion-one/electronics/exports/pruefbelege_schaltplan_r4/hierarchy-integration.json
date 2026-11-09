@@ -1,0 +1,33 @@
+{
+  "status": "PARTIAL",
+  "revision": "r4-C integrated",
+  "recorded_at": "2026-11-09T18:55:15.664653+00:00",
+  "projects": {
+    "motion-one": {
+      "netlist": "MATCH (references, values, footprints, pin groups)",
+      "parts": 68,
+      "net_groups": 74,
+      "erc_errors": 0,
+      "erc_warnings": 0,
+      "parity_issues": 0,
+      "unconnected_items": 0,
+      "drc_warnings": 2
+    },
+    "motion-one-ui": {
+      "netlist": "MATCH (references, values, footprints, pin groups)",
+      "parts": 13,
+      "net_groups": 14,
+      "erc_errors": 0,
+      "erc_warnings": 0,
+      "parity_issues": 0,
+      "unconnected_items": 0,
+      "drc_warnings": 0
+    }
+  },
+  "publication": "NOT RUN",
+  "pdf_export_and_review": "PASS (requested pages 1 and 11)",
+  "remaining": [
+    "Copy prepared delivery files into releases/ and apply repo.patch",
+    "Manager-owned targeted commit, pull/rebase, push and release upload"
+  ]
+}

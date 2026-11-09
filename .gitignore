@@ -33,3 +33,8 @@ devices/motion-one/logs/fw-pinout/
 devices/motion-one/mechanics/alt_win_r4/*.FCStd
 devices/motion-one/mechanics/alt_win_r4/*.step
 devices/motion-one/mechanics/alt_win_r4/*.stl
+
+# Motion One: transient engineering work and locks
+devices/motion-one/electronics/exports/*_work/
+devices/motion-one/electronics/exports/.competitor-*/
+devices/motion-one/management/locks/
