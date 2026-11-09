@@ -35,3 +35,4 @@ Stand: 2026-11-07 20:30. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 - PowerShell kann keine WinRT-BLE-Events abonnieren → BLE nur über die Go-exe.
 
 - Motion One: §1–§7 und Pflicht-Smokes §5 PASS; PCB/Mechanik/Firmware V1 PARTIAL, Integrationsrunde aktiv; Baseline und Media/Doku offen. Siehe `devices/motion-one/management/PROJECT_STATE.md`
+- Motion One Release 1 (V1 Baseline, Pre-release `motion-one-v1.0`): digitale Prüfungen PARTIAL, Hardware NOT RUN; siehe `devices/motion-one/releases/V1_BASELINE/`.

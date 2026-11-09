@@ -79,3 +79,6 @@ Ski: kompakte Querformat-HUD, zweispaltiges Menü mit grossen Touch-Zielen, Test
 
 ## 2026-11-08 Konzept Playground erweitert
 - `docs/KONZEPT_PLAYGROUND.md`: Konsolen-Bild, Ordner-Tabelle alt → neu, Checkliste Repo-Umbenennung (Pages-Domain zuerst, applicationId bleibt), Aufbau Startseite und README. TODO ergänzt. Umsetzung später.
+
+## 2026-11-09 Motion One Release 1 (V1 Baseline)
+- Bericht-PDF, REPRODUCE, DEMO_RUNBOOK, Verifikationsmatrix (0 PASS / 17 PARTIAL / 26 NOT RUN), SHA-256-Manifest, `releases/V1_BASELINE/`, Pre-release `motion-one-v1.0`. Widersprüche: `releases/V1_BASELINE/BEKANNTE_WIDERSPRUECHE.md`. Nichts bestellt, gedruckt oder geflasht.

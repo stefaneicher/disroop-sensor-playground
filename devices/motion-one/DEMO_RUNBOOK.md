@@ -32,3 +32,7 @@ Erst nach Fertigung, Sichtprüfung und ausdrücklicher Freigabe:
    bis sie tatsächlich gemessen wurden.
 
 Bestellung/Bezahlung und Hardwaretests sind eigene Freigabeentscheidungen und werden durch dieses Runbook nicht autorisiert.
+
+## Stand Release 1
+
+Weiterhin kein Muster: Demo = Simulator (`./project play --sim`) plus Renders (`media/renders/`) und Anleitungen (`docs/assembly`, `docs/user`). Hardware-Schritte oben bleiben NOT RUN; Voraussetzungen: Druck der Teile, Bestellfreigabe durch den Nutzer, Messungen am Muster.

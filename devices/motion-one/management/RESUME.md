@@ -86,3 +86,10 @@ D2 umgesetzt: 4-Kanal-TVS U2 SRV05-4 (C13612) auf Bedienplatine, ERC/DRC 0. D3: 
 
 ## Stand 2026-11-09 docs-media r4 + Pre-release
 Renders (4 + beschriftete Explosion, 3840x2160 RGBA) aus assembly_stl r4 (cc9b9ef), ASSEMBLY/USER aktualisiert, PDFs gebaut (7/4 Seiten), Pre-release `motion-one-r4-prototype`. Offen: Wandstaerke/Lippenspiel NOT RUN, Hebelmasse SW1, Clip-Federweg, Schieber-Endlagen, Akkufixierung, pcb_r4.stl-Dichtheit widerspruechlich, iso_open/top_open nicht visuell geprueft. Handoff: management/handoffs/docs-media-engineer/2026-11-09-r4-release.md
+
+## Stand Release 1 (2026-11-09)
+Pre-release `motion-one-v1.0`; Artefakte, Matrix (0 PASS, 17 PARTIAL, 26 NOT RUN) und Manifest in `releases/V1_BASELINE/`. Bericht: `docs/report/TECHNISCHER_BERICHT_V1.pdf`.
+
+**Offene Punkte:** pcb_r4.stl Dichtheit 38/72 vs 40/40; Wand 0.8 mm < 1.0 mm (Pitch 0.2 messen / LIP_D0 erhöhen); zephyr.hex CRLF-Hash; SW2 vs BTN im PINOUT (Frage an PCB); FEM und Slice r4 NOT RUN; Kabelzugentlastung; Anzugsmomente; Lippenspiel 0.191 < 0.25; metrics.json firmware_* veraltet.
+
+**Nutzer-Aufgaben:** (1) Teile und Toleranzkörper drucken, Passprobe; (2) Messungen am Muster (Ruhestrom, Laden, BLE 100 Hz, Latenz, Fall, Masse); (3) Bestellfreigabe, vorher CPL-Rotationen in der JLC-Vorschau prüfen. Nichts bestellt/geflasht.

@@ -1,6 +1,6 @@
-# Disroop Motion One – technischer Bericht V1 (Entwurf)
+# Disroop Motion One – technischer Bericht V1 (Release 1, Baseline r4)
 
-**Status: PARTIAL – kein Fertigungs- oder Hardware-Release.** Dieser Bericht fasst den digitalen V1-Entwurf zusammen.
+**Status: PARTIAL – Pre-release `motion-one-v1.0`, kein Fertigungs- oder Hardware-Release. Stand: Gehäuse r4 (4652d08), PCB r4, Firmware 2026-11-09 (bb1a6fa); Abschnitt 9 und 10 gehen den älteren Abschnitten 1–8 vor.** Dieser Bericht fasst den digitalen V1-Entwurf zusammen.
 Die PCB-, Firmware- und Mechanik-Schnittstellen befinden sich in einer Integrationsrunde; bis zu deren Abschluss sind
 Positionen und Ausgaben revisionsgebunden, aber noch nicht gemeinsam freigegeben. Keine Platine wurde bestellt, kein
 Gehäuse gedruckt und keine Firmware auf Hardware geflasht.
@@ -153,3 +153,25 @@ bevor Rohdaten, Messaufbau und Ergebnis abgelegt sind.
   `../../mechanics/fem/fem_results.json`, `../../mechanics/print/`
 - Firmware-Build/Test: `../../management/handoffs/firmware-engineer/2026-11-07-v1.md`, `../../logs/fw-v1/`
 
+
+
+## 9. Stand Release 1 (Konsolidierung r4, 2026-11-09)
+
+| Bereich | Ergebnis | Label |
+|---|---|---|
+| Firmware | 69 Host-Tests, 0 Fehler; pincheck gegen `PINOUT_V1.json` PASS; FLASH 161100 B (19.86 %), RAM 37604 B (14.34 %); UF2 322560 B | MESSUNG, PASS (nur Host), Hardware NOT RUN |
+| PCB | Steuerboard ERC/DRC sauber; Hauptboard-ERC 0 Verletzungen (nur Schaltplan); Board-STEP 40 Körper, U1/SW1/J1 als Hüllquader | MESSUNG, PASS/PARTIAL |
+| Mechanik r4 | Netzkollision 16 Paare 0 Kollisionen; Schieber-Endlagen 0.0 mm³; Lippenspiel min 0.191 mm (Soll 0.25); Wand min 0.8 mm < 1.0 mm; Clip-Dehnung 0.54 % | SIMULATION/BERECHNUNG; Wand FAIL |
+| FEM r4, Slice r4, Toleranzkörperdruck | nicht gelaufen | NOT RUN |
+| Medien | 4 Renders + beschriftete Explosion 3840x2160 RGBA; Montage 7 S., Bedienung 4 S. (DRAFT, nicht visuell geprüft) | MESSUNG, PARTIAL |
+| Anforderungen | 0 PASS; PARTIAL und NOT RUN laut `releases/V1_BASELINE/VERIFIKATIONSMATRIX.md` | ehrlich |
+
+Die Aussagen zu „Firmware und Pinout noch nicht integriert“ (Abschnitt 6) und „32/32 Tests“ sind überholt: Pinmap r4 ist integriert, 69/0 Tests. Die Slice-Werte aus Abschnitt 5 (3 h 56 min, 71.6 g) gelten für ein früheres Gehäuse, nicht r4 (NOT RUN für r4).
+
+## 10. Bekannte Widersprüche
+
+Siehe `releases/V1_BASELINE/BEKANNTE_WIDERSPRUECHE.md`: (1) `pcb_r4.stl` Dichtheit 38/72 (Mechanik) vs. 40/40 (PCB); (2) Wand 0.8 mm < 1.0 mm; (3) `zephyr.hex` Arbeitskopie CRLF vs. Index LF, Hash nur für Arbeitskopie gültig; (4) „SW2“ vs. `BTN` im PINOUT (ANNAHME); (5) Laufzeit 49 h vs. 65 h.
+
+## 11. Aufgaben für den Nutzer
+
+Druck der Teile und Toleranzkörper, Passprobe; Messungen am Muster gemäss Abschnitt 8; Freigabe der Bestellung (JLC-Vorschau CPL-Rotationen prüfen). Nichts wurde bestellt, gedruckt oder geflasht.

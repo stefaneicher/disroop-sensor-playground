@@ -1,6 +1,6 @@
 {
  "project": "disroop-sensor-playground",
- "updated": "2026-11-08T11:43+01:00",
+ "updated": "2026-11-09T11:00+01:00",
  "threads": [
   {
    "id": "T-01",
@@ -274,6 +274,17 @@
    "refs": [],
    "note": "Entscheid: r5 bekommt keinen Reset-Taster. Reset via Akku trennen / J4 Tag-Connect.",
    "archived": false
+  },
+  {
+   "id": "T-REL1",
+   "parent": null,
+   "title": "Release 1 V1 Baseline (Pre-release motion-one-v1.0)",
+   "kind": "task",
+   "owner": "manager",
+   "status": "done",
+   "refs": [
+    "releases/V1_BASELINE"
+   ]
   }
  ],
  "log": [
@@ -316,6 +327,10 @@
   {
    "t": "11:43",
    "msg": "Q-01 V1 / Q-02 kein UART entschieden; fw-bootloader gestartet"
+  },
+  {
+   "t": "11:00",
+   "msg": "Release 1: Bericht-PDF, Verifikationsmatrix (0 PASS, 17 PARTIAL, 26 NOT RUN), Manifest, Pre-release motion-one-v1.0"
   }
  ],
  "session": "2161f388-0bc4-4170-b315-b3a7921669eb"

@@ -1,0 +1,41 @@
+# SHA-256-Manifest Motion One V1 Baseline (Release 1)
+# Format: sha256  Pfad relativ zu devices/motion-one/ (Bytes der Arbeitskopie).
+# zephyr.hex: Arbeitskopie CRLF (core.autocrlf=true), Git-Index LF -> Hash kann je Checkout abweichen. Referenz: logs/fw-pinmap/zephyr.sha256 (cee6809b...).
+
+5248762380ac26f6e681994b6c191ea932225356aac4209c5bf0d2a474811cbc  releases/V1_BASELINE/artifacts/docs/TECHNISCHER_BERICHT_V1.pdf   (Quelle docs/report/TECHNISCHER_BERICHT_V1.pdf)
+8bf1f3a13da97ef5814cc315487bbaa1aa1b05253213dc316c34e24fb1a8b2ec  releases/V1_BASELINE/artifacts/docs/ASSEMBLY.pdf   (Quelle docs/assembly/ASSEMBLY.pdf)
+712075498f95474d0e9968acd3c30fd88bc0c8d6500d37357407e75810d3c818  releases/V1_BASELINE/artifacts/docs/USER.pdf   (Quelle docs/user/USER.pdf)
+e922a3ac66068adb15e438c26cbd9730da62cc38eb7e7d290e4bf757fffd1e5c  releases/V1_BASELINE/artifacts/docs/VERIFIKATIONSMATRIX.md   (Quelle releases/V1_BASELINE/VERIFIKATIONSMATRIX.md)
+8f3fe8ca4f44a113c0d34bb7ca5d20e73b86933e1fec2b853ed1d5c8d5323c6a  releases/V1_BASELINE/artifacts/docs/BEKANNTE_WIDERSPRUECHE.md   (Quelle releases/V1_BASELINE/BEKANNTE_WIDERSPRUECHE.md)
+230e3ff2bc168e9ffb45a442202fbd26f9b90eb1fbd516d1b29e09f04ca3ad34  releases/V1_BASELINE/artifacts/firmware/zephyr.uf2   (Quelle logs/fw-pinmap/zephyr.uf2)
+cee6809b8ed353724a8a964e27ca476cf06b1ff7ef630021baa9cdc74804deb8  releases/V1_BASELINE/artifacts/firmware/zephyr.hex   (Quelle logs/fw-pinmap/zephyr.hex)
+b2dcb5e5769c29cebd494bbad7f051ffc0f7ed9def75606b33234f3eea20a944  releases/V1_BASELINE/artifacts/firmware/zephyr.bin   (Quelle logs/fw-pinmap/zephyr.bin)
+863b6b67f0645cf49050a8832e422de67199f0ef890fb54fcfd903ac45308e78  releases/V1_BASELINE/artifacts/electronics/motion-one_gerber_r4.zip   (Quelle manufacturing/pcba/motion-one_gerber_r4.zip)
+b768acef4ce085516e43de9e080a310592515daa3b25e70bac60638a2d3d94ea  releases/V1_BASELINE/artifacts/electronics/BOM_motion-one_JLC.csv   (Quelle manufacturing/pcba/BOM_motion-one_JLC.csv)
+c179477c6cd2b0fdc50cc6882627c326e36f2755a3c8892ddc88cd439e7940a8  releases/V1_BASELINE/artifacts/electronics/CPL_motion-one_JLC.csv   (Quelle manufacturing/pcba/CPL_motion-one_JLC.csv)
+794f33cab2d741bab495f917215a175c3c70c910dc188d3feaed270aa03644a2  releases/V1_BASELINE/artifacts/mechanics/oberschale.stl   (Quelle mechanics/print/oberschale.stl)
+caadb01f5a60172fac600e874072352bef9b9a55d89f115a106a023804b949aa  releases/V1_BASELINE/artifacts/mechanics/oberschale.3mf   (Quelle mechanics/print/oberschale.3mf)
+b39e3ec85dbe2f04bfc08f1cdbf92bdc61730b445e43cac4e8b78109d4c8d328  releases/V1_BASELINE/artifacts/mechanics/unterschale_glatt.stl   (Quelle mechanics/print/unterschale_glatt.stl)
+5b034a3c308f17366af387d305d5135a005b547aeb6a6cd6be2251d6b27dc1ad  releases/V1_BASELINE/artifacts/mechanics/unterschale_glatt.3mf   (Quelle mechanics/print/unterschale_glatt.3mf)
+8a52dd634a311f775b9fe5a990e519a918c3fae95a300d35dddc3bdbd3164c62  releases/V1_BASELINE/artifacts/mechanics/schieber.stl   (Quelle mechanics/print/schieber.stl)
+c3a19486e98ad0868728bb560e8e2e20ad51b0b32a9409843d740168029837df  releases/V1_BASELINE/artifacts/mechanics/schieber.3mf   (Quelle mechanics/print/schieber.3mf)
+ea649c4c5c9c24645a55357e5508350e69a8321fad0b674d76256e646e531c91  releases/V1_BASELINE/artifacts/mechanics/tastenkappe.stl   (Quelle mechanics/print/tastenkappe.stl)
+fd1b2f856590f01edcdbf4196e4ca1bd58e2353293af84e906e906ce42991836  releases/V1_BASELINE/artifacts/mechanics/tastenkappe.3mf   (Quelle mechanics/print/tastenkappe.3mf)
+90a753a1141253b880418901beb3e8c9b4c79748f8b31770046da6123fa5ac4f  releases/V1_BASELINE/artifacts/mechanics/lichtleiter.stl   (Quelle mechanics/print/lichtleiter.stl)
+b0943d984cbc4cd41ee5e373204ed590c93f3876334126aa1a820d2648d2b25c  releases/V1_BASELINE/artifacts/mechanics/lichtleiter.3mf   (Quelle mechanics/print/lichtleiter.3mf)
+41f3ae0ebfc586c6a05e1b2d4694a386cd5192bd698028f389efb60fa73f11a3  releases/V1_BASELINE/artifacts/mechanics/toleranzkoerper.stl   (Quelle mechanics/print/toleranzkoerper.stl)
+07b12288584e2de3858dca446380713a245d89263fd2085e50e0a3294d20fa6b  releases/V1_BASELINE/artifacts/mechanics/toleranzkoerper.3mf   (Quelle mechanics/print/toleranzkoerper.3mf)
+7d2bf53e329822acb827b49c37370349f897c2ad2deb157b6764fab94d5fd536  releases/V1_BASELINE/artifacts/renders/exploded_labeled.png   (Quelle media/renders/exploded_labeled.png)
+ba5b2c9b441f42b7f87a0388aff29e2d005eba49fca9032ccf4aeb7afd4dfb03  releases/V1_BASELINE/artifacts/renders/exploded_raw.png   (Quelle media/renders/exploded_raw.png)
+78b31f2e782b3e14e8a9411a7112b18e29344e1faea679f1f2dcc09ac14973d7  releases/V1_BASELINE/artifacts/renders/iso_closed.png   (Quelle media/renders/iso_closed.png)
+4b05971af18197216e7155a76cc2cf309db47febe11aaa8c86e68fb235d9fc1e  releases/V1_BASELINE/artifacts/renders/iso_open.png   (Quelle media/renders/iso_open.png)
+78291731330cb32b669c364af9e0ac45f9b8e3962cc043cc497eb57b8cc477db  releases/V1_BASELINE/artifacts/renders/top_open.png   (Quelle media/renders/top_open.png)
+c3f76575c03f92a7a984b22f3d381139b986c037ad246dc0810d5d0d1addaebe  REPRODUCE.md
+d5478427d414f0005d73ae16dee1724f95772072642a08d08a7d4fb2399a6289  DEMO_RUNBOOK.md
+519d62cfaa73f440e30eb03f875e0a32b2e7c1305cbca814d6f6139fe2e34983  docs/report/TECHNISCHER_BERICHT_V1.md
+54334294d2aa1304abdbcb6dbcf3717173072ce55eb6ee3f3b93f71ead9cf408  management/metrics.json
+e6343426bb7bc9925dab8131cc938b53cb8ceba4d55b1ce7c4a6b9b08ebc6105  management/REQUIREMENTS.md
+132ac85436ab8b2bb6b5bffa5dbf85fc9524f2b3eff0b1ed6bde9a1ddc3e8e28  electronics/PINOUT_V1.json
+19681e13daa6c91bd9b8acf58c77918afebc0ed0093c21f10c2a74e83f69dd74  mechanics/assembly_stl/pcb_r4.stl
+26b53eff95d113ad63d257800943f7758dc672bc9e4abd849c7e1ebe491143ca  electronics/kicad/motion-one/export/motion-one-board.step
+8c6d6a2ded79a729c856dae36fb09623265070d81fca147751c830240f3ed54c  mechanics/cad/collision_r4.json
