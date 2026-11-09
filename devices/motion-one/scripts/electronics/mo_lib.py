@@ -4,23 +4,27 @@ XL-1615 und MLT-5020 aus den LCSC-Datenblaettern (siehe electronics/datasheets).
 import os
 D = os.path.join(os.path.dirname(__file__), '../../electronics/kicad/motion-one/')
 
-def sym(name, ref, pins_l, pins_r, w=10.16, desc='', fp='', ds=''):
+def sym(name, ref, pins_l, pins_r, w=10.16, desc='', fp='', ds='', sx=1.0, sy=1.0):
     import math
     n = max(len(pins_l), len(pins_r)); h = math.ceil((n + 1) / 2) * 2.54
+    def coord(value):
+        return ('%.2f' if abs(value * 100 - round(value * 100)) < 1e-8 else '%.3f') % value
     o = ['(symbol "%s" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)' % name]
-    for k, v, y in (('Reference', ref, h + 1.27), ('Value', name, -h - 1.27)):
-        o.append('(property "%s" "%s" (at 0 %.2f 0) (effects (font (size 1.27 1.27))))' % (k, v, y))
+    for k, v, y in (('Reference', ref, (h + 1.27) * sy), ('Value', name, (-h - 1.27) * sy)):
+        o.append('(property "%s" "%s" (at 0 %s 0) (effects (font (size 1.27 1.27))))' % (k, v, coord(y)))
     for k, v in (('Footprint', fp), ('Datasheet', ds), ('Description', desc)):
         o.append('(property "%s" "%s" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))' % (k, v))
-    o.append('(symbol "%s_0_1" (rectangle (start %.2f %.2f) (end %.2f %.2f) (stroke (width 0.254) (type default)) (fill (type background))))' % (name, -w / 2, h, w / 2, -h))
+    o.append('(symbol "%s_0_1" (rectangle (start %s %s) (end %s %s) (stroke (width 0.254) (type default)) (fill (type background))))' %
+             (name, coord(-w * sx / 2), coord(h * sy), coord(w * sx / 2), coord(-h * sy)))
     o.append('(symbol "%s_1_1"' % name)
     for side, lst in ((0, pins_l), (1, pins_r)):
         for i, p in enumerate(lst):
             if p is None: continue
             num, pname, typ = p
-            y = h - 2.54 * (i + 1)
-            x = -w / 2 - 2.54 if side == 0 else w / 2 + 2.54
-            o.append('(pin %s line (at %.2f %.2f %d) (length 2.54) (name "%s" (effects (font (size 1.27 1.27)))) (number "%s" (effects (font (size 1.27 1.27)))))' % (typ, x, y, 0 if side == 0 else 180, pname, num))
+            y = (h - 2.54 * (i + 1)) * sy
+            x = (-w / 2 - 2.54 if side == 0 else w / 2 + 2.54) * sx
+            o.append('(pin %s line (at %s %s %d) (length 2.54) (name "%s" (effects (font (size 1.27 1.27)))) (number "%s" (effects (font (size 1.27 1.27)))))' %
+                     (typ, coord(x), coord(y), 0 if side == 0 else 180, pname, num))
     o.append('))')
     return '\n'.join(o)
 
@@ -34,12 +38,13 @@ e_l = [(str(n), E73[n], t(n)) for n in range(1, 23)]
 e_r = [(str(n), E73[n], t(n)) for n in range(23, 44)]
 syms = [
     sym('E73-2G4M08S1C', 'U', e_l, e_r, 20.32, 'Ebyte nRF52840 BLE-Modul, Keramikantenne', 'motion-one:E73-2G4M08S1C',
-        'https://www.ebyte.com/en/product-view-news.html?id=905'),
+        'https://www.ebyte.com/en/product-view-news.html?id=905', sx=1.5, sy=1.5),
     sym('ICM-45686', 'U', [('8', 'VDD', 'power_in'), ('5', 'VDDIO', 'power_in'), ('12', 'CS', 'input'), ('13', 'SCLK/SCL', 'input'),
                            ('14', 'SDI/SDA', 'bidirectional'), ('1', 'SDO/AD0', 'bidirectional'), ('11', 'NC', 'no_connect')],
         [('4', 'INT1', 'output'), ('9', 'INT2', 'output'), ('6', 'GND', 'power_in'), ('2', 'RESV(GND)', 'passive'),
          ('3', 'RESV(GND)', 'passive'), ('7', 'RESV(GND)', 'passive'), ('10', 'RESV(GND)', 'passive')], 15.24,
-        'TDK 6-Achsen-IMU, LGA-14 2.5x3', 'Package_LGA:LGA-14_3x2.5mm_P0.5mm_LayoutBorder3x4y', 'https://www.lcsc.com/product-detail/C22459454.html'),
+        'TDK 6-Achsen-IMU, LGA-14 2.5x3', 'Package_LGA:LGA-14_3x2.5mm_P0.5mm_LayoutBorder3x4y',
+        'https://www.lcsc.com/product-detail/C22459454.html', sx=2.0, sy=1.5),
     sym('FS8205A', 'Q', [('6', 'G1', 'input'), ('1', 'S1', 'passive'), ('2', 'D', 'passive')],
         [('4', 'G2', 'input'), ('3', 'S2', 'passive'), ('5', 'D', 'passive')], 10.16,
         'Dual N-MOSFET 20V 6A, gemeinsamer Drain', 'Package_TO_SOT_SMD:SOT-23-6', 'https://www.lcsc.com/product-detail/C2830320.html'),

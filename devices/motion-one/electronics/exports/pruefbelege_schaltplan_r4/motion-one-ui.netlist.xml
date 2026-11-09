@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="E">
+  <design>
+    <source>/r/electronics/kicad/motion-one-ui/motion-one-ui.kicad_sch</source>
+    <date>2026-11-09T17:01:27</date>
+    <tool>Eeschema 10.0.8-10.0.8~ubuntu24.04.1</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>Disroop Motion One - Bedienplatine, Schaltplan r4</title>
+        <company>Disroop</company>
+        <rev>r4</rev>
+        <date>2026-11-09</date>
+        <source>motion-one-ui.kicad_sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="C1">
+      <value>100nF</value>
+      <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <description>Unpolarized capacitor</description>
+      <fields>
+        <field name="LCSC">C1525</field>
+        <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Unpolarized capacitor</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C1525"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>3101bfd8-0f4f-474d-8f61-39d618374103</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="E1">
+      <value>TouchPad</value>
+      <footprint>ui:TouchPad_10x10</footprint>
+      <description>Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <fields>
+        <field name="Footprint">ui:TouchPad_10x10</field>
+        <field name="Datasheet"/>
+        <field name="Description">Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)</field>
+      </fields>
+      <libsource lib="Connector_Generic" part="Conn_01x01" description="Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="ki_keywords" value="connector"/>
+      <property name="ki_fp_filters" value="Connector*:*_1x??_*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>6b932c76-dd5e-4c7e-a208-3e301f902fa6</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="H1">
+      <value>M2</value>
+      <footprint>MountingHole:MountingHole_2.2mm_M2</footprint>
+      <description>Mounting Hole without connection</description>
+      <fields>
+        <field name="Footprint">MountingHole:MountingHole_2.2mm_M2</field>
+        <field name="Datasheet"/>
+        <field name="Description">Mounting Hole without connection</field>
+      </fields>
+      <libsource lib="Mechanical" part="MountingHole" description="Mounting Hole without connection"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="ki_keywords" value="mounting hole"/>
+      <property name="ki_fp_filters" value="MountingHole*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b9568159-24a6-455e-950c-46196e6a7eb4</tstamps>
+      <units>
+        <unit name="A">
+          <pins/>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="H2">
+      <value>M2</value>
+      <footprint>MountingHole:MountingHole_2.2mm_M2</footprint>
+      <description>Mounting Hole without connection</description>
+      <fields>
+        <field name="Footprint">MountingHole:MountingHole_2.2mm_M2</field>
+        <field name="Datasheet"/>
+        <field name="Description">Mounting Hole without connection</field>
+      </fields>
+      <libsource lib="Mechanical" part="MountingHole" description="Mounting Hole without connection"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="ki_keywords" value="mounting hole"/>
+      <property name="ki_fp_filters" value="MountingHole*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>072434ad-3a04-4cf5-b717-453b78b5f6cc</tstamps>
+      <units>
+        <unit name="A">
+          <pins/>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="J1">
+      <value>EXT JST-SH 8p</value>
+      <footprint>Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal</footprint>
+      <description>Generic connectable mounting pin connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <fields>
+        <field name="LCSC">C160407</field>
+        <field name="Footprint">Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal</field>
+        <field name="Datasheet"/>
+        <field name="Description">Generic connectable mounting pin connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)</field>
+      </fields>
+      <libsource lib="Connector_Generic_MountingPin" part="Conn_01x08_MountingPin" description="Generic connectable mounting pin connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <property name="LCSC" value="C160407"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="ki_keywords" value="connector"/>
+      <property name="ki_fp_filters" value="Connector*:*_1x??-1MP*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b1e45754-f81b-47ef-9da3-1a4b846340bb</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="4"/>
+            <pin num="5"/>
+            <pin num="6"/>
+            <pin num="7"/>
+            <pin num="8"/>
+            <pin num="MP"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R1">
+      <value>100</value>
+      <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <description>Resistor</description>
+      <fields>
+        <field name="LCSC">C25076</field>
+        <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Resistor</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C25076"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>ec547733-3ceb-4cc6-ae0c-d39041afa3a5</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R2">
+      <value>100</value>
+      <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <description>Resistor</description>
+      <fields>
+        <field name="LCSC">C25076</field>
+        <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Resistor</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C25076"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>fd04a991-7d56-4cc6-8e4f-93fb1bfff648</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R3">
+      <value>100</value>
+      <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <description>Resistor</description>
+      <fields>
+        <field name="LCSC">C25076</field>
+        <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Resistor</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C25076"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>0b598194-9ba3-4bb0-8ac5-3c4317a4a22d</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R4">
+      <value>100</value>
+      <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <description>Resistor</description>
+      <fields>
+        <field name="LCSC">C25076</field>
+        <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Resistor</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C25076"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>57f4f1cc-409f-4604-8801-a28e281c8eb8</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R5">
+      <value>1k</value>
+      <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <description>Resistor</description>
+      <fields>
+        <field name="LCSC">C11702</field>
+        <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Resistor</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C11702"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>48f7b2e3-38e0-4fb3-b464-79ea7eb11228</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="SW1">
+      <value>RKJXV1224005</value>
+      <footprint>ui:SW-TH_RKJXV1224005</footprint>
+      <datasheet>https://lcsc.com/product-detail/5-way-Tactile-Switchs_ALPS_RKJXV1224005_RKJXV1224005_C146170.html</datasheet>
+      <fields>
+        <field name="Manufacturer">ALPSALPINE(阿尔卑斯阿尔派)</field>
+        <field name="MPN">RKJXV1224005</field>
+        <field name="LCSC Part">C146170</field>
+        <field name="LCSC">C146170</field>
+        <field name="Footprint">ui:SW-TH_RKJXV1224005</field>
+        <field name="Datasheet">https://lcsc.com/product-detail/5-way-Tactile-Switchs_ALPS_RKJXV1224005_RKJXV1224005_C146170.html</field>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="ui" part="RKJXV1224005" description=""/>
+      <property name="Manufacturer" value="ALPSALPINE(阿尔卑斯阿尔派)"/>
+      <property name="MPN" value="RKJXV1224005"/>
+      <property name="LCSC Part" value="C146170"/>
+      <property name="LCSC" value="C146170"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="ki_keywords" value="Multi-Directional Switches"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>c1088d89-033b-4bb2-b821-441e2f90b1ec</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="3"/>
+            <pin num="2"/>
+            <pin num="1"/>
+            <pin num="a"/>
+            <pin num="b"/>
+            <pin num="7"/>
+            <pin num="10"/>
+            <pin num="4"/>
+            <pin num="5"/>
+            <pin num="6"/>
+            <pin num="8"/>
+            <pin num="9"/>
+            <pin num="c"/>
+            <pin num="d"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U1">
+      <value>TTP233H-BA6</value>
+      <footprint>ui:SOT-23-6_L2.9-W1.7-P0.95-LS2.8-BL</footprint>
+      <datasheet>https://www.lcsc.com/datasheet/C2890349.pdf</datasheet>
+      <fields>
+        <field name="Manufacturer">TONTEK(通泰)</field>
+        <field name="MPN">TTP233H-BA6</field>
+        <field name="LCSC Part">C2890349</field>
+        <field name="LCSC">C2890349</field>
+        <field name="Footprint">ui:SOT-23-6_L2.9-W1.7-P0.95-LS2.8-BL</field>
+        <field name="Datasheet">https://www.lcsc.com/datasheet/C2890349.pdf</field>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="ui" part="TTP233H-BA6" description=""/>
+      <property name="Manufacturer" value="TONTEK(通泰)"/>
+      <property name="MPN" value="TTP233H-BA6"/>
+      <property name="LCSC Part" value="C2890349"/>
+      <property name="LCSC" value="C2890349"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="ki_keywords" value="Touch Screen Controllers"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>db9e0379-f56e-4f83-bcab-67eda97ecd40</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="6"/>
+            <pin num="5"/>
+            <pin num="4"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U2">
+      <value>SRV05-4</value>
+      <footprint>Package_TO_SOT_SMD:SOT-23-6</footprint>
+      <datasheet>http://www.onsemi.com/pub/Collateral/SRV05-4-D.PDF</datasheet>
+      <description>ESD Protection Diodes with Low Clamping Voltage, SOT-23-6</description>
+      <fields>
+        <field name="LCSC">C13612</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23-6</field>
+        <field name="Datasheet">http://www.onsemi.com/pub/Collateral/SRV05-4-D.PDF</field>
+        <field name="Description">ESD Protection Diodes with Low Clamping Voltage, SOT-23-6</field>
+      </fields>
+      <libsource lib="Power_Protection" part="SRV05-4" description="ESD Protection Diodes with Low Clamping Voltage, SOT-23-6"/>
+      <property name="LCSC" value="C13612"/>
+      <property name="Sheetname" value="motion-one-ui"/>
+      <property name="Sheetfile" value="motion-one-ui.kicad_sch"/>
+      <property name="ki_keywords" value="ESD protection diodes"/>
+      <property name="ki_fp_filters" value="SOT?23*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>16eff1d7-2b15-4e35-bca4-bd4e31371268</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="3"/>
+            <pin num="5"/>
+            <pin num="2"/>
+            <pin num="4"/>
+            <pin num="6"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="Connector_Generic" part="Conn_01x01">
+      <description>Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <footprints>
+        <fp>Connector*:*_1x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x01</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector_Generic_MountingPin" part="Conn_01x08_MountingPin">
+      <description>Generic connectable mounting pin connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <footprints>
+        <fp>Connector*:*_1x??-1MP*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x08_MountingPin</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Generic connectable mounting pin connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+        <pin num="5" name="Pin_5" type="passive"/>
+        <pin num="6" name="Pin_6" type="passive"/>
+        <pin num="7" name="Pin_7" type="passive"/>
+        <pin num="8" name="Pin_8" type="passive"/>
+        <pin num="MP" name="MountPin" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="C">
+      <description>Unpolarized capacitor</description>
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Unpolarized capacitor</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="R">
+      <description>Resistor</description>
+      <footprints>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Resistor</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Mechanical" part="MountingHole">
+      <description>Mounting Hole without connection</description>
+      <footprints>
+        <fp>MountingHole*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">H</field>
+        <field name="Value">MountingHole</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Mounting Hole without connection</field>
+      </fields>
+    </libpart>
+    <libpart lib="Power_Protection" part="SRV05-4">
+      <description>ESD Protection Diodes with Low Clamping Voltage, SOT-23-6</description>
+      <docs>http://www.onsemi.com/pub/Collateral/SRV05-4-D.PDF</docs>
+      <footprints>
+        <fp>SOT?23*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">SRV05-4</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23-6</field>
+        <field name="Datasheet">http://www.onsemi.com/pub/Collateral/SRV05-4-D.PDF</field>
+        <field name="Description">ESD Protection Diodes with Low Clamping Voltage, SOT-23-6</field>
+      </fields>
+      <pins>
+        <pin num="1" name="IO1" type="passive"/>
+        <pin num="2" name="VN" type="passive"/>
+        <pin num="3" name="IO2" type="passive"/>
+        <pin num="4" name="IO3" type="passive"/>
+        <pin num="5" name="VP" type="passive"/>
+        <pin num="6" name="IO4" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="ui" part="RKJXV1224005">
+      <docs>https://lcsc.com/product-detail/5-way-Tactile-Switchs_ALPS_RKJXV1224005_RKJXV1224005_C146170.html</docs>
+      <fields>
+        <field name="Reference">SW</field>
+        <field name="Value">RKJXV1224005</field>
+        <field name="Footprint">ui:SW-TH_RKJXV1224005</field>
+        <field name="Datasheet">https://lcsc.com/product-detail/5-way-Tactile-Switchs_ALPS_RKJXV1224005_RKJXV1224005_C146170.html</field>
+        <field name="Description"/>
+        <field name="Manufacturer">ALPSALPINE(阿尔卑斯阿尔派)</field>
+        <field name="MPN">RKJXV1224005</field>
+        <field name="LCSC Part">C146170</field>
+      </fields>
+      <pins>
+        <pin num="1" name="B" type="passive"/>
+        <pin num="2" name="DTA" type="passive"/>
+        <pin num="3" name="A" type="passive"/>
+        <pin num="4" name="A" type="passive"/>
+        <pin num="5" name="DTA" type="passive"/>
+        <pin num="6" name="B" type="passive"/>
+        <pin num="7" name="GND" type="passive"/>
+        <pin num="8" name="GND" type="passive"/>
+        <pin num="9" name="GND" type="passive"/>
+        <pin num="10" name="GND" type="passive"/>
+        <pin num="a" name="a" type="passive"/>
+        <pin num="b" name="b" type="passive"/>
+        <pin num="c" name="c" type="passive"/>
+        <pin num="d" name="d" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="ui" part="TTP233H-BA6">
+      <docs>https://www.lcsc.com/datasheet/C2890349.pdf</docs>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">TTP233H-BA6</field>
+        <field name="Footprint">ui:SOT-23-6_L2.9-W1.7-P0.95-LS2.8-BL</field>
+        <field name="Datasheet">https://www.lcsc.com/datasheet/C2890349.pdf</field>
+        <field name="Description"/>
+        <field name="Manufacturer">TONTEK(通泰)</field>
+        <field name="MPN">TTP233H-BA6</field>
+        <field name="LCSC Part">C2890349</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Q" type="passive"/>
+        <pin num="2" name="VSS" type="passive"/>
+        <pin num="3" name="I" type="passive"/>
+        <pin num="4" name="AHLB" type="passive"/>
+        <pin num="5" name="VDD" type="passive"/>
+        <pin num="6" name="TOG" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="Connector_Generic">
+      <uri>/usr/share/kicad/symbols/Connector_Generic.kicad_sym</uri>
+    </library>
+    <library logical="Connector_Generic_MountingPin">
+      <uri>/usr/share/kicad/symbols/Connector_Generic_MountingPin.kicad_sym</uri>
+    </library>
+    <library logical="Device">
+      <uri>/usr/share/kicad/symbols/Device.kicad_sym</uri>
+    </library>
+    <library logical="Mechanical">
+      <uri>/usr/share/kicad/symbols/Mechanical.kicad_sym</uri>
+    </library>
+    <library logical="Power_Protection">
+      <uri>/usr/share/kicad/symbols/Power_Protection.kicad_sym</uri>
+    </library>
+    <library logical="ui">
+      <uri>${KIPRJMOD}/lib/ui.kicad_sym</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="/3V3" class="Power">
+      <node ref="C1" pin="1" pintype="passive"/>
+      <node ref="J1" pin="1" pinfunction="Pin_1_1" pintype="passive"/>
+      <node ref="SW1" pin="3" pinfunction="A_3" pintype="passive"/>
+      <node ref="SW1" pin="4" pinfunction="A_4" pintype="passive"/>
+      <node ref="U1" pin="5" pinfunction="VDD_5" pintype="passive"/>
+      <node ref="U2" pin="5" pinfunction="VP_5" pintype="passive"/>
+    </net>
+    <net code="2" name="/EXT1" class="Default">
+      <node ref="J1" pin="2" pinfunction="Pin_2_2" pintype="passive"/>
+      <node ref="R1" pin="1" pintype="passive"/>
+      <node ref="U2" pin="1" pinfunction="IO1_1" pintype="passive"/>
+    </net>
+    <net code="3" name="/EXT2" class="Default">
+      <node ref="J1" pin="3" pinfunction="Pin_3_3" pintype="passive"/>
+      <node ref="R2" pin="1" pintype="passive"/>
+      <node ref="U2" pin="3" pinfunction="IO2_3" pintype="passive"/>
+    </net>
+    <net code="4" name="/EXT4" class="Default">
+      <node ref="J1" pin="5" pinfunction="Pin_5_5" pintype="passive"/>
+      <node ref="R3" pin="1" pintype="passive"/>
+      <node ref="U2" pin="4" pinfunction="IO3_4" pintype="passive"/>
+    </net>
+    <net code="5" name="/EXT5" class="Default">
+      <node ref="J1" pin="6" pinfunction="Pin_6_6" pintype="passive"/>
+      <node ref="R4" pin="1" pintype="passive"/>
+      <node ref="U2" pin="6" pinfunction="IO4_6" pintype="passive"/>
+    </net>
+    <net code="6" name="/GND" class="Power">
+      <node ref="C1" pin="2" pintype="passive"/>
+      <node ref="J1" pin="8" pinfunction="Pin_8_8" pintype="passive"/>
+      <node ref="J1" pin="MP" pinfunction="MountPin_MP" pintype="passive"/>
+      <node ref="SW1" pin="1" pinfunction="B_1" pintype="passive"/>
+      <node ref="SW1" pin="10" pinfunction="GND_10" pintype="passive"/>
+      <node ref="SW1" pin="6" pinfunction="B_6" pintype="passive"/>
+      <node ref="SW1" pin="7" pinfunction="GND_7" pintype="passive"/>
+      <node ref="SW1" pin="8" pinfunction="GND_8" pintype="passive"/>
+      <node ref="SW1" pin="9" pinfunction="GND_9" pintype="passive"/>
+      <node ref="SW1" pin="b" pinfunction="b_b" pintype="passive"/>
+      <node ref="SW1" pin="d" pinfunction="d_d" pintype="passive"/>
+      <node ref="U1" pin="2" pinfunction="VSS_2" pintype="passive"/>
+      <node ref="U1" pin="4" pinfunction="AHLB_4" pintype="passive"/>
+      <node ref="U1" pin="6" pinfunction="TOG_6" pintype="passive"/>
+      <node ref="U2" pin="2" pinfunction="VN_2" pintype="passive"/>
+    </net>
+    <net code="7" name="/STICK_BTN" class="Default">
+      <node ref="R3" pin="2" pintype="passive"/>
+      <node ref="SW1" pin="a" pinfunction="a_a" pintype="passive"/>
+      <node ref="SW1" pin="c" pinfunction="c_c" pintype="passive"/>
+    </net>
+    <net code="8" name="/STICK_X" class="Default">
+      <node ref="R1" pin="2" pintype="passive"/>
+      <node ref="SW1" pin="2" pinfunction="DTA_2" pintype="passive"/>
+    </net>
+    <net code="9" name="/STICK_Y" class="Default">
+      <node ref="R2" pin="2" pintype="passive"/>
+      <node ref="SW1" pin="5" pinfunction="DTA_5" pintype="passive"/>
+    </net>
+    <net code="10" name="/TOUCH_I" class="Default">
+      <node ref="R5" pin="2" pintype="passive"/>
+      <node ref="U1" pin="3" pinfunction="I_3" pintype="passive"/>
+    </net>
+    <net code="11" name="/TOUCH_PAD" class="Default">
+      <node ref="E1" pin="1" pinfunction="Pin_1_1" pintype="passive"/>
+      <node ref="R5" pin="1" pintype="passive"/>
+    </net>
+    <net code="12" name="/TOUCH_Q" class="Default">
+      <node ref="R4" pin="2" pintype="passive"/>
+      <node ref="U1" pin="1" pinfunction="Q_1" pintype="passive"/>
+    </net>
+    <net code="13" name="unconnected-(J1-Pin_4-Pad4)" class="Default">
+      <node ref="J1" pin="4" pinfunction="Pin_4_4" pintype="passive+no_connect"/>
+    </net>
+    <net code="14" name="unconnected-(J1-Pin_7-Pad7)" class="Default">
+      <node ref="J1" pin="7" pinfunction="Pin_7_7" pintype="passive+no_connect"/>
+    </net>
+  </nets>
+</export>

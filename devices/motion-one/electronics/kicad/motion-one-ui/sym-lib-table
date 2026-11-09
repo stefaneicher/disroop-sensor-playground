@@ -12,4 +12,5 @@
   (lib (name "Transistor_FET")(type "KiCad")(uri "/usr/share/kicad/symbols/Transistor_FET.kicad_sym")(options "")(descr ""))
   (lib (name "ui")(type "KiCad")(uri "${KIPRJMOD}/lib/ui.kicad_sym")(options "")(descr ""))
   (lib (name "power")(type "KiCad")(uri "/usr/share/kicad/symbols/power.kicad_sym")(options "")(descr ""))
+  (lib (name "mo_power")(type "KiCad")(uri "${KIPRJMOD}/mo_power.kicad_sym")(options "")(descr "lokale Power-Symbole"))
 )
