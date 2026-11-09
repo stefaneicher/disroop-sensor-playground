@@ -18,6 +18,12 @@ Stand 2026-11-08 06:45 CET. This is the authoritative task resume for Motion One
 - PCB r4: U2 SRV05-4 TVS on the control board, Pin-1 marker, `*_gerber_r4.zip` (`c1883b7`). Control-board ERC/DRC clean; main-board ERC NOT RUN; U2 CPL rotation (270°) is an ASSUMPTION, JLC preview only by the user.
 - Mechanics r4 (`bc3ad34`, `adfb480`): collision check PASS (0 collisions, cap clearance min 0.305 mm; SIMULATION). STL watertightness FAIL (Oberschale, Unterschale glatt, `pcb_r4.stl`; repair via trimesh insufficient, next: remesh via STEP with gmsh/Blender or finer tessellation). SLS PA12 tolerances PARTIAL (calculated; light-pipe clearance 0.1 mm < 0.2 mm FAIL, proposal 0.2; model wall thickness NOT RUN).
 - Next: STL fix, LP_CLR to 0.2, then renders/PDFs on r4 and labelled exploded view (docs-media), update `metrics.json`/report.
+- **Stand 2026-11-09 06:10 (angehalten auf Wunsch des Nutzers):**
+  - Board-STEP dicht, Hauptboard-ERC PASS 0 Verletzungen (`e619325`; 3 Körper U1/SW1/J1 durch Hüllquader ersetzt; neuer KiCad-Export braucht `step_fix_leaky.py`). Widerspruch offen: Mechanik misst `pcb_r4.stl` mit 72 Körpern, 34 undicht; pcb-engineer meldet 40/40 dicht. Datei aus `e619325` prüfen.
+  - Oberschale und Unterschale glatt dicht 0/0 (Build 11, `88a4d50`; Ursache: Akkufach-Schnitt 0.013 mm unter Trennebene). `LP_CLR` 0.2 gebaut.
+  - Netz-Kollision (`check_collision_mesh.py`, 1.3 s, SIMULATION): Ober∩Unterschale 1.051 mm³ ist Kontakt/Artefakt an der Trennebene (0 bei 0.02 mm Versatz); keine Kollision mit Akku, Motor, H2, Kappe, Lichtleiter. Gesamtlabel noch FAIL wegen `pcb_r4.stl`. Neueste Skripte und `collision_r4.json` ggf. UNCOMMITTET (`check_collision_mesh.py`, `diag_mesh.py`, `wall_edt.py`).
+  - Wand: Raycast/Querschnitt unbrauchbar; Voxel-EDT (`wall_edt.py`, `logs/wall_edt.json`) NOT RUN/unfertig. Lippenspiel nach LIP_D0 1.8 NOT RUN. Kappe-Oberschale 0.201 mm (Stichprobe).
+  - Danach offen: Renders/PDFs auf r4, beschriftete Explosionsansicht, `metrics.json`, Release.
 - **Release rule (user):** when everything is done, create a new GitHub release (`gh release create`) with verified artifacts only. Not yet: STL FAIL and docs on r4 are open.
 - PR #2 (CI: always build bridge, web, tennis, android, firmware) pending checks; Pages deploys via `.github/workflows/pages.yml`.
 
