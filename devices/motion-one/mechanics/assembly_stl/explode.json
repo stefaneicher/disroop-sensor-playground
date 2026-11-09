@@ -12,8 +12,8 @@
     30
    ],
    "tess_tol_mm": 0.02,
-   "triangles": 32112,
-   "bytes": 1605684,
+   "triangles": 32114,
+   "bytes": 1605784,
    "watertight": true,
    "bodies_watertight": null,
    "bbox_min": [
@@ -26,7 +26,7 @@
     21.73,
     13.6
    ],
-   "sha256": "040698e3fe5ceff6b5d13f04624ee3c6e06cab629b6e99abf69f4ef2fd0b3e66"
+   "sha256": "febab0d07383d30b99f911b5848468bf2b120cb4a17e285f797ab29d6e06030c"
   },
   "unterschale_glatt": {
    "file": "unterschale_glatt.stl",
@@ -36,8 +36,8 @@
     -30
    ],
    "tess_tol_mm": 0.02,
-   "triangles": 29858,
-   "bytes": 1492984,
+   "triangles": 29854,
+   "bytes": 1492784,
    "watertight": true,
    "bodies_watertight": null,
    "bbox_min": [
@@ -50,7 +50,7 @@
     21.74,
     2.0
    ],
-   "sha256": "14b31e1c02aca0cacf297426eb14e6f1876bc0bc39a79cb4a295037497bd28fc"
+   "sha256": "1b7ef4ed111fb3ee760cd39b28df7446ba2c69d3c6646ca21fd26b014754c544"
   },
   "tastenkappe": {
    "file": "tastenkappe.stl",
@@ -122,7 +122,7 @@
     21.63,
     4.4
    ],
-   "sha256": "724bc9050c8b20822bc9a22c49fb7af0250b80258d0146e6ed1da8d4e01c4f06"
+   "sha256": "6d7045042e5f21bfdadb586890eb337e9d053d6e2efbe2406fa8f29a853a5bad"
   },
   "pcb_r4": {
    "file": "pcb_r4.stl",

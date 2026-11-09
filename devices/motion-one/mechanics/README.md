@@ -52,3 +52,4 @@ Risiken für den ersten Druck (Prototypenphase): (1) Wand an Nut/Fuge dünn, mit
 - Vollbau glatt mit `LP_GAP` 0.0 und `CAP_TRAVEL_GAP` 0.1 gelaufen. Netz-Kollision (SIMULATION): 0 Kollisionen; Gesamtlabel FAIL nur wegen `pcb_r4.stl`.
 - NOT RUN: Hebelmasse gegen Datenblatt, Clip-Federweg, Schieber-Endlagen. Drei Klemmrippen der Oberschale wurden beim Bau verworfen (offen).
 - Details und Liste fehlender Elemente: [Handoff](../management/handoffs/mechanical-engineer/2026-11-09-r4-luecken.md).
+- Nachtrag: USB-Aussparung 14x8x4.45, Klemmrippen repariert (Innenraum-Subtraktion), Clips im Build, SW1-Hebel 1.4, Servicedurchbruch J4, Schieber-Prägung I/O. Stand Netz-Kollision: 0 (SIMULATION). Details im Handoff.

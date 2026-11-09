@@ -12,8 +12,8 @@ J1_ZC = (J1_Z0 + J1_Z1) / 2
 OM_W, OM_H = 12.35, 6.5
 SH_W, SH_H, SH_L = 8.25, 2.4, 6.65
 OM_X = RX - 0.45                         # Umspritzungs-Front (Huelse 6.65 > Receptacle-Tiefe ca. 6.2)
-OLD = dict(w=P.USB_RECESS[0], h=P.USB_RECESS[1], d=P.USB_RECESS[2], zc=P.USB_ZTOP / 2)
-NEW = dict(w=14.0, h=8.0, d=OM_X + 1.0, zc=J1_ZC)
+OLD = dict(w=12.8, h=7.0, d=3.2, zc=P.USB_ZTOP / 2)   # Stand vor 2026-11-09 (Historie)
+NEW = dict(w=P.USB_RECESS[0], h=P.USB_RECESS[1], d=P.USB_RECESS[2], zc=P.USB_RECESS_ZC)   # aktuell aus params
 
 
 def clr(r):
@@ -32,7 +32,7 @@ o = []
 a = o.append
 a('<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="900" viewBox="0 0 1240 900" font-family="system-ui,sans-serif" font-size="13">')
 a('<rect width="1240" height="900" fill="#fff"/><text x="20" y="28" font-size="20" font-weight="bold">Motion One r4: USB-C mit eingestecktem Stecker (Masse in mm)</text>')
-a('<text x="20" y="48" fill="#555">Rot = aktuelles Modell, gruen = Empfehlung. Stecker-Masse und J1-z-Lage = ANNAHME (siehe Fussnote).</text>')
+a('<text x="20" y="48" fill="#555">Rot = Stand vorher, gruen = aktuelles Modell (params). Stecker-Masse und J1-z-Lage = ANNAHME (siehe Fussnote).</text>')
 
 
 def side(ox, oy, r, col, title):
@@ -66,8 +66,8 @@ def side(ox, oy, r, col, title):
     return ''.join(t)
 
 
-a(side(60, 330, OLD, '#c62828', 'Schnitt y=0, aktuell (Recess 12.8 x 7.0 x 3.2)'))
-a(side(660, 330, NEW, '#2e7d32', 'Schnitt y=0, Empfehlung (Recess 14.0 x 8.0 x %.1f)' % NEW['d']))
+a(side(60, 330, OLD, '#c62828', 'Schnitt y=0, vorher (Recess 12.8 x 7.0 x 3.2)'))
+a(side(660, 330, NEW, '#2e7d32', 'Schnitt y=0, aktuell (Recess %.1f x %.1f x %.2f)' % (NEW['w'], NEW['h'], NEW['d'])))
 
 
 def front(ox, oy, r, col, title):
@@ -85,8 +85,8 @@ def front(ox, oy, r, col, title):
     return ''.join(t)
 
 
-a(front(330, 700, OLD, '#c62828', 'Frontansicht aktuell'))
-a(front(930, 700, NEW, '#2e7d32', 'Frontansicht Empfehlung'))
+a(front(330, 700, OLD, '#c62828', 'Frontansicht vorher'))
+a(front(930, 700, NEW, '#2e7d32', 'Frontansicht aktuell'))
 a('<text x="20" y="880" fill="#555" font-size="12">Fussnote: Stecker = USB-C-Spezifikation (Huelse 8.25x2.4x6.65, Umspritzung max 12.35x6.5; ANNAHME, vor Druck am echten Kabel nachmessen). J1-Hoehe z=1.0..4.26 aus params (USB_ZTOP, USB_H, ANNAHME). Umspritzungs-Front = Receptacle-Front - 0.45 (ANNAHME). Negative Luft = Stecker stoesst an. Generiert von usbc_detail.py.</text>')
 a('</svg>')
 

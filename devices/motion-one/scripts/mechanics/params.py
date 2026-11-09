@@ -46,6 +46,7 @@ IN_TAPER = (0.85, 4.0)    # A Innenkontur an den Stirnwaenden auf 85 % verjuengt
 CLAMP_X = (40.0,)               # A r4: Klemmrippe beidseitig (|y| 11..12.5, Unterkante = Boardoberseite); x=66 -y kollidiert mit J5
 CLAMP_X_POS = (33.0, 67.0)      # A r3: nur +y (SW1-Hebel frei); r4: 67 statt 66 (Abstand Kopf H2-Schraube)
 CLAMP_X_NEG = (26.5, 53.0)      # A r3: nur -y (J2 frei); r4: 53 statt 66 (J5 Geraet x ~57-69 frei, zwischen J4 und C8)
+CLAMP_VIA_INNER = ((33.0, 1), (40.0, 1), (67.0, 1))   # r4: diese Rippen per Innenraum-Subtraktion (Fusion mit Aussenhaut scheiterte)
 BOARD_SUPPORT_X = (72.0, 74.0)  # A Querrippe Board-Auflage hinten (zusaetzlich Akkurahmen-Stirnwaende)
 
 # --- Verbindungselemente (Q: ruthex RX-M2x4, 3djake.com/ruthex/threaded-insert-m2-70-pieces, Abruf 2026-11-07)
@@ -75,12 +76,14 @@ COMP_H = 3.5              # I r3 max. Bauhoehe oben (SW1)
 BOARD_STEP = "electronics/kicad/motion-one/export/motion-one-board.step"   # I r4 (14:40) (z=0 Board-Unterseite, y wie INTERFACES)
 SW1_XY = (20.0, 23.2)     # I r3 Schiebeschalter MSK12C02, Hebel +y
 SW1_WIN = (7.0, -0.3, 3.8)  # A seitlicher Durchbruch Oberschale: Laenge x, z0, z1 (Hebelweg +-1.5 + Spiel)
-SW1_LEVER = dict(w=1.2, y_tip=14.0, z0=1.0, z1=2.5)   # A MSK12C02-Hebel (Datenblatt NICHT geprueft): Breite x, Spitze y (Geraet), z-Bereich
+SW1_LEVER = dict(w=1.4, y_tip=13.55, z0=1.0, z1=2.5)   # A MSK12C02-Hebel (Datenblatt NICHT geprueft): Breite x, Spitze y (Geraet), z-Bereich
 SLIDER = dict(travel=1.5, clr=0.2, shaft_w=3.6, z0=0.3, z_shaft=3.6, z_collar=4.4, collar_w=11.4, collar_y=(13.95, 14.95),
               y_in=13.05, slot_w=1.6, slot_y=14.8, slot_z=2.7, grip_w=10.0, grip_gap=0.3, grip_t=1.5, grip_z=4.6,
               groove_pitch=1.6, groove_w=0.8, groove_d=0.6, n_groove=5)   # A Schieber (Griffkappe)
 CLIP = dict(t=1.0, head_h=0.8, engage=0.7, y_beam=13.0, z_root=-14.0)   # A Schnapphaken: Balken y 13.0..14.0, Kopf 0.8 hoch, 0.7 ueber Boardkante
 CLIPS = [(+1, 68.1, 73.6), (+1, 58.3, 60.8), (-1, 70.0, 74.0)]   # A (Seite, x0, x1) Geraet; Mittelbereich durch Akkurahmen/J5/H2 blockiert
+SERVICE_J4 = (6.0, 5.0)   # A Servicedurchbruch Oberschale ueber J4 (Tag-Connect, Board 45.0/21.4), Breite x Tiefe y
+J4_XY = (45.0, 21.4)      # I r4 PCB-Handoff
 J2_XY = (14.5, 5.1)       # I r3 JST-SH SM02B-SRSS-TB, Steckrichtung -y
 J2_PLUG = (5.0, 4.5, 3.0)   # A SHR-02V-S-Stecker + Biegeradius Litze: Breite x, Laenge -y ab Receptacle-Front, Hoehe
 CABLE_NOTCH = (16.0, 23.0)  # A Kabelschlitz im Akkurahmen -y (Geraet x) fuer Akku-Litze zum J2
@@ -88,7 +91,9 @@ USB_OVERHANG = 0.7        # Q r3 Board-STEP J1 x -0.69
 USB_W, USB_H, USB_D = 8.94, 3.26, 7.35      # Q typ. USB-C-Receptacle (GCT USB4085 Datenblatt-Masse, A Bauform)
 USB_ZTOP = 4.26           # Q r3 Board-STEP: J1-Oberkante z=4.26 (Geraetekoordinaten) > USB_H -> Kollision r3 (2.2 mm3)
 USB_SLOT = (11.4, USB_ZTOP + 0.6)   # A r3: Board-STEP J1-Schale 10.74 breit (y +-5.37) + 0.3 Spiel je Seite; z -0.3 .. USB_ZTOP+0.3
-USB_RECESS = (12.8, 7.0, 3.2)   # A Aussparung Steckerumspritzung (B x H x Tiefe), Steckerfront <= 1 mm vor Receptacle
+USB_RECESS = (14.0, 8.0, 4.45)   # A r4-USB: 1.0 mm Luft vor Umspritzung (Front x=3.45), mittig auf J1 (USB_RECESS_ZC)
+USB_RECESS_ZC = USB_ZTOP - USB_H / 2   # B 2.63
+#   # A Aussparung Steckerumspritzung (B x H x Tiefe), Steckerfront <= 1 mm vor Receptacle
 BUTTON_XY = (48.0, 12.5)  # I Haupttaster (Boardkoordinaten)
 BUTTON_SW = (5.1, 5.1, 1.5)     # I r3 TS-1187A 5.1x5.1, Hoehe 1.5 (ANNAHME pcb)
 LED_XY = (38.0, 12.5)     # I r3

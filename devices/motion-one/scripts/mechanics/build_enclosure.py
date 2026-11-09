@@ -253,7 +253,7 @@ def usb_cuts():
     sw, sh = P.USB_SLOT
     rw, rh, rd = P.USB_RECESS
     return [box(-2, BX + 0.5, -sw / 2, sw / 2, USB_Z - sh / 2, USB_Z + sh / 2),
-            box(-2, rd, -rw / 2, rw / 2, USB_Z - rh / 2, USB_Z + rh / 2)]
+            box(-2, rd, -rw / 2, rw / 2, P.USB_RECESS_ZC - rh / 2, P.USB_RECESS_ZC + rh / 2)]
 
 
 J5 = dev(P.J5_XY)        # r4 Erweiterungsstecker (Geraet x 63.1, y -9.15), Kante y=-BCY
@@ -328,6 +328,12 @@ def slider_geom():
     for k in range(S["n_groove"]):
         gx = sx + (k - (S["n_groove"] - 1) / 2) * S["groove_pitch"]
         cuts.append(box(gx - S["groove_w"] / 2, gx + S["groove_w"] / 2, y_g1 - S["groove_d"], y_g1 + 1, -1.0, 4.5))
+    for sg, kind in ((-1, 'I'), (1, 'O')):   # Praegung 0.4 mm auf Griffoberseite: I = ein, O = aus (ANNAHME Zuordnung)
+        mx = sx + sg * 3.8
+        if kind == 'I':
+            cuts.append(box(mx - 0.3, mx + 0.3, y_g0 + 0.3, y_g1 - 0.3, 4.0, 4.5))
+        else:
+            cuts.append(cq.Solid.makeCylinder(0.6, 0.5, V(mx, (y_g0 + y_g1) / 2, 4.0), V(0, 0, 1)).cut(cq.Solid.makeCylinder(0.25, 0.5, V(mx, (y_g0 + y_g1) / 2, 4.0), V(0, 0, 1))))
     s = cut_all(s, cuts)
     return s, dict(y_foot1=y_f1, x=sx, y_grip0=y_g0, y_grip1=y_g1, a_max=a_max)
 
@@ -440,6 +446,7 @@ def top_shell(shell):
     o = OUTER
     adds = [cyl(sx, sy, 0, 40, P.BOSS_D_INS) for sx, sy in P.SCREWS]
     ribs = [(cx, sg) for cx in P.CLAMP_X for sg in (-1, 1)] + [(cx, 1) for cx in P.CLAMP_X_POS] + [(cx, -1) for cx in P.CLAMP_X_NEG]
+    ribs = [r for r in ribs if r not in P.CLAMP_VIA_INNER]
     for cx, sgn in ribs:   # Klemmrippen: Unterkante auf Board-Oberseite (Randstreifen |y| 11..12.5)
         if True:
             y0, y1 = (BCY - P.BOARD_EDGE_KEEPOUT, 30) if sgn > 0 else (-30, -(BCY - P.BOARD_EDGE_KEEPOUT))
@@ -451,6 +458,8 @@ def top_shell(shell):
     sp = P.SOUND_PITCH
     for dx, dy in [(0, 0), (sp, 0), (-sp, 0), (0, sp), (0, -sp)]:
         cuts.append(cyl(BUZ[0] + dx, BUZ[1] + dy, 0, 40, P.SOUND_HOLES_D))
+    jx, jy = dev(P.J4_XY); sw_, sd_ = P.SERVICE_J4
+    cuts.append(box(jx - sw_ / 2, jx + sw_ / 2, jy - sd_ / 2, jy + sd_ / 2, 0, 40))   # Servicedurchbruch J4
     cuts += usb_cuts() + j5_cuts()
     sx, sy = dev(P.SW1_XY)   # r3: seitlicher Durchbruch SW1-Hebel (+y)
     wl, wz0, wz1 = P.SW1_WIN
@@ -623,6 +632,9 @@ def main():
     inner = inner_solid()
     MOTOR_Z0 = motor_z0()
     print(f"Loft aussen V={OUTER.Volume():.0f} mm3 valid={OUTER.isValid()}, innen V={inner.Volume():.0f} ({time.time()-t0:.1f}s)")
+    for cx, sg in P.CLAMP_VIA_INNER:   # Klemmrippen +y/-y als Aussparung im Innenraum
+        y0, y1 = (BCY - P.BOARD_EDGE_KEEPOUT, 30) if sg > 0 else (-30, -(BCY - P.BOARD_EDGE_KEEPOUT))
+        inner = inner.cut(box(cx - P.RIB_T / 2, cx + P.RIB_T / 2, y0, y1, 0.02, 40))
     shell = OUTER.cut(inner)
     jb = joint_band()
     print(f"Fuegeband V={jb.Volume():.0f} valid={jb.isValid()}")
