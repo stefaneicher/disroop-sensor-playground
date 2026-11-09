@@ -306,6 +306,48 @@ def lightpipe_geom():
     return fuse_all(rod, [cone, col]), dict(z_bottom=z0, z_top=z_top)
 
 
+def slider_geom():
+    """r4-Luecke 1: Schieber (Griffkappe) fuer SW1: Schaft im Fenster, Rillen-Griff aussen, Fuss innen (Verliersicherung),
+    Hebelschlitz. Einbaulage Mittelstellung (Geraetekoordinaten)."""
+    S = P.SLIDER; sx = dev(P.SW1_XY)[0]
+    hw = P.SW1_WIN[0] / 2
+    a_max = max(dims(sx + d)[0] for d in np.linspace(-hw - S["travel"], hw + S["travel"], 9))
+    y_g0 = a_max + 0.1; y_g1 = y_g0 + S["grip_t"] + 0.3
+    sw = S["shaft_w"] / 2
+    d1 = P.LIP_D0 + P.LIP_W + P.GROOVE_CLR + P.BAND_T   # Fuegeband-Innenflaeche = a - d1 (B)
+    a_min = min(dims(sx + d)[0] for d in np.linspace(-S["collar_w"] / 2, S["collar_w"] / 2, 9))
+    y_f1 = min(a_min - d1 - 0.15, S['y_in'] + 0.7)                           # Fuss stoppt 0.15 vor der Bandflaeche (Verliersicherung)
+    shaft = box(sx - sw, sx + sw, S["y_in"], y_g0 + 0.2, S["z0"], S["z_shaft"])
+    foot = box(sx - S["collar_w"] / 2, sx + S["collar_w"] / 2, S["y_in"], y_f1, S["z0"], S["z_shaft"])
+    gw = S["grip_w"] / 2
+    grip = box(sx - gw, sx + gw, y_g0, y_g1, -0.9, 4.4)
+    s = fuse_all(shaft, [foot, grip])
+    lv = P.SW1_LEVER
+    s = s.cut(box(sx - S["slot_w"] / 2, sx + S["slot_w"] / 2, S["y_in"] - 0.1, lv["y_tip"] + 0.8, lv["z0"] - 0.2, lv["z1"] + 0.2))
+    cuts = []
+    for k in range(S["n_groove"]):
+        gx = sx + (k - (S["n_groove"] - 1) / 2) * S["groove_pitch"]
+        cuts.append(box(gx - S["groove_w"] / 2, gx + S["groove_w"] / 2, y_g1 - S["groove_d"], y_g1 + 1, -1.0, 4.5))
+    s = cut_all(s, cuts)
+    return s, dict(y_foot1=y_f1, x=sx, y_grip0=y_g0, y_grip1=y_g1, a_max=a_max)
+
+
+def clip_solids(heads=False):
+    """r4-Luecke 2: Schnapphaken Unterschale. Balken (y 13.0..14.0, t=1.0) von der Bodenschale bis ueber Boardoberseite,
+    Kopf 0.8 hoch (z 0..0.8), 0.7 mm ueber die Boardkante, Einlauffase oben."""
+    C = P.CLIP; out = []
+    for sg, x0, x1 in P.CLIPS:
+        yb0, yb1 = C["y_beam"], C["y_beam"] + C["t"]
+        yh = BCY - C["engage"]
+        h = C["head_h"]
+        prof = [(yb1, C["z_root"]), (yb0, C["z_root"]), (yb0, 0.0), (yh, 0.0), (yh, h * 0.45), (yh + 0.5, h), (yb0 + 0.3, h), (yb1, h)]
+        # Profil in (y,z), Extrusion in x
+        w = cq.Workplane("YZ").polyline([(sg * y, z) for y, z in prof]).close().extrude(x1 - x0).translate(V(x0, 0, 0))
+        w = w.val()
+        out.append(w.intersect(box(x0 - 1, x1 + 1, -30, 30, -0.5, 1)) if heads else w)
+    return out
+
+
 def plan_pts(off, n=240):
     """Draufsicht-Umriss der Trennebene (y = +-a(x)), CCW, um 'off' nach innen versetzt."""
     t = np.linspace(0, math.pi, n)
@@ -430,6 +472,7 @@ def bottom_shell(shell, variant):
              box(bx1, bx1 + t, 6, by + t, -40, zb_top),
              box(bx0 - t, bx1 + t, -by - t, -by, -40, zb_top), box(bx0 - t, bx1 + t, by, by + t, -40, zb_top)]
     adds += [box(bx0, bx1, cy - t / 2, cy + t / 2, -40, P.Z_BAT) for cy in P.CRADLE_Y]   # Wiegerippen
+    adds += [c.intersect(box(-5, P.L + 5, -40, 40, -40, -0.01)) for c in clip_solids()]   # r4: Haken-Balken (Koepfe nach dem Z_S-Schnitt)
     for sx in P.BOARD_SUPPORT_X[:1]:
         adds.append(box(sx, P.BOARD_SUPPORT_X[1], -BCY, BCY, -40, zb_top))
     # r4 Muenzmotor LCM0827: Sockel bis Akku-Unterseite - 0.3, Mulde D8.6 x 3.2 (F-10)
@@ -458,6 +501,7 @@ def bottom_shell(shell, variant):
     bot = safe_clean(bot.intersect(box(-5, P.L + 5, -40, 40, -40, P.Z_S)))
     bot = cut_all(bot, [box(bx0 + 0.013, bx1 - 0.017, -by - 0.037, by + 0.041, P.Z_BAT + 0.011, P.Z_S + 0.5)])   # r4: Akkufach VOR der Lippe (sonst 0.013-mm-Sliver an der Lippenwurzel, 32 offene Kanten)
     bot = fuse_all(bot, [lip().intersect(clip)])   # ADR-0001 Lippe (ragt bis +LIP_H ueber die Trennebene)
+    bot = fuse_all(bot, clip_solids(True))   # Haken-Koepfe ueber Trennebene
     print(f'  {variant}: nach Fusion V={bot.Volume():.0f} valid={bot.isValid()}')
     cuts = []
     for sx, sy in P.SCREWS:
@@ -610,11 +654,12 @@ def main():
         print(f"Unterschale {v}: V={b.Volume():.0f} valid={b.isValid()} ({time.time()-t0:.1f}s)")
     cap, capinfo = cap_geom()
     lp, lpinfo = lightpipe_geom()
+    sl, slinfo = slider_geom()
     comps = components()
-    res = dict(params_file="scripts/mechanics/params.py", motor_z0=MOTOR_Z0, cap=capinfo, lightpipe=lpinfo,
+    res = dict(params_file="scripts/mechanics/params.py", motor_z0=MOTOR_Z0, slider=slinfo, cap=capinfo, lightpipe=lpinfo,
                outer_volume=OUTER.Volume(), inner_volume=inner.Volume(), parts={})
     res.update(min_section_radius())
-    parts = {"oberschale": (top, False), "tastenkappe": (cap, True), "lichtleiter": (lp, True)}
+    parts = {"oberschale": (top, False), "tastenkappe": (cap, True), "lichtleiter": (lp, True), "schieber": (sl, False)}
     for v, b in bots.items():
         parts[f"unterschale_{v}"] = (b, False)   # ADR-0001: Lippe muss nach oben zeigen -> Aussenboden aufs Bett (Support aussen)
     for name, (s, flip) in parts.items():
@@ -638,6 +683,7 @@ def main():
     asm.add(bots[P.CHOSEN], name="unterschale", color=cq.Color(*col["unterschale"]))
     asm.add(cap, name="tastenkappe", color=cq.Color(*col["tastenkappe"]))
     asm.add(lp, name="lichtleiter", color=cq.Color(*col["lichtleiter"]))
+    asm.add(sl, name="schieber", color=cq.Color(0.639, 0.902, 0.208))
     for n in ("akku", "motor", "akku_stecker", "j5_stecker"):
         asm.add(comps[n], name=n, color=cq.Color(0.6, 0.6, 0.6))
     asm.add(board_r4(), name="board_r4", color=cq.Color(0.1, 0.5, 0.2))

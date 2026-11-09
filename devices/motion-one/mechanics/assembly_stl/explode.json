@@ -12,21 +12,21 @@
     30
    ],
    "tess_tol_mm": 0.02,
-   "triangles": 31646,
-   "bytes": 1582384,
+   "triangles": 32112,
+   "bytes": 1605684,
    "watertight": true,
    "bodies_watertight": null,
    "bbox_min": [
     0.0,
-    -21.75,
-    -0.0
+    -21.74,
+    -0.01
    ],
    "bbox_max": [
     170.0,
-    21.8,
+    21.73,
     13.6
    ],
-   "sha256": "4b809c354ef056181fd5644e25ec26ded655c949d6eb9bbaabd0d48279ab445f"
+   "sha256": "040698e3fe5ceff6b5d13f04624ee3c6e06cab629b6e99abf69f4ef2fd0b3e66"
   },
   "unterschale_glatt": {
    "file": "unterschale_glatt.stl",
@@ -36,8 +36,8 @@
     -30
    ],
    "tess_tol_mm": 0.02,
-   "triangles": 29748,
-   "bytes": 1487484,
+   "triangles": 29858,
+   "bytes": 1492984,
    "watertight": true,
    "bodies_watertight": null,
    "bbox_min": [
@@ -50,7 +50,7 @@
     21.74,
     2.0
    ],
-   "sha256": "79f993f6d1b4fd5abb0761e058f60d25bc9d75afdf7de9803c509f333f722ca3"
+   "sha256": "14b31e1c02aca0cacf297426eb14e6f1876bc0bc39a79cb4a295037497bd28fc"
   },
   "tastenkappe": {
    "file": "tastenkappe.stl",
@@ -67,14 +67,14 @@
    "bbox_min": [
     46.1,
     -6.48,
-    1.8
+    1.6
    ],
    "bbox_max": [
     59.1,
     6.48,
     11.1
    ],
-   "sha256": "bc778ec5e7488581a99d0066c9736d078f96a2ed9a77faa1a4c9cee3e32891dc"
+   "sha256": "5e45b0281c7d47aca488bb88412f0367fd390fc3dbcec6fee3cb25b5f19d35a3"
   },
   "lichtleiter": {
    "file": "lichtleiter.stl",
@@ -91,14 +91,38 @@
    "bbox_min": [
     40.1,
     -2.49,
-    0.75
+    0.55
    ],
    "bbox_max": [
     45.1,
     2.49,
     10.7
    ],
-   "sha256": "246c08c5abf504f2169523bd5dcad2d5ac2e8d9eb42bbfe2552360fd8ac797d3"
+   "sha256": "e583f9b6d09d356b40d1cb0282264fdff24c0190c10d4ee8508e0d096589f4bd"
+  },
+  "schieber": {
+   "file": "schieber.stl",
+   "explode_mm": [
+    0,
+    40,
+    25
+   ],
+   "tess_tol_mm": 0.05,
+   "triangles": 140,
+   "bytes": 7084,
+   "watertight": true,
+   "bodies_watertight": null,
+   "bbox_min": [
+    18.9,
+    13.05,
+    -0.9
+   ],
+   "bbox_max": [
+    30.3,
+    21.63,
+    4.4
+   ],
+   "sha256": "724bc9050c8b20822bc9a22c49fb7af0250b80258d0146e6ed1da8d4e01c4f06"
   },
   "pcb_r4": {
    "file": "pcb_r4.stl",

@@ -74,7 +74,13 @@ BOARD_EDGE_KEEPOUT = 1.5  # A Aenderungswunsch: bauteilfreier Randstreifen laeng
 COMP_H = 3.5              # I r3 max. Bauhoehe oben (SW1)
 BOARD_STEP = "electronics/kicad/motion-one/export/motion-one-board.step"   # I r4 (14:40) (z=0 Board-Unterseite, y wie INTERFACES)
 SW1_XY = (20.0, 23.2)     # I r3 Schiebeschalter MSK12C02, Hebel +y
-SW1_WIN = (7.0, 0.02, 3.8)  # A seitlicher Durchbruch Oberschale: Laenge x, z0, z1 (Hebelweg +-1.5 + Spiel)
+SW1_WIN = (7.0, -0.3, 3.8)  # A seitlicher Durchbruch Oberschale: Laenge x, z0, z1 (Hebelweg +-1.5 + Spiel)
+SW1_LEVER = dict(w=1.2, y_tip=14.0, z0=1.0, z1=2.5)   # A MSK12C02-Hebel (Datenblatt NICHT geprueft): Breite x, Spitze y (Geraet), z-Bereich
+SLIDER = dict(travel=1.5, clr=0.2, shaft_w=3.6, z0=0.3, z_shaft=3.6, z_collar=4.4, collar_w=11.4, collar_y=(13.95, 14.95),
+              y_in=13.05, slot_w=1.6, slot_y=14.8, slot_z=2.7, grip_w=10.0, grip_gap=0.3, grip_t=1.5, grip_z=4.6,
+              groove_pitch=1.6, groove_w=0.8, groove_d=0.6, n_groove=5)   # A Schieber (Griffkappe)
+CLIP = dict(t=1.0, head_h=0.8, engage=0.7, y_beam=13.0, z_root=-14.0)   # A Schnapphaken: Balken y 13.0..14.0, Kopf 0.8 hoch, 0.7 ueber Boardkante
+CLIPS = [(+1, 68.1, 73.6), (+1, 58.3, 60.8), (-1, 70.0, 74.0)]   # A (Seite, x0, x1) Geraet; Mittelbereich durch Akkurahmen/J5/H2 blockiert
 J2_XY = (14.5, 5.1)       # I r3 JST-SH SM02B-SRSS-TB, Steckrichtung -y
 J2_PLUG = (5.0, 4.5, 3.0)   # A SHR-02V-S-Stecker + Biegeradius Litze: Breite x, Laenge -y ab Receptacle-Front, Hoehe
 CABLE_NOTCH = (16.0, 23.0)  # A Kabelschlitz im Akkurahmen -y (Geraet x) fuer Akku-Litze zum J2

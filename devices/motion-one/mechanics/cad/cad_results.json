@@ -1,69 +1,92 @@
 {
   "params_file": "scripts/mechanics/params.py",
   "motor_z0": -10.85,
+  "slider": {
+    "y_foot1": 14.839698099999998,
+    "x": 24.6,
+    "y_grip0": 19.8282664,
+    "y_grip1": 21.6282664,
+    "a_max": 19.7282664
+  },
   "cap": {
-    "z_switch_gap": 1.8,
+    "z_switch_gap": 1.6,
     "z_flange_top": 7.400000000000001,
     "z_top": 11.100000000000001,
     "z_inner_ceiling": 7.600000000000001
   },
   "lightpipe": {
-    "z_bottom": 0.75,
+    "z_bottom": 0.55,
     "z_top": 10.703921601786258
   },
   "outer_volume": 149873.32453472298,
   "inner_volume": 110421.64951452092,
   "parts": {
     "oberschale": {
-      "volume_mm3": 20335.013352806483,
+      "volume_mm3": 20282.265409149077,
       "valid": true,
       "print_bbox": [
         170.4092630038654,
-        43.95883643219493,
-        14.36966671685488
+        43.87146379122916,
+        14.369666716854885
       ],
       "com": [
-        89.0616009722574,
-        -0.06223477737098361,
-        6.988770457387044
+        89.04065334119058,
+        -0.14700152931814667,
+        7.008279504720166
       ],
       "print_flip_about_x": false,
       "print_file": "devices/motion-one/mechanics/print/oberschale"
     },
     "tastenkappe": {
-      "volume_mm3": 545.2249809806584,
+      "volume_mm3": 546.6386976747738,
       "valid": true,
       "print_bbox": [
         13.008581697957238,
         13.00454728032784,
-        9.302321495884462
+        9.502321495884463
       ],
       "com": [
         52.6,
-        7.075082064482085e-17,
-        7.67321109059714
+        6.865489456771306e-17,
+        7.657763175416285
       ],
       "print_flip_about_x": true,
       "print_file": "devices/motion-one/mechanics/print/tastenkappe"
     },
     "lichtleiter": {
-      "volume_mm3": 86.17359307584049,
+      "volume_mm3": 87.5873097699559,
       "valid": true,
       "print_bbox": [
         5.001554289995921,
         5.000000200000003,
-        9.95485425578381
+        10.154854255783809
       ],
       "com": [
-        42.6,
-        -4.421164375244145e-18,
-        5.972595606501794
+        42.60000000000001,
+        -2.1410770508881942e-17,
+        5.886685418316998
       ],
       "print_flip_about_x": true,
       "print_file": "devices/motion-one/mechanics/print/lichtleiter"
     },
+    "schieber": {
+      "volume_mm3": 191.84963392600002,
+      "valid": true,
+      "print_bbox": [
+        11.400000200000001,
+        8.228266600000003,
+        5.300000200000005
+      ],
+      "com": [
+        24.59999999999999,
+        17.92136492622452,
+        1.8682443058189515
+      ],
+      "print_flip_about_x": false,
+      "print_file": "devices/motion-one/mechanics/print/schieber"
+    },
     "unterschale_glatt": {
-      "volume_mm3": 27606.661492268853,
+      "volume_mm3": 27722.95280691691,
       "valid": true,
       "print_bbox": [
         170.2704223578854,
@@ -71,9 +94,9 @@
         19.078481635304325
       ],
       "com": [
-        78.95963808738108,
-        -0.013514429037256945,
-        -8.06875588388517
+        78.92577842076803,
+        -0.002015415767924816,
+        -8.052645454420496
       ],
       "print_flip_about_x": false,
       "print_file": "devices/motion-one/mechanics/print/unterschale_glatt"
@@ -87,7 +110,7 @@
   ],
   "end_ellipse_r_min": 4.437763776155193,
   "chosen_variant": "glatt",
-  "runtime_s": 1114.7507412433624,
+  "runtime_s": 962.7534627914429,
   "f08": {
     "batch": true,
     "nproc": 1,
@@ -95,32 +118,32 @@
     "times": [
       [
         "Schale+Fuegeband",
-        28.36,
+        27.51,
         1
       ],
       [
-        "Teil top 472.7s",
-        501.08,
+        "Teil top 344.9s",
+        372.44,
         1
       ],
       [
-        "Teil glatt 556.8s",
-        1057.87,
+        "Teil glatt 540.8s",
+        913.27,
         1
       ],
       [
         "Teile fertig",
-        1058.63,
+        914.12,
         1
       ],
       [
         "Export STL/3MF/BREP",
-        1094.67,
+        956.42,
         1
       ],
       [
         "Baugruppe STEP",
-        1114.75,
+        980.13,
         1
       ]
     ]

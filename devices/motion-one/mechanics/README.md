@@ -46,3 +46,9 @@ User-Entscheid: Prototypen-Gehäuse wird selbst gedruckt, Rückmeldung nach dem 
 - Netz-Kollision (manifold3d, SIMULATION): keine Kollision; Schalen-Kontakt 1.05 mm³ an der Trennebene ist Messartefakt.
 
 Risiken für den ersten Druck (Prototypenphase): (1) Wand an Nut/Fuge dünn, mit 0.4-mm-Düse prüfen, ggf. `LIP_D0` erhöhen; (2) Kappen-/Lichtleiterspiel bewusst knapp lang, nachfeilen; (3) J5-Fase ist abgeschaltet (J5-Öffnung ohne Fase); (4) Drucker-Toleranz FDM ≠ SLS: Toleranzkörper `print/toleranzkoerper.3mf` zuerst drucken; (5) Akku-/USB-C-/Bedienplatinen-Passung nur im Modell geprüft.
+
+### r4-Lücken (2026-11-09)
+- Neu: Schieber SW1 (`print/schieber.stl/.3mf`, Griffkappe mit 5 Rillen, Hub ±1.5, Spiel 0.2, Kragen innen) und 3 Platinen-Schnapphaken in der Unterschale. Im Viewer und `explode.json` eingetragen.
+- Vollbau glatt mit `LP_GAP` 0.0 und `CAP_TRAVEL_GAP` 0.1 gelaufen. Netz-Kollision (SIMULATION): 0 Kollisionen; Gesamtlabel FAIL nur wegen `pcb_r4.stl`.
+- NOT RUN: Hebelmasse gegen Datenblatt, Clip-Federweg, Schieber-Endlagen. Drei Klemmrippen der Oberschale wurden beim Bau verworfen (offen).
+- Details und Liste fehlender Elemente: [Handoff](../management/handoffs/mechanical-engineer/2026-11-09-r4-luecken.md).

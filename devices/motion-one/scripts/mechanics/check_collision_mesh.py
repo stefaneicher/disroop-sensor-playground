@@ -4,7 +4,7 @@ from scipy.spatial import cKDTree
 sys.path.insert(0, os.path.dirname(__file__))
 import params as P
 D = "devices/motion-one/mechanics/assembly_stl/"
-names = ["oberschale", "unterschale_glatt", "pcb_r4", "akku", "motor", "tastenkappe", "lichtleiter"]
+names = ["oberschale", "unterschale_glatt", "pcb_r4", "akku", "motor", "tastenkappe", "lichtleiter", "schieber"]
 T = {n: trimesh.load(D + n + ".stl") for n in names}
 BX, BCY = P.BOARD_X0, P.BOARD_W / 2
 hx, hy = BX + P.H_DOME[0][0], P.H_DOME[0][1] - BCY
