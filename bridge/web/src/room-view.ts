@@ -178,10 +178,21 @@ function buildThingy(): Thingy {
   button.position.y = 0.84;
   button.castShadow = true;
   group.add(button);
-  // micro-USB socket on the front edge (device −y)
-  const usb = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.32, 0.1), new THREE.MeshStandardMaterial({ color: '#0b0d10', roughness: 0.4, metalness: 0.6 }));
-  usb.position.set(0, -0.05, 3.0);
+  // LED hole top left (seen from above with the USB edge towards the viewer)
+  const ledHole = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.06, 24), led);
+  ledHole.position.set(-2.1, 0.77, -2.1);
+  group.add(ledHole);
+  const ledRim = new THREE.Mesh(new THREE.RingGeometry(0.32, 0.46, 24), new THREE.MeshStandardMaterial({ color: '#0b0d10', roughness: 0.5 }));
+  ledRim.rotation.x = -Math.PI / 2;
+  ledRim.position.set(-2.1, 0.78, -2.1);
+  group.add(ledRim);
+  // USB socket bottom centre on the front edge (device −y): metal shell with dark opening
+  const usb = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.4, 0.14), new THREE.MeshStandardMaterial({ color: '#d1d5db', roughness: 0.3, metalness: 0.8 }));
+  usb.position.set(0, -0.05, 3.02);
   group.add(usb);
+  const usbSlot = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.2, 0.02), new THREE.MeshStandardMaterial({ color: '#0b0d10' }));
+  usbSlot.position.set(0, -0.05, 3.1);
+  group.add(usbSlot);
 
   // device axes: x red, y green, z blue (same colours as the charts)
   const axes: [string, string, THREE.Vector3][] = [['X', COLORS.x, new THREE.Vector3(1, 0, 0)], ['Y', COLORS.y, new THREE.Vector3(0, 0, -1)], ['Z', COLORS.z, new THREE.Vector3(0, 1, 0)]];
@@ -341,7 +352,9 @@ export function mountRoom(root: HTMLElement, log: (msg: string) => void): RoomVi
     rate.count++;
     const now = performance.now();
     if (now - rate.since >= 1000) {
-      rate.hz = (rate.count * 1000) / (now - rate.since);
+      const hz = (rate.count * 1000) / (now - rate.since);
+      // moving average (EMA, ~5 s) so jitter in the arrival times does not make the readout jump
+      rate.hz = rate.hz ? rate.hz + 0.2 * (hz - rate.hz) : hz;
       rate.count = 0;
       rate.since = now;
     }
@@ -395,6 +408,7 @@ export function mountRoom(root: HTMLElement, log: (msg: string) => void): RoomVi
     estimator.reset();
     rate.count = 0;
     rate.since = performance.now();
+    rate.hz = 0;
     ws.addEventListener('message', (e) => {
       const s = typeof e.data === 'string' ? sampleFromFrame(e.data) : null;
       if (s && fast === ws) onSample(s);

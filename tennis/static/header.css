@@ -1,7 +1,19 @@
-#thingy-header{position:fixed;top:0;left:0;right:0;height:28px;z-index:1000;display:flex;align-items:center;gap:12px;padding:0 10px;background:#0b1220;color:#e5e7eb;font:12px/1 system-ui,sans-serif;border-bottom:1px solid #1f2937;box-sizing:border-box}
-#thingy-header .dot{width:9px;height:9px;border-radius:50%;background:#ef4444}
+/* Gemeinsamer Header (Dashboard, Tennis, Ski): links Marke, Mitte Navigation, rechts Status. */
+:root{--hdr-h:56px}
+#thingy-header{position:fixed;top:0;left:0;right:0;height:var(--hdr-h);z-index:1000;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px;padding:0 clamp(10px,2.5vw,28px);background:rgba(17,24,39,.95);color:#f9fafb;font:14px/1.2 system-ui,sans-serif;border-bottom:2px solid #65a30d;box-sizing:border-box}
+#thingy-header .brand{display:flex;gap:10px;align-items:center;min-width:0;color:inherit;text-decoration:none}
+#thingy-header .logo{width:34px;height:34px;flex:none;border-radius:8px;background:#f9fafb;padding:3px;box-sizing:border-box}
+#thingy-header .name{font-weight:700;font-size:1.05rem;color:#a3e635}
+#thingy-header .dev{color:#9ca3af;font-size:.75rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#thingy-header nav{display:flex;gap:4px;background:#0b1120;border:1px solid #374151;border-radius:999px;padding:3px}
+#thingy-header nav a{color:#9ca3af;text-decoration:none;padding:5px 14px;border-radius:999px;white-space:nowrap}
+#thingy-header nav a:hover{color:#f9fafb}
+#thingy-header nav a.on{background:#365314;color:#ecfccb;font-weight:600}
+#thingy-header .st{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap;min-width:0}
+#thingy-header .pill{border:1px solid #374151;border-radius:999px;padding:3px 9px;font-size:.75rem;color:#9ca3af;white-space:nowrap;font-variant-numeric:tabular-nums}
+#thingy-header .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:5px}
 #thingy-header.on .dot{background:#a3e635}
-#thingy-header .grow{flex:1}
-#thingy-header .bat{font-variant-numeric:tabular-nums}
+#thingy-header.on .status{color:#bef264}
 #thingy-header .bat.low{color:#f87171}
-body.has-thingy-header{padding-top:28px}
+body.has-thingy-header #stage{top:var(--hdr-h)}
+@media (max-width:640px){#thingy-header .dev,#thingy-header .opt{display:none}#thingy-header nav a{padding:5px 9px}}

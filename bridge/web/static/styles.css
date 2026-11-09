@@ -486,3 +486,13 @@ h1 span { color: var(--accent); }
 
 .tennis-link { color: var(--accent); text-decoration: none; font-weight: 700; }
 .tennis-link:hover { border-color: var(--lime-600); background: var(--lime-800); color: #fff; }
+
+/* Gemeinsamer Header: Marke links, Navigation Mitte, Status rechts (wie tennis/static/header.css) */
+.topbar { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+.topbar .status-row { justify-content: flex-end; }
+.brand-logo { background: #f9fafb; border-radius: 8px; padding: 3px; box-sizing: border-box; }
+.main-nav { display: flex; gap: 4px; background: #0b1120; border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.main-nav a { color: var(--muted); text-decoration: none; padding: 5px 14px; border-radius: 999px; white-space: nowrap; }
+.main-nav a:hover { color: var(--text); }
+.main-nav a.on { background: #365314; color: #ecfccb; font-weight: 600; }
+@media (max-width: 900px) { .topbar { grid-template-columns: 1fr; } .topbar .status-row { justify-content: flex-start; } .main-nav { justify-self: start; } }

@@ -3,7 +3,7 @@
 Abfahrtsspiel im Browser (three.js) und in der Android-App, gesteuert mit dem Thingy:52.
 Der Thingy wird wie ein Lenker flach in der Hand gehalten, Ladebuchse zu dir.
 
-- Bridge: `http://127.0.0.1:8052/ski` (leitet auf `/tennis/ski/` um)
+- Bridge: `http://127.0.0.1:8052/ski/` (`/ski` und `/tennis/ski/` leiten dorthin um)
 - Android: Pill „⛷ Ski“ im Header
 - Quellcode: `tennis/src/ski/*` und `tennis/static/ski/`
 

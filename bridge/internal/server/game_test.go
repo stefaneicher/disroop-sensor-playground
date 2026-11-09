@@ -201,7 +201,7 @@ func TestTennisAppIsServedUnderTennis(t *testing.T) {
 	if code, _, loc := get(t, f.srv.URL+"/tennis"); code != http.StatusMovedPermanently || loc != "/tennis/" {
 		t.Fatalf("/tennis: %d %q", code, loc)
 	}
-	if code, _, loc := get(t, f.srv.URL+"/ski"); code != http.StatusMovedPermanently || loc != "/tennis/ski/" {
+	if code, _, loc := get(t, f.srv.URL+"/ski"); code != http.StatusMovedPermanently || loc != "/ski/" {
 		t.Fatalf("/ski: %d %q", code, loc)
 	}
 	if code, body, _ := get(t, f.srv.URL+"/tennis/"); code != 200 || !strings.Contains(body, "Tennis") {

@@ -89,7 +89,9 @@ func New(cfg Config) http.Handler {
 	}
 	if cfg.Tennis != nil {
 		mux.Handle("GET /tennis", http.RedirectHandler("/tennis/", http.StatusMovedPermanently))
-		mux.Handle("GET /ski", http.RedirectHandler("/tennis/ski/", http.StatusMovedPermanently))
+		mux.Handle("GET /ski", http.RedirectHandler("/ski/", http.StatusMovedPermanently))
+		mux.Handle("GET /ski/{$}", skiHandler(cfg.Tennis))
+		mux.Handle("GET /tennis/ski/{$}", http.RedirectHandler("/ski/", http.StatusMovedPermanently))
 		mux.Handle("GET /tennis/", tennisHandler(cfg.Tennis))
 	}
 	mux.HandleFunc("OPTIONS /api/", func(w http.ResponseWriter, _ *http.Request) { w.WriteHeader(http.StatusNoContent) })

@@ -15,9 +15,7 @@
   <main id="stage">
     <div id="hud">
       <header class="top">
-        <div class="brand"><img src="disroop.png" alt="Disroop" width="28" height="28"><span>Thingy <b>Tennis</b></span></div>
-        <a href="/" class="back-link" title="Zurück zum Live-Dashboard">← Dashboard</a>
-        <div class="score" aria-live="polite">
+                <div class="score" aria-live="polite">
           <div class="main"><span class="who">DU</span><b class="points" id="sc-points">0 : 0</b><span class="who">CPU</span></div>
           <div class="sub">Spiele <span id="sc-games">0 : 0</span> · Sätze <span id="sc-sets">0 : 0</span> · Aufschlag <span id="sc-serve">Du</span></div>
         </div>
@@ -37,10 +35,10 @@
     <div id="menu" class="overlay">
       <div class="card">
         <img src="disroop.png" alt="" width="56" height="56">
-        <h1>Thingy <b>Tennis</b></h1>
+        <h1><b>Tennis</b></h1>
         <p class="muted">Der Thingy:52 ist dein Schläger.</p>
         <button id="m-start" class="primary">Start</button>
-        <a href="/" class="back-link menu-back">← Dashboard</a>
+        
         <button id="m-diff">Schwierigkeit: <b id="m-diff-v">mittel</b></button>
         <button id="m-cam">Kamera: <b id="m-cam-v">3rd-Person</b></button>
         <button id="m-cal">Kalibrieren</button>
@@ -53,6 +51,8 @@
         <h2>Kalibrieren</h2>
         <p>Halte den Thingy wie einen Schläger: <b>nach vorne Richtung Bildschirm</b>, Knopf nach oben.</p>
         <p>Dann den <b>Knopf am Thingy</b> drücken (oder <b>Enter</b>).</p>
+        <canvas id="cal-3d" width="320" height="220" aria-label="Thingy live: LED grün = Daten kommen, rot = keine Daten"></canvas>
+        <p class="small muted">LED-Loch oben links, USB unten Mitte · LED grün = Thingy liefert Daten, rot = keine Daten · Bogen: <span style="color:#22c55e">grün</span> = sinnvolle Neigung, <span style="color:#ef4444">rot</span> = macht Schulter/Körper nicht mit</p>
         <p class="small muted" id="cal-live">Neigung: –</p>
         <button id="cal-ok" class="primary">Jetzt kalibrieren</button>
         <button id="cal-back">Zurück</button>

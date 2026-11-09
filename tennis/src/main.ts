@@ -7,6 +7,8 @@ import { Sfx } from './audio.ts';
 import { Hud, type Badge } from './hud.ts';
 import { showFps } from './fps.ts';
 import { MotionLink } from './link.ts';
+import { ThingyPreview } from './gfx/thingymodel.ts';
+import { checkLimits } from './core/limits.ts';
 import { LimitMonitor } from './limitsui.ts';
 import { Arena, CAMERAS, CAMERA_LABEL, type CameraMode } from './scene.ts';
 
@@ -21,6 +23,8 @@ const arena = new Arena(stage);
 const hud = new Hud();
 const sfx = new Sfx();
 const ctrl = new MotionController();
+const calCanvas = document.getElementById('cal-3d') as HTMLCanvasElement | null;
+const calPreview = calCanvas ? new ThingyPreview(calCanvas) : null;
 const pendingSwings: GameSwing[] = [];
 const keys = new Set<string>();
 
@@ -209,6 +213,7 @@ function frame(now: number): void {
         ? 'Thingy wie einen Schläger halten. Neigen = laufen, schwingen = schlagen. Knopf lang drücken = neu kalibrieren.'
         : '';
   hud.hint(mode === 'play' ? hint : '');
+  if (mode === 'calibrate') calPreview?.render(ctrl.preview(), ctrl.latest && ctrl.calibration.done ? checkLimits(ctrl.calibration.relative(ctrl.latest.q)).level : 'ok');
   if (mode === 'calibrate') $('cal-live').textContent = ctrl.latest ? `Neigung: ${ctrl.roll().toFixed(0)}°` : 'Kein Thingy verbunden';
   $('m-status').textContent =
     b === 'live' ? 'Thingy verbunden (LIVE)' : b === 'sim' ? 'Simulator verbunden (SIM)' : 'Kein Thingy – Tastatur: Leertaste schlägt, ←/→ laufen';

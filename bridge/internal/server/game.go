@@ -1,6 +1,7 @@
 package server
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -115,4 +116,17 @@ func tennisHandler(app fs.FS) http.Handler {
 		})
 	}
 	return http.StripPrefix("/tennis", staticTypes(http.FileServerFS(app)))
+}
+
+// skiHandler serves the ski page under /ski/; a <base> tag keeps its relative asset paths under /tennis/ski/.
+func skiHandler(app fs.FS) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		page, err := fs.ReadFile(app, "ski/index.html")
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		_, _ = w.Write(bytes.Replace(page, []byte("<head>"), []byte(`<head><base href="/tennis/ski/">`), 1))
+	})
 }
