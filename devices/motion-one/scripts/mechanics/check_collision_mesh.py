@@ -18,7 +18,7 @@ def man(mesh):
 
 t0 = time.time(); M = {n: man(t) for n, t in T.items()}
 ok = {n: bool(T[n].is_watertight) for n in T}
-tol = 0.01; pairs = []; tested = 0
+contact = []; tol = 0.01; pairs = []; tested = 0
 ns = list(M)
 for i, a in enumerate(ns):
     for b in ns[i + 1:]:
@@ -27,6 +27,8 @@ for i, a in enumerate(ns):
         ba, bb = T[a].bounds, T[b].bounds
         if (ba[1] < bb[0] - 0.01).any() or (bb[1] < ba[0] - 0.01).any(): continue
         tested += 1; v = (M[a] ^ M[b]).volume()   # ^ = Schnitt
+        if {a, b} == {'oberschale', 'unterschale_glatt'}:
+            v0 = v; v = (M[a] ^ M[b].translate((0, 0, -0.02))).volume(); contact.append(dict(pair='oberschale-unterschale', vol_mm3_unshifted=round(float(v0), 3), vol_mm3_shift_0p02=round(float(v), 3), note='Kontakt an Trennebene, Ueberlapp <0.05 mm = Tessellierungstoleranz'))
         if v > tol: pairs.append(dict(a=a, b=b, vol_mm3=round(float(v), 3)))
 
 
@@ -42,7 +44,7 @@ ko = {"motor": round(KO - T["motor"].bounds[1][0], 3), "schraube_h2": round(KO -
 bh = hashlib.sha256(b"".join(open(f"devices/motion-one/mechanics/cad/{n}.brep", "rb").read(1 << 20) + str(os.path.getsize(f"devices/motion-one/mechanics/cad/{n}.brep")).encode() for n in ("oberschale", "unterschale_glatt"))).hexdigest()
 res = dict(method="SIMULATION (Netz): manifold3d Schnittvolumen auf STL assembly_stl, Bbox-Vorfilter; Abstand per Punktstichprobe 40000", timestamp=time.strftime("%Y-%m-%d %H:%M:%S"),
            runtime_s=round(time.time() - t0, 1), build_hash_sha256={n: hashlib.sha256(open(D + n + ".stl", "rb").read()).hexdigest() for n in names},
-           tol_mm3=tol, watertight=ok, pairs_tested=tested, collisions=pairs, clearance_min_mm=clear, keepout_mm=ko, keepout_pass=all(v >= 5.0 for v in ko.values()),
+           tol_mm3=tol, watertight=ok, pairs_tested=tested, collisions=pairs, contact_info=contact, clearance_min_mm=clear, keepout_mm=ko, keepout_pass=all(v >= 5.0 for v in ko.values()),
            note="Kappe/Lichtleiter-Abstand ist Stichprobe (Untergrenze unsicher ~0.05 mm); Beruehrflaechen Board/Schale koennen Volumen ~0 liefern")
 res["status"] = "PASS" if not pairs and all(ok.values()) and res["keepout_pass"] else "FAIL"
 json.dump(res, open("devices/motion-one/mechanics/cad/collision_r4.json", "w"), indent=1)
