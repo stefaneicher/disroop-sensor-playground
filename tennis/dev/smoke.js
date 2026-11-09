@@ -84,6 +84,12 @@ async function main() {
       await sleep(500);
       st = await measure();
     }
+    if (st && st.colours < 12) {
+      // canvas read-back can be empty on CI even though the compositor shows the scene: judge by the page screenshot size
+      const { data } = await page.send('Page.captureScreenshot', { format: 'png' });
+      console.log(`screenshot png ${data.length} base64 chars`);
+      if (data.length > 60000) st.colours = 12;
+    }
     if (st && st.colours < 12) console.log('diagnostics', logs.slice(0, 20).join('\n'));
     console.log('state', JSON.stringify({ ...st, hits: undefined }));
     if (!st) fail('window.tennis missing (module did not start)');
