@@ -1,6 +1,6 @@
 {
   "params_file": "scripts/mechanics/params.py",
-  "motor_z0": -12.155656737648142,
+  "motor_z0": -10.85,
   "cap": {
     "z_switch_gap": 1.8,
     "z_flange_top": 7.400000000000001,
@@ -15,17 +15,17 @@
   "inner_volume": 110421.64951452092,
   "parts": {
     "oberschale": {
-      "volume_mm3": 19596.974562868923,
+      "volume_mm3": 20335.013352806483,
       "valid": true,
       "print_bbox": [
-        170.0142432639019,
-        43.60108053022891,
-        13.754368058348623
+        170.4092630038654,
+        43.95883643219493,
+        14.36966671685488
       ],
       "com": [
-        88.92533123989581,
-        -0.055471965339572535,
-        7.177885652205114
+        89.0616009722574,
+        -0.06223477737098361,
+        6.988770457387044
       ],
       "print_flip_about_x": false,
       "print_file": "devices/motion-one/mechanics/print/oberschale"
@@ -63,52 +63,20 @@
       "print_file": "devices/motion-one/mechanics/print/lichtleiter"
     },
     "unterschale_glatt": {
-      "volume_mm3": 27422.977575738834,
+      "volume_mm3": 27625.968049468232,
       "valid": true,
       "print_bbox": [
-        170.2593775321506,
-        43.83133147876621,
-        19.074201166830495
+        170.2704223578854,
+        43.78042774005123,
+        19.078481635304325
       ],
       "com": [
-        80.3840484367246,
-        0.016799485482273405,
-        -8.0033925969033
+        78.9214453407594,
+        -0.0060256489759517055,
+        -8.06687597547339
       ],
       "print_flip_about_x": false,
       "print_file": "devices/motion-one/mechanics/print/unterschale_glatt"
-    },
-    "unterschale_verrippt": {
-      "volume_mm3": 29951.74833889849,
-      "valid": true,
-      "print_bbox": [
-        170.26568988531432,
-        43.84670950756694,
-        19.077357343412363
-      ],
-      "com": [
-        84.16024268791578,
-        0.01322455850883246,
-        -7.858605652364113
-      ],
-      "print_flip_about_x": false,
-      "print_file": "devices/motion-one/mechanics/print/varianten/unterschale_verrippt"
-    },
-    "unterschale_verrippt_ausgespart": {
-      "volume_mm3": 28451.91246177151,
-      "valid": true,
-      "print_bbox": [
-        170.26568988531432,
-        43.84670950756694,
-        19.077357343412363
-      ],
-      "com": [
-        81.9821282909073,
-        0.014033765895660683,
-        -8.041011220133901
-      ],
-      "print_flip_about_x": false,
-      "print_file": "devices/motion-one/mechanics/print/varianten/unterschale_verrippt_ausgespart"
     }
   },
   "section_r_min": 7.483106511697922,
@@ -119,5 +87,42 @@
   ],
   "end_ellipse_r_min": 4.437763776155193,
   "chosen_variant": "glatt",
-  "runtime_s": 2101.2659499645233
+  "runtime_s": 1147.5994222164154,
+  "f08": {
+    "batch": true,
+    "nproc": 1,
+    "fast": false,
+    "times": [
+      [
+        "Schale+Fuegeband",
+        28.79,
+        1
+      ],
+      [
+        "Teil top 468.0s",
+        496.78,
+        1
+      ],
+      [
+        "Teil glatt 598.1s",
+        1094.89,
+        1
+      ],
+      [
+        "Teile fertig",
+        1095.62,
+        1
+      ],
+      [
+        "Export STL/3MF/BREP",
+        1129.18,
+        1
+      ],
+      [
+        "Baugruppe STEP",
+        1147.6,
+        1
+      ]
+    ]
+  }
 }

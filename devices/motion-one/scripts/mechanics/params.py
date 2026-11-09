@@ -33,7 +33,7 @@ W_B = 2.0                 # A Wandstaerke Unterschale (alle Varianten gleich -> 
 W = 2.0                   # A gemeinsame Wandstaerke (Innenkontur = Aussenkontur - W)
 # Fuegestelle nach ADR-0001 (User-Entscheid): Lippe an der Unterschale, Nut in der Oberschale, Schattenfuge aussen.
 # Abstaende d in mm von der Aussenkontur der Trennebene (Draufsicht) nach innen.
-LIP_D0 = 1.2              # A Lippe Aussenkante ab Aussenkontur (Unterschalen-Auflage 0.5..1.2 bleibt als Anlageflaeche)
+LIP_D0 = 1.8              # A Lippe Aussenkante ab Aussenkontur (Unterschalen-Auflage 0.5..1.2 bleibt als Anlageflaeche)
 LIP_W = 1.2               # Q ADR-0001 Lippenbreite
 LIP_H = 2.0               # Q ADR-0001 Lippenhoehe ueber Trennebene
 GROOVE_CLR = 0.25         # A ADR-0001 nennt 0.2; r3 auf 0.25 erhoeht wegen SLS PA12 JLC3DP (+-0.2 mm) und FDM-Eigendruck; Toleranzkoerper MESSUNG NOT RUN

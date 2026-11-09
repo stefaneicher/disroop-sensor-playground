@@ -1,0 +1,36 @@
+Loft aussen V=149873 mm3 valid=True, innen V=110422 (5.0s)
+Fuegeband V=7168 valid=True
+[t]    152.2s Schale+Fuegeband
+Traceback (most recent call last):
+  File "/workspace/devices/motion-one/scripts/mechanics/build_enclosure.py", line 640, in <module>
+    main()
+  File "/workspace/devices/motion-one/scripts/mechanics/build_enclosure.py", line 574, in main
+    res_parts = {j: _build_part(j) for j in jobs}
+                    ^^^^^^^^^^^^^^
+  File "/workspace/devices/motion-one/scripts/mechanics/build_enclosure.py", line 539, in _build_part
+    r = top_shell(_SHELL) if job == "top" else bottom_shell(_SHELL, job)
+        ^^^^^^^^^^^^^^^^^
+  File "/workspace/devices/motion-one/scripts/mechanics/build_enclosure.py", line 394, in top_shell
+    cuts += [groove(), shadow_cutter(+1)]   # ADR-0001
+             ^^^^^^^^
+  File "/workspace/devices/motion-one/scripts/mechanics/build_enclosure.py", line 371, in groove
+    return plan_ring(P.LIP_D0 - c, P.LIP_D0 + P.LIP_W + c, -0.5, P.LIP_H + P.GROOVE_TOP)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/devices/motion-one/scripts/mechanics/build_enclosure.py", line 345, in plan_ring
+    return plan_prism(d0, z0, z1).cut(plan_prism(d1, z0 - 0.1, z1 + 0.1))
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/devices/motion-one/scripts/mechanics/build_enclosure.py", line 341, in plan_prism
+    return cq.Solid.extrudeLinear(cq.Face.makeFromWires(plan_wire(off, z0)), V(0, 0, z1 - z0))
+                                                        ^^^^^^^^^^^^^^^^^^
+  File "/workspace/devices/motion-one/scripts/mechanics/build_enclosure.py", line 337, in plan_wire
+    return w.offset2D(-off, kind)[0] if abs(off) > 1e-9 else w
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/cadquery/occ_impl/shapes.py", line 3137, in offset2D
+    obj = downcast(offset.Shape())
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/cadquery/occ_impl/shapes.py", line 409, in downcast
+    f_downcast: Any = downcast_LUT[shapetype(obj)]
+                                   ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/cadquery/occ_impl/shapes.py", line 399, in shapetype
+    raise ValueError("Null TopoDS_Shape object")
+ValueError: Null TopoDS_Shape object

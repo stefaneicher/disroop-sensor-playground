@@ -333,16 +333,25 @@ def plan_wire(off, z, kind="arc"):
         sec = o.intersect(box(-5, P.L + 5, -40, 40, -0.001, 0.001))
         f = [fa for fa in sec.Faces() if abs(fa.Center().z - 0.001) < 1e-3 and fa.normalAt().z > 0.5]
         _PLAN_W0 = f[0].outerWire().translate(V(0, 0, -0.001))
-    w = _PLAN_W0.offset2D(-off, kind)[0] if abs(off) > 1e-9 else _PLAN_W0
-    return w.translate(V(0, 0, z))
+    w = _PLAN_W0.translate(V(0, 0, z))   # r4-Fix: erst verschieben, dann versetzen (sonst nichtmanifolde Tessellierung bei x=6.5)
+    if abs(off) <= 1e-9:
+        return w
+    for dz in (0.0, 0.003, -0.003, 0.007):   # OCC-Offset scheitert z-abhaengig (Null-Shape) -> Ebene minimal versetzen
+        try:
+            return w.translate(V(0, 0, dz)).offset2D(-off, kind)[0].translate(V(0, 0, -dz))
+        except ValueError:
+            continue
+    return _PLAN_W0.offset2D(-off, kind)[0].translate(V(0, 0, z))
 
 
 def plan_prism(off, z0, z1):
-    return cq.Solid.extrudeLinear(cq.Face.makeFromWires(plan_wire(off, z0)), V(0, 0, z1 - z0))
+    return cq.Solid.extrudeLinear(cq.Face.makeFromWires(plan_wire(off, 0.0)), V(0, 0, z1 - z0)).translate(V(0, 0, z0))   # r4: bei z=0 versetzen, Koerper danach verschieben
 
 
 def plan_ring(d0, d1, z0, z1):
-    return plan_prism(d0, z0, z1).cut(plan_prism(d1, z0 - 0.1, z1 + 0.1))
+    # r4: Ring als Flaeche mit Loch extrudieren (kein Boolean -> keine nichtmanifolden Kanten bei x=6.5)
+    wo, wi = plan_wire(d0, 0.0), plan_wire(d1, 0.0)
+    return cq.Solid.extrudeLinear(cq.Face.makeFromWires(wo, [wi]), V(0, 0, z1 - z0)).translate(V(0, 0, z0))
 
 
 def shadow_cutter(sgn):
@@ -350,16 +359,29 @@ def shadow_cutter(sgn):
     Trennebene liegt im breitesten Schnitt (Aussenwand dort senkrecht) -> Fase SHADOW x SHADOW.
     Prisma z-Bereich liegt strikt innerhalb des Loft-Bereichs (keine koplanaren Deckflaechen)."""
     s = P.SHADOW
-    ws = [plan_wire(s + 0.01, -0.01 * sgn), plan_wire(0.0, s * sgn)]
-    fr = cq.Solid.makeLoft(ws if sgn > 0 else ws[::-1], ruled=True)   # immer von unten nach oben (Orientierung)
+
+    def sw(off, z):   # r4: Spline durch Offset-Punkte (offset2D-Wires erzeugten nichtmanifolde/offene Kanten)
+        p = plan_pts(off, 400)
+        return cq.Wire.assembleEdges([cq.Edge.makeSpline([V(float(x), float(y), z) for x, y in p], periodic=True)])
+    fr = cq.Solid.makeLoft([sw(s + 0.01, -0.01 * sgn), sw(0.0, s * sgn)] if sgn > 0 else [sw(0.0, s * sgn), sw(s + 0.01, -0.01 * sgn)], ruled=True)
     za, zb = -0.005 * sgn, (s - 0.005) * sgn
-    return plan_prism(-3.0, min(za, zb), max(za, zb)).cut(fr)
+    z0, z1 = min(za, zb), max(za, zb)
+    pr = cq.Solid.extrudeLinear(cq.Face.makeFromWires(sw(-3.0, 0.0)), V(0, 0, z1 - z0)).translate(V(0, 0, z0))
+    return pr.cut(fr)
 
 
 def joint_band():
-    """Fuegeband (lokale Innenverdickung) beidseits der Trennebene; wird vor der Teilung in die Schale fusioniert."""
+    """Fuegeband: Slab ∩ Aussenloft minus Innenloft (Offset d1). r4: kein offset2D-Ring (erzeugte nichtmanifolde Kanten bei x=6.5)."""
     d1 = P.LIP_D0 + P.LIP_W + P.GROOVE_CLR + P.BAND_T
-    return plan_ring(1.0, d1, *P.BAND_Z)
+    x0, x1 = P.IN_END, P.L - P.IN_END
+    sc0, lt = P.IN_TAPER
+
+    def fn(x):
+        u = min(x - x0, x1 - x)
+        sc = sc0 + (1 - sc0) * math.sin(0.5 * math.pi * min(1.0, u / lt))
+        return section(x, off=d1, scale=sc)
+    slab = box(-5, P.L + 5, -40, 40, *P.BAND_Z)
+    return OUTER.intersect(slab).cut(loft(stations(x0, x1, lt), fn))
 
 
 def lip():
@@ -558,7 +580,7 @@ def main():
     MOTOR_Z0 = motor_z0()
     print(f"Loft aussen V={OUTER.Volume():.0f} mm3 valid={OUTER.isValid()}, innen V={inner.Volume():.0f} ({time.time()-t0:.1f}s)")
     shell = OUTER.cut(inner)
-    jb = joint_band().intersect(OUTER)
+    jb = joint_band()
     print(f"Fuegeband V={jb.Volume():.0f} valid={jb.isValid()}")
     shell = fuse_all(shell, [jb])
     tick("Schale+Fuegeband")

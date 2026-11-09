@@ -1,0 +1,85 @@
+Loft aussen V=149873 mm3 valid=True, innen V=110422 (4.8s)
+Fuegeband V=11511 valid=True
+[t]     28.8s Schale+Fuegeband
+WARNUNG Fusion verworfen: Vector: (39.99979837888505, 14.73472264238021, 4.0843468830362335)
+WARNUNG Fusion verworfen: Vector: (33.000234261593334, 14.729443605534545, 4.1004210940594845)
+WARNUNG Fusion verworfen: Vector: (66.99878729458152, 14.421779469596286, 3.9186472660851175)
+  Diagnose Schnitt Vector: (114.88049760040074, -2.3635082672043195, 0.24849513897788852): valid=True V=20337.4 base=20334.6
+WARNUNG Schnitt verworfen: Vector: (114.88049760040074, -2.3635082672043195, 0.24849513897788852)
+[t]    496.8s Teil top 468.0s
+  glatt: nach Fusion V=29522 valid=True
+  Batch-Schnitt verworfen -> Schleife
+[t]   1094.9s Teil glatt 598.1s
+Oberschale V=20335 valid=True (1095.6s)
+[t]   1095.6s Teile fertig
+Unterschale glatt: V=27626 valid=True (1096.8s)
+[t]   1129.2s Export STL/3MF/BREP
+/usr/local/lib/python3.12/dist-packages/cadquery/utils.py:82: FutureWarning: save will be removed in the next release.
+  warn(f"{f.__name__} will be removed in the next release.", FutureWarning)
+[t]   1147.6s Baugruppe STEP
+{
+ "params_file": "scripts/mechanics/params.py",
+ "motor_z0": -10.85,
+ "cap": {
+  "z_switch_gap": 1.8,
+  "z_flange_top": 7.400000000000001,
+  "z_top": 11.100000000000001,
+  "z_inner_ceiling": 7.600000000000001
+ },
+ "lightpipe": {
+  "z_bottom": 0.75,
+  "z_top": 10.703921601786258
+ },
+ "outer_volume": 149873.32453472298,
+ "inner_volume": 110421.64951452092,
+ "section_r_min": 7.483106511697922,
+ "section_r_min_at": [
+  85.0,
+  -17.269624616468477,
+  3.9848273059254975
+ ],
+ "end_ellipse_r_min": 4.437763776155193,
+ "chosen_variant": "glatt",
+ "runtime_s": 1147.5994222164154,
+ "f08": {
+  "batch": true,
+  "nproc": 1,
+  "fast": false,
+  "times": [
+   [
+    "Schale+Fuegeband",
+    28.79,
+    1
+   ],
+   [
+    "Teil top 468.0s",
+    496.78,
+    1
+   ],
+   [
+    "Teil glatt 598.1s",
+    1094.89,
+    1
+   ],
+   [
+    "Teile fertig",
+    1095.62,
+    1
+   ],
+   [
+    "Export STL/3MF/BREP",
+    1129.18,
+    1
+   ],
+   [
+    "Baugruppe STEP",
+    1147.6,
+    1
+   ]
+  ]
+ }
+}
+oberschale V=20335 valid True bbox [170.4, 44.0, 14.4]
+tastenkappe V=545 valid True bbox [13.0, 13.0, 9.3]
+lichtleiter V=86 valid True bbox [5.0, 5.0, 10.0]
+unterschale_glatt V=27626 valid True bbox [170.3, 43.8, 19.1]

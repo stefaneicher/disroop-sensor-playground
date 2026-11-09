@@ -1,0 +1,62 @@
+{
+ "devices/motion-one/mechanics/print/oberschale.stl": {
+  "open": 0,
+  "nonman": 0,
+  "watertight": true
+ },
+ "devices/motion-one/mechanics/print/unterschale_glatt.stl": {
+  "open": 32,
+  "nonman": 0,
+  "watertight": false
+ },
+ "devices/motion-one/mechanics/print/tastenkappe.stl": {
+  "open": 0,
+  "nonman": 0,
+  "watertight": true
+ },
+ "devices/motion-one/mechanics/print/lichtleiter.stl": {
+  "open": 0,
+  "nonman": 0,
+  "watertight": true
+ },
+ "devices/motion-one/mechanics/assembly_stl/akku.stl": {
+  "open": 0,
+  "nonman": 0,
+  "watertight": true
+ },
+ "devices/motion-one/mechanics/assembly_stl/lichtleiter.stl": {
+  "open": 0,
+  "nonman": 0,
+  "watertight": true
+ },
+ "devices/motion-one/mechanics/assembly_stl/motor.stl": {
+  "open": 0,
+  "nonman": 0,
+  "watertight": true
+ },
+ "devices/motion-one/mechanics/assembly_stl/oberschale.stl": {
+  "open": 0,
+  "nonman": 0,
+  "watertight": true
+ },
+ "devices/motion-one/mechanics/assembly_stl/pcb_r3.stl": {
+  "open": 0,
+  "nonman": 0,
+  "watertight": true
+ },
+ "devices/motion-one/mechanics/assembly_stl/pcb_r4.stl": {
+  "open": 10,
+  "nonman": 60,
+  "watertight": false
+ },
+ "devices/motion-one/mechanics/assembly_stl/tastenkappe.stl": {
+  "open": 0,
+  "nonman": 0,
+  "watertight": true
+ },
+ "devices/motion-one/mechanics/assembly_stl/unterschale_glatt.stl": {
+  "open": 32,
+  "nonman": 0,
+  "watertight": false
+ }
+}

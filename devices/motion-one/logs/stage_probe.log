@@ -1,0 +1,6 @@
+outer V=149873.3 valid True open 0 nonman 0 x-range None
+inner V=110421.6 valid True open 0 nonman 0 x-range None
+shell V=39452.3 valid True open 0 nonman 0 x-range None
+band V=7168.8 valid True open 0 nonman 927 x-range (6.5, 6.5)
+shell+band V=42995.5 valid True open 0 nonman 927 x-range (6.5, 6.5)
+top_rohling V=20370.8 valid True open 0 nonman 294 x-range (6.5, 6.5)

@@ -1,0 +1,82 @@
+Loft aussen V=149873 mm3 valid=True, innen V=110422 (4.9s)
+Fuegeband V=10222 valid=True
+[t]     29.2s Schale+Fuegeband
+WARNUNG Fusion verworfen: Vector: (39.99979837888505, 14.73472264238021, 4.0843468830362335)
+WARNUNG Fusion verworfen: Vector: (33.000234261593334, 14.729443605534545, 4.1004210940594845)
+WARNUNG Fusion verworfen: Vector: (66.99878729458152, 14.421779469596286, 3.9186472660851175)
+[t]    405.7s Teil top 376.4s
+  glatt: nach Fusion V=29033 valid=True
+[t]    753.0s Teil glatt 347.3s
+Oberschale V=19657 valid=True (742.5s)
+[t]    753.9s Teile fertig
+Unterschale glatt: V=28037 valid=True (743.8s)
+[t]    794.8s Export STL/3MF/BREP
+/usr/local/lib/python3.12/dist-packages/cadquery/utils.py:82: FutureWarning: save will be removed in the next release.
+  warn(f"{f.__name__} will be removed in the next release.", FutureWarning)
+[t]    818.0s Baugruppe STEP
+{
+ "params_file": "scripts/mechanics/params.py",
+ "motor_z0": -10.85,
+ "cap": {
+  "z_switch_gap": 1.8,
+  "z_flange_top": 7.400000000000001,
+  "z_top": 11.100000000000001,
+  "z_inner_ceiling": 7.600000000000001
+ },
+ "lightpipe": {
+  "z_bottom": 0.75,
+  "z_top": 10.703921601786258
+ },
+ "outer_volume": 149873.32453472298,
+ "inner_volume": 110421.64951452092,
+ "section_r_min": 7.483106511697922,
+ "section_r_min_at": [
+  85.0,
+  -17.269624616468477,
+  3.9848273059254975
+ ],
+ "end_ellipse_r_min": 4.437763776155193,
+ "chosen_variant": "glatt",
+ "runtime_s": 805.7278439998627,
+ "f08": {
+  "batch": true,
+  "nproc": 1,
+  "fast": false,
+  "times": [
+   [
+    "Schale+Fuegeband",
+    29.25,
+    1
+   ],
+   [
+    "Teil top 376.4s",
+    405.66,
+    1
+   ],
+   [
+    "Teil glatt 347.3s",
+    752.97,
+    1
+   ],
+   [
+    "Teile fertig",
+    753.85,
+    1
+   ],
+   [
+    "Export STL/3MF/BREP",
+    794.82,
+    1
+   ],
+   [
+    "Baugruppe STEP",
+    817.95,
+    1
+   ]
+  ]
+ }
+}
+oberschale V=19657 valid True bbox [198.7, 59.9, 29.2]
+tastenkappe V=545 valid True bbox [13.0, 13.0, 9.3]
+lichtleiter V=86 valid True bbox [5.0, 5.0, 10.0]
+unterschale_glatt V=28037 valid True bbox [170.3, 43.8, 19.1]

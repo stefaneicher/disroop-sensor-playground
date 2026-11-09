@@ -26,16 +26,32 @@ comps = B.components()
 extra = {k: comps[k] for k in ("akku", "motor", "akku_stecker", "schaum", "j5_stecker", "schraube_h2")}
 res = dict(board_step=P.BOARD_STEP, n_board_solids=len(board), tol_mm3=0.01, pairs=[], clearance_min={})
 tot = 0
+import multiprocessing as mp
+
+
+def _bbo(a, b, m=0.01):
+    x, y = a.BoundingBox(), b.BoundingBox()
+    return not (x.xmax < y.xmin - m or y.xmax < x.xmin - m or x.ymax < y.ymin - m or y.ymax < x.ymin - m or x.zmax < y.zmin - m or y.zmax < x.zmin - m)
+
+
+def _job(a):
+    sn, name, b = a
+    return sn, name, shells[sn].intersect(b).Volume()
+
+
+jobs = []; skipped = 0
 for sn, sh in shells.items():
-    for i, b in enumerate(board):
-        ref = ref_of(b)
-        v = sh.intersect(b).Volume() if sh.BoundingBox().add(b.BoundingBox()) and True else 0
-        if v > res["tol_mm3"]:
-            res["pairs"].append(dict(shell=sn, part=ref, vol_mm3=round(v, 3))); tot += 1
+    for b in board:
+        if _bbo(sh, b): jobs.append((sn, ref_of(b), b))
+        else: skipped += 1
     for k, c in extra.items():
-        v = sh.intersect(c).Volume()
+        if _bbo(sh, c): jobs.append((sn, k, c))
+        else: skipped += 1
+res["bbox_prefilter_skipped"] = skipped; res["pairs_tested"] = len(jobs)
+with mp.get_context("fork").Pool(int(os.environ.get("MO_NPROC", "6"))) as pool:
+    for sn, name, v in pool.imap_unordered(_job, jobs):
         if v > res["tol_mm3"]:
-            res["pairs"].append(dict(shell=sn, part=k, vol_mm3=round(v, 3))); tot += 1
+            res["pairs"].append(dict(shell=sn, part=name, vol_mm3=round(v, 3))); tot += 1
     # Mindestabstand Schale -> Bauteile (ohne PCB-Platte, die geklemmt wird)
     if sn in ("tastenkappe", "lichtleiter"):   # Abstand nur Kleinteile (Schalen: BRepExtrema ueber 60 Koerper > 10 min)
         d = min(sh.distance(b) for b in board if ref_of(b) != "PCB")
