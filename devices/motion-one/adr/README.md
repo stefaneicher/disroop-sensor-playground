@@ -31,3 +31,10 @@ Wichtige Entscheide werden je Disziplin als ADR festgehalten, **mit Bild** (Skiz
 | [firmware/ADR-0002](firmware/ADR-0002-nur-rtt.md) | Kein UART, nur RTT | Angenommen | 2026-11-08 |
 | [firmware/ADR-0003](firmware/ADR-0003-motor-leistungsbegrenzung.md) | Motor-PWM ≤ 3.0 V, Arbitrierung | Angenommen | 2026-11-08 |
 | [firmware/ADR-0004](firmware/ADR-0004-erweiterung-treiber.md) | Treiber J5: Stick, Touch, LED-Pins r4 | Angenommen | 2026-11-08 |
+| [electronics/ADR-0003](electronics/ADR-0003-funkmodul-e73.md) | Funkmodul E73-2G4M08S1C (nRF52840) | Angenommen (nachträglich) | 2026-11-09 |
+| [electronics/ADR-0004](electronics/ADR-0004-imu-icm45686.md) | IMU TDK ICM-45686 | Angenommen (nachträglich) | 2026-11-09 |
+| [electronics/ADR-0005](electronics/ADR-0005-lader-tp4056.md) | Lader TP4056 mit diskretem Power-Path | Angenommen (nachträglich) | 2026-11-09 |
+| [electronics/ADR-0006](electronics/ADR-0006-regler-xc6206.md) | 3V3-Regler XC6206P332MR (LDO) | Angenommen (nachträglich) | 2026-11-09 |
+| [electronics/ADR-0007](electronics/ADR-0007-akkuschutz-dw01a.md) | Akkuschutz DW01A + FS8205A | Angenommen (nachträglich) | 2026-11-09 |
+| [electronics/ADR-0008](electronics/ADR-0008-usb-c-esd.md) | USB-C TYPE-C-31-M-12 mit ESD USBLC6-2SC6 | Angenommen (nachträglich) | 2026-11-09 |
+| [electronics/ADR-0009](electronics/ADR-0009-bedienteile.md) | Bedien- und Ausgabeteile: SW1, SW2, RGB-LED, Summer, NTC, Akkustecker | Angenommen (nachträglich) | 2026-11-09 |
