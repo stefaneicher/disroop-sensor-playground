@@ -4,6 +4,7 @@
 	(generator_version "9.0")
 	(uuid "484afd0a-4bd2-4ca4-b001-2c8aa2211354")
 	(paper "A2")
+	(title_block (title "Disroop Motion One - Schaltplan UI r4") (date "2026-11-09") (rev "r4") (company "Disroop") (comment 1 "V1 Baseline, KiCad 10"))
 	(lib_symbols
 		(symbol "ui:TTP233H-BA6"
 			(in_bom yes)

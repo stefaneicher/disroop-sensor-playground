@@ -1,0 +1,12 @@
+{
+ "label": "SIMULATION (Netz, Punktstichprobe)",
+ "quelle_skript": "scripts/mechanics/check_r4_final.py, Abschnitt 2 Lippenspiel",
+ "quelle_ausgabe": "mechanics/cad/final_checks_r4.json -> lippenspiel (aus vorhandenem Lauf uebernommen, Skript nicht neu gelaufen, da es weitere Dateien ueberschreibt)",
+ "eingabe": "mechanics/assembly_stl/unterschale_glatt.stl, oberschale.stl",
+ "methode": "200000 Oberflaechenpunkte Unterschale, Auswahl 0.3 < z < 1.9 mm; Abstand zu 400000 Punkten Oberschale (cKDTree), seed 1",
+ "min_mm": 0.191,
+ "p5_mm": 0.252,
+ "nominal_mm": 0.25,
+ "n": 8476,
+ "hinweis": "Minimum ist Stichprobenwert (Untergrenze unsicher), Messung an Hardware: NOT RUN"
+}

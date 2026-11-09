@@ -97,7 +97,7 @@ for m in noconn:
     items.append(['no_connect', ['at', x, y], ['uuid', U()]])
 
 sch = ['kicad_sch', ['version', 20250114], ['generator', Q('eeschema')], ['generator_version', Q('9.0')],
-       ['uuid', root], ['paper', Q('A2')], ['lib_symbols'] + list(libsyms.values())] + items + \
+       ['uuid', root], ['paper', Q('A2')], ['title_block', ['title', Q('Disroop Motion One - Schaltplan MAIN r4')], ['date', Q('2026-11-09')], ['rev', Q('r4')], ['company', Q('Disroop')]], ['lib_symbols'] + list(libsyms.values())] + items + \
       [['sheet_instances', ['path', Q('/'), ['page', Q('1')]]], ['embedded_fonts', 'no']]
 open(OUT, 'w').write(dump(sch) + '\n')
 import json
