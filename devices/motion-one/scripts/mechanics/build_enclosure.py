@@ -296,7 +296,7 @@ def cap_geom():
 def lightpipe_geom():
     x, y = LED
     z_in = z_top_out(x) - P.W
-    z0 = P.LED_SZ[2] + 0.2
+    z0 = P.LED_SZ[2] + P.LP_GAP
     z_top = z_top_out(x) + P.LP_PROUD
     zc = z_in - 0.2
     cone_h = (P.LP_COLLAR_D - P.LP_D) / 2
