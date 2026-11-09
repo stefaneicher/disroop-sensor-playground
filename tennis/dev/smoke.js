@@ -63,7 +63,7 @@ async function main() {
       const t = await evalJs('window.tennis ? window.tennis.game().t : 0').catch(() => 0);
       if (t > 2 && (!opts['expect-sim'] || i > 8)) break;
     }
-    const st = await evalJs(`(() => {
+    const measure = () => evalJs(`(() => {
       const t = window.tennis; if (!t) return null;
       const c = document.querySelector('#stage canvas');
       const probe = document.createElement('canvas'); probe.width = 64; probe.height = 36;
@@ -74,6 +74,12 @@ async function main() {
                colours: colours.size, badge: document.getElementById('badge').textContent, points: document.getElementById('sc-points').textContent,
                gl: !!c.getContext('webgl2') };
     })()`);
+    // slow CI runners need a while until the first frame is actually rasterised
+    let st = await measure();
+    for (let i = 0; i < 120 && st && st.colours < 12; i++) {
+      await sleep(500);
+      st = await measure();
+    }
     console.log('state', JSON.stringify({ ...st, hits: undefined }));
     if (!st) fail('window.tennis missing (module did not start)');
     else {
