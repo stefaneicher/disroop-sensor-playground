@@ -11,3 +11,5 @@
 | 7 | `metrics.json` firmware_* zeigt noch V1 (32 Tests, 158724 B); aktuell 69/0, FLASH 161100 B, RAM 37604 B. | im Bericht korrigiert | MESSUNG |
 | 8 | Die UI-Platine an J5 ist eine optionale Erweiterungsplatine, nicht Teil des Geräts r4 und im Gehäuse r4 nicht vorgesehen. | dokumentiert | QUELLE: Schaltplan r4-C, UI-Seite |
 | 9 | Bei der hierarchischen Schaltplanintegration wurden auf den PCBs 54 Netze der Hauptplatine bzw. 12 Netze der UI-Platine explizit umbenannt; die Geometrie und elektrischen Pin-Gruppen sind unverändert. Netzklassenmuster und Schaltplan-Verknüpfungen wurden nachgeführt. | Parität 0, offene Verbindungen 0; Beleg pcb_namespace_migration.json | BERECHNUNG, PASS |
+| 10 | Schieber SW1: Spielvorgabe seitlich 0,2 mm normal zu den 45°-Fasen umgesetzt; rein in −z ergibt sich 0,28 mm. | dokumentiert | SIMULATION |
+| 11 | Schieber SW1: Kragen kann frei +2°/−5° kippen, bevor er die Führungsleisten berührt; begrenzt wird es durch den Hebel im Schlitz (±0,1 mm). Wandstärke nach Pad-Einbau, Slice und Probedruck NOT RUN. | Probedruck nötig | SIMULATION, NOT RUN |
