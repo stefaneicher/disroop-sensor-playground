@@ -49,6 +49,10 @@ async function main() {
     page.on('Runtime.consoleAPICalled', (e) => {
       if (e.type === 'error') errors.push(`console.error: ${e.args.map((a) => a.value ?? a.description).join(' ')}`);
     });
+    const logs = [];
+    page.on('Runtime.consoleAPICalled', (e) => logs.push(`${e.type}: ${e.args.map((a) => a.value ?? a.description).join(' ')}`));
+    await page.send('Log.enable').catch(() => {});
+    page.on('Log.entryAdded', (e) => logs.push(`log ${e.entry.level}: ${e.entry.text}`));
     await page.send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 720, deviceScaleFactor: 1, mobile: false });
     const url = `${base}?demo=1&nohint&cam=${cam}`;
     await page.send('Page.navigate', { url });
@@ -80,6 +84,7 @@ async function main() {
       await sleep(500);
       st = await measure();
     }
+    if (st && st.colours < 12) console.log('diagnostics', logs.slice(0, 20).join('\n'));
     console.log('state', JSON.stringify({ ...st, hits: undefined }));
     if (!st) fail('window.tennis missing (module did not start)');
     else {
