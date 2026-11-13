@@ -1,4 +1,4 @@
-"""Kollision per Netz (manifold3d Schnittvolumen) auf den dichten STLs in Einbaulage. Ersetzt den BREP-Lauf. Ausgabe mechanics/cad/collision_r4.json"""
+"""Kollision per Netz (manifold3d Schnittvolumen) auf den dichten STLs in Einbaulage. Ersetzt den BREP-Lauf. Ausgabe mechanics/cad/collision_r5.json\nr5: Platine als Vereinigung der 40 einzeln vernetzten STEP-Koerper (Dichtheit je Koerper), nicht aus dem verschmolzenen STL."""
 import json, hashlib, time, sys, os, numpy as np, trimesh, manifold3d as m3
 from scipy.spatial import cKDTree
 sys.path.insert(0, os.path.dirname(__file__))
@@ -16,8 +16,21 @@ def man(mesh):
     return m3.Manifold(m3.Mesh(vert_properties=np.asarray(mesh.vertices, np.float32), tri_verts=np.asarray(mesh.faces, np.uint32)))
 
 
-t0 = time.time(); M = {n: man(t) for n, t in T.items()}
+def pcb_bodies():
+    import cadquery as cq
+    st = cq.importers.importStep("devices/motion-one/" + P.BOARD_STEP).solids().vals()
+    out = []
+    for s in st:
+        s = s.translate(cq.Vector(P.BOARD_X0, +P.BOARD_W / 2, P.Z_BB)); vs, fs = s.tessellate(0.05, 0.3)
+        out.append(trimesh.Trimesh(np.array([v.toTuple() for v in vs]), np.array(fs), process=True))
+    return out
+
+
+PB = pcb_bodies(); PB_WT = sum(bool(b.is_watertight) for b in PB)
+t0 = time.time(); M = {n: man(t) for n, t in T.items() if n != "pcb_r4"}
+M["pcb_r4"] = m3.Manifold.batch_boolean([man(b) for b in PB], m3.OpType.Add)
 ok = {n: bool(T[n].is_watertight) for n in T}
+ok["pcb_r4"] = bool(PB_WT == len(PB))   # je STEP-Koerper dicht (STL-Gesamtnetz hat Beruehrkanten)
 contact = []; tol = 0.01; pairs = []; tested = 0
 ns = list(M)
 for i, a in enumerate(ns):
@@ -47,10 +60,9 @@ res = dict(method="SIMULATION (Netz): manifold3d Schnittvolumen auf STL assembly
            tol_mm3=tol, watertight=ok, pairs_tested=tested, collisions=pairs, contact_info=contact, clearance_min_mm=clear, keepout_mm=ko, keepout_pass=all(v >= 5.0 for v in ko.values()),
            note="Kappe/Lichtleiter-Abstand ist Stichprobe (Untergrenze unsicher ~0.05 mm); Beruehrflaechen Board/Schale koennen Volumen ~0 liefern")
 _mech = all(v for n, v in ok.items() if n != "pcb_r4")
-_bodies = T["pcb_r4"].split(only_watertight=False)
-res["pcb_r4_koerper"] = dict(bodies=len(_bodies), watertight=int(sum(b.is_watertight for b in _bodies)), whole_watertight=ok["pcb_r4"],
+res["pcb_r4_koerper"] = dict(bodies=len(PB), watertight=int(PB_WT), method="je STEP-Volumenkoerper getrennt vernetzt, Vereinigung per manifold3d",
                              note="STEP-Tessellat des PCB-Agents (Fremdteil), Mechanik-Teile separat bewertet; Kollisionsmessung per Schnittvolumen bleibt gueltig, wenn Schnitt 0")
 res["status_mechanik_teile"] = "PASS" if not pairs and _mech and res["keepout_pass"] else "FAIL"
 res["status"] = "PASS" if res["status_mechanik_teile"] == "PASS" and ok["pcb_r4"] else ("PARTIAL" if res["status_mechanik_teile"] == "PASS" else "FAIL")
-json.dump(res, open("devices/motion-one/mechanics/cad/collision_r4.json", "w"), indent=1)
+json.dump(res, open("devices/motion-one/mechanics/cad/collision_r5.json", "w"), indent=1)
 print(json.dumps({k: v for k, v in res.items() if k not in ("build_hash_sha256",)}, indent=1))
