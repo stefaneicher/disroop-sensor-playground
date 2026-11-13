@@ -11,7 +11,7 @@ Konkrete, offene Aufgaben für das ganze Repo. Ideen ohne Entscheid stehen in [`
 
 ### Thingy / Spiele (siehe `RESUME.md`)
 - [ ] (Dashboard) Ausrichtung prüfen: Heading und Pitch-Vorzeichen, dann Würfel, LED-Position und 3D-Modell korrigieren.
-- [ ] (NFC) Tag neu schreiben (`thingy.exe nfc`) und prüfen, dass der Tap die App öffnet.
+- [x] (NFC) Tag neu schreiben und Tap prüfen — 2026-11-09 gemäss PROGRESS, Meilenstein 11.
 - [ ] (Tennis/Ski) Mit echten Bewegungen live testen, Schwellen nachjustieren.
 - [ ] (Release) Optional Release-Tag mit exe und apk.
 
@@ -44,9 +44,12 @@ Status aller Punkte: **offen**.
 - [ ] (Hosting) Relay-Hosting entscheiden (offene Frage im Konzept), Deployment in CI.
 
 ### Motion One (siehe `devices/motion-one/management/RESUME.md`)
-- [ ] (Elektronik/Mechanik/Firmware) Iteration abschliessen: Board an Mechanik-Handoff anpassen, CAD und Kollision neu prüfen, DTS-Pinmap aus `PINOUT_V1.json`.
-- [ ] (Docs/Media) §11 Montage- und Benutzeranleitung, Renderings.
-- [ ] (Sourcing) Angebote für PCBA und 3D-Druck beim selben Hersteller, J2 JST-SH C160402 nachführen.
-- [ ] (Release) §12 Integrationsreview, §13 `releases/V1_BASELINE/`.
+- [x] (Firmware) r4-Pinmap integrieren und Host-Build prüfen — gespeicherte Belege vom 2026-11-09, abgeglichen 2026-11-13; kein Hardwaretest.
+- [ ] (Mechanik) r5 aus aktuellen Parametern neu bauen, Kollisions-/Wand-/Spiel-/PCB-Körperprüfung und Slice dokumentieren; explode.json gemeinsam erneuern.
+- [ ] (Docs/Media) Vorhandene r4-Drafts und Renderings nach integrierter Revision und Passprobe aktualisieren; nicht als r5 darstellen.
+- [ ] (Sourcing) Aktuelle Verfügbarkeit, DFM/Rotation und Gesamtangebot für freizugebende Revision bestätigen; alte r3-Uploadpakete nicht ungeprüft verwenden.
+- [x] (Release) Historische V1-Baseline angelegt — 2026-11-09; keine Fertigungsfreigabe.
+- [ ] (Integration) Offene Gates aus `devices/motion-one/management/PROJECT_STATE.md` schliessen.
+- [ ] (Dateien) Manuell ausgewiesene Aufräumkandidaten aus `docs/DATEI_AUDIT.html` auf Werkzeug-/Reproduktionsbedarf prüfen; Release-/Prüfbelege erhalten.
 
 ## Erledigt

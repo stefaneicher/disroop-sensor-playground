@@ -2,6 +2,16 @@
 
 Dieser Ordner enthält digitale Übergabedateien für Platinenbestückung und 3D-Druck.
 
+**Abgleich 2026-11-13:** Dateien sind revisionsgebundene Entwurfs-/Übergabestände,
+keine Fertigungsfreigabe für die aktuellen r5-Mechanikquellen. Insbesondere liegen
+in `upload/` noch ältere Anbieterpakete mit r3-Dateinamen; der Generator
+`scripts/electronics/mk_upload.py` kopiert inzwischen r4-Gerber unter diesem alten
+Namen. Name und Inhalt sind daher kein eindeutiger Revisionsnachweis; den
+Hash-Abgleich im [Dateiaudit](../../../docs/DATEI_AUDIT.html) beachten.
+Nicht ungeprüft hochladen oder aus
+verschiedenen Revisionen kombinieren. Verbindlicher Stand:
+[PROJECT_STATE](../management/PROJECT_STATE.md).
+
 ## PCB/PCBA
 
 `pcba/` enthält das Gerber-/Bohrdaten-ZIP, JLCPCB-BOM und CPL sowie PCB-Renderings. ERC/DRC wurden am KiCad-Entwurf

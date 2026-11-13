@@ -29,9 +29,9 @@ Alle Sensorwerte laufen per Bluetooth LE live ins Terminal, in ein Web-Dashboard
 
 *Abfahrt auf Lauberhorn und Streif, der Thingy ist der Lenker: kippen = lenken, Nase runter = Hocke, Ruck = Sprung. http://127.0.0.1:8052/ski oder in der Android-App über „⛷ Ski“. Mehr in [docs/SKI.md](docs/SKI.md).*
 
-> **Keine Firmware, kein Flashen, kein Debugger.** Für dieses Projekt wird keine Firmware gebaut. Der Thingy läuft unverändert mit der Nordic-Werksfirmware (v2.x). Unsere Software ist ein reiner **BLE-Client**:
-> - **Empfangen:** Sie abonniert die GATT-Notifications des Thingy (Sensordaten) und dekodiert sie.
-> - **Senden:** Sie schreibt Befehle in GATT-Characteristics: Ton für das Lied, LED-Farbe, Sensor-Intervalle, NFC-Inhalt.
+> **Thingy:52-Pfad: keine Firmware, kein Flashen, kein Debugger.** Für den Thingy wird keine eigene Firmware gebaut. Der Thingy läuft unverändert mit der Nordic-Werksfirmware (v2.x). Bridge und Android-App sind **BLE-Clients**:
+> - **Empfangen:** Sie abonnieren die GATT-Notifications des Thingy (Sensordaten) und dekodieren sie.
+> - **Senden:** Sie schreiben Befehle in GATT-Characteristics: Ton für das Lied, LED-Farbe, Sensor-Intervalle, NFC-Inhalt.
 >
 > Das hat Grenzen: Es geht nur, was die Werksfirmware anbietet. So ist z. B. die Mikrofon-Abtastrate fest auf 16 kHz. Deshalb ist die Lautstärkemessung standardmässig aus, sie würde die BLE-Verbindung überlasten.
 >
@@ -39,6 +39,8 @@ Alle Sensorwerte laufen per Bluetooth LE live ins Terminal, in ein Web-Dashboard
 > Thingy:52 (Werks-FW) ──BLE──▶ thingy.exe (Windows) ──▶ Terminal + Web-Dashboard :8052
 >                      ──BLE──▶ Android-App ch.disroop.sensorplayground (direkt, Start per NFC)
 > ```
+
+Das separate Motion-One-Teilprojekt enthält dagegen eigene Firmwareentwürfe.
 
 ## Features
 
@@ -108,9 +110,26 @@ tennis/                 Tennis: eigenes Spiel (TypeScript + three.js, kein Bundl
 android/                Android-App (Kotlin, Compose) + reines Kotlin-Modul :protocol
 shared/                 chorus.json (Lied), telemetry.example.json (Beispiel-Snapshot)
 docs/                   Protokoll-Vertrag, Schema, Architektur, Anleitungen
-devices/motion-one/     Eigener Controller „Disroop Motion One“: V1-Entwurf in Entwicklung (PCB, Firmware, ergonomisches Gehäuse); Release 1: [V1_BASELINE](devices/motion-one/releases/V1_BASELINE/VERIFIKATIONSMATRIX.md); Status und nächste Schritte: [Resume](devices/motion-one/management/RESUME.md)
+devices/motion-one/     Eigener Controller „Disroop Motion One“: digitaler Entwurf, nicht hardwarevalidiert
 build/                  Build-Ausgaben (nicht im Git)
 ```
+
+## Motion One: aktueller Stand und Archiv
+
+PCB/Firmware liegen auf r4; die Mechanikquellen enthalten r5-Änderungen, aber noch
+keine gespeicherten r5-Prüfergebnisse. Verbindlich ist der
+[Projektstand](devices/motion-one/management/PROJECT_STATE.md), visuell aufbereitet im
+[aktuellen Überblick](devices/motion-one/media/presentation/index.html).
+Die [V1-Baseline](devices/motion-one/releases/V1_BASELINE/VERIFIKATIONSMATRIX.md) und
+der r3-Zwischenbericht bleiben historische Nachweise, keine aktuelle Fertigungsfreigabe.
+
+Das [Dateiaudit](docs/DATEI_AUDIT.html) bewertet Projektpfade, Referenzhinweise und
+bytegleiche Duplikate. Erneut erzeugen: `node scripts/audit-files.mjs`.
+Fehlende Textreferenzen allein rechtfertigen keine Löschung.
+
+Nach Veröffentlichung auf `main` direkt als HTML:
+[Projektüberblick](https://raw.githack.com/stefaneicher/disroop-sensor-playground/main/devices/motion-one/media/presentation/index.html)
+und [Dateiaudit](https://raw.githack.com/stefaneicher/disroop-sensor-playground/main/docs/DATEI_AUDIT.html).
 
 ## Dokumentation
 

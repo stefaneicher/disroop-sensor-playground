@@ -1,5 +1,21 @@
 # Motion One – Resume
 
+## Aktuelle Fortsetzung (Abgleich 2026-11-13)
+
+**Verbindlich ist [PROJECT_STATE.md](PROJECT_STATE.md).** PCB/Firmware r4,
+Mechanikquellen r5; keine gespeicherten r5-Prüfergebnisse. Nächster technischer
+Schritt: reproduzierbarer r5-Neubau mit Kollisions-, Wand-/Spiel- und
+PCB-Körperprüfung sowie gemeinsam erneuerten Baugruppen-Metadaten. Keine
+Bestellung, kein Druck oder Flashen durch diesen Statusabgleich beauftragt.
+
+Der r3-Zwischenbericht ist als Archiv gekennzeichnet; aktueller visueller Einstieg:
+[Projektüberblick](../media/presentation/index.html). Die Dateibewertung steht im
+[Dateiaudit](../../../docs/DATEI_AUDIT.html). Die folgenden datierten Abschnitte sind
+historische Übergaben; „läuft“, „offen“ oder Agent-IDs dort sind keine aktuelle
+Live-Statusmeldung. Bei Widerspruch gilt PROJECT_STATE mit seinen Belegen.
+
+## Historischer Verlauf
+
 Stand 2026-11-08 06:45 CET. This is the authoritative task resume for Motion One. Read the repo-wide rules and resume hierarchy in [`../../../RESUME.md`](../../../RESUME.md) as well; root RESUME preserves older Thingy:52 context. Also check the repo-wide [`TODO.md`](../../../TODO.md) and [`IDEEN.md`](../../../IDEEN.md) and keep them current; run `git pull --rebase` at session start and push regularly.
 
 ## Current state

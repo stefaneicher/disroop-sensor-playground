@@ -5,10 +5,12 @@ LED, Summer und Akku. Sie basiert auf Zephyr und wird im separaten Firmware-Dock
 
 ## Stand
 
-Codec-, Profil-, Sensorfusions- und IMU-Hosttests: **32/32 PASS** im dokumentierten Lauf. Zephyr-App und UF2/HEX-Images
-sind gebaut. Die Pinbelegung war zunächst ein Platzhalter; die Übernahme aus `../electronics/PINOUT_V1.json` und der
-anschliessende Build laufen. Darum ist Firmware V1 PARTIAL. BLE, IMU, Laden, Akkulaufzeit und Wake-on-motion wurden
-nicht auf echter Hardware getestet (NOT RUN).
+Standabgleich 2026-11-13: Der gespeicherte r4-Lauf dokumentiert **69 Host-Tests ohne
+Fehler**, Pincheck und Bootloader-Pincheck [QUELLE/BERECHNUNG:
+`../logs/fw-pinmap/unit-tests.log`]. Die r4-Pinmap ist integriert; Zephyr-App und
+UF2/HEX-Images liegen vor. Dies ist kein neuer Testlauf. Gesamtstatus **PARTIAL**:
+BLE, IMU, Laden, Akkulaufzeit und Wake-on-motion sind nicht auf echter Hardware
+getestet (NOT RUN). Verbindlicher Gesamtstand: [PROJECT_STATE](../management/PROJECT_STATE.md).
 
 ## Verzeichnisstruktur
 

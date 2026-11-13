@@ -1,18 +1,17 @@
 # Task-Board
-| ID | Aufgabe | Agent | Status |
-|---|---|---|---|
-| T01 | Inspektion Repo/Umgebung | Manager | PASS |
-| T02 | Agents + Skills anlegen | Manager | PASS |
-| T03 | Werkzeug-Image um CadQuery/Gmsh/CalculiX erweitern | Manager | PASS |
-| T04 | Firmware-Image (Zephyr/NCS) | firmware-engineer | PASS: Zephyr 4.5.0 / SDK 1.0.1; Image gebaut |
-| T05 | Smoke-Tests §5 je Spezialist | alle | PASS: Elektronik, SPICE, Beschaffung, Firmware, CAD/FEM/Slicer, Media/PDF; siehe Handoffs |
-| T06 | Anforderungen V1 (§6) | systems-engineer | PASS: IDs, Verifikationsmethode, Quellen und Status |
-| T07 | Architektur/IMU/Budgets (§7) | systems-engineer | PASS: Architektur E73/nRF52840, ICM-45686, Budgets; Datenblatt-Vorbehalte dokumentiert |
-| T08 | KiCad, Analyse, Beschaffung (§8) | pcb-engineer | PARTIAL: KiCad/ERC/DRC/Fertigungsdaten bereit; finale Angebots- und Mechanik-Abstimmung offen |
-| T09 | Firmware (§9) | firmware-engineer | PARTIAL: 32/32 Host-Tests, UF2; Pinout-Integration läuft, Hardwaretests NOT RUN |
-| T10 | Gehäuse, FEM, Slice (§10) | mechanical-engineer | PARTIAL: CAD/Export/Slice PASS; FEM-Netzstudie und Abgleich mit PCB r2 offen |
-| T11 | Media und Anleitungen (§11) | docs-media-engineer | IN PROGRESS: Quellengebundene Montage-/Bedienungs-Drafts beauftragt; finaler Media-Stand wartet auf integrierte Revision |
-| T12 | Bericht, Baseline V1 (§13) | Manager | IN PROGRESS: technischer Bericht als Entwurf erstellt; finaler PDF/Release benötigt abgeschlossene Integrationsrunde und Verifikationsmatrix |
-| T13 | engineering-change vorbereiten (§14) | Manager | PARTIAL: Skill angelegt |
-| T11b | Media/Anleitungen r4 | docs-media-engineer | PARTIAL: Renders, PDFs, Pre-release erstellt; Draft, nichts am Muster geprueft |
-| T12b | Release 1 (§13) | Manager | PARTIAL: Pre-release motion-one-v1.0, Bericht-PDF, Matrix, Manifest; Hardware NOT RUN |
+
+Abgleich: 2026-11-13. Verbindlicher Stand und Belege:
+[PROJECT_STATE.md](PROJECT_STATE.md). Dies ist keine Live-Agentenliste.
+Alte Ausführungsstände bleiben in den datierten Handoffs und im Journal erhalten.
+
+| Aufgabe | Status | Nachweis / Fortsetzung |
+|---|---|---|
+| Anforderungen und Architektur | PARTIAL | Quellen und Entscheide vorhanden; Hardwareverifikation offen |
+| PCB r4 / Schaltplan r4-C | PARTIAL | Gespeicherte Integrationsbelege vorhanden; DFM, Rotation und Musterprüfung offen |
+| Firmware r4 / Pinmap | PARTIAL | Gespeicherter Log: 69 Tests ohne Fehler, Pinchecks; Hardware NOT RUN |
+| Mechanik r5 | NOT RUN | Parameter/Werkzeuge geändert, neuer Bau-/Prüfergebnisstand fehlt |
+| Alte Mechanikbelege r4 | PARTIAL | Hash-Abgleich der Kollisions-Eingaben passend; Wand/Spiel/PCB-Körper offen, explode.json veraltet |
+| Anleitungen / Media | PARTIAL | r4-Drafts und Exporte vorhanden, nicht am Muster validiert |
+| V1-Baseline | PARTIAL | Historischer r4-Snapshot vorhanden, Manifestabweichungen auch an geschützten Artefakten klären; keine r5-Freigabe |
+| Projektstand / Präsentation / Dateiaudit | PARTIAL | Aktueller Einstieg und Archiveinordnung erstellt; unklare Aufräumkandidaten bewusst erhalten |
+| Hardware / Bestellung | NOT RUN | Kein neuer Durchführungsnachweis im Repository |

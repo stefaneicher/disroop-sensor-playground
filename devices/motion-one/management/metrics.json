@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "release": "pre-baseline V1 design; integration not yet signed off",
+  "release": "Historical V1/r4 metrics with firmware log corrections (2026-11-13); V1_BASELINE exists; no r5/hardware sign-off. Current status: PROJECT_STATE.md",
   "metrics": [
     {
       "name": "board_outline",
       "value": "70 x 25 x 1.0",
       "unit": "mm",
       "classification": "QUELLE",
-      "revision": "PCB INTERFACES r2",
-      "evidence": "electronics/kicad/motion-one/export/heights.json",
+      "revision": "PCB INTERFACES r4",
+      "evidence": "management/INTERFACES.json",
       "status": "PARTIAL"
     },
     {
@@ -175,29 +175,29 @@
     },
     {
       "name": "firmware_flash_size",
-      "value": 158724,
+      "value": 161100,
       "unit": "bytes",
       "classification": "MESSUNG",
-      "revision": "Firmware V1",
-      "evidence": "logs/fw-v1/app-build.log",
+      "revision": "Firmware r4, saved 2026-11-09 build",
+      "evidence": "logs/fw-pinmap/app-build.log",
       "status": "PASS"
     },
     {
       "name": "firmware_ram_size",
-      "value": 36196,
+      "value": 37604,
       "unit": "bytes",
       "classification": "MESSUNG",
-      "revision": "Firmware V1",
-      "evidence": "logs/fw-v1/app-build.log",
+      "revision": "Firmware r4, saved 2026-11-09 build",
+      "evidence": "logs/fw-pinmap/app-build.log",
       "status": "PASS"
     },
     {
       "name": "firmware_host_test_count",
-      "value": 32,
+      "value": 69,
       "unit": "tests",
-      "classification": "MESSUNG",
-      "revision": "Firmware V1",
-      "evidence": "logs/fw-v1/unit-tests.log",
+      "classification": "BERECHNUNG (sum of eight saved host-test summaries; scripts/audit-files.mjs)",
+      "revision": "Firmware r4, saved 2026-11-09 run",
+      "evidence": "logs/fw-pinmap/unit-tests.log",
       "status": "PASS"
     },
     {

@@ -4,6 +4,14 @@ Hier liegen Schaltplan, KiCad-Layout, elektrische Simulationen, Baugruppenexport
 
 ## Stand
 
+Standabgleich 2026-11-13: PCB r4 mit integriertem hierarchischem Schaltplan r4-C.
+Die gespeicherten Integrationsbelege vom 2026-11-09 melden Netzlisten MATCH, ERC
+ohne Fehler und keine offenen Verbindungen; Hauptplatine mit zwei DRC-Warnungen,
+UI ohne DRC-Warnungen [QUELLE:
+`exports/pruefbelege_schaltplan_r4/hierarchy-integration.json`]. Die UI-Platine ist
+optional und nicht Teil des Geräts/Gehäuses r4. Gesamtstatus **PARTIAL**;
+verbindlich ist [PROJECT_STATE](../management/PROJECT_STATE.md).
+
 Das V1-Board ist als 4-Lagen-KiCad-Projekt (70 × 25 × 1,0 mm) erstellt und vollständig geroutet. Der dokumentierte
 Prüflauf meldet ERC: 0 Fehler und DRC: 0 Fehler/0 unverbundene Netze; zwei USB-C-Silkscreen-Warnungen sind begründet.
 SPICE-Fälle für Power-Path, Einschaltstrom, Summer/Motor und Akku-Messteiler wurden simuliert.
@@ -40,4 +48,7 @@ Werkzeuge ausschliesslich im Hardware-Image ausführen, zum Beispiel:
 ./project hw run "ngspice -b devices/motion-one/electronics/spice/powerpath.cir"
 ```
 
-Die genauen Generator-, ERC-, DRC- und Exportbefehle stehen in `../scripts/electronics/` und im PCB-Handoff.
+Der aktuelle Hauptschaltplan-Generator ist `../scripts/electronics/gen_mo_sch_hier.py`.
+Ältere Generatoren und Migrationsskripte sind keine austauschbaren Einstiegspunkte:
+Sie können ältere Stände erzeugen oder Quellen verändern. Die genauen Generator-,
+ERC-, DRC- und Exportbefehle stehen in `../scripts/electronics/` und im datierten PCB-Handoff.

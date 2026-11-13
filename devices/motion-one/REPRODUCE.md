@@ -1,6 +1,28 @@
 # Motion One – Reproduzierbarkeit
 
-Alle Werkzeuge laufen in Docker; der Host braucht keine CAD- oder Firmware-Toolchain. Aus dem Repo-Wurzelordner:
+**Einordnung 2026-11-13:** Der verbindliche Stand steht in
+[PROJECT_STATE](management/PROJECT_STATE.md). Mechanikquellen r5 und gespeicherte
+r4-Ergebnisse sind nicht dieselbe Revision. Die folgenden Release-Kommandos
+dokumentieren den historischen Baseline-Aufbau: `make_release.py` nicht
+ungeprüft erneut ausführen, da sonst der Snapshot aus aktuellen, nicht
+gemeinsam freigegebenen Eingaben überschrieben werden kann.
+
+## Dateiaudit ohne CAD-/Firmware-Neubau
+
+```sh
+node scripts/audit-files.mjs
+node --test tests/audit-files.test.mjs
+```
+
+Aufruf aus der Repository-Wurzel. Der Generator schreibt ausschliesslich
+`docs/DATEI_AUDIT.html`; er hasht Projektdateien und vergleicht vorhandene
+Kollisions-/Baugruppen- sowie Release-Kopien. Er führt keine Hardware- oder
+CAD-Tests aus und löscht keine Dateien. Referenzhinweise und bytegleiche
+Duplikate sind keine automatische Löschentscheidung. Ignorierte lokale
+Pfade werden nur aufgelistet, ihre Inhalte nicht untersucht.
+
+Die CAD-/Firmware-Werkzeuge laufen in Docker; der Host braucht keine entsprechende
+Toolchain. Das Dateiaudit oben nutzt Node.js. Aus dem Repo-Wurzelordner:
 
 ```sh
 # Hardware-/CAD-Werkzeug-Image und dessen Werkzeug-Smoke-Tests

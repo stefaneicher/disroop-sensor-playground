@@ -1,5 +1,11 @@
 # Resume: hier weitermachen, falls die Session abbricht
 
+> **Statusabgleich 2026-11-13:** Für Motion One ist
+> [`management/PROJECT_STATE.md`](devices/motion-one/management/PROJECT_STATE.md)
+> verbindlich. Aktueller Überblick und r3-Archiv sind getrennt; das Dateiaudit
+> liegt unter [`docs/DATEI_AUDIT.html`](docs/DATEI_AUDIT.html).
+> Ältere datierte Fortsetzungen unten sind historischer Kontext.
+
 > **Resume-Hierarchie:** Das Root-`RESUME.md` enthält Repo-weite Regeln und verweist auf spezialisierte Resumes. Bei einer
 > Aufgabe in einem Teilprojekt ist das `RESUME.md` im tiefsten passenden Projektordner massgeblich; lies es zusätzlich
 > zu den Root-Regeln. Bei Konflikten gilt der spezifischere Projektstand für dessen Teilprojekt.

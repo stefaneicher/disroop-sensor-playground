@@ -1,6 +1,7 @@
 {
   "project": "disroop-sensor-playground",
   "updated": "2026-11-09T11:00+01:00",
+  "snapshot_notice": "Historische Threads, keine Live-Agentenliste. Aktueller Stand (Abgleich 2026-11-13): devices/motion-one/management/PROJECT_STATE.md",
   "threads": [
     {
       "id": "T-01",

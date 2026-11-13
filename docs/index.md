@@ -3,6 +3,8 @@
 | Dokument | Inhalt |
 |---|---|
 | [../README.md](../README.md) | Überblick, Features, Quickstart, Android-Installation, NFC |
+| [../devices/motion-one/management/PROJECT_STATE.md](../devices/motion-one/management/PROJECT_STATE.md) | Verbindlicher Motion-One-Stand: Quellenrevisionen, Ergebnisrevisionen und offene Gates |
+| [DATEI_AUDIT.html](DATEI_AUDIT.html) | Suchbares Dateiinventar mit Referenzen, Duplikaten und konservativer Aufräumbewertung |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Komponenten, Datenfluss, Ports & Adapters, Android-Architektur, Entscheide |
 | [USAGE.md](USAGE.md) | alle `./project`-Befehle, `thingy.exe`-Flags, Dashboard, Lied, LED, NFC, App |
 | [DEVELOPMENT.md](DEVELOPMENT.md) | Devcontainer, TDD, Tests je Bereich, Smoke-Tests, neuen Sensor hinzufügen, CI |

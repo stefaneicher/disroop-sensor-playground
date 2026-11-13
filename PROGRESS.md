@@ -1,6 +1,8 @@
 # Progress
 
-Stand: 2026-11-07 20:30. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
+Statusabgleich: 2026-11-13. Die Meilensteine dokumentieren den bisherigen Verlauf.
+Verbindlicher Motion-One-Stand: [PROJECT_STATE](devices/motion-one/management/PROJECT_STATE.md).
+✅ = dokumentiert erledigt, 🔄 = offen/teilweise, ⬜ = offen.
 
 ## Meilensteine
 | # | Meilenstein | Status | Notiz |
@@ -27,12 +29,12 @@ Stand: 2026-11-07 20:30. ✅ = erledigt, 🔄 = in Arbeit, ⬜ = offen.
 | 19 | Android-UI wie Web, Tennis + Ski in der App | ✅ | 0c38ca9 |
 | 20 | Umbenennung zu `disroop-sensor-playground` | ✅ | NFC-Tag neu geschrieben (siehe 11) |
 | 21 | Thingy-Ausrichtung im Dashboard (180°?) | 🔄 | wartet auf Kompass-Test des Users |
-| 22 | Eigener Controller „Disroop Motion One“: Vorab-Test, Prompt 1 (Entwicklung), Prompt 2 (Video, Produktseite) | 🔄 | Prompt 1 V1-Entwurf: PCB, Firmware, ergonomisches CAD, FEM und Druckdaten vorhanden; Integration und Release-Baseline offen. Hardwaretests/Bestellung NOT RUN. Siehe `devices/motion-one/management/RESUME.md` |
+| 22 | Eigener Controller „Disroop Motion One“ | 🔄 | PARTIAL: PCB/Firmware r4, Mechanikquellen r5 ohne gespeicherte r5-Prüfergebnisse. Historische V1-Baseline vorhanden; Hardware NOT RUN. Siehe `devices/motion-one/management/PROJECT_STATE.md` |
 | 23 | Copyright Stefan Eicher fürs ganze Repo | ✅ | `LICENSE` |
 
 ## Erkenntnisse
 - Toolversionen (geprüft 2026-11-06): Go 1.27.3, Node 26.13.0 (LTS), Gradle 9.9.0, Android platform 36, build-tools 36.1.0, cmdline-tools 16111833 (android-37 nicht im alten Repo-Format verfügbar), Docker 29.9.3.
 - PowerShell kann keine WinRT-BLE-Events abonnieren → BLE nur über die Go-exe.
 
-- Motion One: §1–§7 und Pflicht-Smokes §5 PASS; PCB/Mechanik/Firmware V1 PARTIAL, Integrationsrunde aktiv; Baseline und Media/Doku offen. Siehe `devices/motion-one/management/PROJECT_STATE.md`
+- Motion One: Quellen, ältere Smoke-Belege, Media/Doku und Baseline vorhanden. Gespeicherte Prüfungen sind revisionsgebunden; r5-Mechanik noch ohne Neubau-/Prüfergebnisse. Siehe `devices/motion-one/management/PROJECT_STATE.md`.
 - Motion One Release 1 (V1 Baseline, Pre-release `motion-one-v1.0`): digitale Prüfungen PARTIAL, Hardware NOT RUN; siehe `devices/motion-one/releases/V1_BASELINE/`.

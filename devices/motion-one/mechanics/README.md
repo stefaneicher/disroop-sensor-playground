@@ -5,6 +5,13 @@ Ausschnitt, Akkuhalterung, Summeröffnung und Vibrationsmotorhalter.
 
 ## Stand
 
+**Abgleich 2026-11-13:** Quellen und Prüfwerkzeuge enthalten r5-Änderungen
+(`params.py`: neue Lippe/Nut-Vorgaben). Die vorhandenen gespeicherten CAD-/
+Kollisions-/Passungsbelege stammen weiterhin aus r4. **r5-Neubau, Prüfung und
+Slice sind NOT RUN.** Die folgenden datierten Abschnitte dokumentieren den
+historischen Verlauf, keine aktuelle Freigabe. Verbindlich:
+[PROJECT_STATE](../management/PROJECT_STATE.md).
+
 Das V1-Design ist ein beidhändig nutzbarer, taillierter Griff mit Fingerwellen und Daumenmulde. CAD-Teile, STEP,
 STL/3MF, Toleranzkörper und PETG-Slicerprojekt sind erzeugt; Gehäusezeit laut Slicer 3 h 56 min und 71,6 g Material
 (SIMULATION, nicht gemessener Druck). Ergonomie und Passungen sind nicht physisch getestet.
@@ -54,3 +61,9 @@ Risiken für den ersten Druck (Prototypenphase): (1) Wand an Nut/Fuge dünn, mit
 - Details und Liste fehlender Elemente: [Handoff](../management/handoffs/mechanical-engineer/2026-11-09-r4-luecken.md).
 - Nachtrag: USB-Aussparung 14x8x4.45, Klemmrippen repariert (Innenraum-Subtraktion), Clips im Build, SW1-Hebel 1.4, Servicedurchbruch J4, Schieber-Prägung I/O. Stand Netz-Kollision: 0 (SIMULATION). Details im Handoff.
 - Abschlussdurchlauf (2026-11-09): Akku-Halte-Nasen (`BAT_TABS`) und J1-Stützrippe (`J1_RIB`, nimmt nur Steckkraft auf, **keine** Kabelzugentlastung) eingebaut. Netz-Kollision 0, Schieber-Endlagen ±1.5 mm 0 mm³ (SIMULATION, PASS). Lippenspiel min 0.191 mm, p5 0.252 mm (Soll 0.25, PASS). Wand per Voxel-EDT 0.4 mm: Min 0.8 mm (Oberschale bei 4.4/-6.8/3.2, Unterschale 35.2/-15.2/0.0), also unter 1.0 mm Ziel: **PARTIAL/FAIL**, Auflösung grenzwertig. Clip-Balken: Dehnung 0.54 % < 2 % (BERECHNUNG, PASS). 4. Clip: nicht gebaut (kein Platz). `pcb_r4.stl`: gleiche SHA, Zählung 38/72 dicht bei Mechanik vs. 40/40 beim PCB-Agent, Methode nicht geklärt; Gesamtlabel jetzt PARTIAL (Mechanikteile PASS). FEM und Slice: NOT RUN. Die Unterschale hatte ein 4-Kanten-Loch an der Lippe; es wurde im STL durch zwei Dreiecke geschlossen (`fix_tjunction.py`), das BREP ist unverändert. Details: [Handoff Abschluss](../management/handoffs/mechanical-engineer/2026-11-09-r4-abschluss.md).
+
+**Korrektur der Einordnung (2026-11-13):** Das oben historisch als PASS übernommene
+Lippenspiel ist **PARTIAL**: Das Minimum 0.191 mm unterschreitet das damalige Soll
+0.25 mm; p5 oberhalb des Solls ersetzt keinen Minimum-Nachweis
+[SIMULATION: `cad/final_checks_r4.json`]. Für r5 liegt weiterhin kein neuer
+Passungsnachweis vor. Der datierte Handoff bleibt als Originalbeleg unverändert.

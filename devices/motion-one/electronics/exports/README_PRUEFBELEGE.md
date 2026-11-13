@@ -1,5 +1,12 @@
 # Pruefbelege r4 (Disroop Motion One)
 
+**Einordnung 2026-11-13:** Die folgende Tabelle ist ein älterer r4-Prüfstand.
+Für die integrierte hierarchische Schaltplanfassung r4-C gelten die neueren
+Belege in `pruefbelege_schaltplan_r4/hierarchy-integration.json` und der
+[Handoff vom 2026-11-09](../../management/handoffs/pcb-engineer/2026-11-09-schaltplan-lesbar.md).
+Die dort erwähnten Exportpakete liegen inzwischen bytegleich in der lokalen
+V1-Baseline. Eine erneute Hardware-/Fertigungsfreigabe folgt daraus nicht.
+
 Stand 2026-11-09. Pfade relativ zu devices/motion-one/. Inhalte wurden gelesen (nicht nur Dateiexistenz). Reale Hardware: NOT RUN.
 
 | Beleg | Ergebnis (1 Zeile) | Label |

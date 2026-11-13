@@ -1,5 +1,23 @@
 # Journal
 
+## 2026-11-13 – Projektstand, Präsentationsarchiv und Dateiaudit
+
+- Verbindlichen Motion-One-Stand in `management/PROJECT_STATE.md` abgeglichen:
+  PCB/Firmware r4; Mechanikquellen r5, aber gespeicherte Mechanikergebnisse r4.
+- Kollisions-Eingaben und Export-/Release-Kopien per SHA-256 verglichen;
+  überholten Unterschalen-Hash in `explode.json` ausdrücklich als offenen Befund erfasst.
+- Vollständiges Baseline-Manifest und Anbieter-Gerber geprüft: weitere
+  Manifestabweichungen auch an geschützten Artefakten sowie nicht mehr zur
+  heutigen r4-Quelle passende Anbieter-Gerber ausgewiesen, nicht überschrieben.
+- Aktuellen Projektüberblick angelegt; r3-Präsentation und weitere ältere
+  Präsentationen unter denselben URLs als Archiv gekennzeichnet.
+  Startseite, README und Status-Einstiege darauf ausgerichtet.
+- Reproduzierbares Dateiaudit mit Einzelpfaden, Referenzhinweisen, SHA-256-
+  Duplikaten und konservativen Empfehlungen erstellt. Fehlende Textreferenzen
+  sind keine Löschfreigabe; lokale ignorierte Inhalte nur aufgelistet.
+- Keine CAD-/PCB-/Firmwarequellen oder historischen Baselines gelöscht oder neu
+  gebaut. Vorbestehende lokale Änderung am Baugruppen-Viewer nicht angefasst.
+
 | Zeit | Was | Ergebnis |
 |---|---|---|
 | 2026-11-06 21:05 | Neues Projekt `thingy52-live` angelegt | Abgespalten vom Blinky-Repo |

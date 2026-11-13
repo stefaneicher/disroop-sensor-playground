@@ -1,8 +1,12 @@
 # Präsentationen
 
+**Aktueller Einstieg:** [Projektüberblick](index.html), abgeglichen am 2026-11-13.
+Verbindlicher Status: [PROJECT_STATE.md](../../management/PROJECT_STATE.md).
+Die folgenden datierten Seiten bleiben als historische Dokumente erreichbar.
+
 | Datei | Inhalt | Stand |
 |---|---|---|
-| [ZWISCHENBERICHT_2026-11-08_r3.html](ZWISCHENBERICHT_2026-11-08_r3.html) | Technische Präsentation: Funktionen, 3D-Ansicht zusammengebaut + Explosion, Komponenten, Preis, Design-Herleitung, Stand | r3, Fügestelle noch v1 |
+| [ZWISCHENBERICHT_2026-11-08_r3.html](ZWISCHENBERICHT_2026-11-08_r3.html) | Historischer Snapshot; eingebettete Geometrie und Preis-/Aufgabenstände nicht aktuell | ARCHIV: r3, Fügestelle noch v1 |
 
 Eigenständige HTML-Datei (STL eingebettet, three.js per CDN – Internet nötig). Im Browser öffnen; Zahlen sind QUELLE/BERECHNUNG/ANNAHME, siehe BOM_V1 und ANGEBOTE_V1.
 
