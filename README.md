@@ -109,7 +109,6 @@ android/                Android-App (Kotlin, Compose) + reines Kotlin-Modul :pro
 shared/                 chorus.json (Lied), telemetry.example.json (Beispiel-Snapshot)
 docs/                   Protokoll-Vertrag, Schema, Architektur, Anleitungen
 devices/motion-one/     Eigener Controller „Disroop Motion One“: V1-Entwurf in Entwicklung (PCB, Firmware, ergonomisches Gehäuse); Release 1: [V1_BASELINE](devices/motion-one/releases/V1_BASELINE/VERIFIKATIONSMATRIX.md); Status und nächste Schritte: [Resume](devices/motion-one/management/RESUME.md)
-projects/voice-bridge/  Git-Submodul: [Voice-Bridge](https://github.com/stefaneicher/voice-bridge), Push-to-Talk-Spracheingabe (Electron); `git submodule update --init`
 build/                  Build-Ausgaben (nicht im Git)
 ```
 
