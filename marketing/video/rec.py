@@ -6,16 +6,16 @@ MODE: still -> one screenshot to build/shots/NAME.jpg
       rt   -> real-time screenshots, resampled to 30 fps later
 """
 import asyncio, sys, os, time, json, shutil
+from lang import BUILD, LANG
 from playwright.async_api import async_playwright
 name, url, mode, D = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+url = url.replace("{lang}", LANG)
 if D.startswith("scene:"):  # e.g. scene:s7*0.45 -> fraction of scene s7's length (narration + pads)
     sid, _, frac = D[6:].partition("*")
-    _B = os.path.join(os.path.dirname(os.path.abspath(__file__)), "build")
-    D = (json.load(open(f"{_B}/durations.json"))[sid] + 1.5) * float(frac or 1) + 0.2
+    D = (json.load(open(f"{BUILD}/durations.json"))[sid] + 1.5) * float(frac or 1) + 0.2
 D = float(D)
 warm = float(sys.argv[5]) if len(sys.argv) > 5 else 0
 FPS = 30
-BUILD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "build")
 CHROME = os.environ.get("CHROME_BIN", "/usr/bin/chromium")
 out = f"{BUILD}/clips/{name}"
 if mode != "still":
@@ -44,6 +44,8 @@ async def main():
         if mode == "shim": await pg.add_init_script(SHIM)
         await pg.goto(url, timeout=60000)
         if mode == "still":
+            # embedded players (e.g. the YouTube video on the home page) stay out of the stills
+            await pg.add_style_tag(content="h2:has(+ .video), .video { display: none !important }")
             await pg.wait_for_timeout(3000)
             await pg.screenshot(path=f"{BUILD}/shots/{name}.jpg", type="jpeg", quality=92)
             await b.close(); return

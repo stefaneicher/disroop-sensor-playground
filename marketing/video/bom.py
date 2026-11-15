@@ -1,6 +1,6 @@
 """BOM rows for the video (main board r3 table of devices/motion-one/sourcing/BOM_V1.md) -> build/bom.json."""
 import json, os
-B = os.path.dirname(os.path.abspath(__file__)); os.makedirs(f"{B}/build", exist_ok=True)
+B = os.path.dirname(os.path.abspath(__file__)); os.makedirs(f"{B}/build", exist_ok=True)  # shared by all languages
 rows = []
 for l in open(f"{B}/../../devices/motion-one/sourcing/BOM_V1.md", encoding="utf-8"):
     if l.startswith("| C"):

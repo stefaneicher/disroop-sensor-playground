@@ -1,8 +1,8 @@
 """Mix narration (build/tts) with a quiet synthetic ambient bed -> build/narration_mix.wav."""
 import json, os, numpy as np, soundfile as sf
-B = os.path.dirname(os.path.abspath(__file__)); BUILD = f"{B}/build"
-SR = 24000
-sc = json.load(open(f"{B}/script.json")); dur = json.load(open(f"{BUILD}/durations.json"))
+from lang import SCRIPT, BUILD
+sc = json.load(open(SCRIPT, encoding="utf-8")); dur = json.load(open(f"{BUILD}/durations.json"))
+SR = sf.info(f"{BUILD}/tts/{sc[0]['id']}.wav").samplerate
 PAD_IN, PAD_OUT = 0.6, 0.9
 parts = []
 for s in sc:
