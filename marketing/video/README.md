@@ -4,7 +4,7 @@ Rund 2 Minuten, Englisch und Deutsch, mit Sprecherstimme und Untertiteln: Playgr
 Tennis- und Ski-Demo, Motion One als 3D-Explosionsansicht, Platine r3, Stückliste (BOM) und SLS-Gehäuse.
 
 Ergebnis: [`sensor-playground-explainer.mp4`](sensor-playground-explainer.mp4) (1920 × 1080, 30 fps, H.264/AAC), auf YouTube: https://youtu.be/hHnMrmjFHO4 (eingebunden auf der [Startseite](https://stefaneicher.github.io/disroop-sensor-playground/)).
-Deutsch: [`sensor-playground-explainer-de.mp4`](sensor-playground-explainer-de.mp4).
+Deutsch: [`sensor-playground-explainer-de.mp4`](sensor-playground-explainer-de.mp4), auf YouTube: https://youtu.be/GS7jUteytK8. Die Startseite zeigt Deutsch, mit Umschalter auf Englisch.
 
 ```bash
 ./project video build    # alles: web + tennis build, Stimme, Aufnahme, Schnitt (Docker)
