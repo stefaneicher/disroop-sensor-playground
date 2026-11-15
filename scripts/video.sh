@@ -8,7 +8,7 @@ invideo() {
   if ! docker image inspect "$VIMAGE" >/dev/null 2>&1 || [[ "${REBUILD:-0}" == 1 ]]; then
     docker build -t "$VIMAGE" "$ROOT/marketing/video" >&2
   fi
-  docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e VOICE="${VOICE:-am_michael}" --shm-size=1g \
+  docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e VOICE="${VOICE:-am_michael}" -e VIDEO_LANG="${VIDEO_LANG:-en}" --shm-size=1g \
     -v "$ROOT":/workspace -w /workspace "$VIMAGE" bash -c "$*"
 }
 

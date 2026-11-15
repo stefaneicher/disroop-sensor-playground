@@ -5,10 +5,10 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import numpy as np
 
 W, H, FPS = 1920, 1080, 30
-BASE = os.path.dirname(os.path.abspath(__file__))
-os.chdir(os.path.join(BASE, "build"))   # clips/, shots/, durations.json live here
+from lang import SCRIPT, BUILD, UI
+os.chdir(BUILD)   # clips/, shots/, tts/, durations.json of this language
 
-SC = json.load(open(os.path.join(BASE, "script.json")))
+SC = json.load(open(SCRIPT, encoding="utf-8"))
 DUR = json.load(open("durations.json")) if os.path.exists("durations.json") else {}
 PAD_IN, PAD_OUT = 0.6, 0.9   # silence before/after each narration clip
 
@@ -136,12 +136,12 @@ def frame(si, scene, t, total, imgs, gt):
         if imgs: img.paste(crop(composite(imgs, t, total), 1.0, .5, .5).resize((W, H)), (0, 0)); d = ImageDraw.Draw(img)
         title1, title2 = "DISROOP", "SENSOR PLAYGROUND"
         y0 = 360
-        d.text((W/2, y0-70), "SHOWCASE  //  BUILT BY AI", font=fsub, fill=tuple(int(c*a) for c in CYAN), anchor="mm")
+        d.text((W/2, y0-70), UI["tag"], font=fsub, fill=tuple(int(c*a) for c in CYAN), anchor="mm")
         for i, (txt, col) in enumerate([(title1, WHITE), (title2, GREEN)]):
             n = int(len(txt)*min(1, max(0, (t-0.4-0.6*i)/1.0)))
             d.text((W/2, y0+60+i*140), txt[:n], font=ftitle, fill=col, anchor="mm")
         if t > 2.2:
-            d.text((W/2, 760), "motion becomes a controller", font=fsub, fill=DIM, anchor="mm")
+            d.text((W/2, 760), UI["sub"], font=fsub, fill=DIM, anchor="mm")
     else:
         pic = composite(imgs, t, total)
         if scene.get("outro") and p > 0.55:

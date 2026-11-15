@@ -1,0 +1,260 @@
+[
+ {
+  "id": "s1",
+  "label": "00 · INTRO",
+  "images": [
+   {
+    "clip": "explode",
+    "dim": 0.75
+   }
+  ],
+  "title": true,
+  "text": "Willkommen im Disroop Sensor Playground. Hier wird Bewegung zum Controller."
+ },
+ {
+  "id": "s2",
+  "label": "01 · DER PLAYGROUND",
+  "images": [
+   {
+    "src": "shots/home.jpg",
+    "z": [
+     1.0,
+     1.35
+    ],
+    "f": [
+     [
+      0.5,
+      0.3
+     ],
+     [
+      0.15,
+      0.75
+     ]
+    ]
+   }
+  ],
+  "text": "Die Idee ist einfach. Du hältst einen Sensor in der Hand. Du bewegst dich. Und ein Spiel im Browser antwortet. Zwei Spiele, ein eigenes Handgerät und die ganze Entwicklungsgeschichte dahinter, alles auf einer Seite."
+ },
+ {
+  "id": "s3",
+  "label": "02 · DER WÜRFEL",
+  "images": [
+   {
+    "clip": "dash",
+    "z": [
+     1.0,
+     1.0
+    ],
+    "f": [
+     [
+      0.5,
+      0.5
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "until": 0.3
+   },
+   {
+    "clip": "dash",
+    "z": [
+     1.25,
+     1.6
+    ],
+    "f": [
+     [
+      0.55,
+      0.55
+     ],
+     [
+      0.95,
+      0.95
+     ]
+    ],
+    "off": 0.3
+   }
+  ],
+  "text": "Alles begann mit einem Würfel. Der Nordic Thingy:52 sendet Beschleunigung, Gyro, Kompass, Temperatur und Luftdruck per Bluetooth Low Energy, live in ein Web-Dashboard und eine Android-App. Mit der Werksfirmware. Nichts muss geflasht werden.",
+  "say": "Alles begann mit einem Würfel. Der Nordic Thingy zweiundfünfzig sendet Beschleunigung, Gyro, Kompass, Temperatur und Luftdruck per Bluetooth Low Energy, live in ein Web-Dashboard und eine Android-App. Mit der Werksfirmware. Nichts muss geflasht werden."
+ },
+ {
+  "id": "s4",
+  "label": "03 · EXPERIMENT: TENNIS",
+  "images": [
+   {
+    "clip": "tennis",
+    "z": [
+     1.0,
+     1.18
+    ],
+    "f": [
+     [
+      0.5,
+      0.6
+     ],
+     [
+      0.5,
+      0.7
+     ]
+    ]
+   }
+  ],
+  "text": "Experiment eins: Tennis. Der Würfel wird zum Schläger. Du schlägst, der Bewegungssensor erkennt den Treffer, und der Ball fliegt über den Platz im Flutlicht."
+ },
+ {
+  "id": "s5",
+  "label": "04 · EXPERIMENT: SKI",
+  "images": [
+   {
+    "clip": "ski",
+    "z": [
+     1.15,
+     1.0
+    ],
+    "f": [
+     [
+      0.5,
+      0.6
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ]
+   }
+  ],
+  "text": "Experiment zwei: die Lauberhorn-Abfahrt. Kippen zum Lenken. Nase nach unten für die Hocke. Ein kurzer Ruck zum Springen. Dein Handgelenk ist der Skifahrer."
+ },
+ {
+  "id": "s6",
+  "label": "05 · GERÄT: MOTION ONE",
+  "images": [
+   {
+    "clip": "explode",
+    "z": [
+     1.0,
+     1.0
+    ],
+    "f": [
+     [
+      0.5,
+      0.5
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ]
+   }
+  ],
+  "text": "Dann reichte der Würfel nicht mehr. Hier kommt Motion One, ein Handcontroller, komplett neu entworfen. Tastenkappe, Oberschale, Platine, Akku und eine Unterschale mit Clips. Er spricht dasselbe Bluetooth-Profil wie der Thingy, die Spiele laufen also unverändert."
+ },
+ {
+  "id": "s7",
+  "label": "06 · ENGINEERING",
+  "images": [
+   {
+    "clip": "pcb",
+    "z": [
+     1.0,
+     1.1
+    ],
+    "f": [
+     [
+      0.5,
+      0.5
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "until": 0.4
+   },
+   {
+    "clip": "bom",
+    "z": [
+     1.0,
+     1.0
+    ],
+    "f": [
+     [
+      0.5,
+      0.5
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "off": 0.4,
+    "until": 0.82
+   },
+   {
+    "src": "shots/sls.jpg",
+    "z": [
+     1.0,
+     1.25
+    ],
+    "f": [
+     [
+      0.5,
+      0.2
+     ],
+     [
+      0.5,
+      0.35
+     ]
+    ],
+    "off": 0.82
+   }
+  ],
+  "text": "Die Dokumentation ist ungewöhnlich ehrlich. Jede Aussage trägt ein Label: Quelle, Berechnung oder Annahme. Platine Revision drei, mit einer Stückliste, die gegen den Live-Lagerbestand des Lieferanten geprüft ist. Berechnet rund zwanzig Dollar Teilekosten pro Gerät. Und ein Gehäuse aus Nylonpulver, gedruckt im selektiven Lasersintern."
+ },
+ {
+  "id": "s8",
+  "label": "07 · AUSBLICK",
+  "images": [
+   {
+    "clip": "ski",
+    "z": [
+     1.25,
+     1.05
+    ],
+    "f": [
+     [
+      0.5,
+      0.5
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "until": 0.5
+   },
+   {
+    "src": "shots/home.jpg",
+    "z": [
+     1.3,
+     1.0
+    ],
+    "f": [
+     [
+      0.2,
+      0.3
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "off": 0.5
+   }
+  ],
+  "outro": true,
+  "text": "Und das Bemerkenswerte: KI-Agenten haben alles gebaut, jedes Werkzeug läuft in Docker. Ein Spielplatz, ja. Aber auch ein Ausblick, wie KI vom Bildschirm in die physische Welt wechselt."
+ }
+]

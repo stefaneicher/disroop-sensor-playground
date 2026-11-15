@@ -26,14 +26,20 @@ canvas{display:block}
 <script type="module">
 import * as T from 'three';
 import {STLLoader} from 'three/addons/loaders/STLLoader.js';
-const q=new URLSearchParams(location.search); const mode=q.get('mode')||'explode';
+const q=new URLSearchParams(location.search); const mode=q.get('mode')||'explode'; const de=q.get('lang')==='de';
+const TX=de?{top:'Oberschale',bot:'Unterschale mit Clips',cap:'Tastenkappe',lg:'Lichtleiter',sw:'Schiebeschalter',pcb:'Platine',bat:'Akku',mot:'Vibrationsmotor',
+  h1:'Stückliste · Motion One',sub:'HAUPTPLATINE r3 · 35 POSITIONEN · JLCPCB-TEILE-API · LAGERPRÜFUNG ≥ 10×',cols:['LCSC','TEIL','WERT','MENGE','LAGER','≥10×','USD'],tot:'Teile pro Gerät:',calc:'(Berechnung)'}
+ :{top:'Top shell',bot:'Bottom shell with clips',cap:'Button cap',lg:'Light guide',sw:'Slide switch',pcb:'Circuit board',bat:'Battery',mot:'Vibration motor',
+  h1:'Bill of Materials · Motion One',sub:'MAIN BOARD r3 · 35 POSITIONS · JLCPCB PARTS API · STOCK CHECK ≥ 10×',cols:['LCSC','PART','VALUE','QTY','STOCK','≥10×','USD'],tot:'Parts per device:',calc:'(calculation)'};
 const ease=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
 window.ready=false;
 if(mode==='bom'){
   document.getElementById('bom').style.display='block';
+  document.querySelector('#bom h1').textContent=TX.h1; document.querySelector('#bom .sub').textContent=TX.sub;
+  document.getElementById('tot').innerHTML=`${TX.tot} <span id="sum">0.00</span> USD <small style="font:20px DejaVu Sans Mono;color:#7aa">${TX.calc}</small>`;
   const rows=await (await fetch('build/bom.json')).json();
   const tb=document.getElementById('tb');
-  tb.innerHTML='<div class="r h"><div>LCSC</div><div>PART</div><div>VALUE</div><div>QTY</div><div>STOCK</div><div>≥10×</div><div class="usd">USD</div></div>'+
+  tb.innerHTML='<div class="r h">'+TX.cols.map((c,i)=>`<div${i==6?' class="usd"':''}>${c}</div>`).join('')+'</div>'+
    rows.map(r=>`<div class="r"><div>${r.lcsc}</div><div>${r.mpn.slice(0,22)}</div><div>${r.val.slice(0,15)}</div><div>${r.qty}</div><div>${(+r.stock).toLocaleString('de-CH')}</div><div class="ok">${r.ok}</div><div class="usd">${r.usd}</div></div>`).join('');
   const els=[...tb.children].slice(1);
   window.renderAt=(t,D)=>{
@@ -54,10 +60,10 @@ if(mode==='bom'){
   const g=new T.GridHelper(1200,60,0x16403c,0x0d2422);g.rotation.x=Math.PI/2;g.position.z=-90;S.add(g);
   const L=new STLLoader(); const load=f=>new Promise(r=>L.load('/devices/motion-one/mechanics/assembly_stl/'+f,r));
   const parts=mode==='pcb'?[['pcb_r3','',0x1f9d55,0,[0,0,0]]]:[
-    ['oberschale','Top shell',0xd8dee2,1,[0,0,30]],['unterschale_glatt','Bottom shell with clips',0x9fb4b8,1,[0,0,-30]],
-    ['tastenkappe','Button cap',0xf59e0b,0,[0,0,55]],['lichtleiter','Light guide',0xe5e7eb,0,[0,0,50]],
-    ['schieber','Slide switch',0x84e65a,0,[0,40,25]],['pcb_r4','Circuit board',0x22c55e,0,[0,0,10]],
-    ['akku','Battery',0x3b82f6,0,[0,0,-12]],['motor','Vibration motor',0xef4444,0,[0,0,-20]]];
+    ['oberschale',TX.top,0xd8dee2,1,[0,0,30]],['unterschale_glatt',TX.bot,0x9fb4b8,1,[0,0,-30]],
+    ['tastenkappe',TX.cap,0xf59e0b,0,[0,0,55]],['lichtleiter',TX.lg,0xe5e7eb,0,[0,0,50]],
+    ['schieber',TX.sw,0x84e65a,0,[0,40,25]],['pcb_r4',TX.pcb,0x22c55e,0,[0,0,10]],
+    ['akku',TX.bat,0x3b82f6,0,[0,0,-12]],['motor',TX.mot,0xef4444,0,[0,0,-20]]];
   const M=[];
   for(const [f,name,col,shell,ex] of parts){
     const geo=await load(f+'.stl'); geo.computeVertexNormals();
