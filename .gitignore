@@ -38,3 +38,6 @@ devices/motion-one/mechanics/alt_win_r4/*.stl
 devices/motion-one/electronics/exports/*_work/
 devices/motion-one/electronics/exports/.competitor-*/
 devices/motion-one/management/locks/
+
+# explainer video: clips, frames, models (./project video build); the final mp4 is committed
+marketing/video/build/

@@ -1,0 +1,259 @@
+[
+ {
+  "id": "s1",
+  "label": "00 · INTRO",
+  "images": [
+   {
+    "clip": "explode",
+    "dim": 0.75
+   }
+  ],
+  "title": true,
+  "text": "Meet the Disroop Sensor Playground. A place where motion becomes a controller."
+ },
+ {
+  "id": "s2",
+  "label": "01 · THE PLAYGROUND",
+  "images": [
+   {
+    "src": "shots/home.jpg",
+    "z": [
+     1.0,
+     1.35
+    ],
+    "f": [
+     [
+      0.5,
+      0.3
+     ],
+     [
+      0.15,
+      0.75
+     ]
+    ]
+   }
+  ],
+  "text": "The premise is simple. You hold a sensor in your hand. You move. And a game in the browser answers. Two games, one handheld device, and the full engineering trail behind it, all on a single page."
+ },
+ {
+  "id": "s3",
+  "label": "02 · THE CUBE",
+  "images": [
+   {
+    "clip": "dash",
+    "z": [
+     1.0,
+     1.0
+    ],
+    "f": [
+     [
+      0.5,
+      0.5
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "until": 0.3
+   },
+   {
+    "clip": "dash",
+    "z": [
+     1.25,
+     1.6
+    ],
+    "f": [
+     [
+      0.55,
+      0.55
+     ],
+     [
+      0.95,
+      0.95
+     ]
+    ],
+    "off": 0.3
+   }
+  ],
+  "text": "It began with a cube. The Nordic Thingy fifty-two streams acceleration, gyro, compass, temperature and pressure over Bluetooth Low Energy, live into a web dashboard and an Android app. Factory firmware. Nothing to flash."
+ },
+ {
+  "id": "s4",
+  "label": "03 · EXPERIMENT: TENNIS",
+  "images": [
+   {
+    "clip": "tennis",
+    "z": [
+     1.0,
+     1.18
+    ],
+    "f": [
+     [
+      0.5,
+      0.6
+     ],
+     [
+      0.5,
+      0.7
+     ]
+    ]
+   }
+  ],
+  "text": "Experiment one: tennis. The cube becomes the racket. You swing, the motion sensor detects the hit, and the ball flies across a floodlit court."
+ },
+ {
+  "id": "s5",
+  "label": "04 · EXPERIMENT: SKI",
+  "images": [
+   {
+    "clip": "ski",
+    "z": [
+     1.15,
+     1.0
+    ],
+    "f": [
+     [
+      0.5,
+      0.6
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ]
+   }
+  ],
+  "text": "Experiment two: the Lauberhorn downhill. Tilt to steer. Nose down to tuck. A sharp jolt to jump. Your wrist is the skier."
+ },
+ {
+  "id": "s6",
+  "label": "05 · DEVICE: MOTION ONE",
+  "images": [
+   {
+    "clip": "explode",
+    "z": [
+     1.0,
+     1.0
+    ],
+    "f": [
+     [
+      0.5,
+      0.5
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ]
+   }
+  ],
+  "text": "Then the cube was not enough. Enter Motion One, a handheld controller designed from scratch. Button cap, top shell, circuit board, battery, and a bottom shell with clips. It speaks the same Bluetooth profile as the Thingy, so the games run unchanged."
+ },
+ {
+  "id": "s7",
+  "label": "06 · ENGINEERING TRAIL",
+  "images": [
+   {
+    "clip": "pcb",
+    "z": [
+     1.0,
+     1.1
+    ],
+    "f": [
+     [
+      0.5,
+      0.5
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "until": 0.4
+   },
+   {
+    "clip": "bom",
+    "z": [
+     1.0,
+     1.0
+    ],
+    "f": [
+     [
+      0.5,
+      0.5
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "off": 0.4,
+    "until": 0.82
+   },
+   {
+    "src": "shots/sls.jpg",
+    "z": [
+     1.0,
+     1.25
+    ],
+    "f": [
+     [
+      0.5,
+      0.2
+     ],
+     [
+      0.5,
+      0.35
+     ]
+    ],
+    "off": 0.82
+   }
+  ],
+  "text": "The documentation is unusually honest. Every claim carries a label: source, calculation, or assumption. Circuit board revision three, with a bill of materials checked against live supplier stock, calculated at about twenty dollars in parts per device. And a housing printed in nylon powder, by selective laser sintering."
+ },
+ {
+  "id": "s8",
+  "label": "07 · OUTLOOK",
+  "images": [
+   {
+    "clip": "ski",
+    "z": [
+     1.25,
+     1.05
+    ],
+    "f": [
+     [
+      0.5,
+      0.5
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "until": 0.5
+   },
+   {
+    "src": "shots/home.jpg",
+    "z": [
+     1.3,
+     1.0
+    ],
+    "f": [
+     [
+      0.2,
+      0.3
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "off": 0.5
+   }
+  ],
+  "outro": true,
+  "text": "And the remarkable part: AI agents built all of it, with every tool running in Docker. A playground, yes. But also a preview of how AI crosses from the screen into the physical world."
+ }
+]
