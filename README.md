@@ -77,6 +77,8 @@ Dann im Browser http://localhost:8052 öffnen. `Strg+C` beendet die exe.
 
 **Tennis:** `./project play` (echter Thingy) oder `./project play --sim` baut alles, startet `thingy.exe tennis` und öffnet http://127.0.0.1:8052/tennis/. Mit dem Invoke-CLI: `./t tennis.play [--sim]`. Anleitung: [docs/TENNIS.md](docs/TENNIS.md).
 
+**Erklärvideo:** `./project video build` nimmt Dashboard, Tennis, Ski und die Motion-One-Szenen auf, spricht den Text mit Kokoro und schneidet [marketing/video/sensor-playground-explainer.mp4](marketing/video/sensor-playground-explainer.mp4). Details: [marketing/video/README.md](marketing/video/README.md).
+
 > Die exe läuft über WSL-Interop **unter Windows**, weil WSL kein Bluetooth hat. Der Port lauscht nur auf `127.0.0.1` von Windows. Aus WSL brauchst du deshalb `curl.exe` statt `curl`, siehe [Troubleshooting](docs/TROUBLESHOOTING.md).
 
 ## Android-App installieren

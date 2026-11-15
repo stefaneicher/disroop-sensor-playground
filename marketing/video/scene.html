@@ -1,0 +1,90 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- Video scenes for marketing/video (rendered frame by frame by rec.py via window.renderAt(t, D)).
+     ?mode=explode  Motion One exploded view (STL from devices/motion-one/mechanics/assembly_stl)
+     ?mode=pcb      board r3, components coloured by height
+     ?mode=bom      BOM table from devices/motion-one/sourcing/BOM_V1.md (build/bom.json, see bom.py) -->
+<style>
+html,body{margin:0;height:100%;background:#05090b;overflow:hidden;font-family:Inter,system-ui,sans-serif}
+canvas{display:block}
+.lab{position:absolute;color:#e6f4f1;font:600 22px Inter,sans-serif;white-space:nowrap;transform:translate(-50%,-50%);padding:6px 12px;border:1px solid #40e0d0;background:#05090bcc;letter-spacing:.5px;opacity:0}
+.lab i{display:inline-block;width:12px;height:12px;margin-right:10px;vertical-align:middle}
+#bom{position:absolute;inset:0;display:none;padding:60px 120px;box-sizing:border-box;color:#dfeeee}
+#bom h1{font:800 54px Inter;margin:0 0 6px;color:#84e65a}
+#bom .sub{font:22px DejaVu Sans Mono,monospace;color:#40e0d0;margin-bottom:26px}
+#win{height:760px;overflow:hidden;border-top:2px solid #40e0d0;border-bottom:2px solid #40e0d0;position:relative}
+#tb{position:absolute;left:0;right:0;top:0}
+.r{display:grid;grid-template-columns:150px 380px 260px 90px 150px 110px 120px;gap:0 18px;font:24px DejaVu Sans Mono,monospace;padding:12px 10px;border-bottom:1px solid #12302e}
+.r.h{font-weight:bold;color:#40e0d0}
+.ok{color:#84e65a}.usd{text-align:right}
+#tot{font:800 44px Inter;margin-top:24px;text-align:right}
+#tot span{color:#84e65a}
+</style>
+<script type="importmap">{"imports":{"three":"/tennis/node_modules/three/build/three.module.js","three/addons/":"/tennis/node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<div id="bom"><h1>Bill of Materials · Motion One</h1><div class="sub">MAIN BOARD r3 · 35 POSITIONS · JLCPCB PARTS API · STOCK CHECK ≥ 10×</div>
+<div id="win"><div id="tb"></div></div><div id="tot">Parts per device: <span id="sum">0.00</span> USD <small style="font:20px DejaVu Sans Mono;color:#7aa">(calculation)</small></div></div>
+<script type="module">
+import * as T from 'three';
+import {STLLoader} from 'three/addons/loaders/STLLoader.js';
+const q=new URLSearchParams(location.search); const mode=q.get('mode')||'explode';
+const ease=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
+window.ready=false;
+if(mode==='bom'){
+  document.getElementById('bom').style.display='block';
+  const rows=await (await fetch('build/bom.json')).json();
+  const tb=document.getElementById('tb');
+  tb.innerHTML='<div class="r h"><div>LCSC</div><div>PART</div><div>VALUE</div><div>QTY</div><div>STOCK</div><div>≥10×</div><div class="usd">USD</div></div>'+
+   rows.map(r=>`<div class="r"><div>${r.lcsc}</div><div>${r.mpn.slice(0,22)}</div><div>${r.val.slice(0,15)}</div><div>${r.qty}</div><div>${(+r.stock).toLocaleString('de-CH')}</div><div class="ok">${r.ok}</div><div class="usd">${r.usd}</div></div>`).join('');
+  const els=[...tb.children].slice(1);
+  window.renderAt=(t,D)=>{
+    const p=ease(t/(D*0.85)); const maxs=tb.scrollHeight-760; tb.style.top=(-maxs*p)+'px';
+    els.forEach((e,i)=>{const on=i/els.length<p+0.02; e.style.opacity=on?1:0.25;});
+    document.getElementById('sum').textContent=(20.24*ease(t/(D*0.9))).toFixed(2);
+  };
+  window.ready=true;
+} else {
+  const R=new T.WebGLRenderer({antialias:true});R.setSize(innerWidth,innerHeight);R.setPixelRatio(1);document.body.appendChild(R.domElement);
+  R.toneMapping=T.ACESFilmicToneMapping;
+  const S=new T.Scene();S.background=new T.Color(0x05090b);S.fog=new T.Fog(0x05090b,500,1400);
+  const cam=new T.PerspectiveCamera(32,innerWidth/innerHeight,1,4000);cam.up.set(0,0,1);
+  S.add(new T.HemisphereLight(0xdffaff,0x0b1a1c,1.4));
+  const d1=new T.DirectionalLight(0xffffff,2.2);d1.position.set(200,-250,400);S.add(d1);
+  const d2=new T.DirectionalLight(0x40e0d0,1.4);d2.position.set(-300,200,-100);S.add(d2);
+  // grid floor
+  const g=new T.GridHelper(1200,60,0x16403c,0x0d2422);g.rotation.x=Math.PI/2;g.position.z=-90;S.add(g);
+  const L=new STLLoader(); const load=f=>new Promise(r=>L.load('/devices/motion-one/mechanics/assembly_stl/'+f,r));
+  const parts=mode==='pcb'?[['pcb_r3','',0x1f9d55,0,[0,0,0]]]:[
+    ['oberschale','Top shell',0xd8dee2,1,[0,0,30]],['unterschale_glatt','Bottom shell with clips',0x9fb4b8,1,[0,0,-30]],
+    ['tastenkappe','Button cap',0xf59e0b,0,[0,0,55]],['lichtleiter','Light guide',0xe5e7eb,0,[0,0,50]],
+    ['schieber','Slide switch',0x84e65a,0,[0,40,25]],['pcb_r4','Circuit board',0x22c55e,0,[0,0,10]],
+    ['akku','Battery',0x3b82f6,0,[0,0,-12]],['motor','Vibration motor',0xef4444,0,[0,0,-20]]];
+  const M=[];
+  for(const [f,name,col,shell,ex] of parts){
+    const geo=await load(f+'.stl'); geo.computeVertexNormals();
+    let mat;
+    if(mode==='pcb'){ geo.computeBoundingBox(); const z0=geo.boundingBox.min.z, z1=geo.boundingBox.max.z; const p=geo.attributes.position; const c=new Float32Array(p.count*3);
+      // board = lowest ~1.7mm; components above
+      for(let i=0;i<p.count;i++){const z=p.getZ(i)-z0; const on=z>1.75; const cc=on?[0.12,0.13,0.15]:[0.08,0.5,0.28]; if(on&&z>3.2){cc[0]=0.75;cc[1]=0.78;cc[2]=0.8;} c.set(cc,i*3);}
+      geo.setAttribute('color',new T.BufferAttribute(c,3)); mat=new T.MeshStandardMaterial({vertexColors:true,metalness:0.3,roughness:0.45});
+    } else mat=new T.MeshStandardMaterial({color:col,metalness:0.1,roughness:shell?0.55:0.4,transparent:true,opacity:1,side:T.DoubleSide});
+    const m=new T.Mesh(geo,mat); m.userData={ex:new T.Vector3(...ex),shell,name,col}; S.add(m); M.push(m);
+    const edges=new T.LineSegments(new T.EdgesGeometry(geo,30),new T.LineBasicMaterial({color:0x40e0d0,transparent:true,opacity:0}));m.add(edges);m.userData.edges=edges;
+  }
+  const box=new T.Box3();M.forEach(m=>box.expandByObject(m));const C=box.getCenter(new T.Vector3());
+  // labels
+  const labs=M.filter(m=>m.userData.name).map(m=>{const e=document.createElement('div');e.className='lab';e.innerHTML=`<i style="background:#${m.userData.col.toString(16).padStart(6,'0')}"></i>${m.userData.name}`;document.body.appendChild(e);m.geometry.computeBoundingBox();return [m,e];});
+  window.renderAt=(t,D)=>{
+    let az,el,dist,exp=0,wire=0,shellOp=1;
+    if(mode==='pcb'){ az=-0.9+t*0.30; el=0.75-0.4*ease(t/D); dist=150-55*ease(t/D); wire=0.5+0.5*Math.sin(t*2); }
+    else { const p1=ease((t-2.2)/3.5); exp=p1*1.6; az=-1.95+t*0.05; el=0.42-0.22*ease(t/D); dist=290-40*ease(t/D)+170*p1;
+      shellOp=1-0.45*ease((t-6)/2); wire=ease((t-6)/2)*0.6; }
+    for(const m of M){ m.position.copy(m.userData.ex).multiplyScalar(exp);} const bb=new T.Box3(); M.forEach(m=>{m.updateMatrixWorld(); bb.expandByObject(m);}); const tgt=bb.getCenter(new T.Vector3()); cam.position.set(tgt.x+dist*Math.cos(el)*Math.cos(az),tgt.y+dist*Math.cos(el)*Math.sin(az),tgt.z+dist*Math.sin(el)); cam.lookAt(tgt);
+    for(const m of M){ m.position.copy(m.userData.ex).multiplyScalar(exp); if(m.userData.shell){m.material.opacity=shellOp;m.material.depthWrite=shellOp>0.9;} m.userData.edges.material.opacity=wire*(m.userData.shell?0.5:1);}
+    R.render(S,cam);
+    for(const [m,e] of labs){ const c=m.geometry.boundingBox.getCenter(new T.Vector3()).add(m.position); c.project(cam);
+      e.style.left=((c.x+1)/2*innerWidth)+'px'; e.style.top=((1-c.y)/2*innerHeight)+'px';
+      const i=labs.findIndex(x=>x[0]===m); e.style.opacity=ease((t-5.2-i*0.35)/0.6)*(t>D-0.5?ease((D-t)/0.5):1); }
+  };
+  window.ready=true;
+}
+</script></body></html>
