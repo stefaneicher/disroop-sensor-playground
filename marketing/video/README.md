@@ -3,7 +3,7 @@
 Rund 2 Minuten, Englisch, mit Sprecherstimme und Untertiteln: Playground-Seite, Thingy:52-Dashboard mit Live-Werten,
 Tennis- und Ski-Demo, Motion One als 3D-Explosionsansicht, Platine r3, Stückliste (BOM) und SLS-Gehäuse.
 
-Ergebnis: [`sensor-playground-explainer.mp4`](sensor-playground-explainer.mp4) (1920 × 1080, 30 fps, H.264/AAC).
+Ergebnis: [`sensor-playground-explainer.mp4`](sensor-playground-explainer.mp4) (1920 × 1080, 30 fps, H.264/AAC), auf YouTube: https://youtu.be/hHnMrmjFHO4 (eingebunden auf der [Startseite](https://stefaneicher.github.io/disroop-sensor-playground/)).
 
 ```bash
 ./project video build    # alles: web + tennis build, Stimme, Aufnahme, Schnitt (Docker)
