@@ -1,6 +1,6 @@
 [versions]
 # androidx versions are the newest ones that still compile against compileSdk 36 (newer ones need 37).
-agp = "9.5.1"
+agp = "9.5.3"
 kotlin = "2.4.21"
 coroutines = "1.11.0"
 serialization = "1.12.0"
