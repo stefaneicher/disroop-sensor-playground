@@ -1,0 +1,15 @@
+{
+  "id": "kids-lions-regatta-thunersee",
+  "name": "Lions-Regatta Thunersee",
+  "category": "Sport",
+  "description": "Segelregatta auf dem Thunersee.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

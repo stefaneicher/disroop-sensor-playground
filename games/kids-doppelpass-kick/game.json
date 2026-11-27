@@ -1,0 +1,15 @@
+{
+  "id": "kids-doppelpass-kick",
+  "name": "Doppelpass-Kick",
+  "category": "Sport",
+  "description": "Fussballspiel mit Timo und Rico.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

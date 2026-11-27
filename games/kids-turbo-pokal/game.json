@@ -1,0 +1,15 @@
+{
+  "id": "kids-turbo-pokal",
+  "name": "Turbo-Pokal",
+  "category": "Rennen",
+  "description": "Rundstreckenrennen: 6 Strecken, Münzen sammeln, schnellere Autos kaufen, Pokale gewinnen.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

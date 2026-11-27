@@ -1,0 +1,1023 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Roboter-Labyrinth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-top:#bfe8ff;
+    --sky-bottom:#eaf8ff;
+    --panel:#ffffff;
+    --panel-border:#d7ecfa;
+    --ink:#163a5f;
+    --ink-soft:#5c7ea3;
+    --accent:#ff6b4a;
+    --accent-dark:#e2502f;
+    --accent-ink:#ffffff;
+    --gold:#ffb703;
+    --gold-ink:#7a4a00;
+    --success:#22b56e;
+    --success-dark:#178a54;
+    --shadow:rgba(20,50,90,0.22);
+    --frame:#0f2a4d;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(180deg,var(--sky-top) 0%,var(--sky-bottom) 55%);
+    font-family:"Nunito",system-ui,sans-serif;
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:16px;
+    padding-block:16px;
+    gap:12px;
+  }
+
+  h1{
+    font-family:"Baloo 2","Nunito",sans-serif;
+    font-weight:800;
+    margin:0;
+    text-wrap:balance;
+  }
+
+  .topbar{
+    width:100%;
+    max-width:980px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px 16px;
+    background:var(--panel);
+    border:2px solid var(--panel-border);
+    border-radius:20px;
+    padding:12px 20px;
+    box-shadow:0 6px 0 var(--panel-border);
+  }
+
+  .title-block{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .title-block .bot-emoji{
+    font-size:28px;
+    line-height:1;
+  }
+
+  .title-block h1{
+    font-size:clamp(18px,3vw,26px);
+    color:var(--frame);
+  }
+
+  .stats{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .pill{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:"Nunito",sans-serif;
+    font-weight:800;
+    font-size:15px;
+    padding:8px 14px;
+    border-radius:999px;
+    background:#fff6e0;
+    color:var(--gold-ink);
+    border:2px solid #ffe4a3;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+
+  .btn{
+    font-family:"Nunito",sans-serif;
+    font-weight:800;
+    font-size:15px;
+    color:var(--accent-ink);
+    background:var(--accent);
+    border:none;
+    border-radius:999px;
+    padding:10px 20px;
+    cursor:pointer;
+    box-shadow:0 4px 0 var(--accent-dark);
+    transition:transform .08s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{ filter:brightness(1.04); }
+  .btn:active{ transform:translateY(3px); box-shadow:0 1px 0 var(--accent-dark); }
+  .btn:focus-visible{ outline:3px solid var(--frame); outline-offset:2px; }
+  .btn.success{ background:var(--success); box-shadow:0 4px 0 var(--success-dark); }
+
+  .stage-wrap{
+    position:relative;
+    width:100%;
+    max-width:980px;
+    aspect-ratio:7/6;
+    border-radius:26px;
+    overflow:hidden;
+    background:#bcdfae;
+    border:6px solid var(--frame);
+    box-shadow:0 14px 0 var(--shadow), 0 18px 30px var(--shadow);
+  }
+
+  #stage{
+    position:absolute;
+    inset:0;
+    display:block;
+    width:100%;
+    height:100%;
+  }
+
+  .stage-wrap:focus{ outline:none; }
+  .stage-wrap:focus-visible{ outline:4px solid var(--accent); outline-offset:-4px; }
+
+  .fallback{
+    position:absolute;
+    inset:0;
+    background:var(--sky-bottom);
+    padding:24px;
+  }
+  .fallback[hidden]{ display:none; }
+  .fallback:not([hidden]){
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .fallback-box{ max-width:340px; text-align:center; }
+  .fallback-box h2{
+    font-family:"Baloo 2",sans-serif;
+    color:var(--frame);
+    font-size:20px;
+    margin:4px 0 8px;
+  }
+  .fallback-box p{ color:var(--ink-soft); font-size:14px; line-height:1.5; margin:0; }
+
+  .hint{
+    position:absolute;
+    left:50%;
+    bottom:14px;
+    transform:translateX(-50%);
+    background:rgba(15,42,77,0.82);
+    color:#fff;
+    font-family:"Nunito",sans-serif;
+    font-weight:700;
+    font-size:14px;
+    padding:9px 16px;
+    border-radius:999px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    pointer-events:none;
+    transition:opacity .5s ease;
+  }
+  .hint .key{
+    display:inline-block;
+    background:rgba(255,255,255,0.16);
+    border:1px solid rgba(255,255,255,0.35);
+    border-radius:6px;
+    padding:1px 7px;
+    font-family:monospace;
+  }
+
+  .toast{
+    position:absolute;
+    top:16px;
+    left:50%;
+    transform:translateX(-50%) translateY(-140%);
+    background:var(--success);
+    color:#fff;
+    font-weight:800;
+    font-family:"Baloo 2",sans-serif;
+    font-size:16px;
+    padding:9px 20px;
+    border-radius:999px;
+    box-shadow:0 4px 0 var(--success-dark);
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+    white-space:nowrap;
+  }
+  .toast.show{ transform:translateX(-50%) translateY(0); }
+
+  .modal-layer{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(12,30,58,0.45);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s ease;
+    padding:16px;
+  }
+  .modal-layer.show{ opacity:1; pointer-events:auto; }
+
+  .modal{
+    background:var(--panel);
+    border-radius:24px;
+    padding:28px 30px;
+    max-width:360px;
+    width:100%;
+    text-align:center;
+    box-shadow:0 12px 0 var(--panel-border);
+    transform:scale(.85);
+    transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .modal-layer.show .modal{ transform:scale(1); }
+
+  .modal .big-emoji{ font-size:48px; display:block; margin-bottom:6px; }
+  .modal h2{
+    font-family:"Baloo 2",sans-serif;
+    color:var(--frame);
+    margin:0 0 8px;
+    font-size:26px;
+  }
+  .modal p{
+    color:var(--ink-soft);
+    margin:0 0 20px;
+    font-size:15px;
+    line-height:1.5;
+  }
+
+  .controls-help{
+    width:100%;
+    max-width:980px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 18px;
+    justify-content:center;
+    color:var(--ink-soft);
+    font-size:13.5px;
+    font-weight:700;
+  }
+  .controls-help span{ display:flex; align-items:center; gap:6px; }
+  .controls-help kbd{
+    font-family:monospace;
+    background:#fff;
+    border:2px solid var(--panel-border);
+    border-radius:6px;
+    padding:1px 7px;
+    color:var(--frame);
+  }
+
+  @media (max-width:520px){
+    .topbar{ padding:10px 14px; }
+    .title-block h1{ font-size:17px; }
+    .pill,.btn{ font-size:13px; padding:8px 12px; }
+    .hint{ font-size:12px; padding:7px 12px; max-width:88%; }
+    .controls-help{ font-size:12px; gap:6px 12px; }
+  }
+</style>
+
+<div class="topbar">
+  <div class="title-block">
+    <span class="bot-emoji">🤖</span>
+    <h1>Roboter-Labyrinth</h1>
+  </div>
+  <div class="stats">
+    <div class="pill" id="starPill">⭐ <span id="starCount">0</span>/<span id="starTotal">0</span></div>
+    <button class="btn" id="restartBtn" type="button">🔄 Neues Labyrinth</button>
+  </div>
+</div>
+
+<div class="stage-wrap" id="stageWrap" tabindex="0">
+  <canvas id="stage"></canvas>
+  <div class="toast" id="toast">Tor geöffnet!</div>
+  <div class="hint" id="hint"><span class="key">↑↓←→</span> Klicke hier ins Spielfeld und bewege den Roboter</div>
+  <div class="modal-layer" id="winLayer">
+    <div class="modal">
+      <span class="big-emoji">🏆</span>
+      <h2>Geschafft!</h2>
+      <p>Der Roboter hat alle Sterne gesammelt und ist aus dem Labyrinth entkommen.</p>
+      <button class="btn success" id="playAgainBtn" type="button">🎲 Neues Labyrinth spielen</button>
+    </div>
+  </div>
+  <div class="fallback" id="fallback" hidden>
+    <div class="fallback-box">
+      <span class="big-emoji">😕</span>
+      <h2>Das Spiel kann hier nicht geladen werden</h2>
+      <p>Diese Ansicht unterstützt leider kein 3D (WebGL), oder die Spiel-Bibliothek konnte nicht geladen werden. Bitte die Seite neu laden oder in einem anderen Browser öffnen.</p>
+    </div>
+  </div>
+</div>
+
+<div class="controls-help">
+  <span><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> oder <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> bewegen</span>
+  <span>⭐ Sammle alle Sterne, bevor du zum Ausgang gehst</span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  const fallbackEl = document.getElementById('fallback');
+  function showFallback(){
+    fallbackEl.hidden = false;
+  }
+
+  if(typeof THREE === 'undefined'){
+    showFallback();
+    return;
+  }
+
+  // quick WebGL support probe before we build the full scene
+  try{
+    const testCanvas = document.createElement('canvas');
+    const gl = testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
+    if(!gl) throw new Error('no webgl');
+  }catch(e){
+    showFallback();
+    return;
+  }
+
+  // ---------- CONFIG ----------
+  const COLS = 7, ROWS = 6;
+  const CELL = 4;
+  const WALL_H = 2.2, WALL_T = 0.5;
+  const NUM_STARS = 4;
+  const MOVE_MS = 230;
+  const WALL_COLORS = [0xff6b4a, 0x4ea8de, 0xffd166, 0x9b5de5, 0x06d6a0, 0xf7767b];
+
+  const DIRS = {
+    N: {dx:0, dy:-1, opposite:'S'},
+    S: {dx:0, dy:1,  opposite:'N'},
+    E: {dx:1, dy:0,  opposite:'W'},
+    W: {dx:-1,dy:0,  opposite:'E'}
+  };
+  const KEY_TO_DIR = {
+    ArrowUp:'N', ArrowDown:'S', ArrowLeft:'W', ArrowRight:'E',
+    w:'N', s:'S', a:'W', d:'E', W:'N', S:'S', A:'W', D:'E'
+  };
+
+  // ---------- DOM ----------
+  const canvas = document.getElementById('stage');
+  const starCountEl = document.getElementById('starCount');
+  const starTotalEl = document.getElementById('starTotal');
+  const restartBtn = document.getElementById('restartBtn');
+  const playAgainBtn = document.getElementById('playAgainBtn');
+  const winLayer = document.getElementById('winLayer');
+  const toast = document.getElementById('toast');
+  const hint = document.getElementById('hint');
+
+  // ---------- AUDIO ----------
+  let audioCtx = null;
+  function ensureAudio(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } }
+  function beep(freq, dur, type, vol, delay){
+    if(!audioCtx) return;
+    const t0 = audioCtx.currentTime + (delay||0);
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type||'sine';
+    osc.frequency.setValueAtTime(freq, t0);
+    gain.gain.setValueAtTime(0, t0);
+    gain.gain.linearRampToValueAtTime(vol!=null?vol:0.18, t0+0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, t0+dur);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t0);
+    osc.stop(t0+dur+0.02);
+  }
+  function sfxCollect(){ beep(880,0.12,'triangle',0.2); beep(1320,0.16,'triangle',0.18,0.07); }
+  function sfxBump(){ beep(140,0.12,'square',0.12); }
+  function sfxOpen(){ beep(523,0.15,'sine',0.2); beep(659,0.15,'sine',0.2,0.1); beep(784,0.22,'sine',0.22,0.2); }
+  function sfxWin(){ [523,659,784,1046].forEach((f,i)=>beep(f,0.22,'sine',0.22,i*0.12)); }
+
+  // ---------- THREE SETUP ----------
+  let scene, camera, renderer;
+  try{
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xbfe8ff);
+    scene.fog = new THREE.Fog(0xbfe8ff, CELL*10, CELL*22);
+
+    camera = new THREE.OrthographicCamera(-1,1,1,-1, 0.1, 200);
+
+    renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+  }catch(e){
+    showFallback();
+    return;
+  }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const hemi = new THREE.HemisphereLight(0xffffff, 0x4a7a3f, 0.95);
+  scene.add(hemi);
+  const sun = new THREE.DirectionalLight(0xfff4de, 0.55);
+  sun.position.set(CELL*2, CELL*14, CELL*1.5);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(1024,1024);
+  sun.shadow.camera.left = -COLS*CELL;
+  sun.shadow.camera.right = COLS*CELL;
+  sun.shadow.camera.top = ROWS*CELL;
+  sun.shadow.camera.bottom = -ROWS*CELL;
+  sun.shadow.camera.near = 1;
+  sun.shadow.camera.far = CELL*30;
+  sun.shadow.bias = -0.0015;
+  scene.add(sun);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.25);
+  fill.position.set(-CELL*3, CELL*8, -CELL*2);
+  scene.add(fill);
+
+  let worldGroup = new THREE.Group();
+  scene.add(worldGroup);
+
+  // ---------- GAME STATE ----------
+  let cells, exitCell, exitDir, outsideCoord, gateMesh, gateLightMesh, gateOpen, stars, robot;
+  let player = {x:0,y:0, moving:false, isOutside:false};
+  let animState = null;
+  let gameWon = false;
+  let hintFaded = false;
+
+  function idx(x,y){ return y*COLS+x; }
+  function cellCenter(x,y){ return new THREE.Vector3(x*CELL+CELL/2, 0, y*CELL+CELL/2); }
+  function hash(str){ let h=0; for(let i=0;i<str.length;i++){ h=(h*31+str.charCodeAt(i))>>>0; } return h; }
+
+  function generateMaze(){
+    const arr = [];
+    for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){
+      arr[idx(x,y)] = {x,y, walls:{N:true,S:true,E:true,W:true}, visited:false};
+    }
+    let current = arr[idx(0,0)];
+    current.visited = true;
+    let visitedCount = 1;
+    const total = COLS*ROWS;
+    const stack = [];
+    while(visitedCount < total){
+      const options = [];
+      for(const dk in DIRS){
+        const d = DIRS[dk];
+        const nx = current.x+d.dx, ny = current.y+d.dy;
+        if(nx>=0 && ny>=0 && nx<COLS && ny<ROWS && !arr[idx(nx,ny)].visited){
+          options.push({dk, cell:arr[idx(nx,ny)]});
+        }
+      }
+      if(options.length){
+        const pick = options[Math.floor(Math.random()*options.length)];
+        current.walls[pick.dk] = false;
+        pick.cell.walls[DIRS[pick.dk].opposite] = false;
+        pick.cell.visited = true;
+        visitedCount++;
+        stack.push(current);
+        current = pick.cell;
+      } else if(stack.length){
+        current = stack.pop();
+      } else break;
+    }
+    return arr;
+  }
+
+  function bfsDistances(arr, sx, sy){
+    const dist = new Array(arr.length).fill(-1);
+    dist[idx(sx,sy)] = 0;
+    const queue = [[sx,sy]];
+    let head = 0;
+    while(head < queue.length){
+      const [cx,cy] = queue[head++];
+      const cell = arr[idx(cx,cy)];
+      for(const dk in DIRS){
+        if(cell.walls[dk]) continue;
+        const d = DIRS[dk];
+        const nx=cx+d.dx, ny=cy+d.dy;
+        if(nx<0||ny<0||nx>=COLS||ny>=ROWS) continue;
+        if(dist[idx(nx,ny)]===-1){
+          dist[idx(nx,ny)] = dist[idx(cx,cy)]+1;
+          queue.push([nx,ny]);
+        }
+      }
+    }
+    return dist;
+  }
+
+  function pickExit(arr){
+    const dist = bfsDistances(arr,0,0);
+    let best=null, bestD=-1;
+    for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){
+      if(x===0&&y===0) continue;
+      const onBoundary = (x===0||y===0||x===COLS-1||y===ROWS-1);
+      if(!onBoundary) continue;
+      const d = dist[idx(x,y)];
+      if(d>bestD){ bestD=d; best=arr[idx(x,y)]; }
+    }
+    let dir;
+    if(best.x===COLS-1) dir='E';
+    else if(best.x===0) dir='W';
+    else if(best.y===ROWS-1) dir='S';
+    else dir='N';
+    return {cell:best, dir, dist};
+  }
+
+  function pickStarCells(arr, dist, exitC){
+    const candidates = [];
+    for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){
+      if(x===0&&y===0) continue;
+      if(x===exitC.x&&y===exitC.y) continue;
+      if(dist[idx(x,y)] < 2) continue;
+      candidates.push(arr[idx(x,y)]);
+    }
+    for(let i=candidates.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [candidates[i],candidates[j]] = [candidates[j],candidates[i]];
+    }
+    return candidates.slice(0, Math.min(NUM_STARS, candidates.length));
+  }
+
+  function buildFloor(){
+    const geo = new THREE.PlaneGeometry(1,1);
+    for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){
+      const light = (x+y)%2===0;
+      const mat = new THREE.MeshStandardMaterial({color: light?0x8fe08f:0x74c97a, roughness:0.95});
+      const tile = new THREE.Mesh(geo, mat);
+      tile.scale.set(CELL-0.04, CELL-0.04, 1);
+      tile.rotation.x = -Math.PI/2;
+      const c = cellCenter(x,y);
+      tile.position.set(c.x, 0, c.z);
+      tile.receiveShadow = true;
+      worldGroup.add(tile);
+    }
+  }
+
+  function buildWalls(arr, exitC, exitD){
+    const wallGeo = new THREE.BoxGeometry(1,1,1);
+    const segs = new Map();
+    function addSeg(key, build){ if(!segs.has(key)) segs.set(key, build); }
+
+    for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){
+      const cell = arr[idx(x,y)];
+      if(cell.walls.W) addSeg('V_'+x+'_'+y, {type:'V', x, y});
+      if(cell.walls.E) addSeg('V_'+(x+1)+'_'+y, {type:'V', x:x+1, y});
+      if(cell.walls.N) addSeg('H_'+x+'_'+y, {type:'H', x, y});
+      if(cell.walls.S) addSeg('H_'+x+'_'+(y+1), {type:'H', x, y:y+1});
+    }
+    // remove the boundary wall segment where the exit opening is carved
+    let exitKey;
+    if(exitD==='E') exitKey = 'V_'+(exitC.x+1)+'_'+exitC.y;
+    else if(exitD==='W') exitKey = 'V_'+exitC.x+'_'+exitC.y;
+    else if(exitD==='S') exitKey = 'H_'+exitC.x+'_'+(exitC.y+1);
+    else exitKey = 'H_'+exitC.x+'_'+exitC.y;
+    segs.delete(exitKey);
+
+    let i=0;
+    segs.forEach((seg)=>{
+      const color = WALL_COLORS[hash(seg.type+seg.x+'_'+seg.y) % WALL_COLORS.length];
+      const mat = new THREE.MeshStandardMaterial({color, roughness:0.65, metalness:0.05});
+      const mesh = new THREE.Mesh(wallGeo, mat);
+      mesh.castShadow = true; mesh.receiveShadow = true;
+      if(seg.type==='V'){
+        mesh.scale.set(WALL_T, WALL_H, CELL+WALL_T);
+        mesh.position.set(seg.x*CELL, WALL_H/2, seg.y*CELL+CELL/2);
+      } else {
+        mesh.scale.set(CELL+WALL_T, WALL_H, WALL_T);
+        mesh.position.set(seg.x*CELL+CELL/2, WALL_H/2, seg.y*CELL);
+      }
+      worldGroup.add(mesh);
+      i++;
+    });
+  }
+
+  function buildExitPlatform(exitC, exitD, outside){
+    const c = cellCenter(outside.x, outside.y);
+    const platGeo = new THREE.BoxGeometry(CELL-0.1, 0.3, CELL-0.1);
+    const platMat = new THREE.MeshStandardMaterial({color:0xffe08a, roughness:0.8});
+    const plat = new THREE.Mesh(platGeo, platMat);
+    plat.position.set(c.x, -0.05, c.z);
+    plat.receiveShadow = true;
+    worldGroup.add(plat);
+
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(1.3, 0.16, 12, 32),
+      new THREE.MeshStandardMaterial({color:0x22b56e, emissive:0x1a8f57, emissiveIntensity:0.7, roughness:0.4})
+    );
+    ring.rotation.x = Math.PI/2;
+    ring.position.set(c.x, 1.4, c.z);
+    worldGroup.add(ring);
+
+    const light = new THREE.PointLight(0x5cffb0, 1.2, CELL*4);
+    light.position.set(c.x, 2, c.z);
+    worldGroup.add(light);
+
+    // gate blocking the opening until stars are collected
+    let gx, gz, gsx, gsz;
+    const ec = cellCenter(exitC.x, exitC.y);
+    const GATE_T = 0.85;
+    if(exitD==='E'){ gx = exitC.x*CELL+CELL; gz = ec.z; gsx=GATE_T; gsz=CELL-0.2; }
+    else if(exitD==='W'){ gx = exitC.x*CELL; gz = ec.z; gsx=GATE_T; gsz=CELL-0.2; }
+    else if(exitD==='S'){ gx = ec.x; gz = exitC.y*CELL+CELL; gsx=CELL-0.2; gsz=GATE_T; }
+    else { gx = ec.x; gz = exitC.y*CELL; gsx=CELL-0.2; gsz=GATE_T; }
+
+    const gateMat = new THREE.MeshStandardMaterial({
+      color:0xff2244, emissive:0xff2222, emissiveIntensity:0.9,
+      transparent:true, opacity:0.8, roughness:0.25
+    });
+    const gate = new THREE.Mesh(new THREE.BoxGeometry(gsx, WALL_H*1.2, gsz), gateMat);
+    gate.position.set(gx, WALL_H*0.6, gz);
+    worldGroup.add(gate);
+
+    const gateLight = new THREE.PointLight(0xff3344, 1.1, CELL*2.6);
+    gateLight.position.set(gx, WALL_H*0.9, gz);
+    worldGroup.add(gateLight);
+
+    return {ring, gate, plat, gateLight};
+  }
+
+  function starShape(){
+    const shape = new THREE.Shape();
+    const spikes = 5, outerR = 0.62, innerR = 0.26;
+    for(let i=0;i<spikes*2;i++){
+      const r = i%2===0 ? outerR : innerR;
+      const a = (i/(spikes*2))*Math.PI*2 - Math.PI/2;
+      const x = Math.cos(a)*r, y = Math.sin(a)*r;
+      if(i===0) shape.moveTo(x,y); else shape.lineTo(x,y);
+    }
+    shape.closePath();
+    return shape;
+  }
+
+  function buildStar(cellObj){
+    const group = new THREE.Group();
+    const geo = new THREE.ExtrudeGeometry(starShape(), {depth:0.22, bevelEnabled:true, bevelThickness:0.04, bevelSize:0.03, bevelSegments:2});
+    geo.rotateX(-Math.PI/2);
+    geo.translate(0,-0.11,0);
+    const mesh = new THREE.Mesh(
+      geo,
+      new THREE.MeshStandardMaterial({color:0xffd23f, emissive:0xcc8b00, emissiveIntensity:0.55, roughness:0.35, metalness:0.15})
+    );
+    mesh.castShadow = true;
+    group.add(mesh);
+    const light = new THREE.PointLight(0xffd23f, 0.9, CELL*2.5);
+    light.position.set(0,0.4,0);
+    group.add(light);
+    const c = cellCenter(cellObj.x, cellObj.y);
+    group.position.set(c.x, 1.1, c.z);
+    worldGroup.add(group);
+    return {group, mesh, cell:cellObj, collected:false};
+  }
+
+  function buildRobot(){
+    const group = new THREE.Group();
+    const body = new THREE.Mesh(
+      new THREE.BoxGeometry(1.1,1.0,1.1),
+      new THREE.MeshStandardMaterial({color:0xff6b4a, roughness:0.5, metalness:0.15})
+    );
+    body.position.y = 0.75;
+    body.castShadow = true;
+    group.add(body);
+
+    const head = new THREE.Mesh(
+      new THREE.BoxGeometry(0.85,0.7,0.85),
+      new THREE.MeshStandardMaterial({color:0xfff3e6, roughness:0.5})
+    );
+    head.position.y = 1.55;
+    head.castShadow = true;
+    group.add(head);
+
+    const eyeGeo = new THREE.SphereGeometry(0.09,10,10);
+    const eyeMat = new THREE.MeshStandardMaterial({color:0x16233f});
+    const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
+    eyeL.position.set(0.22,1.58,0.44);
+    const eyeR = eyeL.clone();
+    eyeR.position.x = -0.22;
+    group.add(eyeL, eyeR);
+
+    const nose = new THREE.Mesh(
+      new THREE.ConeGeometry(0.14,0.32,8),
+      new THREE.MeshStandardMaterial({color:0xffb703})
+    );
+    nose.rotation.x = Math.PI/2;
+    nose.position.set(0,1.45,0.55);
+    group.add(nose);
+
+    const antStem = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.04,0.04,0.4,8),
+      new THREE.MeshStandardMaterial({color:0x9fb3c8})
+    );
+    antStem.position.set(0,2.1,0);
+    group.add(antStem);
+    const antTip = new THREE.Mesh(
+      new THREE.SphereGeometry(0.11,10,10),
+      new THREE.MeshStandardMaterial({color:0x22b56e, emissive:0x1a8f57, emissiveIntensity:0.6})
+    );
+    antTip.position.set(0,2.32,0);
+    group.add(antTip);
+
+    const armGeo = new THREE.BoxGeometry(0.22,0.55,0.22);
+    const armMat = new THREE.MeshStandardMaterial({color:0xe2502f});
+    const armL = new THREE.Mesh(armGeo, armMat);
+    armL.position.set(0.68,0.7,0);
+    const armR = armL.clone();
+    armR.position.x = -0.68;
+    group.add(armL, armR);
+
+    const blob = new THREE.Mesh(
+      new THREE.CircleGeometry(0.85, 24),
+      new THREE.MeshBasicMaterial({color:0x0f2a4d, transparent:true, opacity:0.22})
+    );
+    blob.rotation.x = -Math.PI/2;
+    blob.position.y = 0.02;
+    group.add(blob);
+
+    group.scale.setScalar(1.3);
+    return group;
+  }
+
+  // ---------- BUILD WORLD ----------
+  function clearWorld(){
+    while(worldGroup.children.length){
+      const obj = worldGroup.children.pop();
+      if(obj.geometry) obj.geometry.dispose();
+      if(obj.material){
+        if(Array.isArray(obj.material)) obj.material.forEach(m=>m.dispose());
+        else obj.material.dispose();
+      }
+    }
+  }
+
+  let mazeCenterVec = new THREE.Vector3();
+
+  function newGame(){
+    clearWorld();
+    gameWon = false;
+    winLayer.classList.remove('show');
+    toast.classList.remove('show');
+
+    cells = generateMaze();
+    const picked = pickExit(cells);
+    exitCell = picked.cell;
+    exitDir = picked.dir;
+    outsideCoord = {
+      x: exitCell.x + DIRS[exitDir].dx,
+      y: exitCell.y + DIRS[exitDir].dy
+    };
+
+    buildFloor();
+    buildWalls(cells, exitCell, exitDir);
+    const exitParts = buildExitPlatform(exitCell, exitDir, outsideCoord);
+    gateMesh = exitParts.gate;
+    gateLightMesh = exitParts.gateLight;
+    gateOpen = false;
+
+    const starCells = pickStarCells(cells, picked.dist, exitCell);
+    stars = starCells.map(buildStar);
+    starTotalEl.textContent = stars.length;
+    starCountEl.textContent = '0';
+
+    robot = buildRobot();
+    const startC = cellCenter(0,0);
+    robot.position.set(startC.x, 0, startC.z);
+    worldGroup.add(robot);
+
+    player = {x:0, y:0, moving:false, isOutside:false, facing:0};
+    animState = null;
+
+    hintFaded = false;
+    hint.style.opacity = '1';
+
+    const mazeW = COLS*CELL, mazeD = ROWS*CELL;
+    mazeCenterVec.set(mazeW/2, 0, mazeD/2);
+    camera.position.set(mazeCenterVec.x, 40, mazeCenterVec.z + 0.001);
+    camera.up.set(0,0,-1);
+    camera.lookAt(mazeCenterVec);
+    fitCamera();
+  }
+
+  function fitCamera(){
+    const mazeW = COLS*CELL, mazeD = ROWS*CELL;
+    const margin = CELL*1.4;
+    const rect = canvas.getBoundingClientRect();
+    const aspect = Math.max(rect.width,1) / Math.max(rect.height,1);
+    let halfH = mazeD/2 + margin;
+    let halfW = halfH*aspect;
+    if(halfW < mazeW/2+margin){
+      halfW = mazeW/2+margin;
+      halfH = halfW/aspect;
+    }
+    camera.left = -halfW; camera.right = halfW;
+    camera.top = halfH; camera.bottom = -halfH;
+    camera.updateProjectionMatrix();
+  }
+
+  // ---------- MOVEMENT ----------
+  function canMove(dirKey){
+    const fromCell = cells[idx(player.x, player.y)];
+    if(player.x===exitCell.x && player.y===exitCell.y && dirKey===exitDir){
+      return gateOpen ? {type:'exit'} : {type:'blocked'};
+    }
+    const d = DIRS[dirKey];
+    const nx = player.x+d.dx, ny = player.y+d.dy;
+    if(nx<0||ny<0||nx>=COLS||ny>=ROWS) return {type:'blocked'};
+    if(fromCell.walls[dirKey]) return {type:'blocked'};
+    return {type:'move', x:nx, y:ny};
+  }
+
+  const FACING = {N:Math.PI, S:0, E:Math.PI/2*-1+Math.PI, W:Math.PI/2}; // will be recalculated simply below
+  function facingAngle(dirKey){
+    // robot's +Z (nose) should point toward movement direction
+    if(dirKey==='S') return 0;
+    if(dirKey==='N') return Math.PI;
+    if(dirKey==='E') return -Math.PI/2;
+    if(dirKey==='W') return Math.PI/2;
+    return 0;
+  }
+
+  function shortestAngleLerp(a,b,t){
+    let diff = ((b-a+Math.PI)%(Math.PI*2))-Math.PI;
+    if(diff < -Math.PI) diff += Math.PI*2;
+    return a + diff*t;
+  }
+
+  function tryMove(dirKey){
+    if(player.moving || gameWon) return;
+    if(!hintFaded){ hintFaded=true; hint.style.opacity='0'; }
+    const res = canMove(dirKey);
+    const targetAngle = facingAngle(dirKey);
+    if(res.type==='blocked'){
+      sfxBump();
+      bump(dirKey);
+      player.facing = targetAngle;
+      animState = { type:'rotateOnly', startAngle: robot.rotation.y, targetAngle, start: performance.now(), dur:150 };
+      player.moving = true;
+      return;
+    }
+    const from = robot.position.clone();
+    let to;
+    if(res.type==='exit'){
+      to = cellCenter(outsideCoord.x, outsideCoord.y);
+    } else {
+      to = cellCenter(res.x, res.y);
+    }
+    animState = {
+      type: res.type==='exit' ? 'exitMove' : 'move',
+      from, to,
+      startAngle: robot.rotation.y,
+      targetAngle,
+      start: performance.now(),
+      dur: MOVE_MS,
+      newX: res.x, newY: res.y
+    };
+    player.moving = true;
+  }
+
+  function bump(dirKey){
+    const d = DIRS[dirKey];
+    const push = new THREE.Vector3(d.dx*0.35, 0, d.dy*0.35);
+    const base = robot.position.clone();
+    const dur = 150;
+    const t0 = performance.now();
+    function step(){
+      const t = Math.min((performance.now()-t0)/dur, 1);
+      const k = t<0.5 ? t*2 : (1-t)*2;
+      robot.position.set(base.x+push.x*k, base.y, base.z+push.z*k);
+      if(t<1) requestAnimationFrame(step);
+    }
+    step();
+  }
+
+  function easeOutQuad(t){ return 1-(1-t)*(1-t); }
+
+  function updateAnim(now){
+    if(!animState) return;
+    const t = Math.min((now-animState.start)/animState.dur, 1);
+    const e = easeOutQuad(t);
+    if(animState.type==='rotateOnly'){
+      robot.rotation.y = shortestAngleLerp(animState.startAngle, animState.targetAngle, e);
+      if(t>=1){ animState=null; player.moving=false; }
+      return;
+    }
+    robot.position.lerpVectors(animState.from, animState.to, e);
+    robot.rotation.y = shortestAngleLerp(animState.startAngle, animState.targetAngle, e);
+    if(t>=1){
+      robot.position.copy(animState.to);
+      if(animState.type==='exitMove'){
+        player.isOutside = true;
+        triggerWin();
+      } else {
+        player.x = animState.newX;
+        player.y = animState.newY;
+        checkStarPickup();
+      }
+      animState = null;
+      player.moving = false;
+    }
+  }
+
+  function checkStarPickup(){
+    for(const s of stars){
+      if(!s.collected && s.cell.x===player.x && s.cell.y===player.y){
+        s.collected = true;
+        worldGroup.remove(s.group);
+        s.group.traverse(o=>{ if(o.geometry) o.geometry.dispose(); if(o.material) o.material.dispose(); });
+        ensureAudio(); sfxCollect();
+        const count = stars.filter(x=>x.collected).length;
+        starCountEl.textContent = count;
+        if(count===stars.length){
+          openGate();
+        }
+      }
+    }
+  }
+
+  function openGate(){
+    gateOpen = true;
+    ensureAudio(); sfxOpen();
+    showToast('Tor geöffnet! Lauf zum Ausgang ✨');
+    const startY = gateMesh.position.y;
+    const t0 = performance.now();
+    const dur = 500;
+    function step(){
+      const t = Math.min((performance.now()-t0)/dur,1);
+      gateMesh.position.y = startY - t*2.4;
+      gateMesh.material.opacity = 0.75*(1-t);
+      if(t<1) requestAnimationFrame(step);
+      else { worldGroup.remove(gateMesh); if(gateLightMesh) worldGroup.remove(gateLightMesh); }
+    }
+    step();
+  }
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=>toast.classList.remove('show'), 2600);
+  }
+
+  function triggerWin(){
+    gameWon = true;
+    ensureAudio(); sfxWin();
+    setTimeout(()=>winLayer.classList.add('show'), 300);
+  }
+
+  // ---------- INPUT ----------
+  const stageWrap = document.getElementById('stageWrap');
+
+  window.addEventListener('keydown', (e)=>{
+    ensureAudio();
+    const dir = KEY_TO_DIR[e.key];
+    if(dir){
+      e.preventDefault();
+      tryMove(dir);
+    }
+  });
+
+  // Keyboard events only reach us while this frame has focus, so make sure
+  // clicking/tapping the game grabs focus (and unlocks audio on mobile).
+  stageWrap.addEventListener('pointerdown', ()=>{ ensureAudio(); stageWrap.focus(); });
+  stageWrap.addEventListener('keydown', (e)=>{
+    const dir = KEY_TO_DIR[e.key];
+    if(dir){ e.preventDefault(); }
+  });
+
+  restartBtn.addEventListener('click', ()=>{ ensureAudio(); newGame(); stageWrap.focus(); });
+  playAgainBtn.addEventListener('click', ()=>{ ensureAudio(); newGame(); stageWrap.focus(); });
+
+  // ---------- RESIZE ----------
+  function resize(){
+    const rect = canvas.getBoundingClientRect();
+    const w = Math.max(rect.width,1), h = Math.max(rect.height,1);
+    renderer.setSize(w,h,false);
+    fitCamera();
+  }
+  window.addEventListener('resize', resize);
+
+  // ---------- ANIMATE ----------
+  function animate(now){
+    requestAnimationFrame(animate);
+    for(const s of stars){
+      if(!s.collected){
+        s.mesh.rotation.y += 0.03;
+        s.mesh.rotation.x += 0.015;
+      }
+    }
+    if(!gateOpen && gateMesh){
+      const pulse = 0.7 + Math.sin(now*0.005)*0.1;
+      gateMesh.material.opacity = pulse;
+      if(gateLightMesh) gateLightMesh.intensity = 0.9 + Math.sin(now*0.005)*0.4;
+    }
+    updateAnim(now || performance.now());
+    renderer.render(scene, camera);
+  }
+
+  // ---------- HOT RELOAD SUPPORT ----------
+  function start(){
+    newGame();
+    resize();
+    requestAnimationFrame(animate);
+    try{ window.focus(); stageWrap.focus(); }catch(e){}
+  }
+  if(window.claude && window.claude.hot){
+    if(window.claude.hot.ready) window.claude.hot.ready(start);
+    else start();
+  } else {
+    start();
+  }
+})();
+</script>
+
+</body></html>

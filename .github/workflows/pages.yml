@@ -36,6 +36,10 @@ jobs:
           cp docs/DATEI_AUDIT.html _site/docs/
           cp -r tennis/dist _site/tennis/static
           cp -r devices/motion-one/media/presentation _site/devices/motion-one/media/presentation
+          node scripts/kids-catalog.mjs
+          mkdir -p _site/console _site/games
+          cp -r console/kinder _site/console/kinder
+          cp -r games/kids-* _site/games/
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

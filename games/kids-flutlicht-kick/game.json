@@ -1,0 +1,15 @@
+{
+  "id": "kids-flutlicht-kick",
+  "name": "Flutlicht-Kick",
+  "category": "Sport",
+  "description": "Fussball unter Flutlicht in der Bergsee-Arena mit Timo, der Nummer 10.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

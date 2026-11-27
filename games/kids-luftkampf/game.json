@@ -1,0 +1,15 @@
+{
+  "id": "kids-luftkampf",
+  "name": "Luftkampf",
+  "category": "Fliegen",
+  "description": "Luftkampf-Spiel.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

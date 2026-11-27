@@ -1,0 +1,15 @@
+{
+  "id": "kids-roboter-labyrinth",
+  "name": "Roboter-Labyrinth",
+  "category": "Knobeln",
+  "description": "Roboter durchs Labyrinth führen.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

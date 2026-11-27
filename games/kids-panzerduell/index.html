@@ -1,0 +1,219 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Panzerduell</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Saira:wght@400;600;800&display=swap">
+<style>
+/* Layout: ein Vollbild-Spielfeld (Canvas), HUD oben, Overlays für Start/Game Over */
+:root{
+  --sand:#d9c08a; --sand-dark:#b89a5e; --olive:#5b6b2f; --olive-light:#8a9a4a;
+  --enemy:#a3402a; --ink:#2b2414; --paper:#f3e6c4; --flash:#ffd25a;
+  --f-display:"Black Ops One","Impact",system-ui,sans-serif;
+  --f-body:"Saira",system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+html,body{height:100%}
+body{background:var(--ink);color:var(--paper);font-family:var(--f-body);overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+#wrap{position:relative;height:100%;width:100%}
+canvas{display:block;width:100%;height:100%}
+#hud{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding-top:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));pointer-events:none;font-weight:800}
+.chip{background:rgba(43,36,20,.78);color:var(--paper);padding:6px 12px;border-radius:4px;font-variant-numeric:tabular-nums;letter-spacing:.06em;text-transform:uppercase;font-size:13px}
+.chip b{font-family:var(--f-display);font-weight:400;font-size:18px;color:var(--flash);margin-left:6px}
+#hearts{letter-spacing:2px;color:var(--enemy);font-size:18px}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:rgba(43,36,20,.55)}
+.card{background:var(--paper);color:var(--ink);max-width:360px;width:100%;padding:24px 22px;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);display:flex;flex-direction:column;gap:14px}
+.card h1{font-family:var(--f-display);font-weight:400;font-size:40px;line-height:1;margin:0;color:var(--olive);text-wrap:balance}
+.card p{margin:0;line-height:1.45}
+.stencil{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;color:var(--enemy)}
+.card ul{margin:0;padding-left:18px;line-height:1.5}
+button{font-family:var(--f-display);font-size:22px;background:var(--olive);color:var(--paper);border:3px solid var(--ink);padding:12px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+button:focus-visible{outline:3px solid var(--flash);outline-offset:2px}
+</style>
+
+<div id="wrap">
+  <canvas id="c"></canvas>
+  <div id="hud">
+    <span class="chip">Punkte<b id="score">0</b></span>
+    <span class="chip">Welle<b id="wave">1</b></span>
+    <span class="chip" id="hearts">♥♥♥♥♥</span>
+  </div>
+  <div class="overlay" id="start">
+    <div class="card">
+      <span class="stencil">Einsatzbefehl</span>
+      <h1>Panzerduell</h1>
+      <ul>
+        <li>Finger aufs Feld legen und Richtung Gegner <b>ziehen</b>.</li>
+        <li>Loslassen = <b>Feuer!</b> Je länger gezogen, desto weiter fliegt die Granate.</li>
+        <li>Weiche den roten Granaten aus: Tippe kurz links oder rechts, dann fährt dein Panzer dorthin.</li>
+      </ul>
+      <button id="go">Los geht's</button>
+    </div>
+  </div>
+  <div class="overlay" id="over" hidden>
+    <div class="card">
+      <span class="stencil">Panzer getroffen</span>
+      <h1 id="overTitle">Game Over</h1>
+      <p id="overText"></p>
+      <button id="again">Nochmal</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(()=>{
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+let W=0,H=0,DPR=1;
+function resize(){DPR=Math.min(2,window.devicePixelRatio||1);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);if(player){player.y=H-70;player.x=Math.min(Math.max(player.x,30),W-30);}}
+window.addEventListener('resize',resize);
+
+const $=id=>document.getElementById(id);
+let player,enemies,shells,parts,rocks,tracks,score,wave,hp,running=false,aim=null,reload=0,spawnLeft,spawnT,best=0,shake=0;
+try{best=+localStorage.getItem('pz_best')||0}catch(e){}
+
+function newGame(){
+  player={x:W/2,y:H-70,tx:W/2,ang:-Math.PI/2,turret:-Math.PI/2,hit:0};
+  enemies=[];shells=[];parts=[];tracks=[];score=0;wave=0;hp=5;reload=0;
+  rocks=[];for(let i=0;i<5;i++)rocks.push({x:40+Math.random()*(W-80),y:110+Math.random()*(H*0.45),r:14+Math.random()*12});
+  nextWave();updHud();
+}
+function nextWave(){wave++;spawnLeft=2+wave;spawnT=0.5;updHud();}
+function spawnEnemy(){
+  const x=30+Math.random()*(W-60);
+  enemies.push({x,y:-30,ang:Math.PI/2,turret:Math.PI/2,speed:28+wave*4+Math.random()*15,
+    tx:30+Math.random()*(W-60),ty:80+Math.random()*(H*0.45),fire:1.5+Math.random()*2,hp:wave>3&&Math.random()<.3?2:1,boss:false});
+}
+function updHud(){$('score').textContent=score;$('wave').textContent=wave;$('hearts').textContent='♥'.repeat(Math.max(0,hp))+'♡'.repeat(Math.max(0,5-hp));}
+
+// Eingabe
+let down=null;
+cv.addEventListener('pointerdown',e=>{if(!running)return;cv.setPointerCapture(e.pointerId);down={x:e.clientX,y:e.clientY,t:performance.now()};aim={x:e.clientX,y:e.clientY};});
+cv.addEventListener('pointermove',e=>{if(down)aim={x:e.clientX,y:e.clientY};});
+function release(e){
+  if(!down||!running){down=null;aim=null;return;}
+  const dx=aim.x-down.x,dy=aim.y-down.y,dist=Math.hypot(dx,dy);
+  if(dist<18){player.tx=Math.min(Math.max(down.x,30),W-30);} // Tippen = fahren
+  else fire(dx,dy,dist);
+  down=null;aim=null;
+}
+cv.addEventListener('pointerup',release);cv.addEventListener('pointercancel',()=>{down=null;aim=null});
+
+function aimVec(){ // Zielrichtung = vom Panzer in Zugrichtung
+  if(!down||!aim)return null;const dx=aim.x-down.x,dy=aim.y-down.y,d=Math.hypot(dx,dy);if(d<18)return null;
+  return {ang:Math.atan2(dy,dx),range:Math.min(H*1.1,120+d*3.2)};
+}
+function fire(){
+  const a=aimVec();if(!a||reload>0)return;
+  const sp=520;const ux=Math.cos(a.ang),uy=Math.sin(a.ang);
+  shells.push({x:player.x+ux*30,y:player.y+uy*30,vx:ux*sp,vy:uy*sp,life:a.range/sp,mine:true});
+  reload=0.55;player.turret=a.ang;
+  for(let i=0;i<8;i++)parts.push(P(player.x+ux*32,player.y+uy*32,'#ffd25a',ux*120,uy*120,.25));
+  shake=3;
+}
+function P(x,y,c,vx,vy,l){return{x,y,c,vx:vx+(Math.random()-.5)*160,vy:vy+(Math.random()-.5)*160,l,ml:l,r:2+Math.random()*4};}
+function boom(x,y,big){
+  const n=big?40:18;for(let i=0;i<n;i++)parts.push(P(x,y,['#ffd25a','#f08a2c','#a3402a','#3a3020'][i%4],0,0,.5+Math.random()*.6));
+  shake=big?10:5;
+}
+
+// Update
+function update(dt){
+  if(reload>0)reload-=dt;
+  // Spieler fahren
+  const dx=player.tx-player.x;if(Math.abs(dx)>2){player.x+=Math.sign(dx)*Math.min(Math.abs(dx),190*dt);if(Math.random()<.4)tracks.push({x:player.x,y:player.y+14,l:3});}
+  const av=aimVec();if(av)player.turret=av.ang;
+  if(player.hit>0)player.hit-=dt;
+  // Gegner spawnen
+  if(spawnLeft>0){spawnT-=dt;if(spawnT<=0){spawnEnemy();spawnLeft--;spawnT=1.2;}}
+  else if(enemies.length===0){nextWave();}
+  for(const e of enemies){
+    const ddx=e.tx-e.x,ddy=e.ty-e.y,d=Math.hypot(ddx,ddy);
+    if(d>4){const ta=Math.atan2(ddy,ddx);e.ang+=angDiff(ta,e.ang)*Math.min(1,dt*3);e.x+=Math.cos(e.ang)*e.speed*dt;e.y+=Math.sin(e.ang)*e.speed*dt;if(Math.random()<.25)tracks.push({x:e.x,y:e.y,l:3});}
+    else{e.tx=30+Math.random()*(W-60);e.ty=80+Math.random()*(H*0.5);}
+    const pa=Math.atan2(player.y-e.y,player.x-e.x);e.turret+=angDiff(pa,e.turret)*Math.min(1,dt*4);
+    e.fire-=dt;if(e.fire<=0&&e.y>20){
+      const sp=170+wave*12,ea=e.turret+(Math.random()-.5)*.18;
+      shells.push({x:e.x+Math.cos(ea)*24,y:e.y+Math.sin(ea)*24,vx:Math.cos(ea)*sp,vy:Math.sin(ea)*sp,life:6,mine:false});
+      e.fire=Math.max(1.1,3.2-wave*.18)+Math.random()*1.5;
+    }
+  }
+  // Granaten
+  for(const s of shells){
+    s.x+=s.vx*dt;s.y+=s.vy*dt;s.life-=dt;
+    if(Math.random()<.6)parts.push({x:s.x,y:s.y,c:'rgba(240,230,200,.6)',vx:0,vy:0,l:.25,ml:.25,r:2});
+    for(const r of rocks)if(Math.hypot(s.x-r.x,s.y-r.y)<r.r){s.life=0;boom(s.x,s.y,false);}
+    if(s.mine){
+      for(const e of enemies)if(e.hp>0&&Math.hypot(s.x-e.x,s.y-e.y)<22){s.life=0;e.hp--;boom(s.x,s.y,e.hp<=0);if(e.hp<=0){score+=100*wave;updHud();}}
+    }else if(Math.hypot(s.x-player.x,s.y-player.y)<20){
+      s.life=0;boom(s.x,s.y,true);hp--;player.hit=.5;updHud();if(hp<=0)gameOver();
+    }
+    if(s.life<=0&&s.mine&&s.x>0&&s.x<W&&s.y>0&&s.y<H&&!s.done){s.done=1;boom(s.x,s.y,false);tracks.push({x:s.x,y:s.y,l:6,crater:1});}
+  }
+  shells=shells.filter(s=>s.life>0&&s.x>-50&&s.x<W+50&&s.y>-80&&s.y<H+50);
+  enemies=enemies.filter(e=>e.hp>0);
+  for(const p of parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.92;p.vy*=.92;p.l-=dt;}
+  parts=parts.filter(p=>p.l>0);
+  for(const t of tracks)t.l-=dt;tracks=tracks.filter(t=>t.l>0);
+  if(shake>0)shake=Math.max(0,shake-dt*30);
+}
+function angDiff(a,b){let d=a-b;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return d;}
+
+// Zeichnen
+function drawTank(x,y,ang,tur,body,dark,flash,armor){
+  ctx.save();ctx.translate(x,y);ctx.rotate(ang);
+  ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(-20,-15,44,34);
+  ctx.fillStyle='#2b2414';ctx.fillRect(-22,-18,44,8);ctx.fillRect(-22,10,44,8);
+  ctx.fillStyle='#4a4030';for(let i=-20;i<22;i+=6){ctx.fillRect(i,-18,2,8);ctx.fillRect(i,10,2,8);}
+  ctx.fillStyle=flash?'#fff':body;ctx.fillRect(-18,-11,36,22);
+  ctx.fillStyle=dark;ctx.fillRect(-18,-11,36,4);
+  if(armor){ctx.strokeStyle='#ffd25a';ctx.lineWidth=2;ctx.strokeRect(-18,-11,36,22);}
+  ctx.restore();
+  ctx.save();ctx.translate(x,y);ctx.rotate(tur);
+  ctx.fillStyle=dark;ctx.fillRect(4,-3,24,6);
+  ctx.beginPath();ctx.arc(0,0,10,0,Math.PI*2);ctx.fillStyle=flash?'#fff':body;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=dark;ctx.stroke();
+  ctx.restore();
+}
+let grain=null;
+function makeGrain(){grain=document.createElement('canvas');grain.width=grain.height=128;const g=grain.getContext('2d');g.fillStyle='#d9c08a';g.fillRect(0,0,128,128);
+  for(let i=0;i<700;i++){g.fillStyle=Math.random()<.5?'rgba(184,154,94,.5)':'rgba(240,222,170,.5)';g.fillRect(Math.random()*128,Math.random()*128,1+Math.random()*2,1+Math.random()*2);}}
+function draw(){
+  ctx.save();if(shake)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
+  if(!grain)makeGrain();ctx.fillStyle=ctx.createPattern(grain,'repeat');ctx.fillRect(-20,-20,W+40,H+40);
+  for(const t of tracks){ctx.fillStyle=t.crater?`rgba(60,45,20,${.35*t.l/6})`:`rgba(120,95,55,${.35*t.l/3})`;
+    if(t.crater){ctx.beginPath();ctx.arc(t.x,t.y,9,0,Math.PI*2);ctx.fill();}else ctx.fillRect(t.x-3,t.y-3,6,6);}
+  for(const r of rocks){ctx.fillStyle='#8a7a5a';ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#a89770';ctx.beginPath();ctx.arc(r.x-r.r*.3,r.y-r.r*.3,r.r*.55,0,Math.PI*2);ctx.fill();}
+  // Ziellinie
+  const a=aimVec();
+  if(a&&running){
+    ctx.save();ctx.setLineDash([8,8]);ctx.lineWidth=3;ctx.strokeStyle=reload>0?'rgba(43,36,20,.35)':'rgba(43,36,20,.75)';
+    ctx.beginPath();ctx.moveTo(player.x,player.y);const ex=player.x+Math.cos(a.ang)*a.range,ey=player.y+Math.sin(a.ang)*a.range;ctx.lineTo(ex,ey);ctx.stroke();
+    ctx.setLineDash([]);ctx.strokeStyle='#a3402a';ctx.lineWidth=2;ctx.beginPath();ctx.arc(ex,ey,14,0,Math.PI*2);ctx.moveTo(ex-20,ey);ctx.lineTo(ex+20,ey);ctx.moveTo(ex,ey-20);ctx.lineTo(ex,ey+20);ctx.stroke();ctx.restore();
+  }
+  for(const e of enemies)drawTank(e.x,e.y,e.ang,e.turret,'#a3402a','#5e2214',false,e.hp>1);
+  if(player)drawTank(player.x,player.y,-Math.PI/2,player.turret,'#5b6b2f','#2f3a14',player.hit>0&&Math.floor(player.hit*20)%2===0,false);
+  for(const s of shells){ctx.fillStyle=s.mine?'#2b2414':'#c0301a';ctx.beginPath();ctx.arc(s.x,s.y,s.mine?4:5,0,Math.PI*2);ctx.fill();}
+  for(const p of parts){ctx.globalAlpha=Math.max(0,p.l/p.ml);ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();}
+  ctx.globalAlpha=1;
+  // Nachladebalken
+  if(player&&running&&reload>0){ctx.fillStyle='rgba(43,36,20,.6)';ctx.fillRect(player.x-20,player.y+26,40,5);ctx.fillStyle='#ffd25a';ctx.fillRect(player.x-20,player.y+26,40*(1-reload/.55),5);}
+  ctx.restore();
+}
+let last=0;
+function loop(t){const dt=Math.min(.05,(t-last)/1000||0);last=t;if(running)update(dt);else{for(const p of parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.l-=dt}parts=parts.filter(p=>p.l>0);if(shake>0)shake=Math.max(0,shake-dt*30);}draw();requestAnimationFrame(loop);}
+
+function gameOver(){running=false;if(score>best){best=score;try{localStorage.setItem('pz_best',best)}catch(e){}}
+  $('overText').textContent=`Du hast ${score} Punkte geholt und Welle ${wave} erreicht. Rekord: ${best}.`;setTimeout(()=>{$('over').hidden=false;$('again').focus();},700);}
+function start(){$('start').hidden=true;$('over').hidden=true;newGame();running=true;}
+$('go').onclick=start;$('again').onclick=start;
+
+resize();
+// Startbild: Demo-Szene
+player={x:W/2,y:H-70,tx:W/2,turret:-Math.PI/2+.4,hit:0};enemies=[];shells=[];parts=[];tracks=[];
+rocks=[{x:W*.25,y:H*.35,r:20},{x:W*.75,y:H*.25,r:16}];
+enemies.push({x:W*.3,y:H*.18,ang:Math.PI/2,turret:Math.PI/2,hp:1},{x:W*.7,y:H*.42,ang:2.6,turret:2.2,hp:1});
+requestAnimationFrame(loop);
+})();
+</script>
+
+</body></html>

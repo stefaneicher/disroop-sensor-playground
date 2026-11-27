@@ -26,6 +26,16 @@ Status aller Punkte: **offen**.
 - [~] (Ski erledigt 2026-11-08, Alarm/Ton nur per Unit-Test, nicht mit echtem Gerät; Tennis offen) (Tennis/Ski) Bewegungsgrenzen: Dreht man das Gerät in einer Weise, die der Spieler (Mensch) nicht machen kann, gibt es Alarm oder Ton. So lernt man den möglichen Bewegungsradius.
 - [ ] (Verbindung, teilweise 2026-11-08: ConnectionHub, alle Ansichten migriert, ungebaut/ungetestet) Klären, ob die Verbindung bei jedem Wechsel zwischen Ansichten abbrechen und neu aufgebaut werden muss (heute trennt `TennisActivity.onStop`). Alternative: eine dauerhafte Verbindung (z. B. Service oder gemeinsamer Halter), die alle Ansichten nutzen.
 
+
+### Kinder-Spielplatz (User, 2026-11-27, Konzept: [`docs/KONZEPT_KINDER_SPIELPLATZ.md`](docs/KONZEPT_KINDER_SPIELPLATZ.md))
+- [x] (Spiele) 21 Familienspiele aus Claude-Artifacts als `games/kids-*` mit `game.json` übernommen — 2026-11-27
+- [x] (Konsole) Startseite `console/kinder/` mit Profilen, Zeitkonto (30 Min. pro Kind, Woche ab Samstag), Eltern-PIN — 2026-11-27
+- [ ] (Test) Startseite auf dem Tablet prüfen (Touch, Vollbild, Warnungen, Abpfiff).
+- [ ] (CI) `tests/kids-zeitkonto.test.mjs` in einen CI-Bereich aufnehmen (z. B. `./project web test`).
+- [ ] (Pages) Entscheiden, ob `console/kinder` und `games/kids-*` über Pages laufen sollen; dann Workflow erweitern.
+- [ ] (Android) Kinder-Startseite als Einstieg in der App, Zeitkonto nativ speichern, Spiele nur über die Startseite.
+- [ ] (Flutlicht-Kick) Prototyp-Test Godot + Mixamo (Phase 0 im Zieldesign).
+
 ### Handy-Controller per QR-Code (User, 2026-11-08, Konzept: [`docs/KONZEPT_HANDY_CONTROLLER.md`](docs/KONZEPT_HANDY_CONTROLLER.md))
 Status aller Punkte: **offen**.
 - [ ] (Pad) Pad-Seite `/pad`: Sensor-Freigabe per Tipp (iOS), Querformat, `deviceorientation`/`devicemotion` → `MotionFrame`, Touch = Taster, Vibration als Feedback.

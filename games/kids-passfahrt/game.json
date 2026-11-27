@@ -1,0 +1,15 @@
+{
+  "id": "kids-passfahrt",
+  "name": "Passfahrt",
+  "category": "Rennen",
+  "description": "Von Thun auf den Grimselpass: Wohnwagen überholen, Blitzern ausweichen, gegen die Uhr.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

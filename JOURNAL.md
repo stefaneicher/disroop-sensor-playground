@@ -1,5 +1,14 @@
 # Journal
 
+## 2026-11-27 – Kinder-Spielplatz mit Zeitkonto
+
+- 21 Familienspiele (Three.js, je eine HTML-Datei) aus Claude-Artifacts nach `games/kids-*` übernommen, je mit `game.json` und `README.md` (Herkunft). Echte Vornamen, Ortsnamen und Vereinsbezüge durch erfundene ersetzt, weil das Repo öffentlich ist.
+- Neue Startseite `console/kinder/`: Profile pro Kind, Spielauswahl nach Kategorie, Spiel im Vollbild mit Restzeit, Warnungen bei 5 und 1 Minute, Abpfiff bei 0. Eltern-Bereich hinter PIN: Namen, Minuten pro Kind, +10 Min. Bonus, Lernspiele zählen ja/nein, Übersicht der Woche.
+- Zeitkonto-Logik in `console/kinder/zeitkonto.js`, 7 Tests in `tests/kids-zeitkonto.test.mjs` grün (`node --test`). Katalog über `scripts/kids-catalog.mjs`.
+- Startseite per Headless-Chrome-Screenshot geprüft (1180×820 und 390×844). Spiele selbst laden Three.js vom CDN und wurden hier nicht gestartet; nicht auf echtem Tablet getestet.
+- Zielbild «Flutlicht-Kick» als Profi-Spiel (Godot, Android) in `games/kids-flutlicht-kick/ZIELDESIGN.md`.
+- Nicht in CI und nicht auf Pages eingebunden (siehe TODO).
+
 ## 2026-11-13 – Projektstand, Präsentationsarchiv und Dateiaudit
 
 - Verbindlichen Motion-One-Stand in `management/PROJECT_STATE.md` abgeglichen:

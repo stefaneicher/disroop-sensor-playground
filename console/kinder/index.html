@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kinder-Spielplatz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: fröhlich, klar, für Kinder ab 5 lesbar; Elternteil ruhig und sachlich
+IDEA: Spielplatz-Eingang mit Tickets: jedes Kind hat sein Zeitkonto für die Woche
+PICTURE: grosse runde Profil-Knöpfe mit Zeit-Ring, darunter Spielkacheln in Kategorie-Farben
+COLOUR and TYPE: Himmelblau, Wiesengrün, kräftige Kategorie-Farben; Fredoka
+LAYOUT: Profile → Spiele → Vollbild-Spiel mit Zeitanzeige; Eltern-Bereich hinter PIN
+*/
+:root{--sky:#7cc4f0;--sky2:#b9e2fa;--grass:#55b14a;--ink:#16233a;--card:#fff;--muted:#5b6780;--red:#e4572e}
+*{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font:17px/1.4 Fredoka,system-ui,sans-serif;color:var(--ink);background:linear-gradient(var(--sky),var(--sky2) 60%,#d8f0c8);min-height:100%;overflow-x:clip}
+body::after{content:"";position:fixed;left:-10%;right:-10%;bottom:-120px;height:220px;background:var(--grass);border-radius:50%;z-index:-1}
+header{display:flex;align-items:center;gap:12px;padding:calc(env(safe-area-inset-top) + 14px) max(4vw,16px) 6px}
+header h1{margin:0;font-size:clamp(30px,5vw,44px);font-weight:700;line-height:1.05;color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.15)}
+header .sp{flex:1}
+button{font:inherit;cursor:pointer;border:0;border-radius:999px;min-height:44px;padding:0 18px;background:#fff;color:var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.12)}
+button:focus-visible{outline:3px solid #ffcc33;outline-offset:2px}
+.ghost{background:rgba(255,255,255,.75)}
+main{padding:8px max(4vw,16px) 40px;max-width:1240px;margin:0 auto}
+h2{font-size:clamp(24px,3.4vw,32px);margin:14px 0 14px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.15)}
+.kids{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:20px}
+.kid{background:var(--card);border-radius:28px;padding:22px 16px 18px;text-align:center;box-shadow:0 6px 0 rgba(0,0,0,.1);display:grid;justify-items:center;gap:8px}
+.kid .ring{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),#e8edf3 0)}
+.kid .ring span{width:104px;height:104px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:44px;font-weight:700;color:var(--c)}
+.kid b{font-size:24px}
+.kid small{color:var(--muted);font-size:16px}
+.kid.empty{opacity:.6}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:6px 0 16px}
+.chip{background:#fff;border-radius:999px;padding:8px 16px;font-weight:600;box-shadow:0 3px 0 rgba(0,0,0,.1)}
+.cats{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.cats button{flex:none;min-height:40px;padding:0 14px;font-weight:600}
+.cats button[aria-pressed=true]{background:var(--ink);color:#fff}
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:16px}
+.game{all:unset;cursor:pointer;background:var(--card);border-radius:22px;overflow:hidden;box-shadow:0 5px 0 rgba(0,0,0,.1);display:flex;flex-direction:column}
+.game:focus-visible{outline:3px solid #ffcc33}
+.game .art{height:96px;background:var(--gc);position:relative;overflow:hidden}
+.game .art::before{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.18);right:-40px;top:-60px}
+.game .art::after{content:attr(data-l);position:absolute;left:16px;bottom:-14px;font-size:84px;font-weight:700;color:rgba(255,255,255,.9);line-height:1}
+.game .txt{padding:12px 16px 16px}
+.game b{display:block;font-size:20px;line-height:1.15}
+.game small{display:block;color:var(--muted);font-size:15px;margin-top:4px}
+.game .tag{display:inline-block;margin-top:8px;font-size:13px;font-weight:600;color:var(--gc)}
+#player{position:fixed;inset:0;background:#000;display:none;z-index:20}
+#player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#hud{position:absolute;top:calc(env(safe-area-inset-top) + 8px);right:calc(env(safe-area-inset-right) + 8px);display:flex;gap:8px;z-index:2}
+#hud .time{background:rgba(22,35,58,.85);color:#fff;border-radius:999px;padding:0 14px;display:flex;align-items:center;font-weight:600;min-height:40px}
+#hud .time.low{background:var(--red)}
+#hud button{min-height:40px;background:rgba(255,255,255,.9)}
+.toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:600;z-index:30;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.overlay{position:fixed;inset:0;background:rgba(22,35,58,.72);display:none;place-items:center;padding:20px;z-index:40}
+.overlay.show{display:grid}
+.panel{background:#fff;border-radius:26px;padding:24px;width:min(560px,100%);max-height:90vh;overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.panel h3{margin:0 0 8px;font-size:28px}
+.panel p{margin:0 0 14px;color:var(--muted)}
+.panel .big{font-size:46px;text-align:center;margin:8px 0}
+.pin{display:flex;gap:10px;justify-content:center;margin:10px 0 16px}
+.pin input{width:58px;height:64px;text-align:center;font:700 30px Fredoka,sans-serif;border:2px solid #cfd8e3;border-radius:14px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 92px auto;gap:8px;align-items:center;margin:8px 0}
+.row input{font:inherit;font-size:16px;padding:10px 12px;border:2px solid #cfd8e3;border-radius:12px;width:100%}
+.panel .actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;margin-top:16px}
+.primary{background:var(--ink);color:#fff}
+.log{font-size:15px;color:var(--muted);margin:4px 0 10px}
+.note{font-size:14px;color:var(--muted);margin-top:14px}
+label.sw{display:flex;gap:10px;align-items:center;margin:10px 0}
+label.sw input{width:22px;height:22px}
+@media(max-width:600px){.kid .ring{width:108px;height:108px}.kid .ring span{width:84px;height:84px;font-size:36px}.row{grid-template-columns:minmax(0,1fr) 80px}.row button{grid-column:1/-1}}
+@media(prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Spielplatz</h1><div class="sp"></div>
+  <button class="ghost" id="parentsBtn">Eltern</button>
+</header>
+<main>
+  <section id="who">
+    <h2>Wer spielt?</h2>
+    <div class="kids" id="kids"></div>
+  </section>
+  <section id="pick" hidden>
+    <div class="bar">
+      <button id="backBtn">← Zurück</button>
+      <span class="chip" id="kidChip"></span>
+    </div>
+    <div class="cats" id="cats"></div>
+    <h2 id="pickTitle">Was spielst du?</h2>
+    <div class="games" id="games"></div>
+  </section>
+</main>
+
+<div id="player">
+  <div id="hud"><span class="time" id="timeLeft">0:00</span><button id="stopBtn">Beenden</button></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<div class="overlay" id="doneOv"><div class="panel">
+  <h3 id="doneTitle">Abpfiff!</h3>
+  <p id="doneText">Deine Spielzeit für diese Woche ist vorbei.</p>
+  <div class="actions"><button class="primary" id="doneOk">OK</button></div>
+</div></div>
+
+<div class="overlay" id="pinOv"><div class="panel">
+  <h3 id="pinTitle">Eltern-PIN</h3>
+  <p id="pinText">Bitte PIN eingeben.</p>
+  <div class="pin" id="pinBox"></div>
+  <div class="actions"><button id="pinCancel">Abbrechen</button><button class="primary" id="pinOk">Weiter</button></div>
+</div></div>
+
+<div class="overlay" id="parentOv"><div class="panel">
+  <h3>Eltern-Bereich</h3>
+  <p id="weekInfo"></p>
+  <div id="kidRows"></div>
+  <label class="sw"><input type="checkbox" id="countLearning"> Lernspiele zählen zur Spielzeit</label>
+  <label class="row" style="grid-template-columns:minmax(0,1fr) 92px">Minuten pro Woche (Standard)<input type="number" id="stdMin" min="0" max="600" inputmode="numeric"></label>
+  <p class="note">Das Zeitkonto ist auf diesem Gerät in diesem Browser gespeichert. Wer die Browserdaten löscht oder ein Spiel direkt über seine Adresse öffnet, umgeht es. In der geplanten Android-App wird es verbindlich.</p>
+  <div class="actions"><button id="newPin">PIN ändern</button><button class="primary" id="parentClose">Fertig</button></div>
+</div></div>
+
+<script type="module">
+import * as Z from './zeitkonto.js';
+{
+const $ = id => document.getElementById(id);
+const KEY = 'disroop.kinderspielplatz.v1';
+const CAT_COLORS = {Sport:'#e4572e',Rennen:'#f39c12',Fliegen:'#2e86de',Abenteuer:'#8e44ad',Action:'#c0392b',Knobeln:'#16a085',Lernen:'#17a673'};
+let state, games = [], kid = null, cat = 'Alle', playing = null, lastTick = 0, warned = {}, saveT = 0;
+
+function load(){ try{ const s = JSON.parse(localStorage.getItem(KEY)); if(s && s.version===1) return s; }catch(e){} return Z.newState(); }
+function save(){ try{ Z.prune(state); localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function toast(t){ const el=$('toast'); el.textContent=t; el.classList.add('show'); clearTimeout(toast.h); toast.h=setTimeout(()=>el.classList.remove('show'),2600); }
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mins = ms => Math.ceil(ms/60000);
+const resetText = () => Z.nextReset(Date.now(), state.settings.resetDay, state.settings.resetHour).toLocaleDateString('de-CH',{weekday:'long',day:'numeric',month:'long'});
+
+function renderKids(){
+  const now = Date.now();
+  $('kids').innerHTML = state.kids.map(k => {
+    const rem = Z.remainingMs(state,k.id,now), bud = Z.budgetMs(state,k.id,now), p = bud ? Math.round(rem/bud*100) : 0;
+    return `<button class="kid ${rem<=0?'empty':''}" data-id="${k.id}" style="--c:${k.color};--p:${p}">
+      <div class="ring"><span>${esc(k.name.trim()[0]||'?')}</span></div>
+      <b>${esc(k.name)}</b>
+      <small>${rem>0 ? `Noch ${mins(rem)} Min. diese Woche` : `Neue Zeit ab ${resetText()}`}</small></button>`;
+  }).join('');
+}
+function showWho(){ $('who').hidden=false; $('pick').hidden=true; kid=null; renderKids(); }
+function showPick(id){
+  kid = state.kids.find(k=>k.id===id);
+  const rem = Z.remainingMs(state,kid.id,Date.now());
+  $('who').hidden=true; $('pick').hidden=false;
+  $('kidChip').textContent = `${kid.name} · noch ${mins(rem)} Min.`;
+  $('kidChip').style.color = kid.color;
+  $('pickTitle').textContent = rem>0 ? `Was spielst du, ${kid.name}?` : 'Diese Woche ist die Spielzeit vorbei';
+  renderGames();
+}
+function renderGames(){
+  const cats = ['Alle', ...new Set(games.map(g=>g.category))];
+  $('cats').innerHTML = cats.map(c=>`<button aria-pressed="${c===cat}" data-c="${esc(c)}">${esc(c)}</button>`).join('');
+  const rem = Z.remainingMs(state,kid.id,Date.now());
+  const list = games.filter(g => cat==='Alle' || g.category===cat);
+  $('games').innerHTML = list.length ? list.map(g => {
+    const free = !Z.counts(state,g), locked = rem<=0 && !free;
+    return `<button class="game" data-id="${g.id}" ${locked?'disabled':''} style="--gc:${CAT_COLORS[g.category]||'#555'}${locked?';opacity:.45;cursor:not-allowed':''}">
+      <div class="art" data-l="${esc(g.name[0])}"></div>
+      <div class="txt"><b>${esc(g.name)}</b><small>${esc(g.description)}</small>
+      <span class="tag">${esc(g.category)} · ab ${esc(g.age)}${free?' · zählt nicht':''}</span></div></button>`;
+  }).join('') : '<p class="chip">Noch keine Spiele gefunden.</p>';
+}
+
+function startGame(id){
+  const g = games.find(x=>x.id===id); if(!g) return;
+  const counted = Z.counts(state,g);
+  if(counted && Z.remainingMs(state,kid.id,Date.now())<=0){ toast('Keine Spielzeit mehr diese Woche'); return; }
+  playing = { game:g, counted }; warned = {};
+  const f = document.createElement('iframe');
+  f.src = g.path; f.allow = 'fullscreen; autoplay; gamepad'; f.title = g.name;
+  $('player').appendChild(f); $('player').style.display='block';
+  lastTick = Date.now(); updateHud();
+  try{ document.documentElement.requestFullscreen?.().catch(()=>{}); }catch(e){}
+}
+function stopGame(msg){
+  if(!playing) return;
+  tick(); save();
+  $('player').querySelector('iframe')?.remove(); $('player').style.display='none';
+  playing = null;
+  try{ if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }catch(e){}
+  if(msg){ $('doneTitle').textContent=msg.title; $('doneText').textContent=msg.text; $('doneOv').classList.add('show'); }
+  showPick(kid.id);
+}
+function tick(){
+  if(!playing) return;
+  const now = Date.now(), dt = now - lastTick; lastTick = now;
+  if(!playing.counted || document.visibilityState!=='visible') return;
+  const rem = Z.addUsage(state, kid.id, dt, now, playing.game.id);
+  if(now - saveT > 5000){ save(); saveT = now; }
+  if(rem<=5*60000 && rem>60000 && !warned[5]){ warned[5]=1; toast('Noch 5 Minuten Spielzeit'); }
+  if(rem<=60000 && rem>0 && !warned[1]){ warned[1]=1; toast('Noch 1 Minute! Bald ist Schluss.'); }
+  if(rem<=0) stopGame({title:'Abpfiff!', text:`Deine Spielzeit für diese Woche ist vorbei. Neue Zeit gibt es ab ${resetText()}.`});
+}
+function updateHud(){
+  if(!playing) return;
+  const el = $('timeLeft');
+  if(!playing.counted){ el.textContent='zählt nicht'; el.classList.remove('low'); return; }
+  const rem = Z.remainingMs(state,kid.id,Date.now());
+  el.textContent = Z.formatMs(rem); el.classList.toggle('low', rem<=60000);
+}
+setInterval(()=>{ tick(); updateHud(); }, 1000);
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible') lastTick=Date.now(); else { tick(); save(); } });
+addEventListener('pagehide', ()=>{ tick(); save(); });
+
+/* Eltern-PIN */
+let pinMode = 'check', pinFirst = '';
+function openPin(mode){
+  pinMode = mode; pinFirst = '';
+  $('pinTitle').textContent = mode==='check' ? 'Eltern-PIN' : 'Neue PIN festlegen';
+  $('pinText').textContent = mode==='check' ? 'Bitte die 4-stellige PIN eingeben.' : 'Wähle eine 4-stellige PIN, die die Kinder nicht kennen.';
+  $('pinBox').innerHTML = [0,1,2,3].map(i=>`<input inputmode="numeric" maxlength="1" aria-label="Ziffer ${i+1}" type="password">`).join('');
+  $('pinOv').classList.add('show'); $('pinBox').querySelector('input').focus();
+}
+$('pinBox').addEventListener('input', e => { if(e.target.value && e.target.nextElementSibling) e.target.nextElementSibling.focus(); });
+$('pinBox').addEventListener('keydown', e => { if(e.key==='Backspace' && !e.target.value && e.target.previousElementSibling) e.target.previousElementSibling.focus(); if(e.key==='Enter') $('pinOk').click(); });
+async function hash(p){ try{ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('spielplatz:'+p)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }catch(e){ return 'p:'+p; } }
+$('pinOk').addEventListener('click', async () => {
+  const p = [...$('pinBox').querySelectorAll('input')].map(i=>i.value).join('');
+  if(!/^\d{4}$/.test(p)){ toast('Bitte 4 Ziffern eingeben'); return; }
+  if(pinMode==='check'){
+    if(await hash(p)===state.pin){ $('pinOv').classList.remove('show'); openParents(); }
+    else { toast('Falsche PIN'); openPin('check'); }
+  } else if(!pinFirst){ pinFirst=p; $('pinText').textContent='Bitte die PIN zur Bestätigung nochmals eingeben.'; $('pinBox').querySelectorAll('input').forEach(i=>i.value=''); $('pinBox').querySelector('input').focus(); }
+  else if(p===pinFirst){ state.pin = await hash(p); save(); $('pinOv').classList.remove('show'); toast('PIN gespeichert'); openParents(); }
+  else { toast('Die PINs stimmen nicht überein'); openPin('set'); }
+});
+$('pinCancel').addEventListener('click', ()=>$('pinOv').classList.remove('show'));
+$('parentsBtn').addEventListener('click', ()=> openPin(state.pin ? 'check' : 'set'));
+$('newPin').addEventListener('click', ()=>{ $('parentOv').classList.remove('show'); openPin('set'); });
+
+function openParents(){
+  const now = Date.now();
+  $('weekInfo').textContent = `Diese Woche läuft bis ${resetText()}, 00:00 Uhr. Danach sind alle Konten wieder voll.`;
+  $('stdMin').value = state.settings.weeklyMinutes;
+  $('countLearning').checked = state.settings.countLearning;
+  $('kidRows').innerHTML = state.kids.map(k => {
+    const wk = state.weeks[Z.weekKey(now,state.settings.resetDay,state.settings.resetHour)]?.[k.id];
+    const per = {}; (wk?.log||[]).forEach(l => per[l.game]=(per[l.game]||0)+l.ms);
+    const log = Object.entries(per).map(([g,ms]) => `${esc(games.find(x=>x.id===g)?.name||g)} ${Math.max(1,Math.round(ms/60000))} Min.`).join(' · ');
+    return `<div class="row" data-id="${k.id}">
+      <input value="${esc(k.name)}" aria-label="Name" data-f="name">
+      <input type="number" min="0" max="600" inputmode="numeric" value="${k.minutes ?? ''}" placeholder="${state.settings.weeklyMinutes}" aria-label="Minuten pro Woche" data-f="min">
+      <button data-bonus="10">+10 Min.</button></div>
+      <div class="log">Gespielt: ${mins(Z.usedMs(state,k.id,now))} von ${mins(Z.budgetMs(state,k.id,now))} Min.${log?' – '+log:''}</div>`;
+  }).join('');
+  $('parentOv').classList.add('show');
+}
+$('kidRows').addEventListener('change', e => {
+  const k = state.kids.find(x=>x.id===e.target.closest('.row')?.dataset.id); if(!k) return;
+  if(e.target.dataset.f==='name') k.name = e.target.value.trim() || k.name;
+  if(e.target.dataset.f==='min') k.minutes = e.target.value==='' ? null : Math.max(0, +e.target.value|0);
+  save();
+});
+$('kidRows').addEventListener('click', e => {
+  const b = e.target.closest('[data-bonus]'); if(!b) return;
+  const id = b.closest('.row').dataset.id; Z.addBonus(state,id,+b.dataset.bonus,Date.now()); save(); openParents(); toast('10 Minuten Bonus gegeben');
+});
+$('stdMin').addEventListener('change', e => { state.settings.weeklyMinutes = Math.max(0, +e.target.value|0); save(); openParents(); });
+$('countLearning').addEventListener('change', e => { state.settings.countLearning = e.target.checked; save(); });
+$('parentClose').addEventListener('click', ()=>{ $('parentOv').classList.remove('show'); kid ? showPick(kid.id) : showWho(); });
+
+/* Navigation */
+$('kids').addEventListener('click', e => { const b=e.target.closest('.kid'); if(b) showPick(b.dataset.id); });
+$('backBtn').addEventListener('click', showWho);
+$('cats').addEventListener('click', e => { const b=e.target.closest('[data-c]'); if(b){ cat=b.dataset.c; renderGames(); } });
+$('games').addEventListener('click', e => { const b=e.target.closest('.game'); if(b && !b.disabled) startGame(b.dataset.id); });
+$('stopBtn').addEventListener('click', ()=>stopGame());
+$('doneOk').addEventListener('click', ()=>$('doneOv').classList.remove('show'));
+
+state = load();
+showWho();
+fetch('games.json').then(r=>r.json()).then(c=>{ games=c.games||[]; if(kid) renderGames(); })
+  .catch(()=>toast('Spieleliste nicht gefunden. Bitte über einen Webserver öffnen.'));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "id": "kids-foil-cup",
+  "name": "Foil-Cup",
+  "category": "Sport",
+  "description": "Segelrennen im America’s-Cup-Stil mit Foiling-Yacht.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}
