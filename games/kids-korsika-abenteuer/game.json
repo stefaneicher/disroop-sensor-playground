@@ -11,5 +11,6 @@
   ],
   "gestures": [],
   "entry": "index.html",
-  "playtime": true
+  "playtime": true,
+  "thumb": "thumb.jpg"
 }

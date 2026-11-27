@@ -1,5 +1,13 @@
 # Journal
 
+## 2026-11-28 – Kinder-Spielplatz: ein Konto pro Gerät, Eltern-Code, Vorschaubilder
+
+- Kinderauswahl entfernt: ein Zeitkonto pro Gerät. Eltern-Bereich mit festem Code (nur SHA-256 im Repo), +10 Min., Timer zurücksetzen, unbegrenzt spielen.
+- Vorschaubilder `thumb.jpg` für alle 21 Spiele per Headless-Chrome (Bibliotheken lokal aus npm umgeleitet); alle Spiele luden ohne Fehler.
+- Himmelsuhr vollständig: 162 Zusatzdateien (`dem/`, `sky/`) aus dem Artifact übernommen, Prüfsummen stichprobenweise verglichen.
+- Weitere Anonymisierung: Dorf-Rallye heisst Hügelwil-Rallye (Titel, Banner), Regatta heisst See-Regatta (kein Club-Name mehr).
+- 8 Tests grün. Startseite per Klicktest geprüft (falscher/richtiger Code, unbegrenzt, gesperrt bei 0 Min., Zurücksetzen). Nicht auf echtem Tablet getestet.
+
 ## 2026-11-27 – Kinder-Spielplatz mit Zeitkonto
 
 - 21 Familienspiele (Three.js, je eine HTML-Datei) aus Claude-Artifacts nach `games/kids-*` übernommen, je mit `game.json` und `README.md` (Herkunft). Echte Vornamen, Ortsnamen und Vereinsbezüge durch erfundene ersetzt, weil das Repo öffentlich ist.

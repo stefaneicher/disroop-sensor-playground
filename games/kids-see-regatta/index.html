@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Lions-Regatta Thunersee</title>
+<title>See-Regatta</title>
 <style>
   :root{ --blue:#00338D; --gold:#EBB700; --ink:#0d1b2a; }
   *{box-sizing:border-box}
@@ -59,15 +59,15 @@
 <div id="tl" class="touch">◀</div><div id="tr" class="touch">▶</div>
 
 <div id="start" class="overlay"><div class="card">
-  <div class="club">LIONS CLUB THUN</div>
-  <h1>Lions-Regatta<br><span>Thunersee</span></h1>
+  <div class="club">SEGELCLUB</div>
+  <h1>See-Regatta<br><span>Thunersee</span></h1>
   <p>Segle für den guten Zweck: Sammle in 2 Minuten so viele goldene Spendenbojen wie möglich. Schnell hintereinander gibt es einen Bonus.</p>
   <p>Achtung: <b>Föhnböen</b> drehen den Wind, und die <b>Kursschiffe</b> haben Vorfahrt.<br>Gegen den Wind geht nichts – am schnellsten bist du mit Wind von der Seite.</p>
   <div class="keys">← → oder A / D steuern · Handy: linke / rechte Bildschirmhälfte<br>T Tageszeit · G Gewitter</div>
   <button id="go">Leinen los!</button>
 </div></div>
 <div id="end" class="overlay hidden"><div class="card">
-  <div class="club">LIONS CLUB THUN DANKT</div>
+  <div class="club">DANKE FÜRS MITSEGELN</div>
   <h1>Regatta beendet</h1>
   <div class="result" id="final">CHF 0</div>
   <p id="best"></p>
@@ -529,7 +529,7 @@ function tick(){
 
 function endGame(){
   state = 'end';
-  let best = 0; try { best = +localStorage.getItem('lionsRegattaBest') || 0; if (score > best){ localStorage.setItem('lionsRegattaBest', score); } } catch(e){}
+  let best = 0; try { best = +localStorage.getItem('seeRegattaBest') || 0; if (score > best){ localStorage.setItem('seeRegattaBest', score); } } catch(e){}
   $('final').textContent = fmtCHF(score);
   $('best').textContent = score > best ? '🏆 Neuer Rekord!' : `Rekord: ${fmtCHF(best)}`;
   $('end').classList.remove('hidden');

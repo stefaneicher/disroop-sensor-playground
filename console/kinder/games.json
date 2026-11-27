@@ -15,6 +15,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-doppelpass-kick/index.html"
     },
     {
@@ -31,6 +32,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-flutlicht-kick/index.html"
     },
     {
@@ -47,13 +49,14 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-foil-cup/index.html"
     },
     {
-      "id": "kids-lions-regatta-thunersee",
-      "name": "Lions-Regatta Thunersee",
+      "id": "kids-see-regatta",
+      "name": "See-Regatta",
       "category": "Sport",
-      "description": "Segelregatta auf dem Thunersee.",
+      "description": "Segelregatta für den guten Zweck: Spendenbojen sammeln, Wind und Kursschiffe beachten.",
       "age": "6+",
       "players": 1,
       "input": [
@@ -63,7 +66,8 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
-      "path": "../../games/kids-lions-regatta-thunersee/index.html"
+      "thumb": "thumb.jpg",
+      "path": "../../games/kids-see-regatta/index.html"
     },
     {
       "id": "kids-springreiten-parcours",
@@ -79,11 +83,12 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-springreiten-parcours/index.html"
     },
     {
       "id": "kids-dorf-rallye",
-      "name": "Dorf-Rallye",
+      "name": "Hügelwil-Rallye",
       "category": "Rennen",
       "description": "Rallye durch ein Bauerndorf mit Weilern, Kehren und Feldwegen.",
       "age": "6+",
@@ -95,6 +100,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-dorf-rallye/index.html"
     },
     {
@@ -111,6 +117,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-passfahrt/index.html"
     },
     {
@@ -127,6 +134,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-tschu-tschu-rennen/index.html"
     },
     {
@@ -143,6 +151,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-turbo-pokal/index.html"
     },
     {
@@ -159,6 +168,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-kiwi-air/index.html"
     },
     {
@@ -175,6 +185,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-luftkampf/index.html"
     },
     {
@@ -191,6 +202,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-burgdorf-glutdrache/index.html"
     },
     {
@@ -207,6 +219,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-eiger-nordwand/index.html"
     },
     {
@@ -223,6 +236,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-griechenland-abenteuer/index.html"
     },
     {
@@ -239,6 +253,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-korsika-abenteuer/index.html"
     },
     {
@@ -255,6 +270,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-new-york-abenteuer/index.html"
     },
     {
@@ -271,6 +287,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-panzerduell/index.html"
     },
     {
@@ -287,6 +304,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-roboter-labyrinth/index.html"
     },
     {
@@ -303,6 +321,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-erdball-laenderquiz/index.html"
     },
     {
@@ -319,6 +338,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-himmelsuhr/index.html"
     },
     {
@@ -335,6 +355,7 @@
       "gestures": [],
       "entry": "index.html",
       "playtime": true,
+      "thumb": "thumb.jpg",
       "path": "../../games/kids-lesefreude/index.html"
     }
   ]

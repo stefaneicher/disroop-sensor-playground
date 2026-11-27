@@ -1,6 +1,6 @@
 {
   "id": "kids-dorf-rallye",
-  "name": "Dorf-Rallye",
+  "name": "Hügelwil-Rallye",
   "category": "Rennen",
   "description": "Rallye durch ein Bauerndorf mit Weilern, Kehren und Feldwegen.",
   "age": "6+",
@@ -11,5 +11,6 @@
   ],
   "gestures": [],
   "entry": "index.html",
-  "playtime": true
+  "playtime": true,
+  "thumb": "thumb.jpg"
 }

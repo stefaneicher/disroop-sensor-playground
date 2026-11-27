@@ -10,14 +10,20 @@ Alle Three.js-Spiele, die mit den Kindern in Claude-Chats entstanden sind, liege
 
 | Regel | Wert | Einstellbar |
 |---|---|---|
-| Budget | 30 Minuten pro Kind und Woche | ja, Standard und pro Kind |
+| Konto | eines pro Gerät, keine Kinderauswahl (das Kind am Gerät spielt) | – |
+| Budget | 30 Minuten pro Woche | Eltern-Bereich |
 | Woche | Samstag 00:00 bis Samstag 00:00 (Ortszeit) | im Code (`DEFAULTS`) |
 | Was zählt | nur Zeit, in der ein Spiel sichtbar offen ist | – |
 | Warnungen | bei 5 Minuten und 1 Minute Restzeit | – |
 | Zeit vorbei | Spiel wird beendet, Hinweis auf den nächsten Samstag | – |
-| Bonus | +10 Minuten für die laufende Woche | Eltern-Bereich |
-| Lernspiele | zählen standardmässig mit | Eltern-Bereich |
-| Eltern-Bereich | hinter einer 4-stelligen PIN (als SHA-256 gespeichert) | PIN ändern |
+| Eltern | +10 Minuten, Timer zurücksetzen, unbegrenzt spielen, Lernspiele zählen ja/nein, Wochenübersicht | Eltern-Bereich |
+| Eltern-Code | fester Code; im Repo liegt nur sein SHA-256 (`PARENT_CODE_SHA256` in `zeitkonto.js`). Nach 3 Fehlversuchen 60 Sekunden Pause | Hash im Code ersetzen |
+
+Der Code ist Schutz vor Kindern, keine echte Sicherheit («Security by Obscurity»): Wer das Repo lesen kann, kann den kurzen Code durch Ausprobieren finden. Neuen Code setzen:
+
+```
+python3 -c "import hashlib;print(hashlib.sha256(b'spielplatz:NEUERCODE').hexdigest())"
+```
 
 Die Logik steckt in `console/kinder/zeitkonto.js` (reine Funktionen, ohne DOM) und ist mit `node --test tests/kids-zeitkonto.test.mjs` geprüft.
 
@@ -47,14 +53,15 @@ console/kinder/            Startseite mit Zeitkonto
   games.json               Katalog, erzeugt mit `node scripts/kids-catalog.mjs`
 games/kids-<name>/         eine Kassette pro Spiel
   index.html               das Spiel (eine Datei, Three.js über CDN)
-  game.json                Name, Kategorie, Alter, Eingaben, zählt zur Spielzeit
+  game.json                Name, Kategorie, Alter, Eingaben, Vorschaubild, zählt zur Spielzeit
+  thumb.jpg                Vorschaubild (Screenshot aus dem Spiel, 640×400)
   README.md                Herkunft (Claude-Artifact), Stand
 games/kids-flutlicht-kick/ZIELDESIGN.md   Zielbild für die Profi-Version (Godot, Android)
 scripts/kids-catalog.mjs   erzeugt den Katalog
 tests/kids-zeitkonto.test.mjs
 ```
 
-Neues Spiel aufnehmen: Ordner `games/kids-<name>/` mit `index.html` und `game.json` anlegen, dann `node scripts/kids-catalog.mjs` ausführen.
+Neues Spiel aufnehmen: Ordner `games/kids-<name>/` mit `index.html`, `game.json` und `thumb.jpg` (Screenshot) anlegen, dann `node scripts/kids-catalog.mjs` ausführen. Spiele mit eigenen Dateien (z. B. `kids-himmelsuhr` mit `dem/` und `sky/`) bringen diese im eigenen Ordner mit.
 
 ## Verbindung zum Playground
 

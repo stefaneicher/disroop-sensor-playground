@@ -1,6 +1,6 @@
-# Lions-Regatta Thunersee
+# See-Regatta
 
-Segelregatta auf dem Thunersee.
+Segelregatta für den guten Zweck: Spendenbojen sammeln, Wind und Kursschiffe beachten.
 
 - Kategorie: Sport
 - Herkunft: Claude-Artifact https://claude.ai/artifact/SqdjwQyRKDUbER5PJqKGhk

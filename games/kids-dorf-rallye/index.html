@@ -118,8 +118,8 @@ tr.me td{font-weight:700;color:var(--red)}
 
 <div id="menu" class="overlay">
   <div class="card">
-    <div class="kicker">GÜRBETAL · KANTON BERN</div>
-    <h1>BURGISTEIN<br><span>RALLYE</span></h1>
+    <div class="kicker">BAUERNDORF · HÜGELLAND</div>
+    <h1>HÜGELWIL<br><span>RALLYE</span></h1>
     <p class="sub">8,1 km auf echten Strassen: vom Bahnhof Hügelwil über zwei Bahnübergänge den Tannwil-Stutz hinauf, durch die Kurzhalde-Kehre, an Unterhof vorbei nach Weiherhof, die Höhenstrasse hinunter nach Bachmatt und Hohlweg, über den Feldweg nach Erlenmoos und durchs Talgrund zurück.</p>
     <div class="row" id="diff"><button data-d="0">Gemütlich</button><button data-d="1" class="sel">Sportlich</button><button data-d="2">Profi</button></div>
     <div class="row" id="laps"><button data-l="1" class="sel">1 Runde</button><button data-l="2">2 Runden</button><button data-l="3">3 Runden</button></div>
@@ -136,7 +136,7 @@ tr.me td{font-weight:700;color:var(--red)}
 
 <div id="result" class="overlay hidden">
   <div class="card">
-    <div class="kicker">ZIEL · BAHNHOF BURGISTEIN</div>
+    <div class="kicker">ZIEL · BAHNHOF HÜGELWIL</div>
     <h1 id="resTitle">ZIEL!</h1>
     <table id="resTable"></table>
     <div class="sub" id="resBest"></div>
@@ -755,7 +755,7 @@ function buildCastle(){
   // east wing (lower)
   add(B, std({map:houseFacade}), 18.5, 5.5, -3, 11, 11, 20);
   add(hipRoof(13,22,9,0.7), roof, 18.5, 11, -3);
-  // flag (Kanton Bern colours simplified to Swiss flag)
+  // flag (Kantonsfarben simplified to Swiss flag)
   const fTex = makeTex(96,64,(c)=>{ c.fillStyle='#d52b1e'; c.fillRect(0,0,96,64); c.fillStyle='#fff'; c.fillRect(40,12,16,40); c.fillRect(28,24,40,16); });
   flagPivot = new THREE.Group(); flagPivot.position.set(-13, 39.6, 10.5); g.add(flagPivot);
   const flag = new THREE.Mesh(new THREE.PlaneGeometry(3,2), std({map:fTex, side:THREE.DoubleSide})); flag.position.x=1.5; flagPivot.add(flag);
@@ -990,7 +990,7 @@ function buildDetails(){
     const arch = new THREE.Group(); arch.position.set(TX[i], y, TZ[i]); arch.rotation.y = rot;
     const dark = std({color:0x22262c, metalness:0.5, roughness:0.5});
     for (const sx of [-1,1]){ const p=new THREE.Mesh(new THREE.BoxGeometry(0.5,7,0.5), dark); p.position.set(sx*(W/2+1.5),3.5,0); p.castShadow=true; arch.add(p); }
-    const bt = makeTex(1024,128,(g)=>{ g.fillStyle='#d52b1e'; g.fillRect(0,0,1024,128); g.fillStyle='#fff'; g.font='bold 74px Arial'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('BURGISTEIN RALLYE', 512, 68); });
+    const bt = makeTex(1024,128,(g)=>{ g.fillStyle='#d52b1e'; g.fillRect(0,0,1024,128); g.fillStyle='#fff'; g.font='bold 74px Arial'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('HÜGELWIL RALLYE', 512, 68); });
     const banner = new THREE.Mesh(new THREE.BoxGeometry(W+3.5,1.7,0.2), [dark,dark,dark,dark,std({map:bt}),std({map:bt})]); banner.position.y=6.4; banner.castShadow=true; arch.add(banner);
     const back=new THREE.Mesh(new THREE.BoxGeometry(4.4,0.8,0.2), dark); back.position.y=5.2; arch.add(back);
     for (let k=0;k<5;k++){ const lm=new THREE.MeshStandardMaterial({color:0x200000, emissive:0xff1a10, emissiveIntensity:0}); for (const zz of [0.11,-0.11]){ const l=new THREE.Mesh(new THREE.CircleGeometry(0.27,20), lm); l.position.set((k-2)*0.82,5.2,zz); if (zz<0) l.rotation.y=Math.PI; arch.add(l); } startLights.push(lm); }
@@ -1073,10 +1073,10 @@ function liveryTex(main, accent, num, name){
     g.fillRect(0,h*0.78,w*0.62,h*0.07);
     g.fillStyle='#fff'; g.beginPath(); g.arc(w*0.46,h*0.42,h*0.33,0,7); g.fill();
     g.fillStyle='#111'; g.font=`bold ${h*0.44|0}px Arial`; g.textAlign='center'; g.textBaseline='middle'; g.fillText(num, w*0.46, h*0.45);
-    g.fillStyle='rgba(255,255,255,.92)'; g.font=`bold ${h*0.15|0}px Arial`; g.textAlign='left'; g.fillText('BURGISTEIN RALLYE', w*0.08, h*0.62);
+    g.fillStyle='rgba(255,255,255,.92)'; g.font=`bold ${h*0.15|0}px Arial`; g.textAlign='left'; g.fillText('HÜGELWIL RALLYE', w*0.08, h*0.62);
     g.font=`600 ${h*0.12|0}px Arial`; g.fillText(name.toUpperCase(), w*0.08, h*0.2);
     g.fillStyle='#d52b1e'; g.fillRect(w*0.03,h*0.12,h*0.16,h*0.16); g.fillStyle='#fff'; g.fillRect(w*0.03+h*0.065,h*0.145,h*0.03,h*0.11); g.fillRect(w*0.03+h*0.025,h*0.185,h*0.11,h*0.03);
-    const spons=['GÜRBETAL','LÄNGENBERG','THUN'];
+    const spons=['TALGRUND','HÖHENBERG','SEEWIL'];
     spons.forEach((s,k)=>{ g.fillStyle='rgba(255,255,255,.88)'; g.fillRect(w*(0.12+k*0.12),h*0.3,w*0.1,h*0.14); g.fillStyle='#14181f'; g.font=`bold ${h*0.09|0}px Arial`; g.textAlign='center'; g.fillText(s, w*(0.17+k*0.12), h*0.385); });
   });
 }
@@ -1461,7 +1461,7 @@ function backfire(c, dur){ c.flameT=dur; c.popT=0; }
 let state='loading', difficulty=1, LAPS=1;
 let cd=0, raceTime=0, lapStart=0, bestLap=0, lastLapsDone=-1, lapTimes=[], lastBeep=4;
 let camMode=0, sectionName='', sectionT=0, msgT=0, shake=0;
-let allTimeBest=0; try{ allTimeBest=+localStorage.getItem('burgistein_rallye3_best')||0; }catch(e){}
+let allTimeBest=0; try{ allTimeBest=+localStorage.getItem('dorf_rallye3_best')||0; }catch(e){}
 const fmt = t => { const m=Math.floor(t/60), s=t-m*60; return `${m}:${s<10?'0':''}${s.toFixed(1)}`; };
 function placeCar(c,s,lat){
   const p=trackAt(s,lat); c.x=p.x; c.z=p.z; c.th=Math.atan2(p.dx,p.dz); c.y=groundH(c.x,c.z); c.gPrev=c.y;
@@ -1582,7 +1582,7 @@ function updateProgress(dt){
 }
 function finishRace(){
   state='finished'; player.finish=raceTime; showMsg('ZIEL!',2.2); beep(660,0.2); setTimeout(()=>beep(990,0.35),200);
-  let rec=false; if (bestLap && (!allTimeBest||bestLap<allTimeBest)){ allTimeBest=bestLap; rec=true; try{ localStorage.setItem('burgistein_rallye3_best',String(bestLap)); }catch(e){} }
+  let rec=false; if (bestLap && (!allTimeBest||bestLap<allTimeBest)){ allTimeBest=bestLap; rec=true; try{ localStorage.setItem('dorf_rallye3_best',String(bestLap)); }catch(e){} }
   setTimeout(()=>showResults(rec),2300);
 }
 function showResults(rec){

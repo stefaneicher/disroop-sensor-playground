@@ -1,4 +1,4 @@
-# Dorf-Rallye
+# Hügelwil-Rallye
 
 Rallye durch ein Bauerndorf mit Weilern, Kehren und Feldwegen.
 

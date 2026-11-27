@@ -1,12 +1,17 @@
-// Zeitkonto für den Kinder-Spielplatz: Wochenbudget pro Kind, Neustart an einem festen Wochentag.
+// Zeitkonto für den Kinder-Spielplatz: ein Wochenbudget pro Gerät, Neustart an einem festen Wochentag.
 // Reine Funktionen ohne DOM, damit sie mit `node --test` geprüft werden können.
 
 export const DEFAULTS = Object.freeze({
-  weeklyMinutes: 30,   // Spielzeit pro Kind und Woche
+  weeklyMinutes: 30,   // Spielzeit pro Woche auf diesem Gerät
   resetDay: 6,         // 0 = Sonntag … 6 = Samstag
   resetHour: 0,        // Neustart um 00:00 Uhr Ortszeit
   countLearning: true, // zählen Lernspiele zur Spielzeit?
 });
+
+// Eltern-Code: SHA-256 von "spielplatz:" + Code. Ändern mit
+//   python3 -c "import hashlib;print(hashlib.sha256(b'spielplatz:NEUERCODE').hexdigest())"
+// Das ist Schutz vor Kindern, keine echte Sicherheit: Wer den Code lesen kann, kann ihn ausprobieren.
+export const PARENT_CODE_SHA256 = 'd2d7135a17d1bfed5c04b5bf986f2992f16a89b18e7b59d09df320c7d8881d7c';
 
 /** Beginn der aktuellen Spielwoche (lokale Zeit) als Datum. */
 export function weekStart(now, resetDay = DEFAULTS.resetDay, resetHour = DEFAULTS.resetHour) {
@@ -34,52 +39,63 @@ export function nextReset(now, resetDay, resetHour) {
 
 export function newState() {
   return {
-    version: 1,
-    pin: null,
+    version: 2,
     settings: { ...DEFAULTS },
-    kids: [
-      { id: 'k1', name: 'Kind 1', color: '#e4572e', minutes: null },
-      { id: 'k2', name: 'Kind 2', color: '#2e86de', minutes: null },
-      { id: 'k3', name: 'Kind 3', color: '#17a673', minutes: null },
-    ],
-    weeks: {}, // weekKey → { kidId → { usedMs, bonusMin, log: [{game, startedAt, ms}] } }
+    unlimited: false, // Eltern haben unbegrenztes Spielen eingeschaltet
+    weeks: {},        // weekKey → { usedMs, bonusMin, log: [{game, startedAt, ms}] }
   };
 }
 
-function week(state, kidId, now) {
+/** Liest einen gespeicherten Zustand; Unbekanntes oder Altes ergibt einen frischen Zustand. */
+export function restore(raw) {
+  if (raw && raw.version === 2 && raw.settings && raw.weeks) {
+    return { ...newState(), ...raw, settings: { ...DEFAULTS, ...raw.settings } };
+  }
+  return newState();
+}
+
+function week(state, now) {
   const k = weekKey(now, state.settings.resetDay, state.settings.resetHour);
-  state.weeks[k] ??= {};
-  state.weeks[k][kidId] ??= { usedMs: 0, bonusMin: 0, log: [] };
-  return state.weeks[k][kidId];
+  state.weeks[k] ??= { usedMs: 0, bonusMin: 0, log: [] };
+  return state.weeks[k];
 }
 
-export function budgetMs(state, kidId, now) {
-  const kid = state.kids.find(k => k.id === kidId);
-  const base = kid?.minutes ?? state.settings.weeklyMinutes;
-  return (base + week(state, kidId, now).bonusMin) * 60_000;
+export function budgetMs(state, now) {
+  return (state.settings.weeklyMinutes + week(state, now).bonusMin) * 60_000;
 }
 
-export function usedMs(state, kidId, now) {
-  return week(state, kidId, now).usedMs;
+export function usedMs(state, now) {
+  return week(state, now).usedMs;
 }
 
-export function remainingMs(state, kidId, now) {
-  return Math.max(0, budgetMs(state, kidId, now) - usedMs(state, kidId, now));
+export function remainingMs(state, now) {
+  if (state.unlimited) return Infinity;
+  return Math.max(0, budgetMs(state, now) - usedMs(state, now));
 }
 
-/** Verbucht gespielte Zeit. Gibt die verbleibende Zeit zurück. */
-export function addUsage(state, kidId, ms, now, game) {
-  const w = week(state, kidId, now);
+export function weekLog(state, now) {
+  return week(state, now).log;
+}
+
+/** Verbucht gespielte Zeit (auch bei «unbegrenzt», damit die Übersicht stimmt). Gibt die Restzeit zurück. */
+export function addUsage(state, ms, now, game) {
+  const w = week(state, now);
   const add = Math.max(0, Math.min(ms, 60_000)); // ein Tick zählt nie mehr als 1 Minute
   w.usedMs += add;
   const last = w.log[w.log.length - 1];
   if (last && last.game === game && now - (last.startedAt + last.ms) < 120_000) last.ms += add;
   else w.log.push({ game, startedAt: now - add, ms: add });
-  return remainingMs(state, kidId, now);
+  return remainingMs(state, now);
 }
 
-export function addBonus(state, kidId, minutes, now) {
-  week(state, kidId, now).bonusMin += minutes;
+export function addBonus(state, minutes, now) {
+  week(state, now).bonusMin += minutes;
+}
+
+/** Setzt die laufende Woche zurück: volle Zeit, kein Bonus, leere Übersicht. */
+export function resetWeek(state, now) {
+  const k = weekKey(now, state.settings.resetDay, state.settings.resetHour);
+  state.weeks[k] = { usedMs: 0, bonusMin: 0, log: [] };
 }
 
 /** Zählt dieses Spiel zur Spielzeit? */
@@ -96,6 +112,7 @@ export function prune(state, keep = 8) {
 }
 
 export function formatMs(ms) {
+  if (!Number.isFinite(ms)) return '∞';
   const s = Math.ceil(ms / 1000);
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 }
