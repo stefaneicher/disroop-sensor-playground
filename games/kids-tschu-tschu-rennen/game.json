@@ -1,0 +1,15 @@
+{
+  "id": "kids-tschu-tschu-rennen",
+  "name": "Tschu-Tschu-Rennen",
+  "category": "Rennen",
+  "description": "Zugrennen ohne Text für die Kleinen: Gas geben, Kühe weghupen, Sterne sammeln.",
+  "age": "4+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

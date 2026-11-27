@@ -1,0 +1,15 @@
+{
+  "id": "kids-burgistein-rallye",
+  "name": "Burgistein Rallye",
+  "category": "Rennen",
+  "description": "Rallye durch Burgistein im Gürbetal.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

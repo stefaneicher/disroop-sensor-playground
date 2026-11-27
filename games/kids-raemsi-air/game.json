@@ -1,0 +1,15 @@
+{
+  "id": "kids-raemsi-air",
+  "name": "Rämsi Air",
+  "category": "Fliegen",
+  "description": "Flugsimulator mit Pilot Rämsi: starten, landen, Flugzeuge kaufen.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

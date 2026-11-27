@@ -100,6 +100,10 @@ Die APK ist mit einem öffentlich eingecheckten Demo-Schlüssel signiert. Neuins
 
 Der Thingy nimmt nur **eine** BLE-Verbindung an. Während `nfc` läuft, müssen `thingy.exe` und die App getrennt sein.
 
+## Kinder-Spielplatz
+
+Familienspiele unter `games/kids-*`, Startseite mit wöchentlichem Zeitkonto pro Kind unter `console/kinder/`. Lokal starten: `python3 -m http.server` im Repo-Root, dann `http://localhost:8000/console/kinder/` öffnen. Details: [`docs/KONZEPT_KINDER_SPIELPLATZ.md`](docs/KONZEPT_KINDER_SPIELPLATZ.md).
+
 ## Projektstruktur
 
 ```

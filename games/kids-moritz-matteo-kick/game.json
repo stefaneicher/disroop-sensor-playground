@@ -1,0 +1,15 @@
+{
+  "id": "kids-moritz-matteo-kick",
+  "name": "Moritz & Matteo Kick",
+  "category": "Sport",
+  "description": "Fussballspiel mit Moritz und Matteo.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

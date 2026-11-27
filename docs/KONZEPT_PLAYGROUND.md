@@ -113,4 +113,4 @@ Die heutige README (Thingy-zentriert, Sensorübersicht, NFC) wandert nach `hardw
 2. Ordner umbauen nach obiger Tabelle, Schritt für Schritt.
 3. Neue README und Konsolen-Startseite mit animierter Landschaft.
 4. Relay und Handy-Controller, dann Skicross (siehe Handy-Konzept).
-5. Kinderspiele als `games/kids-*` aufnehmen.
+5. Kinderspiele als `games/kids-*` aufnehmen. Erledigt 2026-11-27, siehe [`KONZEPT_KINDER_SPIELPLATZ.md`](KONZEPT_KINDER_SPIELPLATZ.md).

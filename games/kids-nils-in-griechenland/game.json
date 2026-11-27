@@ -1,0 +1,15 @@
+{
+  "id": "kids-nils-in-griechenland",
+  "name": "Nils in Griechenland",
+  "category": "Abenteuer",
+  "description": "Abenteuer in Griechenland.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

@@ -1,0 +1,15 @@
+{
+  "id": "kids-eiger-nordwand",
+  "name": "Eiger Nordwand",
+  "category": "Abenteuer",
+  "description": "Kletterspiel durch die Eiger-Nordwand mit Steinschlag, Lawinen und Biwaks.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

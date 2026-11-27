@@ -1,0 +1,15 @@
+{
+  "id": "kids-fabio-in-new-york",
+  "name": "Fabio in New York",
+  "category": "Abenteuer",
+  "description": "Fabio erkundet New York, auch mit dem Auto.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

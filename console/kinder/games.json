@@ -1,0 +1,341 @@
+{
+  "version": 1,
+  "games": [
+    {
+      "id": "kids-css-segel-cup",
+      "name": "CSS Segel-Cup",
+      "category": "Sport",
+      "description": "Segelrennen im America’s-Cup-Stil mit Foiling-Yacht.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-css-segel-cup/index.html"
+    },
+    {
+      "id": "kids-lions-regatta-thunersee",
+      "name": "Lions-Regatta Thunersee",
+      "category": "Sport",
+      "description": "Segelregatta auf dem Thunersee.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-lions-regatta-thunersee/index.html"
+    },
+    {
+      "id": "kids-moritz-matteo-kick",
+      "name": "Moritz & Matteo Kick",
+      "category": "Sport",
+      "description": "Fussballspiel mit Moritz und Matteo.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-moritz-matteo-kick/index.html"
+    },
+    {
+      "id": "kids-moritz-fc-thun",
+      "name": "Moritz und FC Thun",
+      "category": "Sport",
+      "description": "Fussball im Visana Stadion Thun mit Moritz, der Nummer 10.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-moritz-fc-thun/index.html"
+    },
+    {
+      "id": "kids-springreiten-parcours",
+      "name": "Springreiten Parcours",
+      "category": "Sport",
+      "description": "Springreiten durch einen Parcours.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-springreiten-parcours/index.html"
+    },
+    {
+      "id": "kids-adrians-passfahrt",
+      "name": "Adrians Passfahrt",
+      "category": "Rennen",
+      "description": "Von Thun auf den Grimselpass: Wohnwagen überholen, Blitzern ausweichen, gegen die Uhr.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-adrians-passfahrt/index.html"
+    },
+    {
+      "id": "kids-burgistein-rallye",
+      "name": "Burgistein Rallye",
+      "category": "Rennen",
+      "description": "Rallye durch Burgistein im Gürbetal.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-burgistein-rallye/index.html"
+    },
+    {
+      "id": "kids-tschu-tschu-rennen",
+      "name": "Tschu-Tschu-Rennen",
+      "category": "Rennen",
+      "description": "Zugrennen ohne Text für die Kleinen: Gas geben, Kühe weghupen, Sterne sammeln.",
+      "age": "4+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-tschu-tschu-rennen/index.html"
+    },
+    {
+      "id": "kids-turbo-pokal",
+      "name": "Turbo-Pokal",
+      "category": "Rennen",
+      "description": "Rundstreckenrennen: 6 Strecken, Münzen sammeln, schnellere Autos kaufen, Pokale gewinnen.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-turbo-pokal/index.html"
+    },
+    {
+      "id": "kids-luftkampf",
+      "name": "Luftkampf",
+      "category": "Fliegen",
+      "description": "Luftkampf-Spiel.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-luftkampf/index.html"
+    },
+    {
+      "id": "kids-raemsi-air",
+      "name": "Rämsi Air",
+      "category": "Fliegen",
+      "description": "Flugsimulator mit Pilot Rämsi: starten, landen, Flugzeuge kaufen.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-raemsi-air/index.html"
+    },
+    {
+      "id": "kids-burgdorf-glutdrache",
+      "name": "Burgdorf – Die Nacht des Glutdrachen",
+      "category": "Abenteuer",
+      "description": "Abenteuer in Burgdorf.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-burgdorf-glutdrache/index.html"
+    },
+    {
+      "id": "kids-eiger-nordwand",
+      "name": "Eiger Nordwand",
+      "category": "Abenteuer",
+      "description": "Kletterspiel durch die Eiger-Nordwand mit Steinschlag, Lawinen und Biwaks.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-eiger-nordwand/index.html"
+    },
+    {
+      "id": "kids-fabio-in-new-york",
+      "name": "Fabio in New York",
+      "category": "Abenteuer",
+      "description": "Fabio erkundet New York, auch mit dem Auto.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-fabio-in-new-york/index.html"
+    },
+    {
+      "id": "kids-nils-in-griechenland",
+      "name": "Nils in Griechenland",
+      "category": "Abenteuer",
+      "description": "Abenteuer in Griechenland.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-nils-in-griechenland/index.html"
+    },
+    {
+      "id": "kids-noam-in-korsika",
+      "name": "Noam in Korsika",
+      "category": "Abenteuer",
+      "description": "Wildschweine und Schlangen fangen, kochen und ein Fest mit Feuerwerk feiern.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-noam-in-korsika/index.html"
+    },
+    {
+      "id": "kids-panzerduell",
+      "name": "Panzerduell",
+      "category": "Action",
+      "description": "Panzerspiel in der Wüste: ziehen zum Zielen, loslassen zum Feuern.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-panzerduell/index.html"
+    },
+    {
+      "id": "kids-roboter-labyrinth",
+      "name": "Roboter-Labyrinth",
+      "category": "Knobeln",
+      "description": "Roboter durchs Labyrinth führen.",
+      "age": "6+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-roboter-labyrinth/index.html"
+    },
+    {
+      "id": "kids-erdball-laenderquiz",
+      "name": "Erdball Länderquiz",
+      "category": "Lernen",
+      "description": "Drehbarer Globus mit Länderquiz in sechs Modi.",
+      "age": "7+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-erdball-laenderquiz/index.html"
+    },
+    {
+      "id": "kids-himmelsuhr",
+      "name": "Himmelsuhr",
+      "category": "Lernen",
+      "description": "Sonnensystem mit Zeitreise, Sternhimmel, Finsternissen und ISS.",
+      "age": "8+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-himmelsuhr/index.html"
+    },
+    {
+      "id": "kids-lesefreude",
+      "name": "Lesefreude",
+      "category": "Lernen",
+      "description": "Lese-Chilbi zum Lesen und Snow-Safari zum Rechnen mit Peter.",
+      "age": "7+",
+      "players": 1,
+      "input": [
+        "touch",
+        "keyboard"
+      ],
+      "gestures": [],
+      "entry": "index.html",
+      "playtime": true,
+      "path": "../../games/kids-lesefreude/index.html"
+    }
+  ]
+}

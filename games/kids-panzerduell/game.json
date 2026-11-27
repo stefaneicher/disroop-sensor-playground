@@ -1,0 +1,15 @@
+{
+  "id": "kids-panzerduell",
+  "name": "Panzerduell",
+  "category": "Action",
+  "description": "Panzerspiel in der Wüste: ziehen zum Zielen, loslassen zum Feuern.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}

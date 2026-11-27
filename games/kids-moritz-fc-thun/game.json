@@ -1,0 +1,15 @@
+{
+  "id": "kids-moritz-fc-thun",
+  "name": "Moritz und FC Thun",
+  "category": "Sport",
+  "description": "Fussball im Visana Stadion Thun mit Moritz, der Nummer 10.",
+  "age": "6+",
+  "players": 1,
+  "input": [
+    "touch",
+    "keyboard"
+  ],
+  "gestures": [],
+  "entry": "index.html",
+  "playtime": true
+}
