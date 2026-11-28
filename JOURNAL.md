@@ -1,5 +1,11 @@
 # Journal
 
+## 2026-11-28 – Flutlicht-Kick neu (Three.js)
+
+- `games/kids-flutlicht-kick/index.html` neu geschrieben (three 0.160, Bloom): 7 gegen 7 auf Kleinfeld, Spielerwechsel, KI mit Formation/Pressing/Decken, Torhüter, Standardsituationen, Halbzeit, Einlauf, Tor-Wiederholung, Jubel-Effekte, Radar, Menü mit Demo-Spiel, drei Gegner und drei Hilfe-Stufen.
+- Headless geprüft: KI gegen KI 2–6 Tore pro Spiel, keine JS-Fehler. Einfacher Test-Bot als Mensch: Junior 6:0, Profi 2:2, Legende 2:6. Screenshots Menü (Tablet, Handy quer), Spiel, Torjubel, Wiederholung.
+- Nicht auf echtem Tablet getestet; Sound nur synthetisch.
+
 ## 2026-11-28 – Kinder-Spielplatz: ein Konto pro Gerät, Eltern-Code, Vorschaubilder
 
 - Kinderauswahl entfernt: ein Zeitkonto pro Gerät. Eltern-Bereich mit festem Code (nur SHA-256 im Repo), +10 Min., Timer zurücksetzen, unbegrenzt spielen.

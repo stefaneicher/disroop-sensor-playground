@@ -1,6 +1,6 @@
 # Flutlicht-Kick
 
-Fussball unter Flutlicht in der Bergsee-Arena mit Timo, der Nummer 10.
+Fussball 7 gegen 7 unter Flutlicht: Timo und der FC Bergsee gegen drei Gegner, mit Wiederholung und Jubel.
 
 - Kategorie: Sport
 - Herkunft: Claude-Artifact https://claude.ai/artifact/N2CskNzqRBJDBm4p1DECxP

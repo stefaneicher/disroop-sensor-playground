@@ -1,6 +1,8 @@
 # Flutlicht-Kick – Zieldesign v2
 
-Stand: 27.11.2026 · Status: Vorschlag, Umsetzung startet mit dem Prototyp-Test (Phase 0)
+Stand: 28.11.2026 · Status: Spielgefühl und Präsentation in der Three.js-Version umgesetzt; Godot-Prototyp (Phase 0) offen
+
+**Umgesetzt in `index.html` (Three.js, 28.11.2026):** Kleinfeld 68 × 44 m, 7 gegen 7 (2-3-1), automatischer Spielerwechsel (Timo #10 als Star), Pass/Schuss bzw. Grätsche/Wechsel je nach Situation, drei Hilfe-Stufen und drei erfundene Gegner, Formation, Pressing, Decken, Laufwege, Torhüter mit Hechten, Fangen und Fausten, Einwurf, Ecke, Abstoss, Anstoss, Halbzeit, Einlauf, TV-Kamera, Tor-Wiederholung in Zeitlupe, Jubel, Konfetti, Feuerwerk, Netz-Wölbung, Flutlicht-Glow, Radar, Pause, erzeugter Sound. Realistische Figuren (Mixamo) und Saison-Modus fehlen noch.
 
 ## 1. Ziel in einem Satz
 
